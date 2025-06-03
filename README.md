@@ -1,54 +1,23 @@
-# React + TypeScript + Vite
+## Git Flow
+- main : 최종적으로 배포되는 브랜치
+- dev : 배포 전, 개발 중심으로 검증 위주의 브랜치
+- feature : 추가 기능을 개발 혹은 기존 기능 수정 브랜치
+- hotfix : main 브랜치에서 발생한 버그를 수정하는 브랜치
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+⚠️ [중요] 반드시 모든 Pull Request는 `dev` 브랜치로 보내주세요!<br>
+👉 `main` 브랜치로 직접 PR 금지!
 
-Currently, two official plugins are available:
+### 📚 Commit 유형 (Prefix)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+| 커밋 유형 | 설명 |
+|-----------|------|
+| `feat` | 새로운 기능 추가 또는 기존 기능 개선 |
+| `fix` | 버그 수정 |
+| `refactor` | 코드 리팩토링 (기능 변화 없이 구조 개선) |
+| `doc` | 문서 작업 (README 등) |
+| `test` | 테스트 코드 추가 또는 수정 |
+| `build` | 빌드 관련 파일 수정 (예: yml, properties 등) |
+| `perform` | 성능 개선 |
+| `clean` | 불필요한 코드 제거, 정리 |
+| `design` | UI/UX 디자인 작업 또는 개선 |
+| `style` | 코드 스타일 변경 (세미콜론, 들여쓰기 등) – 기능 변화 없음 |
