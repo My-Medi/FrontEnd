@@ -7,7 +7,7 @@
 ⚠️ [중요] 반드시 모든 Pull Request는 `dev` 브랜치로 보내주세요!<br>
 👉 `main` 브랜치로 직접 PR 금지!
 
-### 📚 Commit 유형 (Prefix)
+## 📚 Commit 유형 (Prefix)
 
 | 커밋 유형 | 설명 |
 |-----------|------|
@@ -21,3 +21,8 @@
 | `clean` | 불필요한 코드 제거, 정리 |
 | `design` | UI/UX 디자인 작업 또는 개선 |
 | `style` | 코드 스타일 변경 (세미콜론, 들여쓰기 등) – 기능 변화 없음 |
+
+## 🚨 github 주의사항
+- Pull request 생성 시, main인지 dev인지 반드시 확인
+- 기능 별로 branch 생성
+- commit 시, main 업데이트 확인(pull) 후에 push하기
