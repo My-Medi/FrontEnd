@@ -14,14 +14,14 @@ const Rectangle17454 = styled.div`
   /* 복잡한 계산식과 positioning만 styled-components로 */
   box-sizing: border-box;
   position: absolute;
-
+  
   /* 해상도에 비례한 크기 조정 */
   width: calc(${BOX_WIDTH} * (100vw / ${FIGMA_WIDTH}));
   height: calc(${BOX_HEIGHT} * (100vw / ${FIGMA_WIDTH}));
   left: calc(${BOX_LEFT} * (100vw / ${FIGMA_WIDTH}));
   top: calc(${BOX_TOP} * (100vw / ${FIGMA_WIDTH}));
   border-radius: 60px;
-
+  
   /* 작은 화면 대응 */
   @media (max-width: 480px) {
     position: relative;
@@ -40,7 +40,7 @@ const SimpleBox: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
     <div className="bg-white min-h-screen w-full relative overflow-x-hidden">
       {/* 사이드바 메뉴들 */}
       <SideBar />
-
+      
       <Rectangle17454 className="bg-white border border-blue-200 shadow-lg">
         {children}
       </Rectangle17454>
@@ -48,4 +48,4 @@ const SimpleBox: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   );
 };
 
-export default SimpleBox;
+export default SimpleBox; 

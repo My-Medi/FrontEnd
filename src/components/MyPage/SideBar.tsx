@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-// assets 이미지 import
-import homeIcon from "../assets/home.png";
-import writeIcon from "../assets/write.png";
-import write2Icon from "../assets/wirte2.png";
-import alramIcon from "../assets/alram.png";
-import alram2Icon from "../assets/alram2.png";
-import peopleIcon from "../assets/people.png";
+// assets 이미지 import (MyPage 폴더에서 올바른 경로)
+import homeIcon from "../../assets/home.png";
+import writeIcon from "../../assets/write.png";
+import write2Icon from "../../assets/wirte2.png";
+import alramIcon from "../../assets/alram.png";
+import alram2Icon from "../../assets/alram2.png";
+import peopleIcon from "../../assets/people.png";
 
 // 피그마 기준값 (1920px 기준)
 const FIGMA_WIDTH = 1920;
@@ -222,4 +222,4 @@ const SideBar: React.FC<SideBarProps> = ({
   );
 };
 
-export default SideBar;
+export default SideBar; 
