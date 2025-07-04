@@ -1,12 +1,33 @@
 import "./App.css";
+import type { JSX } from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import GlobalStyles from "./styles/GlobalStyles";
+import HomeLayout from "./layout/HomeLayout";
+import MyHome from "./pages/MyHome";
 
-function App() {
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <HomeLayout />,
+    children: [
+      {
+        index: true,
+        element: <MyHome />,
+      },
+      {
+        path: "mypage",
+        element: <MyHome />,
+      },
+    ],
+  },
+]);
+
+function App(): JSX.Element {
   return (
-    <div className="flex h-screen items-center justify-center bg-gray-100">
-      <button className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded shadow">
-        Tailwind 작동 테스트
-      </button>
-    </div>
+    <>
+      <GlobalStyles />
+      <RouterProvider router={router} />
+    </>
   );
 }
 
