@@ -41,7 +41,7 @@ const menuItems: MenuItem[] = [
   { id: 3, title: ["매칭된 전문가"], icon: peopleIcon },
 ];
 
-// 사이드바 컨테이너
+// 사이드바 컨테이너 - 계산식만 styled-components
 const SideBarContainer = styled.div`
   position: absolute;
   left: calc(124 * (100vw / ${FIGMA_WIDTH}));
@@ -56,36 +56,20 @@ const SideBarContainer = styled.div`
   }
 `;
 
-// 메뉴 아이템 박스
+// 메뉴 아이템 박스 - 하이브리드
 const MenuBox = styled.div<{ isSelected: boolean }>`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  /* 복잡한 계산식과 동적 스타일만 styled-components */
   gap: calc(12 * (100vw / ${FIGMA_WIDTH}));
-  
   width: calc(150 * (100vw / ${FIGMA_WIDTH}));
   height: calc(150 * (100vw / ${FIGMA_WIDTH}));
   margin-bottom: calc(50 * (100vw / ${FIGMA_WIDTH}));
+  border-radius: calc(20 * (100vw / ${FIGMA_WIDTH}));
 
   background: ${(props) => (props.isSelected ? "#FFFFFF" : "transparent")};
-  border: none;
   box-shadow: ${(props) =>
     props.isSelected
       ? "0px 46px 18px rgba(29, 104, 255, 0.01), 0px 26px 15px rgba(29, 104, 255, 0.03), 0px 11px 11px rgba(29, 104, 255, 0.06), 0px 3px 6px rgba(29, 104, 255, 0.07)"
       : "none"};
-  border-radius: calc(20 * (100vw / ${FIGMA_WIDTH}));
-  
-  cursor: pointer;
-  transition: all 0.3s ease;
-  
-  &:hover {
-    transform: scale(1.05);
-  }
-  
-  &:active {
-    transform: scale(0.95);
-  }
   
   @media (max-width: 480px) {
     width: 120px;
@@ -96,7 +80,7 @@ const MenuBox = styled.div<{ isSelected: boolean }>`
   }
 `;
 
-// 아이콘 컨테이너 (겹침 효과용)
+// 아이콘 컨테이너 - 계산식만 styled-components
 const IconContainer = styled.div`
   position: relative;
   width: calc(58 * (100vw / ${FIGMA_WIDTH}));
@@ -108,11 +92,10 @@ const IconContainer = styled.div`
   }
 `;
 
-// 아이콘 스타일
+// 아이콘 스타일 - 계산식만 styled-components
 const MenuIcon = styled.img<{ isSelected: boolean }>`
   width: calc(58 * (100vw / ${FIGMA_WIDTH}));
   height: calc(65 * (100vw / ${FIGMA_WIDTH}));
-  object-fit: contain;
   
   @media (max-width: 480px) {
     width: 46px;
@@ -120,9 +103,11 @@ const MenuIcon = styled.img<{ isSelected: boolean }>`
   }
 `;
 
-// 겹침 아이콘 스타일
+// 겹침 아이콘 스타일 - 복잡한 계산식과 positioning
 const OverlayIcon = styled.img<{ position: "center" | "right" }>`
   position: absolute;
+  z-index: 2;
+  
   ${(props) =>
     props.position === "center"
       ? `
@@ -139,8 +124,6 @@ const OverlayIcon = styled.img<{ position: "center" | "right" }>`
     width: calc(20 * (100vw / ${FIGMA_WIDTH}));
     height: calc(20 * (100vw / ${FIGMA_WIDTH}));
   `}
-  object-fit: contain;
-  z-index: 2;
   
   @media (max-width: 480px) {
     ${(props) =>
@@ -157,13 +140,8 @@ const OverlayIcon = styled.img<{ position: "center" | "right" }>`
   }
 `;
 
-// 텍스트 컨테이너
+// 텍스트 컨테이너 - 계산식만 styled-components
 const MenuTextContainer = styled.div<{ isSelected: boolean }>`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
   gap: calc(2 * (100vw / ${FIGMA_WIDTH}));
   max-width: calc(180 * (100vw / ${FIGMA_WIDTH}));
   
@@ -173,23 +151,12 @@ const MenuTextContainer = styled.div<{ isSelected: boolean }>`
   }
 `;
 
-// 텍스트 스타일
+// 텍스트 스타일 - 계산식만 styled-components
 const MenuText = styled.div<{ isSelected: boolean }>`
-  font-family: "Pretendard", sans-serif;
-  font-weight: 600; /* SemiBold */
   font-size: calc(22 * (100vw / ${FIGMA_WIDTH}));
-  line-height: 1.4; /* 140% */
-  letter-spacing: 0%;
-  text-align: center;
-  color: #1d68ff;
-  margin: 0;
-  padding: 0;
-  white-space: nowrap;
-  word-break: keep-all;
   
   @media (max-width: 480px) {
     font-size: 16px;
-    line-height: 1.4;
   }
 `;
 
@@ -202,38 +169,49 @@ const SideBar: React.FC<SideBarProps> = ({
   selectedMenu = 0,
   onMenuSelect,
 }) => {
-  const [selected, setSelected] = useState<number>(selectedMenu);
-  
+  const [internalSelectedMenu, setInternalSelectedMenu] = useState(selectedMenu);
+
   const handleMenuClick = (index: number) => {
-    setSelected(index);
+    setInternalSelectedMenu(index);
     onMenuSelect?.(index);
   };
-  
+
   return (
     <SideBarContainer>
-      {menuItems.map((item) => (
+      {menuItems.map((item, index) => (
         <MenuBox
           key={item.id}
-          isSelected={selected === item.id}
-          onClick={() => handleMenuClick(item.id)}
+          isSelected={internalSelectedMenu === index}
+          onClick={() => handleMenuClick(index)}
+          className="flex flex-col items-center justify-center cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 active:scale-95"
         >
           <IconContainer>
             <MenuIcon
               src={item.icon}
               alt={item.title.join(" ")}
-              isSelected={selected === item.id}
+              isSelected={internalSelectedMenu === index}
+              className="object-contain"
             />
             {item.overlayIcon && (
               <OverlayIcon
                 src={item.overlayIcon}
-                alt={`${item.title.join(" ")} overlay`}
+                alt="overlay"
                 position={item.overlayPosition || "center"}
+                className="object-contain"
               />
             )}
           </IconContainer>
-          <MenuTextContainer isSelected={selected === item.id}>
-            {item.title.map((line, index) => (
-              <MenuText key={index} isSelected={selected === item.id}>
+
+          <MenuTextContainer
+            isSelected={internalSelectedMenu === index}
+            className="flex flex-col items-center justify-center text-center"
+          >
+            {item.title.map((line, lineIndex) => (
+              <MenuText
+                key={lineIndex}
+                isSelected={internalSelectedMenu === index}
+                className="font-semibold leading-relaxed text-blue-600 m-0 p-0 whitespace-nowrap break-keep"
+              >
                 {line}
               </MenuText>
             ))}
