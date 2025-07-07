@@ -16,6 +16,9 @@ export default function MyHome() {
           checkupCount={2}
         />
       </div>
+      <div className="w-full flex justify-center">
+        <div className="w-[1398px] h-[2px] bg-[#DBE6FF]" />
+      </div>
       <div className="p-10">
         <MyConstantMedical status="안심" nickname="하나" />
       </div>

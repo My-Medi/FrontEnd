@@ -30,7 +30,7 @@ const MyConstantMedical: React.FC<Props> = ({ status, nickname }) => {
           <img
             src={current.iconPath}
             alt={`${status} 아이콘`}
-            className="w-[60px] h-[60px] lg:w-[77px] lg:h-[65px]"
+            className="w-[60px] h-[60px] lg:w-[77px] lg:h-[65px] ml-2 lg:ml-4"
           />
 
           {/* 세로선 : borderline -> borderColor로 사용 */}
@@ -51,7 +51,7 @@ const MyConstantMedical: React.FC<Props> = ({ status, nickname }) => {
         {/* 마이 메디컬 리포트로 가는 링크 */}
         <a
           href="#"
-          className="text-sm md:text-base text-[#1D68FF] font-pretendard mt-auto self-end whitespace-nowrap"
+          className="text-sm md:text-base text-[#1D68FF] font-pretendard mt-auto self-end whitespace-nowrap hover:underline"
         >
           마이 메디컬 리포트로 알아보기 &gt;
         </a>
