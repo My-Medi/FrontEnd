@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 
 // assets 이미지 import (MyPage 폴더에서 올바른 경로)
 import homeIcon from "../../assets/home.png";
@@ -9,10 +8,94 @@ import alramIcon from "../../assets/alram.png";
 import alram2Icon from "../../assets/alram2.png";
 import peopleIcon from "../../assets/people.png";
 
-// 피그마 기준값 (1920px 기준)
-const FIGMA_WIDTH = 1920;
+const STYLES = {
+  container: "absolute left-[calc(124*100vw/1920)] top-[calc(320*100vw/1920)] z-10 max-[480px]:relative max-[480px]:left-0 max-[480px]:top-0 max-[480px]:m-4",
+  
+  menuItem: {
+    base: "relative flex flex-col items-center justify-center cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 active:scale-95",
+    dimensions: "gap-[calc(12*100vw/1920)] w-[calc(150*100vw/1920)] h-[calc(150*100vw/1920)] mb-[calc(50*100vw/1920)] rounded-[calc(20*100vw/1920)]",
+    responsive: "max-[480px]:w-[120px] max-[480px]:h-[120px] max-[480px]:mb-4 max-[480px]:rounded-[15px] max-[480px]:gap-[8px]"
+  },
+  
+  icon: {
+    container: "relative w-[calc(58*100vw/1920)] h-[calc(65*100vw/1920)] max-[480px]:w-[46px] max-[480px]:h-[52px]",
+    image: "w-[calc(58*100vw/1920)] h-[calc(65*100vw/1920)] max-[480px]:w-[46px] max-[480px]:h-[52px] object-contain"
+  },
+  
+  title: {
+    container: "flex flex-col items-center justify-center text-center gap-[calc(2*100vw/1920)] max-w-[calc(180*100vw/1920)] max-[480px]:max-w-[140px] max-[480px]:gap-[1px]",
+    text: "font-semibold leading-relaxed text-blue-600 m-0 p-0 whitespace-nowrap break-keep text-[calc(22*100vw/1920)] max-[480px]:text-[16px]"
+  }
+};
 
-// 메뉴 데이터 타입
+const DottedIndicator: React.FC = () => {
+  const createDots = (direction: 'left' | 'right') => {
+    return Array.from({ length: 8 }, (_, i) => (
+      <div
+        key={`${direction}-${i}`}
+        className="absolute bg-[#1D68FF]"
+        style={{
+          [direction === 'left' ? 'right' : 'left']: `${53 + (i * 6)}%`,
+          top: '0',
+          width: '3%',
+          height: '100%'
+        }}
+      />
+    ));
+  };
+
+  return (
+    <div 
+      className="absolute"
+      style={{
+        top: '50%',
+        left: 'calc(150 * 100vw / 1920)',
+        width: 'calc(80 * 100vw / 1920)',
+        height: 'calc(4 * 100vw / 1920)',
+        transform: 'translateY(-50%)',
+        zIndex: 10
+      }}
+    >
+      {/* 왼쪽 점선 */}
+      {createDots('left')}
+      
+      {/* 중앙 원 */}
+      <div
+        className="absolute bg-[#1D68FF] rounded-full"
+        style={{
+          left: '50%',
+          top: '50%',
+          width: 'calc(25 * 100vw / 1920)',
+          height: 'calc(25 * 100vw / 1920)',
+          transform: 'translate(-50%, -50%)'
+        }}
+      />
+      
+      {/* 오른쪽 점선 */}
+      {createDots('right')}
+    </div>
+  );
+};
+
+const OverlayIcon: React.FC<{ 
+  src: string; 
+  position: "center" | "right"; 
+  alt?: string; 
+}> = ({ src, position, alt = "overlay" }) => {
+  const positionStyles = {
+    center: "top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[calc(39.39*100vw/1920)] h-[calc(44.53*100vw/1920)] max-[480px]:w-[31px] max-[480px]:h-[35px]",
+    right: "top-1/4 -right-[5%] transform -translate-y-1/2 w-[calc(20*100vw/1920)] h-[calc(20*100vw/1920)] max-[480px]:w-[16px] max-[480px]:h-[16px] max-[480px]:-right-[2px]"
+  };
+
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className={`absolute object-contain z-[2] ${positionStyles[position]}`}
+    />
+  );
+};
+
 interface MenuItem {
   id: number;
   title: string[];
@@ -41,125 +124,6 @@ const menuItems: MenuItem[] = [
   { id: 3, title: ["매칭된 전문가"], icon: peopleIcon },
 ];
 
-// 사이드바 컨테이너 - 계산식만 styled-components
-const SideBarContainer = styled.div`
-  position: absolute;
-  left: calc(124 * (100vw / ${FIGMA_WIDTH}));
-  top: calc(320 * (100vw / ${FIGMA_WIDTH}));
-  z-index: 10;
-  
-  @media (max-width: 480px) {
-    position: relative;
-    left: 0;
-    top: 0;
-    margin: 1rem;
-  }
-`;
-
-// 메뉴 아이템 박스 - 하이브리드
-const MenuBox = styled.div<{ isSelected: boolean }>`
-  /* 복잡한 계산식과 동적 스타일만 styled-components */
-  gap: calc(12 * (100vw / ${FIGMA_WIDTH}));
-  width: calc(150 * (100vw / ${FIGMA_WIDTH}));
-  height: calc(150 * (100vw / ${FIGMA_WIDTH}));
-  margin-bottom: calc(50 * (100vw / ${FIGMA_WIDTH}));
-  border-radius: calc(20 * (100vw / ${FIGMA_WIDTH}));
-
-  background: ${(props) => (props.isSelected ? "#FFFFFF" : "transparent")};
-  box-shadow: ${(props) =>
-    props.isSelected
-      ? "0px 46px 18px rgba(29, 104, 255, 0.01), 0px 26px 15px rgba(29, 104, 255, 0.03), 0px 11px 11px rgba(29, 104, 255, 0.06), 0px 3px 6px rgba(29, 104, 255, 0.07)"
-      : "none"};
-  
-  @media (max-width: 480px) {
-    width: 120px;
-    height: 120px;
-    margin-bottom: 1rem;
-    border-radius: 15px;
-    gap: 8px;
-  }
-`;
-
-// 아이콘 컨테이너 - 계산식만 styled-components
-const IconContainer = styled.div`
-  position: relative;
-  width: calc(58 * (100vw / ${FIGMA_WIDTH}));
-  height: calc(65 * (100vw / ${FIGMA_WIDTH}));
-  
-  @media (max-width: 480px) {
-    width: 46px;
-    height: 52px;
-  }
-`;
-
-// 아이콘 스타일 - 계산식만 styled-components
-const MenuIcon = styled.img<{ isSelected: boolean }>`
-  width: calc(58 * (100vw / ${FIGMA_WIDTH}));
-  height: calc(65 * (100vw / ${FIGMA_WIDTH}));
-  
-  @media (max-width: 480px) {
-    width: 46px;
-    height: 52px;
-  }
-`;
-
-// 겹침 아이콘 스타일 - 복잡한 계산식과 positioning
-const OverlayIcon = styled.img<{ position: "center" | "right" }>`
-  position: absolute;
-  z-index: 2;
-  
-  ${(props) =>
-    props.position === "center"
-      ? `
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: calc(39.39 * (100vw / ${FIGMA_WIDTH}));
-    height: calc(44.53 * (100vw / ${FIGMA_WIDTH}));
-  `
-      : `
-    top: 25%;
-    right: -5%;
-    transform: translateY(-50%);
-    width: calc(20 * (100vw / ${FIGMA_WIDTH}));
-    height: calc(20 * (100vw / ${FIGMA_WIDTH}));
-  `}
-  
-  @media (max-width: 480px) {
-    ${(props) =>
-      props.position === "center"
-        ? `
-      width: 31px;
-      height: 35px;
-    `
-        : `
-      width: 16px;
-      height: 16px;
-      right: -2px;
-    `}
-  }
-`;
-
-// 텍스트 컨테이너 - 계산식만 styled-components
-const MenuTextContainer = styled.div<{ isSelected: boolean }>`
-  gap: calc(2 * (100vw / ${FIGMA_WIDTH}));
-  max-width: calc(180 * (100vw / ${FIGMA_WIDTH}));
-  
-  @media (max-width: 480px) {
-    max-width: 140px;
-    gap: 1px;
-  }
-`;
-
-// 텍스트 스타일 - 계산식만 styled-components
-const MenuText = styled.div<{ isSelected: boolean }>`
-  font-size: calc(22 * (100vw / ${FIGMA_WIDTH}));
-  
-  @media (max-width: 480px) {
-    font-size: 16px;
-  }
-`;
-
 interface SideBarProps {
   selectedMenu?: number;
   onMenuSelect?: (menuIndex: number) => void;
@@ -176,49 +140,59 @@ const SideBar: React.FC<SideBarProps> = ({
     onMenuSelect?.(index);
   };
 
-  return (
-    <SideBarContainer>
-      {menuItems.map((item, index) => (
-        <MenuBox
-          key={item.id}
-          isSelected={internalSelectedMenu === index}
-          onClick={() => handleMenuClick(index)}
-          className="flex flex-col items-center justify-center cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105 active:scale-95"
-        >
-          <IconContainer>
-            <MenuIcon
-              src={item.icon}
-              alt={item.title.join(" ")}
-              isSelected={internalSelectedMenu === index}
-              className="object-contain"
-            />
-            {item.overlayIcon && (
-              <OverlayIcon
-                src={item.overlayIcon}
-                alt="overlay"
-                position={item.overlayPosition || "center"}
-                className="object-contain"
-              />
-            )}
-          </IconContainer>
+  const getMenuItemStyles = (isSelected: boolean) => ({
+    className: `
+      ${STYLES.menuItem.base}
+      ${STYLES.menuItem.dimensions}
+      ${STYLES.menuItem.responsive}
+      ${isSelected ? 'bg-white' : 'bg-transparent'}
+    `,
+    boxShadow: isSelected 
+      ? '0px 46px 18px rgba(29, 104, 255, 0.01), 0px 26px 15px rgba(29, 104, 255, 0.03), 0px 11px 11px rgba(29, 104, 255, 0.06), 0px 3px 6px rgba(29, 104, 255, 0.07)'
+      : 'none'
+  });
 
-          <MenuTextContainer
-            isSelected={internalSelectedMenu === index}
-            className="flex flex-col items-center justify-center text-center"
+  return (
+    <div className={STYLES.container}>
+      {menuItems.map((item, index) => {
+        const isSelected = internalSelectedMenu === index;
+        const menuStyles = getMenuItemStyles(isSelected);
+        
+        return (
+          <div
+            key={item.id}
+            onClick={() => handleMenuClick(index)}
+            className={menuStyles.className}
+            style={{ boxShadow: menuStyles.boxShadow }}
           >
-            {item.title.map((line, lineIndex) => (
-              <MenuText
-                key={lineIndex}
-                isSelected={internalSelectedMenu === index}
-                className="font-semibold leading-relaxed text-blue-600 m-0 p-0 whitespace-nowrap break-keep"
-              >
-                {line}
-              </MenuText>
-            ))}
-          </MenuTextContainer>
-        </MenuBox>
-      ))}
-    </SideBarContainer>
+            {isSelected && <DottedIndicator />}
+
+
+            <div className={STYLES.icon.container}>
+              <img
+                src={item.icon}
+                alt={item.title.join(" ")}
+                className={STYLES.icon.image}
+              />
+              {item.overlayIcon && item.overlayPosition && (
+                <OverlayIcon 
+                  src={item.overlayIcon} 
+                  position={item.overlayPosition}
+                  alt={`${item.title.join(" ")} overlay`}
+                />
+              )}
+            </div>
+            <div className={STYLES.title.container}>
+              {item.title.map((line, lineIndex) => (
+                <div key={lineIndex} className={STYLES.title.text}>
+                  {line}
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
   );
 };
 
