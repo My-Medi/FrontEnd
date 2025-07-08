@@ -18,7 +18,7 @@ function App() {
         <div className="w-[1398px] h-[2px] bg-[#DBE6FF]" />
       </div>
       <div className="p-10">
-        <MyConstantMedical status="관심" nickname="하나" />
+        <MyConstantMedical status="정상" nickname="하나" />
       </div>
     </div>
   );
