@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 
 // assets 이미지 import (MyPage 폴더에서 올바른 경로)
-import homeIcon from "../../assets/home.png";
-import writeIcon from "../../assets/write.png";
-import write2Icon from "../../assets/wirte2.png";
-import alramIcon from "../../assets/alram.png";
-import alram2Icon from "../../assets/alram2.png";
-import peopleIcon from "../../assets/people.png";
+import homeIcon from "../../assets/Myhome/home.png";
+import writeIcon from "../../assets/Myhome/write.png";
+import write2Icon from "../../assets/Myhome/wirte2.png";
+import alramIcon from "../../assets/Myhome/alarm.png";
+import peopleIcon from "../../assets/Myhome/people.png";
 
 const STYLES = {
   container: "absolute left-[calc(124*100vw/1920)] top-[calc(320*100vw/1920)] z-10 max-[480px]:relative max-[480px]:left-0 max-[480px]:top-0 max-[480px]:m-4",
@@ -118,8 +117,6 @@ const menuItems: MenuItem[] = [
     id: 2,
     title: ["내 알림"],
     icon: alramIcon,
-    overlayIcon: alram2Icon,
-    overlayPosition: "center",
   },
   { id: 3, title: ["매칭된 전문가"], icon: peopleIcon },
 ];

@@ -4,8 +4,8 @@ import Footer from "../components/Footer";
 
 const HomeLayout: React.FC = () => {
   return (
-    <div className="min-h-screen flex flex-col">
-      <main className="flex-1">
+    <div>
+      <main>
         <Outlet />
       </main>
       <Footer />
