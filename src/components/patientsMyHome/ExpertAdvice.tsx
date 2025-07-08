@@ -4,7 +4,7 @@ interface Props {
 
 const ExpertAdvice: React.FC<Props> = ({ adviceText }) => {
   return (
-    <section className="w-full max-w-[1980px] mx-auto px-[1.5vw] py-[-25vw] space-y-[1.5vw] ml-[-2vw]">
+    <section className="w-full max-w-[1980px] mx-auto px-[1.5vw] py-[-25vw] space-y-[1.5vw] ml-[-3.5vw] mt-[0.5vw]">
       {/* 제목 */}
       <h2 className="font-pretendard font-medium text-[clamp(16px,1.25vw,24px)] text-[#121218] mt-[-2vw]">
         등록된 전문가의 조언!

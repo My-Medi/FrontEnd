@@ -7,7 +7,7 @@ export default function MyHome() {
   //const userStatus: HealthStatus = "정상";
   return (
     <div>
-      <div className="max-w-[1280px] mx-auto px-4 py-8">
+      <div className="max-w-[1920px] mx-auto px-4 py-8">
         <PatientInfoSection
           nickname="하나"
           name="김민지"
@@ -18,7 +18,7 @@ export default function MyHome() {
         />
       </div>
       <div className="w-full flex justify-center">
-        <div className="w-[1398px] h-[2px] bg-[#DBE6FF]" />
+        <div className="w-[clamp(300px,95vw,1920px)] h-[2px] bg-[#DBE6FF] ml-[-3vw] mr-[-3vw]" />
       </div>
       <div className="px-[clamp(16px,3vw,40px)] py-[clamp(16px,3vw,40px)]">
         <div className="flex flex-col gap-[clamp(8px,1.5vw,32px)]">
@@ -27,7 +27,7 @@ export default function MyHome() {
         </div>
       </div>
       <div className="w-full flex justify-center">
-        <div className="w-[clamp(300px,90vw,1398px)] h-[2px] bg-[#DBE6FF]" />
+        <div className="w-[clamp(300px,95vw,1920px)] h-[2px] bg-[#DBE6FF] ml-[-3vw] mr-[-3vw]" />
       </div>
     </div>
   );
