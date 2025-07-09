@@ -13,11 +13,9 @@ interface ScheduleCardProps {
   title: string;
   description: string;
   source: {
-    // icon?: React.ReactNode; // 아이콘은 추후 SVG로 대체
     text: string;
   };
   time: {
-    // icon?: React.ReactNode;
     text: string;
   };
 }
@@ -45,20 +43,18 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
   const styles = typeStyles[type];
 
   return (
-    <div className="flex items-center gap-8 p-4 md:p-6 lg:p-8 bg-white border-2 border-[#DBE6FF] rounded-2xl w-full">
-      {/* Date Section */}
-      <div className="flex-shrink-0 text-center">
-        <div className={`font-semibold text-4xl leading-tight ${styles.dateColor}`}>
+    <div className="flex items-center gap-8 p-1 md:p-2 lg:p-3 bg-white border-2 border-[#DBE6FF] rounded-2xl w-full">
+      <div className="flex-shrink-0 text-center pl-6">
+        <div className={`font-semibold text-3xl leading-tight ${styles.dateColor}`}>
           {date.month}월
         </div>
-        <div className={`font-semibold text-4xl leading-tight ${styles.dateColor}`}>
+        <div className={`font-semibold text-3xl leading-tight ${styles.dateColor}`}>
           {date.day}일
         </div>
       </div>
 
-      {/* Content Section */}
       <div className="flex flex-col gap-2 flex-grow">
-        <h3 className="font-semibold text-xl md:text-2xl text-[#121218]">{title}</h3>
+        <h3 className="font-semibold text-2xl md:text-2xl text-[#121218]">{title}</h3>
         <p className="font-medium text-sm md:text-base text-[#4D5053] leading-relaxed">
           {description}
         </p>
