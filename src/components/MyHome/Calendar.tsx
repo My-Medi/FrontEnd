@@ -94,34 +94,34 @@ const Calendar: React.FC = () => {
 
   return (
     <div>
-      <div className="mb-4 sm:mb-6">
-        <h2 className="text-lg sm:text-xl lg:text-2xl font-medium text-[#121212]">
+      <div className="mb-4 lg:mb-6">
+        <h2 className="text-lg font-medium text-[#121212] lg:text-2xl">
           건강 캘린더
         </h2>
       </div>
 
-      <div className="flex items-center justify-center gap-4 sm:gap-8 mb-6 sm:mb-8">
+      <div className="flex items-center justify-center gap-4 lg:gap-8 mb-6 lg:mb-8">
         <button 
           onClick={goToPrevMonth}
-          className="w-6 h-6 sm:w-6 sm:h-6 bg-[#C5C8CB] hover:bg-[#B0B3B6] transition-colors flex items-center justify-center rounded-sm" 
+          className="w-6 h-6 bg-[#C5C8CB] hover:bg-[#B0B3B6] transition-colors flex items-center justify-center rounded-sm" 
           style={{
             clipPath: 'polygon(100% 0%, 100% 100%, 0% 50%)'
           }}
         >
         </button>
         
-        <div className="flex items-center gap-2 sm:gap-4">
-          <span className="text-lg sm:text-xl lg:text-2xl font-medium text-[#121218]">
+        <div className="flex items-center gap-2 lg:gap-4">
+          <span className="text-lg font-medium text-[#121218] lg:text-2xl">
             {currentDate.getFullYear()}년
           </span>
-          <span className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-[#1D68FF]">
+          <span className="text-2xl font-semibold text-[#1D68FF] lg:text-4xl">
             {monthNames[currentDate.getMonth()]}
           </span>
         </div>
         
         <button 
           onClick={goToNextMonth}
-          className="w-6 h-6 sm:w-6 sm:h-6 bg-[#1D68FF] hover:bg-[#0F4CCC] transition-colors flex items-center justify-center rounded-sm"
+          className="w-6 h-6 bg-[#1D68FF] hover:bg-[#0F4CCC] transition-colors flex items-center justify-center rounded-sm"
           style={{
             clipPath: 'polygon(0% 0%, 100% 50%, 0% 100%)'
           }}
@@ -132,7 +132,7 @@ const Calendar: React.FC = () => {
       <div className="border-t-4 border-[#1D68FF] bg-[rgba(219,230,255,0.5)]">
         <div className="grid grid-cols-7 gap-0">
           {weekDays.map((day) => (
-            <div key={day} className="text-left py-2 sm:py-3 pl-2 sm:pl-3">
+            <div key={day} className="text-left py-2 lg:py-3 pl-2 lg:pl-3">
               <span className="font-pretendard text-2xl font-semibold text-[#121218] leading-[150%]">
                 {day}
               </span>
@@ -148,8 +148,8 @@ const Calendar: React.FC = () => {
               <div 
                 key={dayIndex}
                 className={`
-                  relative h-28 sm:h-32 lg:h-36 xl:h-40 border-r border-[#DBE6FF] last:border-r-0
-                  flex flex-col items-start justify-start p-2 sm:p-3
+                  relative h-28 lg:h-40 border-r border-[#DBE6FF] last:border-r-0
+                  flex flex-col items-start justify-start p-2 lg:p-3
                   ${day.isToday ? 'bg-[rgba(219,230,255,0.5)] outline outline-2 outline-[#1D68FF]' : day.isSelected ? 'bg-[rgba(219,230,255,0.5)] border-2 border-[#1D68FF]' : ''}
                   hover:bg-gray-50 transition-colors cursor-pointer
                   box-border
@@ -157,7 +157,7 @@ const Calendar: React.FC = () => {
               >
                 <span 
                   className={`
-                    text-lg sm:text-xl lg:text-2xl font-medium leading-none
+                    text-lg font-medium leading-none lg:text-2xl
                     ${day.isToday ? 'text-[#1D68FF] font-bold' : 
                       day.isCurrentMonth ? 'text-[#121218]' : 'text-[#C5C8CB]'}
                   `}
@@ -168,17 +168,17 @@ const Calendar: React.FC = () => {
                 {day.hasEvent && day.isCurrentMonth && (
                   <div className="mt-1 w-full">
                     {day.hasEvent === '이력서 등록일' && (
-                      <div className="bg-[rgba(161,246,142,0.3)] px-1 py-0.5 text-[#121218] truncate text-xs sm:text-sm rounded">
+                      <div className="bg-[rgba(161,246,142,0.3)] px-1 py-0.5 text-[#121218] truncate text-xs rounded">
                         {day.hasEvent}
                       </div>
                     )}
                     {day.hasEvent === '첫 환자 매칭' && (
-                      <span className="text-xs sm:text-sm text-[rgba(255,255,255,0.8)] bg-transparent rounded">
+                      <span className="text-xs text-[rgba(255,255,255,0.8)] bg-transparent rounded">
                         {day.hasEvent}
                       </span>
                     )}
                     {day.hasEvent === '00님 예약일' && (
-                      <div className="bg-[rgba(29,104,255,0.8)] px-1 py-0.5 text-[rgba(255,255,255,0.8)] truncate text-xs sm:text-sm rounded">
+                      <div className="bg-[rgba(29,104,255,0.8)] px-1 py-0.5 text-[rgba(255,255,255,0.8)] truncate text-xs rounded">
                         {day.hasEvent}
                       </div>
                     )}

@@ -15,8 +15,8 @@ const SimpleBox: React.FC<SimpleBoxProps> = ({ children, fullWidthContent, class
           m-4 flex flex-col flex-grow
           
           lg:absolute
-          lg:w-[calc(1439*100vw/1920)] lg:h-[calc(2493*100vw/1920)] lg:left-[calc(357*100vw/1920)] lg:top-[calc(292*100vw/1920)]
-          lg:rounded-[calc(60*100vw/1920)]
+          lg:w-[1439px] lg:left-[357px] lg:top-[292px]
+          lg:rounded-[60px]
           lg:m-0
           
           ${className || ''}
@@ -27,14 +27,7 @@ const SimpleBox: React.FC<SimpleBoxProps> = ({ children, fullWidthContent, class
         }}
       >
         {fullWidthContent}
-        <div
-          className='
-            p-6 flex flex-col
-            lg:p-0 lg:pl-[calc(73*100vw/1920)] lg:pt-[calc(76*100vw/1920)] lg:pr-[calc(73*100vw/1920)] lg:pb-[calc(40*100vw/1920)]
-          '
-        >
         {children}
-        </div>
       </div>
     </>
   );
