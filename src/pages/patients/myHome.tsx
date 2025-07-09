@@ -1,10 +1,8 @@
 import ExpertAdvice from "../../components/patientsMyHome/ExpertAdvice";
 import MyConstantMedical from "../../components/patientsMyHome/MyConstantMedical";
 import PatientInfoSection from "../../components/patientsMyHome/ProfileInfo";
-//import type { HealthStatus } from "../../constants/healthStatus";
 
 export default function MyHome() {
-  //const userStatus: HealthStatus = "정상";
   return (
     <div>
       <div className="max-w-[1920px] mx-auto px-4 py-8">
