@@ -1,33 +1,47 @@
 import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const ExpertInputForm = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const userType = location.state?.userType;
+
+  const handleNext = () => {
+    navigate("/signup-complete", { state: { userType } });
+  };
+
+  const handlePrev = () => {
+    navigate("/signup-info", { state: { userType } });
+  };
+
   return (
     <div className="w-full bg-white flex flex-col items-center py-[100px]">
       {/* 타이틀 및 화살표 */}
       <div className="relative w-full flex justify-center mb-15">
-        <svg 
-          width={31} 
-          height={57} 
-          viewBox="0 0 31 57" 
-          fill="none" 
-          xmlns="http://www.w3.org/2000/svg" 
-          className="w-[27px] h-[53px] absolute left-0 top-1/2 transform -translate-y-1/2 cursor-pointer" 
+        <svg
+          width={31}
+          height={57}
+          viewBox="0 0 31 57"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-[27px] h-[53px] absolute left-0 top-1/2 transform -translate-y-1/2 cursor-pointer"
           preserveAspectRatio="none"
+          onClick={handlePrev}
         >
-          <path 
-            d="M29 2L2 29.0933L29 55" 
-            stroke="#121218" 
-            strokeOpacity="0.5" 
-            strokeWidth={4} 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
+          <path
+            d="M29 2L2 29.0933L29 55"
+            stroke="#121218"
+            strokeOpacity="0.5"
+            strokeWidth={4}
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
         <p className="text-4xl font-semibold mt-5 text-center text-[#121218]">마이메디 회원가입</p>
       </div>
-      
+
       {/* 타이틀 및 단계 표시 */}
-      
+
       <div className="flex items-center justify-center gap-2 mb-16">
         <StepCircle number={1} label="약관동의" active />
         <Divider active />
@@ -190,7 +204,7 @@ const ExpertInputForm = () => {
       <CareerTable />
       <AddButton/>
 
-      
+
       <SectionTitle title="경력소개" />
       <div className="w-[1301px] h-[319px] bg-white border-2 border-[#dbe6ff] rounded-[14px] p-6 mb-20">
         <p className="text-[22px] text-left text-[#121218]">
@@ -200,8 +214,18 @@ const ExpertInputForm = () => {
 
       {/* 버튼 */}
       <div className="flex gap-[268px]">
-        <button className="px-20 py-5 rounded-[60px] cursor-pointer bg-[#dbe6ff] text-[32px] text-[#121218] font-medium">이전</button>
-        <button className="w-[380px] px-20 py-5 rounded-[60px] cursor-pointer bg-[#1d68ff] text-[32px] text-white font-semibold">완료</button>
+        <button
+          className="px-20 py-5 rounded-[60px] cursor-pointer bg-[#dbe6ff] text-[32px] text-[#121218] font-medium"
+          onClick={handlePrev}
+        >
+          이전
+        </button>
+        <button
+          className="w-[380px] px-20 py-5 rounded-[60px] cursor-pointer bg-[#1d68ff] text-[32px] text-white font-semibold"
+          onClick={handleNext}
+        >
+          완료
+        </button>
       </div>
     </div>
   );
@@ -225,10 +249,10 @@ const StepCircle = ({ number, label, active }: { number: number; label: string; 
 //   <div className={`w-[130px] h-[4px] self-start mt-8 ${active ? "bg-[#1d68ff]" : "bg-[#DBE6FF]"}`} />
 // );
 const Divider = ({ active, dashed }: { active?: boolean; dashed?: boolean }) => (
-  <div 
+  <div
     className="w-[130px] h-[4px] self-start mt-8"
     style={
-      dashed 
+      dashed
         ? {
             backgroundImage: `repeating-linear-gradient(to right, #DBE6FF 0, #DBE6FF 8px, transparent 8px, transparent 16px)`,
             backgroundColor: 'transparent'

@@ -1,26 +1,39 @@
-
+import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const TermsAgreement = () => {
+  const [agreed, setAgreed] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const userType = location.state?.userType;
+
+  const handleNext = () => {
+    if (agreed) {
+      navigate("/signup-info", { state: { userType } });
+    }
+  };
+
   return (
     <div className="flex flex-col items-center bg-white mt-50 min-h-screen py-10">
       {/* 제목 */}
       <div className="relative w-full flex justify-center mb-20">
-        <svg 
-          width={31} 
-          height={57} 
-          viewBox="0 0 31 57" 
-          fill="none" 
-          xmlns="http://www.w3.org/2000/svg" 
-          className="w-[27px] h-[53px] absolute left-10 top-1/2 transform -translate-y-1/2 cursor-pointer" 
+        <svg
+          width={31}
+          height={57}
+          viewBox="0 0 31 57"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-[27px] h-[53px] absolute left-10 top-1/2 transform -translate-y-1/2 cursor-pointer"
           preserveAspectRatio="none"
+          onClick={() => navigate("/signup")}
         >
-          <path 
-            d="M29 2L2 29.0933L29 55" 
-            stroke="#121218" 
-            strokeOpacity="0.5" 
-            strokeWidth={4} 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
+          <path
+            d="M29 2L2 29.0933L29 55"
+            stroke="#121218"
+            strokeOpacity="0.5"
+            strokeWidth={4}
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
         <p className="text-4xl font-semibold text-center text-[#121212]">
@@ -28,7 +41,7 @@ const TermsAgreement = () => {
         </p>
       </div>
 
-      
+
 
       <div className="flex flex-row justify-center gap-0  mb-20">
         <StepCircle number={1} label="약관동의" active />
@@ -134,6 +147,27 @@ const TermsAgreement = () => {
           </p>
         </div>
       </div>
+      <div className="w-[1200px] flex justify-end items-center mt-4 mb-8">
+        <label htmlFor="agree" className="flex items-center cursor-pointer">
+          <input
+            id="agree"
+            type="checkbox"
+            checked={agreed}
+            onChange={(e) => setAgreed(e.target.checked)}
+            className="mr-2 h-5 w-5"
+          />
+          <span className="text-lg">서비스 이용약관에 모두 동의합니다.</span>
+        </label>
+      </div>
+      <button
+        onClick={handleNext}
+        disabled={!agreed}
+        className={`w-[1200px] py-4 text-2xl font-bold text-white rounded-md ${
+          agreed ? "bg-[#1D68FF] hover:bg-blue-700" : "bg-gray-400 cursor-not-allowed"
+        }`}
+      >
+        다음
+      </button>
     </div>
   );
 };
@@ -153,10 +187,10 @@ const StepCircle = ({ number, label, active }: { number: number; label: string; 
 );
 
 const Divider = ({ active }: { active?: boolean }) => (
-  <div 
+  <div
     className="w-[120px] h-[4px] mt-8"
     style={{
-      backgroundImage: active 
+      backgroundImage: active
         ? `repeating-linear-gradient(to right, #1d68ff 0, #1d68ff 8px, transparent 8px, transparent 16px)`
         : `repeating-linear-gradient(to right, #DBE6FF 0, #DBE6FF 8px, transparent 8px, transparent 16px)`,
       backgroundColor: 'transparent'
