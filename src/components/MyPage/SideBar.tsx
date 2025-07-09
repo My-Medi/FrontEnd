@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 
 // assets 이미지 import (MyPage 폴더에서 올바른 경로)
-import homeIcon from "../../assets/Myhome/home.png";
-import writeIcon from "../../assets/Myhome/write.png";
-import write2Icon from "../../assets/Myhome/wirte2.png";
-import alramIcon from "../../assets/Myhome/alarm.png";
-import peopleIcon from "../../assets/Myhome/people.png";
+import homeIcon from "../../assets/Myhome/SideBar/home.svg";
+import writeIcon from "../../assets/Myhome/SideBar/write.svg";
+import write2Icon from "../../assets/Myhome/SideBar/write2.svg";
+import alramIcon from "../../assets/Myhome/SideBar/notification.svg";
+import peopleIcon from "../../assets/Myhome/SideBar/expert.svg";
 
 const STYLES = {
   container: "absolute left-[calc(124*100vw/1920)] top-[calc(320*100vw/1920)] z-10 max-[480px]:relative max-[480px]:left-0 max-[480px]:top-0 max-[480px]:m-4",
