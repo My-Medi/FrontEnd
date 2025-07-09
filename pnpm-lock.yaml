@@ -29,6 +29,9 @@ importers:
       react-dom:
         specifier: ^19.1.0
         version: 19.1.0(react@19.1.0)
+      react-icons:
+        specifier: ^5.5.0
+        version: 5.5.0(react@19.1.0)
       react-router-dom:
         specifier: ^7.6.1
         version: 7.6.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -53,7 +56,7 @@ importers:
         version: 19.1.5(@types/react@19.1.6)
       '@vitejs/plugin-react-swc':
         specifier: ^3.9.0
-        version: 3.10.1(vite@6.3.5(@types/node@24.0.12)(jiti@2.4.2)(lightningcss@1.30.1)(sass@1.89.2))
+        version: 3.10.1(vite@6.3.5(jiti@2.4.2)(lightningcss@1.30.1)(sass@1.89.2))
       eslint:
         specifier: ^9.25.0
         version: 9.28.0(jiti@2.4.2)
@@ -86,6 +89,7 @@ importers:
         version: 8.33.1(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
       vite:
         specifier: ^6.3.5
+        version: 6.3.5(jiti@2.4.2)(lightningcss@1.30.1)(sass@1.89.2)
         version: 6.3.5(@types/node@24.0.12)(jiti@2.4.2)(lightningcss@1.30.1)(sass@1.89.2)
 
 packages:
@@ -430,7 +434,7 @@ packages:
   '@pkgr/core@0.2.7':
     resolution: {integrity: sha512-YLT9Zo3oNPJoBjBc4q8G2mjU4tqIbf5CEOORbUUr48dCD9q3umJ3IPlVqOqDakPfd2HuwccBaqlGhN4Gmr5OWg==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
-
+    
   '@rolldown/pluginutils@1.0.0-beta.9':
     resolution: {integrity: sha512-e9MeMtVWo186sgvFFJOPGy7/d2j2mZhLJIdVW0C/xDluuOvymEATqz6zKsP0ZmXGzQtqlyjz5sC1sYQUoJG98w==}
 
@@ -1339,14 +1343,12 @@ packages:
 
   node-addon-api@7.1.1:
     resolution: {integrity: sha512-5m3bsyrjFWE1xf7nz7YXdN4udnVtXK6/Yfgn5qnahL6bCkf2yKt4k3nuTKAtT4r3IG8JNR2ncsIMdZuAzJjHQQ==}
-
   node-releases@2.0.19:
     resolution: {integrity: sha512-xxOWJsBKtzAq7DY0J+DTzuz58K8e7sJbdgwkbMWQe8UYB6ekmsQ45q0M/tJDsGaZmbC+l7n57UV8Hl5tHxO9uw==}
 
   normalize-range@0.1.2:
     resolution: {integrity: sha512-bdok/XvKII3nUpklnV6P2hxtMNrCboOjAcyBuQnWEhO665FwrSNRxU+AqpsyvO6LgGYPspN+lu5CLtw4jPRKNA==}
     engines: {node: '>=0.10.0'}
-
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
     engines: {node: '>= 0.8.0'}
@@ -1420,6 +1422,11 @@ packages:
     resolution: {integrity: sha512-Xs1hdnE+DyKgeHJeJznQmYMIBG3TKIHJJT95Q58nHLSrElKlGQqDTR2HQ9fx5CN/Gk6Vh/kupBTDLU11/nDk/g==}
     peerDependencies:
       react: ^19.1.0
+
+  react-icons@5.5.0:
+    resolution: {integrity: sha512-MEFcXdkP3dLo8uumGI5xN3lDFNsRtrjbOEKDLD7yv76v4wpnEq2Lt2qeHaQOr34I/wPN3s3+N08WkQ+CW37Xiw==}
+    peerDependencies:
+      react: '*'
 
   react-router-dom@7.6.1:
     resolution: {integrity: sha512-vxU7ei//UfPYQ3iZvHuO1D/5fX3/JOqhNTbRR+WjSBWxf9bIvpWK+ftjmdfJHzPOuMQKe2fiEdG+dZX6E8uUpA==}
@@ -2051,12 +2058,13 @@ snapshots:
       '@tailwindcss/oxide-wasm32-wasi': 4.1.8
       '@tailwindcss/oxide-win32-arm64-msvc': 4.1.8
       '@tailwindcss/oxide-win32-x64-msvc': 4.1.8
-
+  '@tailwindcss/vite@4.1.8(vite@6.3.5(jiti@2.4.2)(lightningcss@1.30.1)(sass@1.89.2))':
   '@tailwindcss/vite@4.1.8(vite@6.3.5(@types/node@24.0.12)(jiti@2.4.2)(lightningcss@1.30.1)(sass@1.89.2))':
     dependencies:
       '@tailwindcss/node': 4.1.8
       '@tailwindcss/oxide': 4.1.8
       tailwindcss: 4.1.8
+      vite: 6.3.5(jiti@2.4.2)(lightningcss@1.30.1)(sass@1.89.2)
       vite: 6.3.5(@types/node@24.0.12)(jiti@2.4.2)(lightningcss@1.30.1)(sass@1.89.2)
 
   '@types/estree@1.0.7': {}
@@ -2168,7 +2176,11 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 8.33.1
       eslint-visitor-keys: 4.2.0
-
+  '@vitejs/plugin-react-swc@3.10.1(vite@6.3.5(jiti@2.4.2)(lightningcss@1.30.1)(sass@1.89.2))':
+    dependencies:
+      '@rolldown/pluginutils': 1.0.0-beta.9
+      '@swc/core': 1.11.29
+      vite: 6.3.5(jiti@2.4.2)(lightningcss@1.30.1)(sass@1.89.2)
   '@vitejs/plugin-react-swc@3.10.1(vite@6.3.5(@types/node@24.0.12)(jiti@2.4.2)(lightningcss@1.30.1)(sass@1.89.2))':
     dependencies:
       '@rolldown/pluginutils': 1.0.0-beta.9
@@ -2702,10 +2714,10 @@ snapshots:
   node-addon-api@7.1.1:
     optional: true
 
+
   node-releases@2.0.19: {}
 
   normalize-range@0.1.2: {}
-
   optionator@0.9.4:
     dependencies:
       deep-is: 0.1.4
@@ -2769,6 +2781,10 @@ snapshots:
     dependencies:
       react: 19.1.0
       scheduler: 0.26.0
+
+  react-icons@5.5.0(react@19.1.0):
+    dependencies:
+      react: 19.1.0
 
   react-router-dom@7.6.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:
@@ -2930,6 +2946,7 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
+  vite@6.3.5(jiti@2.4.2)(lightningcss@1.30.1)(sass@1.89.2):
   vite@6.3.5(@types/node@24.0.12)(jiti@2.4.2)(lightningcss@1.30.1)(sass@1.89.2):
     dependencies:
       esbuild: 0.25.5
