@@ -1,9 +1,13 @@
 import React from "react";
-import SimpleBox from "../components/MyPage/SimpleBox";
-import SideBar from "../components/MyPage/SideBar";
-import Calendar from "../components/MyPage/Calendar";
-import ScheduleCard from "../components/MyPage/ScheduleCard";
-import type { ScheduleType } from "../components/MyPage/ScheduleCard";
+import SimpleBox from "../components/MyHome/SimpleBox";
+import SideBar from "../components/MyHome/SideBar";
+import Calendar from "../components/MyHome/Calendar";
+
+import type { ScheduleType } from "../components/MyHome/ScheduleCard";
+import ExpertAdvice from "../components/MyHome/ExpertAdvice";
+import MyConstantMedical from "../components/MyHome/MyConstantMedical";
+import PatientInfoSection from "../components/MyHome/ProfileInfo";
+import ScheduleCard from "../components/MyHome/ScheduleCard";
 
 const scheduleData = [
   {
@@ -35,13 +39,24 @@ const scheduleData = [
 const MyHome: React.FC = () => {
   return (
     <div
-      className="relative w-full flex flex-row"
-      style={{
-        minHeight: "calc(2950 * 100vw / 1920)",
-      }}
+      className="relative w-full flex flex-col lg:flex-row min-h-screen lg:min-h-[calc(2923*100vw/1920)]"
     >
-      <SideBar />
+      <SideBar userType="patient" />
       <SimpleBox>
+        <PatientInfoSection
+          nickname="하나"
+          name="김민지"
+          age={23}
+          height={168}
+          weight={52}
+          checkupCount={2}
+        />
+        <div className="w-full h-[2px] bg-[#DBE6FF] my-8" />
+        <div className="flex flex-col">
+          <MyConstantMedical status="안심" nickname="하나" />
+          <ExpertAdvice adviceText="하루 1시간 이상 걷기, 추천 운동법으로 혈당 수치를 낮춰보세요!" />
+        </div>
+        <div className="w-full h-[2px] bg-[#DBE6FF] my-8" />
         <Calendar />
         <div className="mt-8 flex flex-col gap-6">
           {scheduleData.map((schedule, index) => (
