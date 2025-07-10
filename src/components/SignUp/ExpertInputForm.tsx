@@ -7,137 +7,71 @@ interface ExpertInputFormProps {
 
 const ExpertInputForm: React.FC<ExpertInputFormProps> = ({ onNext, onPrev }) => {
   return (
-    <div className="w-full bg-white flex flex-col items-center py-[100px]">
+    <div className="w-full bg-white flex flex-col items-center py-[30px]">
       {/* 전문분야 */}
-      <SectionTitle title="전문분야" />
-      <div className="flex flex-row gap-[30px] mb-14 items-center">
-        <div className="flex justify-start items-center flex-grow-0 flex-shrink-0 relative gap-[18px]">
-          <svg
-            width={30}
-            height={30}
-            viewBox="0 0 30 30"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="flex-grow-0 flex-shrink-0 w-[30px] h-[30px] relative"
-          >
-            <rect width={30} height={30} rx={8} fill="#1D68FF" />
-            <path
-              d="M9 14.5345L13.6737 19L21 12"
-              stroke="white"
-              strokeWidth={3}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          <p className="flex-grow-0 flex-shrink-0 text-[28px] font-medium text-left text-[#121218]">
-            영양사
-          </p>
-        </div>
-        <div className="flex justify-start items-center flex-grow-0 flex-shrink-0 relative gap-[18px]">
-          <svg
-            width={30}
-            height={30}
-            viewBox="0 0 30 30"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="flex-grow-0 flex-shrink-0 w-[30px] h-[30px] relative"
-          >
-            <rect x="0.5" y="0.5" width={29} height={29} rx="7.5" fill="white" />
-            <rect x="0.5" y="0.5" width={29} height={29} rx="7.5" stroke="#9DA0A3" />
-            <path
-              d="M9 14.5345L13.6737 19L21 12"
-              stroke="#9DA0A3"
-              strokeWidth={3}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          <p className="flex-grow-0 flex-shrink-0 text-[28px] font-medium text-left text-[#4d5053]">
-            건강관리사
-          </p>
-        </div>
-        <div className="flex justify-start items-center flex-grow-0 flex-shrink-0 relative gap-[18px]">
-          <svg
-            width={30}
-            height={30}
-            viewBox="0 0 30 30"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="flex-grow-0 flex-shrink-0 w-[30px] h-[30px] relative"
-          >
-            <rect x="0.5" y="0.5" width={29} height={29} rx="7.5" fill="white" />
-            <rect x="0.5" y="0.5" width={29} height={29} rx="7.5" stroke="#9DA0A3" />
-            <path
-              d="M9 14.5345L13.6737 19L21 12"
-              stroke="#9DA0A3"
-              strokeWidth={3}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          <p className="flex-grow-0 flex-shrink-0 text-[28px] font-medium text-left text-[#4d5053]">
-            웰니스 코치
-          </p>
-        </div>
-        <div className="flex justify-start items-center flex-grow-0 flex-shrink-0 relative gap-[18px]">
-          <svg
-            width={30}
-            height={30}
-            viewBox="0 0 30 30"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="flex-grow-0 flex-shrink-0 w-[30px] h-[30px] relative"
-          >
-            <rect x="0.5" y="0.5" width={29} height={29} rx="7.5" fill="white" />
-            <rect x="0.5" y="0.5" width={29} height={29} rx="7.5" stroke="#9DA0A3" />
-            <path
-              d="M9 14.5345L13.6737 19L21 12"
-              stroke="#9DA0A3"
-              strokeWidth={3}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          <p className="flex-grow-0 flex-shrink-0 text-[28px] font-medium text-left text-[#4d5053]">
-            운동 처방사
-          </p>
-        </div>
-        <div className="flex justify-start items-center flex-grow-0 flex-shrink-0 relative gap-[18px]">
-          <svg
-            width={30}
-            height={30}
-            viewBox="0 0 30 30"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="flex-grow-0 flex-shrink-0 w-[30px] h-[30px] relative"
-          >
-            <rect x="0.5" y="0.5" width={29} height={29} rx="7.5" fill="white" />
-            <rect x="0.5" y="0.5" width={29} height={29} rx="7.5" stroke="#9DA0A3" />
-            <path
-              d="M9 14.5345L13.6737 19L21 12"
-              stroke="#9DA0A3"
-              strokeWidth={3}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          <p className="flex-grow-0 flex-shrink-0 text-[28px] font-medium text-left text-[#4d5053]">
-            기타
-          </p>
-        </div>
+      <div className="w-[1200px] mb-14 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+        <span className="w-5 h-5 bg-[#1D68FF] rounded-[6px]" />
+        <p className="text-[35px] font-medium text-[#121218]">전문분야</p>
       </div>
 
-      {/* 소속 회사/기관명 */}
-      <SectionTitle title="소속 회사/기관명" />
-      <div className="w-[625px] h-[60px] mb-14 rounded-[14px] border-[1.5px] border-[#9DA0A3] px-6 flex items-center">
-        <p className="text-[22px] text-center text-[#9DA0A3]">
-          소속 회사/ 기관명을 입력하세요.
-        </p>
+      <div className="flex items-center gap-[24px] overflow-x-auto">
+        {["영양사", "건강관리사", "웰니스 코치", "운동 처방사", "기타"].map((label, i) => (
+          <div key={i} className="flex items-center gap-[6px]">
+            <svg
+              width={30}
+              height={30}
+              viewBox="0 0 30 30"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-[30px] h-[30px]"
+            >
+              <rect
+                x="0.5"
+                y="0.5"
+                width={29}
+                height={29}
+                rx="7.5"
+                fill="white"
+              />
+              <rect
+                x="0.5"
+                y="0.5"
+                width={29}
+                height={29}
+                rx="7.5"
+                stroke="#9DA0A3"
+              />
+              <path
+                d="M9 14.5345L13.6737 19L21 12"
+                stroke="#9DA0A3"
+                strokeWidth={3}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <p className="text-[28px] font-medium text-[#121218]">{label}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+
+      <div className="w-[1200px] mb-14 flex items-center justify-between gap-6">
+        <div className="flex items-center gap-4">
+          <span className="w-5 h-5 bg-[#1D68FF] rounded-[6px]" />
+          <p className="text-[32px] font-medium text-[#121218]">소속 회사/기관명</p>
+        </div>
+        <input
+          type="text"
+          className="w-[625px] h-[60px] rounded-[14px] border-[1.5px] border-[#9DA0A3] px-6 text-[22px] text-[#121218] placeholder-[#9DA0A3]"
+          placeholder="소속 회사/ 기관명을 입력하세요."
+        />
       </div>
 
       {/* 자격증 업로드 */}
       <SectionTitle title="자격증" />
-      <div className="w-[1301px] h-[157px] bg-white border-2 border-[#dbe6ff] rounded-[14px] flex items-center justify-center gap-5 mb-6">
+      <div className="w-[1200px] h-[157px] bg-white border-2 border-[#dbe6ff] rounded-[14px] flex items-center justify-center gap-5 mb-6">
         <svg width={24} height={31} viewBox="0 0 24 31" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M13.5 11V2.75L21.75 11M3 0.5C1.335 0.5 0 1.835 0 3.5V27.5C0 28.2956 0.31607 29.0587 0.87868 29.6213C1.44129 30.1839 2.20435 30.5 3 30.5H21C21.7956 30.5 22.5587 30.1839 23.1213 29.6213C23.6839 29.0587 24 28.2956 24 27.5V9.5L15 0.5H3Z" fill="#9DA0A3" />
         </svg>
@@ -155,10 +89,23 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({ onNext, onPrev }) => 
        <AddButton/>
       </div>
 
+      {/* 경력사항 */}
+      <SectionTitle title="경력사항" />
+      <CareerTable />
+      <AddButton/>
+
+
+      <SectionTitle title="경력소개" />
+      <div className="w-[1200px] h-[319px] bg-white border-2 border-[#dbe6ff] rounded-[14px] p-6 mb-20">
+        <p className="text-[22px] text-left text-[#121218]">
+          안녕하세요. 저는 -에서 근무했던 000영양사입니다. ---마이메디를 통해--------------ㅁ
+        </p>
+      </div>
+
       {/* 버튼 */}
-      <div className="flex items-center justify-between mt-8 w-[1200px]">
-        <button type="button" className="px-10 py-3 bg-[#DBE6FF] text-black rounded-full text-lg font-semibold shadow-md" onClick={onPrev}>이전</button>
-        <button type="button" className="px-10 py-3 bg-[#1D68FF] text-white rounded-full text-lg font-semibold shadow-md" onClick={onNext}>다음</button>
+      <div className="flex gap-[268px]">
+        <button onClick={onPrev} className="px-20 py-5 rounded-[60px] cursor-pointer bg-[#dbe6ff] text-[32px] text-[#121218] font-medium">이전</button>
+        <button onClick={onNext} className="w-[380px] px-20 py-5 rounded-[60px] cursor-pointer bg-[#1d68ff] text-[32px] text-white font-semibold">완료</button>
       </div>
     </div>
   );
@@ -167,7 +114,8 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({ onNext, onPrev }) => 
 
 
 const SectionTitle = ({ title }: { title: string }) => (
-  <div className="w-[1200px] mb-6">
+  <div className="w-[1200px] mb-6 flex items-center gap-6">
+    <span className="w-5 h-5 bg-[#1D68FF] rounded-[6px]"></span>
     <p className="text-[32px] font-medium text-[#121218]">{title}</p>
   </div>
 );
