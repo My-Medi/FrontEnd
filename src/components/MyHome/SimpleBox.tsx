@@ -12,12 +12,9 @@ const SimpleBox: React.FC<SimpleBoxProps> = ({ children, fullWidthContent, class
       <div
         className={`
           box-border bg-white border border-[#DBE6FF] rounded-3xl overflow-hidden overflow-y-auto
-          m-4 flex flex-col flex-grow
+          m-4 flex flex-col
           
-          lg:absolute
-          lg:w-[1439px] lg:left-[357px] lg:top-[292px]
-          lg:rounded-[60px]
-          lg:m-0
+          lg:max-w-[1439px] lg:mb-8 lg:rounded-[60px]
           
           ${className || ''}
         `}
