@@ -67,33 +67,33 @@ const MyHome: React.FC = () => {
         </SimpleBox>
       </div>
 
-      <div className="hidden lg:block">
+      <div className="hidden lg:flex lg:pt-[70px]">
         <SideBar userType="patient" />
-        <SimpleBox>
-          <div className="pl-[73px] pt-[76px] pr-[73px] pb-[40px]">
-            <PatientInfoSection
-              nickname="하나"
-              name="김민지"
-              age={23}
-              height={168}
-              weight={52}
-              checkupCount={2}
-            />
-            <div className="w-full h-[2px] bg-[#DBE6FF] mt-[36px] mb-[44px]" />
-            <MyConstantMedical status="안심" nickname="하나" />
-            <ExpertAdvice adviceText="하루 1시간 이상 걷기, 추천 운동법으로 혈당 수치를 낮춰보세요!" />
-            <div className="w-full h-[2px] bg-[#DBE6FF] mt-[22px] mb-[54px]" />
-            <Calendar />
-            <div className="mt-[34px] flex flex-col gap-6">
-              {scheduleData.map((schedule, index) => (
-                <ScheduleCard key={index} {...schedule} />
-              ))}
+        <main className="flex-grow lg:ml-[80px]">
+          <SimpleBox>
+            <div className="pl-[73px] pt-[76px] pr-[73px] pb-[40px]">
+              <PatientInfoSection
+                nickname="하나"
+                name="김민지"
+                age={23}
+                height={168}
+                weight={52}
+                checkupCount={2}
+              />
+              <div className="w-full h-[2px] bg-[#DBE6FF] mt-[36px] mb-[44px]" />
+              <MyConstantMedical status="안심" nickname="하나" />
+              <ExpertAdvice adviceText="하루 1시간 이상 걷기, 추천 운동법으로 혈당 수치를 낮춰보세요!" />
+              <div className="w-full h-[2px] bg-[#DBE6FF] mt-[22px] mb-[54px]" />
+              <Calendar />
+              <div className="mt-[34px] flex flex-col gap-6">
+                {scheduleData.map((schedule, index) => (
+                  <ScheduleCard key={index} {...schedule} />
+                ))}
+              </div>
             </div>
-          </div>
-        </SimpleBox>
+          </SimpleBox>
+        </main>
       </div>
-
-      <div className="hidden lg:block lg:h-[2927px]" />
     </div>
   );
 };

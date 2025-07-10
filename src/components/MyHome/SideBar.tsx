@@ -83,7 +83,7 @@ const SideBar: React.FC<SideBarProps> = ({
   };
 
   return (
-    <div className="relative m-4 z-10 lg:absolute lg:m-0 lg:left-[124px] lg:top-[320px]">
+    <div className="relative m-4 z-10 lg:m-0 lg:ml-[124px] lg:mt-7">
       {menuItems.map((item, index) => {
         const isSelected = internalSelectedMenu === index;
         return (
