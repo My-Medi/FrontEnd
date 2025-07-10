@@ -1,19 +1,11 @@
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 
-const ExpertInputForm = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const userType = location.state?.userType;
+interface ExpertInputFormProps {
+  onNext: () => void;
+  onPrev: () => void;
+}
 
-  const handleNext = () => {
-    navigate("/signup-complete", { state: { userType } });
-  };
-
-  const handlePrev = () => {
-    navigate("/signup-info", { state: { userType } });
-  };
-
+const ExpertInputForm: React.FC<ExpertInputFormProps> = ({ onNext, onPrev }) => {
   return (
     <div className="w-full bg-white flex flex-col items-center py-[100px]">
       {/* 타이틀 및 화살표 */}
@@ -26,7 +18,7 @@ const ExpertInputForm = () => {
           xmlns="http://www.w3.org/2000/svg"
           className="w-[27px] h-[53px] absolute left-0 top-1/2 transform -translate-y-1/2 cursor-pointer"
           preserveAspectRatio="none"
-          onClick={handlePrev}
+          onClick={onPrev}
         >
           <path
             d="M29 2L2 29.0933L29 55"
@@ -40,17 +32,7 @@ const ExpertInputForm = () => {
         <p className="text-4xl font-semibold mt-5 text-center text-[#121218]">마이메디 회원가입</p>
       </div>
 
-      {/* 타이틀 및 단계 표시 */}
 
-      <div className="flex items-center justify-center gap-2 mb-16">
-        <StepCircle number={1} label="약관동의" active />
-        <Divider active />
-        <StepCircle number={2} label="회원정보입력" active />
-        <Divider active />
-        <StepCircle number={3} label="전문가정보입력" active />
-        <Divider dashed />
-        <StepCircle number={4} label="가입완료" />
-      </div>
 
       {/* 전문분야 */}
       <SectionTitle title="전문분야" />
@@ -199,127 +181,60 @@ const ExpertInputForm = () => {
        <AddButton/>
       </div>
 
-      {/* 경력사항 */}
-      <SectionTitle title="경력사항" />
-      <CareerTable />
-      <AddButton/>
-
-
-      <SectionTitle title="경력소개" />
-      <div className="w-[1301px] h-[319px] bg-white border-2 border-[#dbe6ff] rounded-[14px] p-6 mb-20">
-        <p className="text-[22px] text-left text-[#121218]">
-          안녕하세요. 저는 -에서 근무했던 000영양사입니다. ---마이메디를 통해--------------ㅁ
-        </p>
-      </div>
-
       {/* 버튼 */}
-      <div className="flex gap-[268px]">
-        <button
-          className="px-20 py-5 rounded-[60px] cursor-pointer bg-[#dbe6ff] text-[32px] text-[#121218] font-medium"
-          onClick={handlePrev}
-        >
-          이전
-        </button>
-        <button
-          className="w-[380px] px-20 py-5 rounded-[60px] cursor-pointer bg-[#1d68ff] text-[32px] text-white font-semibold"
-          onClick={handleNext}
-        >
-          완료
-        </button>
+      <div className="flex items-center justify-between mt-8 w-[1200px]">
+        <button type="button" className="px-10 py-3 bg-[#DBE6FF] text-black rounded-full text-lg font-semibold shadow-md" onClick={onPrev}>이전</button>
+        <button type="button" className="px-10 py-3 bg-[#1D68FF] text-white rounded-full text-lg font-semibold shadow-md" onClick={onNext}>다음</button>
       </div>
     </div>
   );
 };
 
-const StepCircle = ({ number, label, active }: { number: number; label: string; active?: boolean }) => (
-  <div className="flex flex-col items-center">
-    <div
-      className={`w-[68px] h-[68px] rounded-full flex items-center justify-center text-[32px] font-medium ${
-        active ? "bg-[#1d68ff] text-white" : "bg-white border border-[#1d68ff]/50 text-[#121218]/50"
-      }`}
-      style={active ? { boxShadow: "0px 0px 30px 1px rgba(29,104,255,0.4)" } : {}}
-    >
-      {number}
-    </div>
-    <p className={`mt-2 text-xl text-center ${active ? "text-[#121218]" : "text-[#121218]/50"}`}>{label}</p>
-  </div>
-);
 
-// const Divider = ({ active }: { active?: boolean }) => (
-//   <div className={`w-[130px] h-[4px] self-start mt-8 ${active ? "bg-[#1d68ff]" : "bg-[#DBE6FF]"}`} />
-// );
-const Divider = ({ active, dashed }: { active?: boolean; dashed?: boolean }) => (
-  <div
-    className="w-[130px] h-[4px] self-start mt-8"
-    style={
-      dashed
-        ? {
-            backgroundImage: `repeating-linear-gradient(to right, #DBE6FF 0, #DBE6FF 8px, transparent 8px, transparent 16px)`,
-            backgroundColor: 'transparent'
-          }
-        : {
-            backgroundColor: active ? '#1d68ff' : '#DBE6FF'
-          }
-    }
-  />
-);
 
 const SectionTitle = ({ title }: { title: string }) => (
-  <div className="flex items-center gap-2 w-[1300px] mb-6">
-    <div className="w-[19px] h-[19px] rounded-md bg-[#1d68ff]" />
-    <p className="text-[28px] font-medium text-left text-[#121218]">{title}</p>
+  <div className="w-[1200px] mb-6">
+    <p className="text-[32px] font-medium text-[#121218]">{title}</p>
   </div>
 );
 
-
-
 const CareerTable = () => (
-  <div className="w-[1301px] border-2 border-[#dbe6ff] text-[#121218] text-20 rounded-[14px] overflow-hidden mb-14">
-    <div className="flex text-[#121218] bg-white border-b-2 border-[#dbe6ff]">
-      <HeaderCell width="308px">회사/기관명</HeaderCell>
-      <HeaderCell width="524px">근무기간</HeaderCell>
-      <HeaderCell width="469px">역할입력</HeaderCell>
-    </div>
-    {[1, 2].map((_, i) => (
-      <div key={i} className="flex border-b flex-grow-0 flex-shrink-0 text-[22px] border-[#dbe6ff] bg-white text-[#121218]">
-        <Cell width="308px">대한영양사협회</Cell>
-        <div className="flex">
-          <Cell width="242px">2022.05.24</Cell>
-          <Cell width="40px">-</Cell>
-          <Cell width="242px">2025.05.12</Cell>
-        </div>
-        <Cell width="469px">식단 계획 및 조리</Cell>
-      </div>
-    ))}
+  <div className="w-[1200px] mb-6">
+    <table className="w-full border-collapse">
+      <thead>
+        <tr className="bg-[#f8f9fa]">
+          <HeaderCell width="20%">기간</HeaderCell>
+          <HeaderCell width="30%">소속</HeaderCell>
+          <HeaderCell width="30%">직책</HeaderCell>
+          <HeaderCell width="20%">담당업무</HeaderCell>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <Cell width="20%">2020.01 - 2023.12</Cell>
+          <Cell width="30%">건강관리센터</Cell>
+          <Cell width="30%">영양사</Cell>
+          <Cell width="20%">영양 상담</Cell>
+        </tr>
+      </tbody>
+    </table>
   </div>
 );
 
 const HeaderCell = ({ children, width }: { children: React.ReactNode; width: string }) => (
-  <div className={`flex justify-center text-2xl font-semibold items-center h-14`} style={{ width }}>{children}</div>
+  <th className={`border border-[#e9ecef] p-4 text-center font-medium ${width}`}>{children}</th>
 );
 
 const Cell = ({ children, width }: { children: React.ReactNode; width: string }) => (
-  <div className={`flex justify-center items-center h-14 px-5`} style={{ width }}>{children}</div>
+  <td className={`border border-[#e9ecef] p-4 text-center ${width}`}>{children}</td>
 );
 
 const AddButton = () => (
-  <div className="flex justify-center items-center w-[413px] h-[50px] rounded-[50px] border-2 border-[#dbe6ff] bg-white cursor-pointer">
-    <svg
-      width={23}
-      height={24}
-      viewBox="0 0 23 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="flex-grow-0 flex-shrink-0"
-      preserveAspectRatio="none"
-    >
-      <path
-        d="M11.3608 0.533203C12.1892 0.533203 12.8608 1.2048 12.8608 2.0332V10.6396H21.4663C22.2946 10.6396 22.9661 11.3114 22.9663 12.1396C22.9663 12.9681 22.2947 13.6396 21.4663 13.6396H12.8608V21.9658C12.8607 22.7941 12.1892 23.4658 11.3608 23.4658C10.5325 23.4658 9.86102 22.7941 9.86084 21.9658V13.6396H1.53369C0.705617 13.6392 0.0336914 12.9678 0.0336914 12.1396C0.0338703 11.3116 0.705727 10.6401 1.53369 10.6396H9.86084V2.0332C9.86087 1.20482 10.5325 0.533233 11.3608 0.533203Z"
-        fill="#75787B"
-      />
-    </svg>
+  <div className="w-[1200px] mb-14">
+    <button className="w-full py-4 bg-[#f8f9fa] border-2 border-dashed border-[#dee2e6] text-[#6c757d] text-lg font-medium rounded-md hover:bg-[#e9ecef] transition-colors">
+      + 경력 추가
+    </button>
   </div>
 );
 
-
-export default ExpertInputForm;
+export default ExpertInputForm; 
