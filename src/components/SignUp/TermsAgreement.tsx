@@ -1,15 +1,16 @@
 import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 
-const TermsAgreement = () => {
+interface TermsAgreementProps {
+  onNext: () => void;
+  onPrev: () => void;
+}
+
+const TermsAgreement: React.FC<TermsAgreementProps> = ({ onNext, onPrev }) => {
   const [agreed, setAgreed] = useState(false);
-  const navigate = useNavigate();
-  const location = useLocation();
-  const userType = location.state?.userType;
 
   const handleNext = () => {
     if (agreed) {
-      navigate("/signup-info", { state: { userType } });
+      onNext();
     }
   };
 
@@ -25,7 +26,7 @@ const TermsAgreement = () => {
           xmlns="http://www.w3.org/2000/svg"
           className="w-[27px] h-[53px] absolute left-10 top-1/2 transform -translate-y-1/2 cursor-pointer"
           preserveAspectRatio="none"
-          onClick={() => navigate("/signup")}
+          onClick={onPrev}
         >
           <path
             d="M29 2L2 29.0933L29 55"
@@ -42,16 +43,6 @@ const TermsAgreement = () => {
       </div>
 
 
-
-      <div className="flex flex-row justify-center gap-0  mb-20">
-        <StepCircle number={1} label="약관동의" active />
-        <Divider/>
-        <StepCircle number={2} label="회원정보입력" />
-        <Divider/>
-        <StepCircle number={3} label="전문가정보입력" />
-        <Divider/>
-        <StepCircle number={4} label="가입완료" />
-      </div>
 
       {/* 하단 약관 영역 */}
       <div className="flex flex-col items-start bg-white border shadow-md w-[1200px]">
@@ -172,29 +163,6 @@ const TermsAgreement = () => {
   );
 };
 
-const StepCircle = ({ number, label, active }: { number: number; label: string; active?: boolean }) => (
-  <div className="flex flex-col items-center">
-    <div
-      className={`w-[68px] h-[68px] rounded-full flex items-center justify-center text-[32px] font-medium ${
-        active ? "bg-[#1d68ff] text-white" : "bg-white border border-[#1d68ff]/50 text-[#121218]/50"
-      }`}
-      style={active ? { boxShadow: "0px 0px 30px 1px rgba(29,104,255,0.4)" } : {}}
-    >
-      {number}
-    </div>
-    <p className={`mt-2 text-xl text-center ${active ? "text-[#121218]" : "text-[#121218]/50"}`}>{label}</p>
-  </div>
-);
 
-const Divider = ({ active }: { active?: boolean }) => (
-  <div
-    className="w-[120px] h-[4px] mt-8"
-    style={{
-      backgroundImage: active
-        ? `repeating-linear-gradient(to right, #1d68ff 0, #1d68ff 8px, transparent 8px, transparent 16px)`
-        : `repeating-linear-gradient(to right, #DBE6FF 0, #DBE6FF 8px, transparent 8px, transparent 16px)`,
-      backgroundColor: 'transparent'
-    }}
-  />
-);
-export default TermsAgreement
+
+export default TermsAgreement; 
