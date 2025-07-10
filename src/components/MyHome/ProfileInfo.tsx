@@ -1,5 +1,5 @@
 import React from "react";
-import defaultProfileImage from "@/assets/profile.svg";
+import defaultProfileImage from "@/assets/MyHome/profile.svg";
 
 interface PatientInfoProps {
   nickname: string;

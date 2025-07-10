@@ -1,7 +1,7 @@
 import React from "react";
-import SignUpInfo from "../components/SignUp/Info";
+import SignUpInfo from "../../components/SignUp/Info";
 import { FiChevronLeft } from "react-icons/fi";
-import Stepper from "../components/SignUp/Stepper";
+import Stepper from "../../components/SignUp/Stepper";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const SignUpInfoPage: React.FC = () => {

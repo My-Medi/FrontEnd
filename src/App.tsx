@@ -2,16 +2,16 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
 // import GlobalStyles from "./styles/GlobalStyles";
 import HomeLayout from "./layout/HomeLayout";
-import MyHome from "./pages/MyHome";
-import SignUp from "./pages/SignUp";
-import SignUpInfoPage from "./pages/SignUpInfo";
-import SignUpComplete from "./pages/SignUpComplete";
-import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
-import IntroducePage from "./pages/IntroducePage";
+import MyHome from "./pages/Myhome/MyHome";
+import SignUp from "./pages/Signup/SignUp";
+import SignUpInfoPage from "./pages/Signup/SignUpInfo";
+import SignUpComplete from "./pages/Signup/SignUpComplete";
+import HomePage from "./pages/Home/HomePage";
+import LoginPage from "./pages/Login/LoginPage";
+import IntroducePage from "./pages/Introduce/IntroducePage";
 import TermsAgreement from "./pages/Signup/TermsAgreement";
 import ExpertInputform from "./pages/Signup/ExpertInputform";
-import NotFoundPage from "./pages/NotFoundPage";
+import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 
 const router = createBrowserRouter([
   {
@@ -35,10 +35,9 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      {/* <GlobalStyles /> */}
       <RouterProvider router={router} />
     </>
   );
 }
 
-export default App;
+export default App; 

@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import checkIcon from "../assets/signupcheck.png";
-import Stepper from "../components/SignUp/Stepper";
+import checkIcon from "../../assets/SignUp/signupcheck.png";
+import Stepper from "../../components/SignUp/Stepper";
 import { FiChevronLeft } from "react-icons/fi";
 
 const SignUpComplete: React.FC = () => {
