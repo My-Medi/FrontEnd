@@ -6,7 +6,6 @@ import TermsAgreement from "../../components/SignUp/TermsAgreement";
 import SignUpInfo from "../../components/SignUp/Info";
 import ExpertInputForm from "../../components/SignUp/ExpertInputForm";
 import SignUpComplete from "../../components/SignUp/SignUpComplete";
-import ExpertSignup from "../../components/SignUp/ExpertSignup";
 import Stepper from "../../components/SignUp/Stepper";
 
 type SignUpStep = "select" | "terms" | "info" | "expert-info" | "complete";
@@ -126,7 +125,20 @@ const SignUp: React.FC = () => {
       case "terms":
         return (
           <div className="flex flex-col items-center justify-center min-h-[70vh] w-full">
-            <Stepper currentStep={currentStep} userType={userType || undefined} />
+            {/* 제목 */}
+            <div className="mt-20 mb-10 flex items-center justify-center w-full relative">
+              <button type="button" className="absolute left-[184px]" onClick={handlePrev}>
+                <FiChevronLeft size={50} className="text-gray-400" />
+              </button>
+              <h2 className="text-2xl font-bold">마이메디 회원가입</h2>
+            </div>
+
+            {/* Stepper */}
+            <div className="mb-10">
+              <Stepper currentStep={currentStep} userType={userType || undefined} />
+            </div>
+
+            {/* 약관동의 폼 */}
             <TermsAgreement onNext={handleNext} onPrev={handlePrev} />
           </div>
         );
@@ -153,7 +165,20 @@ const SignUp: React.FC = () => {
       case "expert-info":
         return (
           <div className="flex flex-col items-center justify-center min-h-[70vh] w-full">
-            <Stepper currentStep={currentStep} userType={userType || undefined} />
+            {/* 제목 */}
+            <div className="mt-20 mb-10 flex items-center justify-center w-full relative">
+              <button type="button" className="absolute left-[184px]" onClick={handlePrev}>
+                <FiChevronLeft size={50} className="text-gray-400" />
+              </button>
+              <h2 className="text-2xl font-bold">마이메디 회원가입</h2>
+            </div>
+
+            {/* Stepper */}
+            <div className="mb-10">
+              <Stepper currentStep={currentStep} userType={userType || undefined} />
+            </div>
+
+            {/* 전문가 정보 입력 폼 */}
             <ExpertInputForm onNext={handleNext} onPrev={handlePrev} />
           </div>
         );
