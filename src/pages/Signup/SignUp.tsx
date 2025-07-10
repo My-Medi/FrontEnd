@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FiChevronLeft } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import StepSelector from "../components/SignUp/StepSelector";
+import StepSelector from "../../components/SignUp/StepSelector";
 
 const SignUp: React.FC = () => {
   const [selected, setSelected] = useState<"personal" | "expert" | null>("personal");

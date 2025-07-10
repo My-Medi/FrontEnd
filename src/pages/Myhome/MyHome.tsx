@@ -1,13 +1,13 @@
 import React from 'react';
-import SimpleBox from '../components/MyHome/SimpleBox';
-import SideBar from '../components/MyHome/SideBar';
-import Calendar from '../components/MyHome/Calendar';
+import SimpleBox from '../../components/MyHome/SimpleBox';
+import SideBar from '../../components/MyHome/SideBar';
+import Calendar from '../../components/MyHome/Calendar';
 
-import type { ScheduleType } from '../components/MyHome/ScheduleCard';
-import ExpertAdvice from '../components/MyHome/ExpertAdvice';
-import MyConstantMedical from '../components/MyHome/MyConstantMedical';
-import PatientInfoSection from '../components/MyHome/ProfileInfo';
-import ScheduleCard from '../components/MyHome/ScheduleCard';
+import type { ScheduleType } from '../../components/MyHome/ScheduleCard';
+import ExpertAdvice from '../../components/MyHome/ExpertAdvice';
+import MyConstantMedical from '../../components/MyHome/MyConstantMedical';
+import PatientInfoSection from '../../components/MyHome/ProfileInfo';
+import ScheduleCard from '../../components/MyHome/ScheduleCard';
 
 const scheduleData = [
   {
