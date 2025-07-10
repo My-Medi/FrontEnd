@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SimpleBox from '../../components/MyHome/SimpleBox';
 import SideBar from '../../components/MyHome/SideBar';
 import Calendar from '../../components/MyHome/Calendar';
@@ -39,12 +39,13 @@ const scheduleData = [
 ];
 
 const MyHome: React.FC = () => {
-  return (
-    <div className="relative w-full">
-      <div className="flex flex-col lg:hidden">
-        <SideBar userType="patient" />
-        <SimpleBox>
-          <div className="p-6">
+  const [selectedMenu, setSelectedMenu] = useState(0);
+
+  const renderContent = () => {
+    switch (selectedMenu) {
+      case 0:
+        return (
+          <>
             <PatientInfoSection
               nickname="하나"
               name="김민지"
@@ -53,43 +54,52 @@ const MyHome: React.FC = () => {
               weight={52}
               checkupCount={2}
             />
-            <div className="w-full h-[2px] bg-[#DBE6FF] my-4" />
+            <div className="w-full h-[2px] bg-[#DBE6FF] my-4 lg:mt-[36px] lg:mb-[44px]" />
             <MyConstantMedical status="안심" nickname="하나" />
             <ExpertAdvice adviceText="하루 1시간 이상 걷기, 추천 운동법으로 혈당 수치를 낮춰보세요!" />
-            <div className="w-full h-[2px] bg-[#DBE6FF] my-4" />
+            <div className="w-full h-[2px] bg-[#DBE6FF] my-4 lg:mt-[22px] lg:mb-[54px]" />
             <Calendar />
-            <div className="mt-8 flex flex-col gap-6">
+            <div className="mt-8 flex flex-col gap-6 lg:mt-[34px]">
               {scheduleData.map((schedule, index) => (
                 <ScheduleCard key={index} {...schedule} />
               ))}
             </div>
-          </div>
+          </>
+        );
+      case 1:
+        return <div className="p-6 text-center">건강관리요청서 작성하기 페이지</div>;
+      case 2:
+        return <div className="p-6 text-center">내 알림 페이지</div>;
+      case 3:
+        return <div className="p-6 text-center">매칭된 전문가 페이지</div>;
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="relative w-full">
+      <div className="flex flex-col lg:hidden">
+        <SideBar
+          userType="patient"
+          selectedMenu={selectedMenu}
+          onMenuSelect={setSelectedMenu}
+        />
+        <SimpleBox>
+          <div className="p-6">{renderContent()}</div>
         </SimpleBox>
       </div>
 
       <div className="hidden lg:flex lg:pt-[70px]">
-        <SideBar userType="patient" />
-        <main className="flex-grow lg:ml-[80px]">
+        <SideBar
+          userType="patient"
+          selectedMenu={selectedMenu}
+          onMenuSelect={setSelectedMenu}
+        />
+        <main className="flex-grow lg:ml-[70px]">
           <SimpleBox>
-            <div className="pl-[73px] pt-[76px] pr-[73px] pb-[40px]">
-              <PatientInfoSection
-                nickname="하나"
-                name="김민지"
-                age={23}
-                height={168}
-                weight={52}
-                checkupCount={2}
-              />
-              <div className="w-full h-[2px] bg-[#DBE6FF] mt-[36px] mb-[44px]" />
-              <MyConstantMedical status="안심" nickname="하나" />
-              <ExpertAdvice adviceText="하루 1시간 이상 걷기, 추천 운동법으로 혈당 수치를 낮춰보세요!" />
-              <div className="w-full h-[2px] bg-[#DBE6FF] mt-[22px] mb-[54px]" />
-              <Calendar />
-              <div className="mt-[34px] flex flex-col gap-6">
-                {scheduleData.map((schedule, index) => (
-                  <ScheduleCard key={index} {...schedule} />
-                ))}
-              </div>
+            <div className="pl-[73px] pt-[76px] pr-[73px] pb-[80px]">
+              {renderContent()}
             </div>
           </SimpleBox>
         </main>

@@ -6,13 +6,15 @@ import Topbar from "../components/Common/layout/Topbar";
 
 const HomeLayout: React.FC = () => {
   return (
-    <div className="flex flex-col max-w-[1920px] min-h-screen mx-auto">
+    <div className="flex flex-col min-h-screen">
       <Topbar />
-      <NavBar />
-      <main className="flex-grow mb-24 lg:mb-[640px]">
-        <Outlet />
-      </main>
-      <Footer />
+      <div className="w-full max-w-[1920px] mx-auto flex flex-col flex-grow">
+        <NavBar />
+        <main className="flex-grow mb-24 lg:mb-[640px]">
+          <Outlet />
+        </main>
+        <Footer />
+      </div>
     </div>
   );
 };
