@@ -75,17 +75,15 @@ const SideBar: React.FC<SideBarProps> = ({
   onMenuSelect,
   userType,
 }) => {
-  const [internalSelectedMenu, setInternalSelectedMenu] = useState(selectedMenu);
   const menuItems = userType === 'expert' ? expertMenuItems : patientMenuItems;
   const handleMenuClick = (index: number) => {
-    setInternalSelectedMenu(index);
     onMenuSelect?.(index);
   };
 
   return (
     <div className="relative m-4 z-10 lg:m-0 lg:ml-[124px] lg:mt-7">
       {menuItems.map((item, index) => {
-        const isSelected = internalSelectedMenu === index;
+        const isSelected = selectedMenu === index;
         return (
           <div
             key={item.id}

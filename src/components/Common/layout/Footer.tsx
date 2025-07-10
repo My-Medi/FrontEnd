@@ -2,7 +2,7 @@ import React from "react";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="w-5/6 bg-white mx-auto">
+    <footer className="w-5/6 bg-white mx-auto pb-[104px]">
       <div className="w-full">
         <div className="h-[0.2rem] bg-[#1D68FF]"></div>
       </div>
