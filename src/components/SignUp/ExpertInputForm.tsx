@@ -8,32 +8,6 @@ interface ExpertInputFormProps {
 const ExpertInputForm: React.FC<ExpertInputFormProps> = ({ onNext, onPrev }) => {
   return (
     <div className="w-full bg-white flex flex-col items-center py-[100px]">
-      {/* 타이틀 및 화살표 */}
-      <div className="relative w-full flex justify-center mb-15">
-        <svg
-          width={31}
-          height={57}
-          viewBox="0 0 31 57"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-[27px] h-[53px] absolute left-0 top-1/2 transform -translate-y-1/2 cursor-pointer"
-          preserveAspectRatio="none"
-          onClick={onPrev}
-        >
-          <path
-            d="M29 2L2 29.0933L29 55"
-            stroke="#121218"
-            strokeOpacity="0.5"
-            strokeWidth={4}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-        <p className="text-4xl font-semibold mt-5 text-center text-[#121218]">마이메디 회원가입</p>
-      </div>
-
-
-
       {/* 전문분야 */}
       <SectionTitle title="전문분야" />
       <div className="flex flex-row gap-[30px] mb-14 items-center">
