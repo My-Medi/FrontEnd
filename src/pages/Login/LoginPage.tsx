@@ -7,17 +7,17 @@ import SocialLoginButton from "../../components/Login/SocialLoginButton";
 
 const LoginPage = () => {
   return (
-    <div className="flex flex-col items-center w-full pt-[175px] pb-12">
+    <div className="flex flex-col items-center w-full pt-44 pb-12">
       <img
         src={logo}
         alt="MyMedi Logo"
-        className="w-[232px] h-[36px] mb-[30px]"
+        className="w-56 h-9 mb-8"
       />
-      <h1 className="text-[48px] font-semibold text-[#25282B] mb-[64px]">
+      <h1 className="text-5xl font-semibold text-[#25282B] mb-16">
         로그인
       </h1>
-      <div className="flex flex-col items-center w-full max-w-[642px] px-4">
-        <div className="flex flex-col w-full gap-y-[24px]">
+      <div className="flex flex-col items-center w-full max-w-2xl px-4">
+        <div className="flex flex-col w-full gap-y-6">
           <LoginInput
             label="아이디"
             type="text"
@@ -33,11 +33,11 @@ const LoginPage = () => {
           />
         </div>
         <button
-          className="w-full h-[100px] mt-[40px] text-white bg-[#1D68FF] rounded-[60px] text-[32px] font-semibold flex justify-center items-center gap-2.5 px-20 py-5"
+          className="w-full h-24 mt-10 text-white bg-[#1D68FF] rounded-full text-3xl font-semibold flex justify-center items-center gap-2.5"
         >
           로그인
         </button>
-        <div className="flex items-center justify-between w-full mt-[16px]">
+        <div className="flex flex-col items-center w-full gap-4 mt-4 sm:flex-row sm:justify-between">
           <div className="relative flex items-center">
             <input
               type="checkbox"
@@ -64,20 +64,20 @@ const LoginPage = () => {
               </span>
             </label>
           </div>
-          <div className="flex items-center text-2xl font-medium text-[#4D5053]">
+          <div className="flex items-center text-2xl font-medium text-[#4D5053] gap-4">
             <a href="#" className="hover:underline">
               아이디 찾기
             </a>
-            <span className="mx-4 text-gray-300">|</span>
+            <span className="text-gray-300">|</span>
             <a href="#" className="hover:underline">
               비밀번호 찾기
             </a>
           </div>
         </div>
-        <div className="mt-[48px] text-xl">
-          <span className="font-light text-[#121218]">
-            아직 마이메디 회원이 아니신가요?{" "}
-          </span>
+        <div className="flex items-baseline mt-12 gap-x-4">
+          <p className="text-xl font-light text-[#121218]">
+            아직 마이메디 회원이 아니신가요?
+          </p>
           <a
             href="/signup"
             className="text-2xl font-semibold text-[#121218] hover:underline"
@@ -86,7 +86,7 @@ const LoginPage = () => {
           </a>
         </div>
       </div>
-      <div className="flex flex-col w-full max-w-[642px] px-4 mt-[54px] gap-y-[16px]">
+      <div className="flex flex-col w-full max-w-2xl px-4 mt-14 gap-y-4">
         <SocialLoginButton
           icon={kakao}
           text="카카오로 로그인"
