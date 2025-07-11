@@ -5,7 +5,6 @@ import logo from "../../assets/Login/logo.svg";
 import kakao from "../../assets/Login/kakao.svg";
 import naver from "../../assets/Login/naver.svg";
 import google from "../../assets/Login/google.svg";
-import before from "../../assets/Login/before.svg";
 import LoginInput from "../../components/Login/LoginInput";
 import SocialLoginButton from "../../components/Login/SocialLoginButton";
 import LoginConfirmModal from "../../components/Common/modal/LoginConfirmModal";
@@ -24,7 +23,6 @@ const button = cva(
 );
 
 const LoginPage = () => {
-  const navigate = useNavigate();
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -81,16 +79,10 @@ const LoginPage = () => {
 
   return (
     <div className="relative flex flex-col items-center w-full min-h-screen pt-20 pb-12 lg:pt-44">
-      <button
-        onClick={() => navigate(-1)}
-        className="absolute top-20 left-8 xl:top-[122px] xl:left-[279px]"
-      >
-        <img src={before} alt="뒤로가기" className="w-13 h-13" />
-      </button>
       <img
         src={logo}
         alt="MyMedi Logo"
-        className="w-48 h-auto mb-8 lg:w-56"
+        className="w-48 h-auto mb-11 lg:w-56"
       />
       <h1 className="text-3xl font-semibold text-[#25282B] mb-8 sm:text-4xl lg:text-5xl lg:mb-16">
         로그인
