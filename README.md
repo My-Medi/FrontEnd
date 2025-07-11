@@ -1,3 +1,37 @@
+<img width="1920" height="1080" alt="표지" src="https://github.com/user-attachments/assets/731abe46-19e2-4ef9-94c8-ce985227847c" />
+
+
+## 🧑‍💻 Team My-Medi Fronted Developers
+
+<table>
+  <tr>
+    <td align="center" style="padding: 20px;">
+      <a href="https://github.com/geg222">
+        <img src="https://github.com/geg222.png" width="130px;" alt="geg222"/><br />
+        <div style="font-size:18px;"><b>원준영</b></div>
+      </a>
+    </td>
+    <td align="center" style="padding: 20px;">
+      <a href="https://github.com/dokyung17">
+        <img src="https://github.com/dokyung17.png" width="130px;" alt="dokyung17"/><br />
+        <div style="font-size:18px;"><b>곽도경</b></div>
+      </a>
+    </td>
+    <td align="center" style="padding: 20px;">
+      <a href="https://github.com/mkyoung29">
+        <img src="https://github.com/mkyoung29.png" width="130px;" alt="mkyoung29"/><br />
+        <div style="font-size:18px;"><b>최민경</b></div>
+      </a>
+    </td>
+    <td align="center" style="padding: 20px;">
+      <a href="https://github.com/Hminkyung">
+        <img src="https://github.com/Hminkyung.png" width="130px;" alt="Hminkyung"/><br />
+        <div style="font-size:18px;"><b>황민경</b></div>
+      </a>
+    </td>
+  </tr>
+</table>
+
 ## Git Flow
 - main : 최종적으로 배포되는 브랜치
 - dev : 배포 전, 개발 중심으로 검증 위주의 브랜치
