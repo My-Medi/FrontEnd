@@ -10,7 +10,7 @@ const HomeLayout: React.FC = () => {
       <div className="w-full max-w-[1920px] mx-auto ">
         <Topbar />
       </div>
-      <div className="w-full max-w-[1920px] mx-auto flex flex-col flex-grow">
+      <div className="w-full max-w-[1920px] mx-auto flex flex-col flex-grow pt-10">
         <NavBar />
         <main className="flex-grow mb-24 lg:mb-[640px]">
           <Outlet />

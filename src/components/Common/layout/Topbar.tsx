@@ -12,7 +12,7 @@ const Topbar = () => {
 
   return (
     <>
-      {/* Desktop View: xl(1280px) 이상에서만 보임. 기존 코드를 그대로 복사하여 스타일을 100% 보존 */}
+      {/* Desktop View: xl(1280px) 이상에서만 보임. Figma 디자인에 맞춰 스타일 수정 */}
       <div className="hidden xl:block">
         <div className="flex justify-between items-center min-w-[1450px] w-full h-[138px] px-[100px] pt-[30px] bg-white/80">
           <div className="flex items-center gap-2.5">

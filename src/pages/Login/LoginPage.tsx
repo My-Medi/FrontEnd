@@ -1,13 +1,92 @@
+import { useState, useMemo, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { cva } from "class-variance-authority";
 import logo from "../../assets/Login/logo.svg";
 import kakao from "../../assets/Login/kakao.svg";
 import naver from "../../assets/Login/naver.svg";
 import google from "../../assets/Login/google.svg";
+import before from "../../assets/Login/before.svg";
 import LoginInput from "../../components/Login/LoginInput";
 import SocialLoginButton from "../../components/Login/SocialLoginButton";
+import LoginConfirmModal from "../../components/Common/modal/LoginConfirmModal";
+
+const button = cva(
+  "w-full h-16 mt-8 text-xl font-semibold rounded-full lg:h-24 lg:mt-10 lg:text-3xl flex justify-center items-center gap-2.5",
+  {
+    variants: {
+      intent: {
+        active: "text-white bg-[#1D68FF]",
+        inactive:
+          "bg-[#C5C8CB] text-white",
+      },
+    },
+  },
+);
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+  const [id, setId] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+
+  const isPasswordValid = useMemo(() => {
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*.,?":{}|<>])(?=.{8,})/;
+    return passwordRegex.test(password);
+  }, [password]);
+
+  const isFormValid = useMemo(() => {
+    return id.length > 0 && isPasswordValid;
+  }, [id, isPasswordValid]);
+
+  useEffect(() => {
+    const originalOverflow = window.getComputedStyle(document.body).overflow;
+    if (isModalOpen) {
+      const scrollbarWidth =
+        window.innerWidth - document.documentElement.clientWidth;
+      document.body.style.overflow = 'hidden';
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    }
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      document.body.style.paddingRight = '0px';
+    };
+  }, [isModalOpen]);
+
+  const handleLogin = () => {
+    // NOTE: This is a temporary login handler for demonstration.
+    // TODO: Replace with actual API call.
+    const MOCK_USERS = [
+      { id: "testuser", password: "Testpassword1!" },
+      { id: "user123", password: "Password123!" },
+    ];
+
+    if (!isFormValid) return;
+
+    const foundUser = MOCK_USERS.find((user) => user.id === id);
+
+    if (!foundUser) {
+      setModalMessage("등록되지 않은 회원입니다.");
+    } else if (foundUser.password !== password) {
+      setModalMessage("아이디 혹은 비밀번호가 올바르지 않습니다.");
+    } else {
+      // This case would be a successful login.
+      console.log("Login Successful");
+      return; // Do not open modal on success
+    }
+    setIsModalOpen(true);
+  };
+
   return (
-    <div className="flex flex-col items-center w-full pt-20 pb-12 lg:pt-44">
+    <div className="relative flex flex-col items-center w-full min-h-screen pt-20 pb-12 lg:pt-44">
+      <button
+        onClick={() => navigate(-1)}
+        className="absolute top-20 left-8 xl:top-[122px] xl:left-[279px]"
+      >
+        <img src={before} alt="뒤로가기" className="w-13 h-13" />
+      </button>
       <img
         src={logo}
         alt="MyMedi Logo"
@@ -23,6 +102,8 @@ const LoginPage = () => {
             type="text"
             id="username"
             placeholder="아이디를 입력하세요."
+            value={id}
+            onChange={(e) => setId(e.target.value)}
           />
           <LoginInput
             label="비밀번호"
@@ -30,10 +111,14 @@ const LoginPage = () => {
             id="password"
             placeholder="비밀번호를 입력하세요."
             errorMessage="소문자, 대문자 , 특수기호 포함 8글자 이상"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </div>
         <button
-          className="w-full h-16 mt-8 text-xl font-semibold text-white bg-[#1D68FF] rounded-full lg:h-24 lg:mt-10 lg:text-3xl flex justify-center items-center gap-2.5"
+          className={button({ intent: isFormValid ? "active" : "inactive" })}
+          disabled={!isFormValid}
+          onClick={handleLogin}
         >
           로그인
         </button>
@@ -43,6 +128,8 @@ const LoginPage = () => {
               type="checkbox"
               id="remember-me"
               className="sr-only peer"
+              checked={rememberMe}
+              onChange={() => setRememberMe(!rememberMe)}
             />
             <label
               htmlFor="remember-me"
@@ -103,6 +190,11 @@ const LoginPage = () => {
           alt="google icon"
         />
       </div>
+      <LoginConfirmModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title={modalMessage}
+      />
     </div>
   );
 };
