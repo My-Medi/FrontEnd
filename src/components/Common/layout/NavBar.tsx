@@ -5,20 +5,17 @@ const NavBar: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    // xl(1280px) 미만에서는 숨기고, xl 이상에서는 원본 코드가 그대로 보이도록 처리
-    <div className="hidden xl:block">
-      <nav className="w-full flex justify-center" >
-        <div
-          className="bg-white rounded-full flex items-center justify-around py-[14px] min-w-[980px] w-[87%] min-h-[56px] mx-[124px]"
-          style={{ boxShadow: "0 0 5px 0 #1D68FF" }}
-        >
-          <p onClick={() => navigate('/myhome')} className="cursor-pointer text-[#121212] text-[22px] leading-[26px]">마이 홈</p>
-          <a href="#" className="text-[#121212] text-[22px] leading-[26px]">마이 메디컬 리포트</a>
-          <a href="#" className="text-[#121212] text-[22px] leading-[26px]">전문가 찾기</a>
-          <a href="#" className="text-[#121212] text-[22px] leading-[26px]">건강용어 알아보기</a>
-        </div>
-      </nav>
-    </div>
+    <nav className="w-full hidden xl:flex justify-center" >
+      <div
+        className="bg-white rounded-full flex items-center justify-around py-[14px] min-w-[980px] w-[87%] min-h-[56px] mx-[124px]"
+        style={{ boxShadow: "0px 0px 20px 0px #1D68FF33" }}
+      >
+        <p onClick={() => navigate('/myhome')} className="cursor-pointer text-[#121212] text-[22px] leading-[26px]">마이 홈</p>
+        <a href="#" className="text-[#121212] text-[22px] leading-[26px]">마이 메디컬 리포트</a>
+        <a href="#" className="text-[#121212] text-[22px] leading-[26px]">전문가 찾기</a>
+        <a href="#" className="text-[#121212] text-[22px] leading-[26px]">건강용어 알아보기</a>
+      </div>
+    </nav>
   );
 };
 
