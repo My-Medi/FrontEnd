@@ -54,12 +54,12 @@ const MyHome: React.FC = () => {
               weight={52}
               checkupCount={2}
             />
-            <div className="w-full h-[2px] bg-[#DBE6FF] my-4 lg:mt-[36px] lg:mb-[44px]" />
+            <div className="w-full h-[2px] bg-[#DBE6FF] my-4 lg:my-8" />
             <MyConstantMedical status="안심" nickname="하나" />
             <ExpertAdvice adviceText="하루 1시간 이상 걷기, 추천 운동법으로 혈당 수치를 낮춰보세요!" />
-            <div className="w-full h-[2px] bg-[#DBE6FF] my-4 lg:mt-[22px] lg:mb-[54px]" />
+            <div className="w-full h-[2px] bg-[#DBE6FF] my-4 lg:my-8" />
             <Calendar />
-            <div className="mt-8 flex flex-col gap-6 lg:mt-[34px]">
+            <div className="flex flex-col gap-6 mt-8">
               {scheduleData.map((schedule, index) => (
                 <ScheduleCard key={index} {...schedule} />
               ))}
@@ -86,7 +86,7 @@ const MyHome: React.FC = () => {
           onMenuSelect={setSelectedMenu}
         />
         <SimpleBox>
-          <div className="p-6">{renderContent()}</div>
+          <div className="p-4 sm:p-6">{renderContent()}</div>
         </SimpleBox>
       </div>
 
@@ -98,9 +98,7 @@ const MyHome: React.FC = () => {
         />
         <main className="flex-grow lg:ml-[70px]">
           <SimpleBox>
-            <div className="pl-[73px] pt-[76px] pr-[73px] pb-[80px]">
-              {renderContent()}
-            </div>
+            <div className="p-8 xl:p-16">{renderContent()}</div>
           </SimpleBox>
         </main>
       </div>
