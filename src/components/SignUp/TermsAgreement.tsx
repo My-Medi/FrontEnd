@@ -15,7 +15,7 @@ const TermsAgreement: React.FC<TermsAgreementProps> = ({ onNext, onPrev }) => {
   };
 
   return (
-    <div className="flex flex-col items-center bg-white min-h-screen py-10">
+    <div className="flex flex-col items-center bg-white">
 
       {/* 하단 약관 영역 */}
       <div className="flex flex-col items-start bg-white border border-[#DBE6FF]  shadow-md w-[1000px] rounded-[20px]">

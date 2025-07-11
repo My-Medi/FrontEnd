@@ -29,11 +29,17 @@ const SignUp: React.FC = () => {
   const navigate = useNavigate();
 
   const handleUserTypeSelect = (type: "personal" | "expert") => {
+    // 화면 맨 위로 스크롤
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
     setUserType(type);
     setCurrentStep("terms");
   };
 
   const handleNext = () => {
+    // 화면 맨 위로 스크롤
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
     switch (currentStep) {
       case "select":
         // 이미 handleUserTypeSelect에서 처리됨
@@ -58,6 +64,9 @@ const SignUp: React.FC = () => {
   };
 
   const handlePrev = () => {
+    // 화면 맨 위로 스크롤
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
     switch (currentStep) {
       case "select":
         navigate(-1);
@@ -109,12 +118,14 @@ const SignUp: React.FC = () => {
       case "select":
         return (
           <div className="flex flex-col items-center justify-center min-h-[10vh] w-full">
-            <div className="mt-20 relative w-full mb-30 flex items-center justify-center">
+            {/* 제목 */}
+            <div className="mt-20 mb-10 flex items-center justify-center w-full relative">
               <button type="button" className="absolute left-[184px]" onClick={handlePrev}>
-                <FiChevronLeft size={50} className="text-gray-400" />
+                <FiChevronLeft size={60} className="text-gray-400" />
               </button>
               <h2 className="text-2xl font-bold">마이메디 회원가입</h2>
             </div>
+            
             <StepSelector 
               selected={userType} 
               setSelected={(type) => handleUserTypeSelect(type as "personal" | "expert")} 
@@ -128,15 +139,14 @@ const SignUp: React.FC = () => {
             {/* 제목 */}
             <div className="mt-20 mb-10 flex items-center justify-center w-full relative">
               <button type="button" className="absolute left-[184px]" onClick={handlePrev}>
-                <FiChevronLeft size={50} className="text-gray-400" />
+                <FiChevronLeft size={60} className="text-gray-400" />
               </button>
               <h2 className="text-2xl font-bold">마이메디 회원가입</h2>
             </div>
 
             {/* Stepper */}
-            <div className="mb-10">
               <Stepper currentStep={currentStep} userType={userType || undefined} />
-            </div>
+
 
             {/* 약관동의 폼 */}
             <TermsAgreement onNext={handleNext} onPrev={handlePrev} />
@@ -144,10 +154,10 @@ const SignUp: React.FC = () => {
         );
       case "info":
         return (
-          <div className="flex flex-col items-center justify-center min-h-[70vh] w-full">
+          <div className="flex flex-col items-center justify-center w-full">
             <div className="mt-20 relative w-full mb-10 flex items-center justify-center">
               <button type="button" className="absolute left-[184px]" onClick={handlePrev}>
-                <FiChevronLeft size={50} className="text-gray-400" />
+                <FiChevronLeft size={60} className="text-gray-400" />
               </button>
               <h2 className="text-2xl font-bold">마이메디 회원가입</h2>
             </div>
@@ -168,7 +178,7 @@ const SignUp: React.FC = () => {
             {/* 제목 */}
             <div className="mt-20 mb-10 flex items-center justify-center w-full relative">
               <button type="button" className="absolute left-[184px]" onClick={handlePrev}>
-                <FiChevronLeft size={50} className="text-gray-400" />
+                <FiChevronLeft size={60} className="text-gray-400" />
               </button>
               <h2 className="text-2xl font-bold">마이메디 회원가입</h2>
             </div>
@@ -184,8 +194,21 @@ const SignUp: React.FC = () => {
         );
       case "complete":
         return (
-          <div className="flex flex-col items-center justify-center min-h-[70vh] w-full">
-            <Stepper currentStep={currentStep} userType={userType || undefined} />
+          <div className="flex flex-col items-center justify-center w-full">
+            {/* 제목 */}
+            <div className="mt-20 mb-10 flex items-center justify-center w-full relative">
+              <button type="button" className="absolute left-[184px]" onClick={handlePrev}>
+                <FiChevronLeft size={60} className="text-gray-400" />
+              </button>
+              <h2 className="text-2xl font-bold">마이메디 회원가입</h2>
+            </div>
+
+            {/* Stepper */}
+            <div className="mb-10">
+              <Stepper currentStep={currentStep} userType={userType || undefined} />
+            </div>
+
+            {/* 회원가입 완료 */}
             <SignUpComplete onPrev={handlePrev} onComplete={handleComplete} />
           </div>
         );

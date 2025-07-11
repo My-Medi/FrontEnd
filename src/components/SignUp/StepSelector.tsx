@@ -17,39 +17,47 @@ const StepSelector: React.FC<StepSelectorProps> = ({ selected, setSelected, onSu
       <button
         type="button"
         onClick={() => setSelected("personal")}
-        className={`flex flex-col items-center justify-center w-64 h-48 rounded-xl transition-all duration-150 focus:outline-none
-          ${selected === "personal"
-            ? "border-4 border-[#1D68FF] bg-white"
-            : "border-2 border-[#8CB6FF] bg-white"}
-        `}
-        style={{
-          ...(selected === "personal"
-            ? { boxShadow: "0 0 12px 2px #1D68FF", border: "4px solid #1D68FF" }
-            : { border: "2px solid #8CB6FF" }),
-          outline: "none"
+        className="flex flex-col items-center justify-center w-64 h-48 rounded-xl transition-all duration-150 hover:cursor-pointer border-2 border-[#8CB6FF] bg-white"
+        onMouseEnter={(e) => {
+          e.currentTarget.style.boxShadow = "0 0 12px 2px #1D68FF";
+          e.currentTarget.style.border = "4px solid #1D68FF";
+          // hover 시 활성화된 아이콘으로 변경
+          const img = e.currentTarget.querySelector('img') as HTMLImageElement;
+          if (img) img.src = personalIcon;
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.boxShadow = "none";
+          e.currentTarget.style.border = "2px solid #8CB6FF";
+          // hover 해제 시 비활성화된 아이콘으로 변경
+          const img = e.currentTarget.querySelector('img') as HTMLImageElement;
+          if (img) img.src = unactivePersonalIcon;
         }}
       >
-        <img src={selected === "personal" ? personalIcon : unactivePersonalIcon} alt="personal" className="w-20 h-20" />
-        <span className={`mt-4 text-2xl font-bold ${selected === "personal" ? "text-black" : "text-gray-400"}`}>개인</span>
+        <img src={unactivePersonalIcon} alt="personal" className="w-20 h-20" />
+        <span className="mt-4 text-2xl font-bold text-black">개인</span>
       </button>
       {/* 전문가 선택 박스 */}
       <button
         type="button"
         onClick={() => setSelected("expert")}
-        className={`flex flex-col items-center justify-center w-64 h-48 rounded-xl transition-all duration-150 focus:outline-none
-          ${selected === "expert"
-            ? "border-4 border-[#1D68FF] bg-white"
-            : "border-2 border-[#8CB6FF] bg-white"}
-        `}
-        style={{
-          ...(selected === "expert"
-            ? { boxShadow: "0 0 12px 2px #1D68FF", border: "4px solid #1D68FF" }
-            : { border: "2px solid #8CB6FF" }),
-          outline: "none"
+        className="flex flex-col items-center justify-center w-64 h-48 rounded-xl transition-all duration-150 hover:cursor-pointer border-2 border-[#8CB6FF] bg-white"
+        onMouseEnter={(e) => {
+          e.currentTarget.style.boxShadow = "0 0 12px 2px #1D68FF";
+          e.currentTarget.style.border = "4px solid #1D68FF";
+          // hover 시 활성화된 아이콘으로 변경
+          const img = e.currentTarget.querySelector('img') as HTMLImageElement;
+          if (img) img.src = expertIcon;
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.boxShadow = "none";
+          e.currentTarget.style.border = "2px solid #8CB6FF";
+          // hover 해제 시 비활성화된 아이콘으로 변경
+          const img = e.currentTarget.querySelector('img') as HTMLImageElement;
+          if (img) img.src = unactiveExpertIcon;
         }}
       >
-        <img src={selected === "expert" ? expertIcon : unactiveExpertIcon} alt="expert" className="w-20 h-20" />
-        <span className={`mt-4 text-2xl font-bold ${selected === "expert" ? "text-black" : "text-gray-400"}`}>전문가</span>
+        <img src={unactiveExpertIcon} alt="expert" className="w-20 h-20" />
+        <span className="mt-4 text-2xl font-bold text-black">전문가</span>
       </button>
     </div>
     <button
