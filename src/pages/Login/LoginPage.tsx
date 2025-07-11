@@ -7,13 +7,13 @@ import SocialLoginButton from "../../components/Login/SocialLoginButton";
 
 const LoginPage = () => {
   return (
-    <div className="flex flex-col items-center w-full pt-44 pb-12">
+    <div className="flex flex-col items-center w-full pt-20 pb-12 lg:pt-44">
       <img
         src={logo}
         alt="MyMedi Logo"
-        className="w-56 h-9 mb-8"
+        className="w-48 h-auto mb-8 lg:w-56"
       />
-      <h1 className="text-5xl font-semibold text-[#25282B] mb-16">
+      <h1 className="text-3xl font-semibold text-[#25282B] mb-8 sm:text-4xl lg:text-5xl lg:mb-16">
         로그인
       </h1>
       <div className="flex flex-col items-center w-full max-w-2xl px-4">
@@ -33,7 +33,7 @@ const LoginPage = () => {
           />
         </div>
         <button
-          className="w-full h-24 mt-10 text-white bg-[#1D68FF] rounded-full text-3xl font-semibold flex justify-center items-center gap-2.5"
+          className="w-full h-16 mt-8 text-xl font-semibold text-white bg-[#1D68FF] rounded-full lg:h-24 lg:mt-10 lg:text-3xl flex justify-center items-center gap-2.5"
         >
           로그인
         </button>
@@ -59,12 +59,12 @@ const LoginPage = () => {
                   />
                 </svg>
               </div>
-              <span className="text-2xl font-medium text-[#4D5053]">
+              <span className="text-lg font-medium text-[#4D5053] lg:text-2xl">
                 로그인 유지
               </span>
             </label>
           </div>
-          <div className="flex items-center text-2xl font-medium text-[#4D5053] gap-4">
+          <div className="flex items-center text-lg font-medium text-[#4D5053] gap-4 lg:text-2xl">
             <a href="#" className="hover:underline">
               아이디 찾기
             </a>
@@ -74,19 +74,19 @@ const LoginPage = () => {
             </a>
           </div>
         </div>
-        <div className="flex items-baseline mt-12 gap-x-4">
-          <p className="text-xl font-light text-[#121218]">
+        <div className="flex items-baseline mt-8 gap-x-4 lg:mt-12">
+          <p className="text-base font-light text-[#121218] lg:text-xl">
             아직 마이메디 회원이 아니신가요?
           </p>
           <a
             href="/signup"
-            className="text-2xl font-semibold text-[#121218] hover:underline"
+            className="text-lg font-semibold text-[#121218] hover:underline lg:text-2xl"
           >
             회원가입
           </a>
         </div>
       </div>
-      <div className="flex flex-col w-full max-w-2xl px-4 mt-14 gap-y-4">
+      <div className="flex flex-col w-full max-w-2xl px-4 mt-10 gap-y-4 lg:mt-14">
         <SocialLoginButton
           icon={kakao}
           text="카카오로 로그인"
