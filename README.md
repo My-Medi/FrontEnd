@@ -1,4 +1,4 @@
-<img width="1920" height="1080" alt="표지" src="https://github.com/user-attachments/assets/731abe46-19e2-4ef9-94c8-ce985227847c" />
+<img width="1920" height="1080" alt="표지" src="https://github.com/user-attachments/assets/de63b1bd-d738-479b-82aa-ef1408057efa" />
 
 
 ## 🧑‍💻 Team My-Medi Fronted Developers
