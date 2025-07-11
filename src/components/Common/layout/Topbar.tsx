@@ -4,7 +4,7 @@ const Topbar = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex justify-between items-center min-w-[1450px] w-full h-[138px] px-[100px] pt-[30px] bg-white/80">
+    <div className="flex justify-between items-center min-w-[1470px] w-full h-[138px] px-[140px] pt-[30px] bg-white/80">
       <div className="flex items-center gap-2.5">
         <img
           src="/MyMedi_logo.png"
