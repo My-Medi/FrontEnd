@@ -44,7 +44,6 @@ const Topbar = () => {
                 mymedi 소개
               </p>
             </div>
-
             <div className="flex items-center gap-10 flex-shrink-0">
               <p
                 onClick={() => navigate("login")}

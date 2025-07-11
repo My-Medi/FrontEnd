@@ -17,16 +17,33 @@ const StepSelector: React.FC<StepSelectorProps> = ({ selected, setSelected, onSu
       <button
         type="button"
         onClick={() => setSelected("personal")}
-        className={`flex flex-col items-center justify-center w-64 h-48 rounded-xl transition-all duration-150 focus:outline-none
-          ${selected === "personal"
-            ? "border-4 border-[#1D68FF] bg-white"
-            : "border-2 border-[#8CB6FF] bg-white"}
-        `}
+        className="flex flex-col items-center justify-center w-64 h-48 rounded-xl transition-all duration-150 hover:cursor-pointer"
         style={{
-          ...(selected === "personal"
-            ? { boxShadow: "0 0 12px 2px #1D68FF", border: "4px solid #1D68FF" }
-            : { border: "2px solid #8CB6FF" }),
+          border: selected === "personal" ? "4px solid #1D68FF" : "2px solid #8CB6FF",
+          boxShadow: selected === "personal" ? "0 0 12px 2px #1D68FF" : "none",
           outline: "none"
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.boxShadow = "0 0 12px 2px #1D68FF";
+          e.currentTarget.style.border = "4px solid #1D68FF";
+          // 텍스트 색상 변경
+          const span = e.currentTarget.querySelector('span');
+          if (span) span.style.color = "#000";
+          // 아이콘 변경
+          const img = e.currentTarget.querySelector('img');
+          if (img) img.src = personalIcon;
+        }}
+        onMouseLeave={(e) => {
+          if (selected !== "personal") {
+            e.currentTarget.style.boxShadow = "none";
+            e.currentTarget.style.border = "2px solid #8CB6FF";
+            // 텍스트 색상 회색으로
+            const span = e.currentTarget.querySelector('span');
+            if (span) span.style.color = "#9ca3af"; // Tailwind gray-400
+            // 아이콘 변경
+            const img = e.currentTarget.querySelector('img');
+            if (img) img.src = unactivePersonalIcon;
+          }
         }}
       >
         <img src={selected === "personal" ? personalIcon : unactivePersonalIcon} alt="personal" className="w-20 h-20" />
@@ -36,16 +53,33 @@ const StepSelector: React.FC<StepSelectorProps> = ({ selected, setSelected, onSu
       <button
         type="button"
         onClick={() => setSelected("expert")}
-        className={`flex flex-col items-center justify-center w-64 h-48 rounded-xl transition-all duration-150 focus:outline-none
-          ${selected === "expert"
-            ? "border-4 border-[#1D68FF] bg-white"
-            : "border-2 border-[#8CB6FF] bg-white"}
-        `}
+        className="flex flex-col items-center justify-center w-64 h-48 rounded-xl transition-all duration-150 hover:cursor-pointer"
         style={{
-          ...(selected === "expert"
-            ? { boxShadow: "0 0 12px 2px #1D68FF", border: "4px solid #1D68FF" }
-            : { border: "2px solid #8CB6FF" }),
+          border: selected === "expert" ? "4px solid #1D68FF" : "2px solid #8CB6FF",
+          boxShadow: selected === "expert" ? "0 0 12px 2px #1D68FF" : "none",
           outline: "none"
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.boxShadow = "0 0 12px 2px #1D68FF";
+          e.currentTarget.style.border = "4px solid #1D68FF";
+          // 텍스트 색상 변경
+          const span = e.currentTarget.querySelector('span');
+          if (span) span.style.color = "#000";
+          // 아이콘 변경
+          const img = e.currentTarget.querySelector('img');
+          if (img) img.src = expertIcon;
+        }}
+        onMouseLeave={(e) => {
+          if (selected !== "expert") {
+            e.currentTarget.style.boxShadow = "none";
+            e.currentTarget.style.border = "2px solid #8CB6FF";
+            // 텍스트 색상 회색으로
+            const span = e.currentTarget.querySelector('span');
+            if (span) span.style.color = "#9ca3af"; // Tailwind gray-400
+            // 아이콘 변경
+            const img = e.currentTarget.querySelector('img');
+            if (img) img.src = unactiveExpertIcon;
+          }
         }}
       >
         <img src={selected === "expert" ? expertIcon : unactiveExpertIcon} alt="expert" className="w-20 h-20" />
@@ -53,8 +87,10 @@ const StepSelector: React.FC<StepSelectorProps> = ({ selected, setSelected, onSu
       </button>
     </div>
     <button
-      className="mt-4 px-10 py-3 bg-[#1D68FF] text-white rounded-full text-lg font-semibold shadow-md transition"
+      className={`w-[380px] mt-10 px-20 py-5 rounded-[60px] text-[32px] font-semibold text-white transition hover:cursor-pointer hover:bg-blue-700
+          ${!selected ? "bg-gray-400 cursor-not-allowed" : "bg-[#1d68ff] cursor-pointer"}`}
       onClick={onSubmit}
+      disabled={!selected}
     >
       회원가입하기
     </button>

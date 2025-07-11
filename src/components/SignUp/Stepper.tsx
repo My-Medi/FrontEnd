@@ -55,9 +55,10 @@ const Stepper: React.FC<StepperProps> = ({ currentStep, userType }) => {
     const label = getStepLabel(stepNumber);
     
     return (
+      // 현재 단계 표시
       <div key={stepNumber} className="flex flex-col items-center z-10">
         <div 
-          className={`w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold ${
+          className={`w-17 h-17 rounded-full flex items-center justify-center text-2xl font-bold ${
             status === "completed" || status === "active"
               ? "bg-[#1D68FF] text-white shadow-[0_0_16px_0_rgba(29,104,255,0.25)]"
               : "border-2 border-[#B5D0FF] text-[#888] bg-white"
@@ -65,6 +66,7 @@ const Stepper: React.FC<StepperProps> = ({ currentStep, userType }) => {
         >
           {stepNumber}
         </div>
+        {/* 단계 라벨 표시 */}
         <span 
           className={`mt-2 text-lg font-semibold ${
             status === "completed" || status === "active" ? "text-black" : "text-[#888]"
@@ -83,12 +85,13 @@ const Stepper: React.FC<StepperProps> = ({ currentStep, userType }) => {
     if (isLastStep) return null;
     
     return (
+      // 단계 구분선 표시
       <div 
         key={`divider-${stepNumber}`}
-        className={`h-1 w-35 -ml-2 -mr-7 mb-[38px] z-0 ${
+        className={`h-1 w-45 -ml-7 -mr-7 mb-[38px] z-0 ${
           status === "completed" 
             ? "bg-[#1D68FF]" 
-            : "border-b-3 border-dashed border-[#B5D0FF]"
+            : "border-b-4 border-dashed border-[#B5D0FF]"
         }`}
       />
     );
