@@ -97,7 +97,7 @@ const TermsAgreement: React.FC<TermsAgreementProps> = ({ onNext, onPrev }) => {
       <button
         onClick={handleNext}
         disabled={!agreed}
-        className={`w-[300px] h-[70px] py-2 text-xl mt-10 font-bold text-white rounded-full ${
+        className={`w-[300px] h-[70px] text-[32px] py-2 text-xl mt-10 font-bold text-white rounded-full ${
           agreed ? "bg-[#1D68FF] hover:bg-blue-700" : "bg-gray-400 cursor-not-allowed"
         } mt-4`}
       >

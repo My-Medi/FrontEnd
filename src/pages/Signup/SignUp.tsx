@@ -28,21 +28,12 @@ const SignUp: React.FC = () => {
   });
   const navigate = useNavigate();
 
-  const handleUserTypeSelect = (type: "personal" | "expert") => {
-    // 화면 맨 위로 스크롤
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    
-    setUserType(type);
-    setCurrentStep("terms");
-  };
-
   const handleNext = () => {
-    // 화면 맨 위로 스크롤
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    
     switch (currentStep) {
       case "select":
-        // 이미 handleUserTypeSelect에서 처리됨
+        if (!userType) return; // 선택 안 했으면 진행 안 함
+        setCurrentStep("terms");
         break;
       case "terms":
         setCurrentStep("info");
@@ -128,7 +119,7 @@ const SignUp: React.FC = () => {
             
             <StepSelector 
               selected={userType} 
-              setSelected={(type) => handleUserTypeSelect(type as "personal" | "expert")} 
+              setSelected={setUserType} 
               onSubmit={handleNext} 
             />
           </div>
@@ -161,7 +152,9 @@ const SignUp: React.FC = () => {
               </button>
               <h2 className="text-2xl font-bold">마이메디 회원가입</h2>
             </div>
+            <div className="mb-10">
             <Stepper currentStep={currentStep} userType={userType || undefined} />
+            </div>
             <SignUpInfo
               values={signUpData}
               onChange={handleDataChange}
