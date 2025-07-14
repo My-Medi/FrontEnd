@@ -5,9 +5,9 @@ const NavBar: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <nav className="w-full hidden xl:flex justify-center" >
+    <nav className="w-full hidden lg:flex justify-center" >
       <div
-        className="bg-white rounded-full flex items-center justify-around py-[14px] min-w-[980px] w-[87%] min-h-[56px] mx-[124px]"
+        className="bg-white rounded-full flex items-center justify-around py-[14px] w-[87%] min-h-[56px] mx-[124px]"
         style={{ boxShadow: "0px 0px 20px 0px #1D68FF33" }}
       >
         <p onClick={() => navigate('/myhome')} className="cursor-pointer text-[#121212] text-[22px] leading-[26px]">마이 홈</p>

@@ -1,5 +1,4 @@
 import { useState, useMemo, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { cva } from "class-variance-authority";
 import logo from "../../assets/Login/logo.svg";
 import kakao from "../../assets/Login/kakao.svg";
@@ -7,7 +6,7 @@ import naver from "../../assets/Login/naver.svg";
 import google from "../../assets/Login/google.svg";
 import LoginInput from "../../components/Login/LoginInput";
 import SocialLoginButton from "../../components/Login/SocialLoginButton";
-import LoginConfirmModal from "../../components/Common/modal/LoginConfirmModal";
+import LoginConfirmModal from "../../components/Login/modal/LoginConfirmModal";
 
 const button = cva(
   "w-full h-16 mt-8 text-xl font-semibold rounded-full lg:h-24 lg:mt-10 lg:text-3xl flex justify-center items-center gap-2.5",
@@ -78,11 +77,11 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="relative flex flex-col items-center w-full min-h-screen pt-20 pb-12 lg:pt-44">
+    <div className="relative flex flex-col items-center w-full pt-20 lg:pt-44">
       <img
         src={logo}
         alt="MyMedi Logo"
-        className="w-48 h-auto mb-11 lg:w-56"
+        className="w-48 h-auto pb-11 lg:w-56"
       />
       <h1 className="text-3xl font-semibold text-[#25282B] mb-8 sm:text-4xl lg:text-5xl lg:mb-16">
         로그인
@@ -153,7 +152,7 @@ const LoginPage = () => {
             </a>
           </div>
         </div>
-        <div className="flex items-baseline mt-8 gap-x-4 lg:mt-12">
+        <div className="flex items-baseline mt-8 gap-x-4 lg:mt-12 font-Pretendard">
           <p className="text-base font-light text-[#121218] lg:text-xl">
             아직 마이메디 회원이 아니신가요?
           </p>

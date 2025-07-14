@@ -13,8 +13,8 @@ const Topbar = () => {
   return (
     <>
       {/* Desktop View: xl(1280px) 이상에서만 보임. Figma 디자인에 맞춰 스타일 수정 */}
-      <div className="hidden xl:block">
-        <div className="flex justify-between items-center min-w-[1450px] w-full h-[138px] px-[100px] pt-[30px] bg-white/80">
+      <div className="hidden lg:block">
+        <div className="flex justify-between items-center min-w-[1024px] w-full h-[138px] px-[100px] pt-[30px] bg-white/80">
           <div className="flex items-center gap-2.5">
             <img
               src="/MyMedi_logo.png"
@@ -26,7 +26,7 @@ const Topbar = () => {
             >
               MYMEDi{" "}
             </p>
-            <div className="flex items-end gap-2 mr-10">
+            <div className="hidden min-[1410px]:flex items-end gap-2 mr-10">
               <p className="text-[32px] font-semibold text-[#121212] whitespace-nowrap">
                 마이 메디
               </p>
@@ -60,7 +60,7 @@ const Topbar = () => {
                 회원가입
               </p>
             </div>
-            <div className="flex items-center gap-[223px] px-5 py-2.5 rounded-[20px] bg-[#f6f6f6]">
+            <div className="hidden min-[1410px]:flex items-center gap-[223px] px-5 py-2.5 rounded-[20px] bg-[#f6f6f6]">
               <p className="text-base font-medium text-left text-[#121212]/50">
                 Search
               </p>
@@ -87,7 +87,7 @@ const Topbar = () => {
       </div>
       
       {/* Mobile View: xl(1280px) 미만에서만 보임 */}
-      <div className="xl:hidden">
+      <div className="lg:hidden">
         <div className="relative z-20 flex justify-between items-center w-full h-20 px-4  shadow-sm">
             <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => handleNavigate("/")}>
               <img src="/MyMedi_logo.png" className="w-10 h-10 object-cover" alt="MyMedi Logo"/>
