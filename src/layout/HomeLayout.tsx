@@ -1,18 +1,18 @@
-import React from "react";
-import { Outlet } from "react-router-dom";
-import NavBar from "../components/Common/layout/NavBar";
-import Footer from "../components/Common/layout/Footer";
-import Topbar from "../components/Common/layout/Topbar";
+import React from 'react';
+import { Outlet } from 'react-router-dom';
+import NavBar from '../components/Common/layout/NavBar';
+import Footer from '../components/Common/layout/Footer';
+import Topbar from '../components/Common/layout/Topbar';
 
 const HomeLayout: React.FC = () => {
   return (
-    <div className="flex flex-col min-h-screen">
-      <div className="w-full max-w-[1920px] mx-auto ">
-        <Topbar />
-      </div>
-      <div className="w-full max-w-[1920px] mx-auto flex flex-col flex-grow pt-10">
-        <NavBar />
-        <main className="flex-grow mb-24 lg:mb-[640px]">
+    <div className="w-full"> {/* 전체 배경을 위한 최상위 div */}
+      <div className="max-w-[1920px] mx-auto"> {/* 콘텐츠 중앙 정렬을 위한 div */}
+        <header>
+          <Topbar />
+          <NavBar />
+        </header>
+        <main className="flex-grow pb-[560px]">
           <Outlet />
         </main>
         <Footer />
