@@ -12,7 +12,6 @@ const Topbar = () => {
 
   return (
     <>
-      {/* Desktop View: xl(1280px) 이상에서만 보임. Figma 디자인에 맞춰 스타일 수정 */}
       <div className="hidden lg:block">
         <div className="flex justify-between items-center min-w-[1024px] w-full h-[138px] px-[100px] pt-[30px] bg-white/80">
           <div className="flex items-center gap-2.5">
@@ -74,11 +73,11 @@ const Topbar = () => {
                 preserveAspectRatio="xMidYMid meet"
               >
                 <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   d="M14.6357 14.9977C13.3152 16.1219 11.6035 16.8003 9.73341 16.8003C5.55446 16.8003 2.16675 13.4126 2.16675 9.23366C2.16675 5.0547 5.55446 1.66699 9.73341 1.66699C13.9124 1.66699 17.3001 5.0547 17.3001 9.23366C17.3001 11.0925 16.6298 12.7948 15.5178 14.112L19.1498 17.744L18.2659 18.6279L14.6357 14.9977ZM16.0501 9.23366C16.0501 12.7223 13.222 15.5503 9.73341 15.5503C6.24482 15.5503 3.41675 12.7223 3.41675 9.23366C3.41675 5.74506 6.24482 2.91699 9.73341 2.91699C13.222 2.91699 16.0501 5.74506 16.0501 9.23366Z"
                   fill="#121212"
-                  fill-opacity="0.5"
+                  fillOpacity="0.5"
                 />
               </svg>
             </div>
