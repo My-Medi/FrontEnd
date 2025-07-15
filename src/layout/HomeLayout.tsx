@@ -15,8 +15,8 @@ const HomeLayout: React.FC = () => {
         <main className="flex-grow pb-[560px]">
           <Outlet />
         </main>
-        <Footer />
       </div>
+      <Footer />
     </div>
   );
 };
