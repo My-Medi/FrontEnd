@@ -47,7 +47,7 @@ const ExpertCard: React.FC<ExpertCardProps> = ({
         <span className="text-xl font-medium text-[#1D68FF] leading-6">/</span>
         <span className="text-xl font-medium text-[#121218] pl-2 leading-6">{realname}</span>
       </div>
-      <div className="text-lg font-medium text-[#25282B] text-left leading-9">{description}</div>
+      <div className="text-lg font-medium text-[#25282B] text-left leading-9">{description.split('.')[0]}</div>
       <ul className="mt-2 text-sm font-medium text-[#75787B] list-none whitespace-pre-line w-full break-words gap-1 leading-6">
         {careers.map((career, idx) => (
           <li key={idx}>{career}</li>
