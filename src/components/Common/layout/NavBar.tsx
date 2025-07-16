@@ -18,7 +18,10 @@ const NavBar = () => {
             <p className='cursor-pointer text-[#121218] text-[16px] leading-[36px] tracking-[-0.48px] font-[Pretendard] font-medium'>
               마이 메디컬 리포트
             </p>
-            <p className='cursor-pointer text-[#121218] text-[16px] leading-[36px] tracking-[-0.48px] font-[Pretendard] font-medium'>
+            <p
+              onClick={() => navigate('/expert')}
+              className='cursor-pointer text-[#121218] text-[16px] leading-[36px] tracking-[-0.48px] font-[Pretendard] font-medium'
+            >
               전문가 찾기
             </p>
             <p className='cursor-pointer text-[#121218] text-[16px] leading-[36px] tracking-[-0.48px] font-[Pretendard] font-medium'>
