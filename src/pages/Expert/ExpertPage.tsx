@@ -79,7 +79,7 @@ const ExpertPage = () => {
     <div className="flex flex-col items-center py-12 ">
       <ExpertIntroSection />
       <div className="pb-8 lg:pb-[50px]" />
-      <div className="w-full flex flex-col items-center px-4 lg:px-80">
+      <div className="w-full flex flex-col items-center px-2 sm:px-4 md:px-8 lg:px-80">
         <div className="w-full mx-auto">
           <ExpertCategoryFilter selected={selectedCategory} onSelect={setSelectedCategory} />
           <div className="h-[1.5px] bg-[#DBE6FF] w-full max-w-7xl mx-auto mt-3 mb-3" />
@@ -89,8 +89,8 @@ const ExpertPage = () => {
               setSelectedCategories={setSelectedCategories}
             />
           </div>
-          {/* 카드리스트: 한 줄 3개, 5줄(15개)씩 */}
-          <div className="flex flex-wrap justify-center gap-[32px] max-w-[1296px] mx-auto">
+          {/* 카드리스트: 반응형(모바일 1개, 태블릿 2개, 데스크탑 3개) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-[32px] max-w-full lg:max-w-[1296px] mx-auto w-full">
             {pagedList.map((expert: Expert, idx: number) => (
               <ExpertCard key={idx} {...expert} onClick={() => setSelectedExpert(mapExpertToDetail(expert))} />
             ))}
