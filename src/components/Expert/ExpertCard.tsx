@@ -42,7 +42,7 @@ const ExpertCard: React.FC<ExpertCardProps> = ({
         )}
       </div>
     </div>
-    <div className="flex flex-col items-start gap-1 mt-2 w-full">
+    <div className="flex flex-col items-start gap-1 pt-2 w-full">
       <div className="w-full truncate">
         <span className="text-[20px] font-medium text-[#1D68FF] pr-2 leading-[1.19em]">{nickname}</span>
         <span className="text-[20px] font-medium text-[#1D68FF] leading-[1.19em]">/</span>
