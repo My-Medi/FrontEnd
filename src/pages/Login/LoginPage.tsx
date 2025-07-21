@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { cva } from "class-variance-authority";
 import logo from "../../assets/Login/logo.svg";
@@ -8,8 +8,8 @@ import google from "../../assets/Login/google.svg";
 import backSvg from "../../assets/Expert/back.svg";
 import LoginInput from "../../components/Login/LoginInput";
 import SocialLoginButton from "../../components/Login/SocialLoginButton";
-import LoginConfirmModal from "../../components/Login/modal/LoginConfirmModal";
 import { useAuth } from "../../contexts/AuthContext";
+import LoginConfirmModal from "../../components/Login/modal/LoginConfirmModal";
 
 const button = cva(
   "w-[385.2px] h-[60px] mt-6 text-[19.2px] font-semibold rounded-full flex justify-center items-center gap-2.5 leading-[1.193]",
@@ -33,9 +33,10 @@ const LoginPage = () => {
     password: "",
   });
   const [isKeepLogin, setIsKeepLogin] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const { setUserType } = useAuth();
   const navigate = useNavigate();
+  const [showFailModal, setShowFailModal] = useState(false);
+  const idInputRef = useRef<HTMLInputElement>(null);
 
   const isFormValid = useMemo(() => {
     return formData.id.length > 0 && formData.password.length > 0;
@@ -51,18 +52,16 @@ const LoginPage = () => {
 
   const handleLogin = () => {
     if (isFormValid) {
-      setShowModal(true);
+      // 아이디가 'user' 또는 'expert'일 때만 로그인 성공
+      const id = formData.id.toLowerCase();
+      if (id === 'user' || id === 'expert') {
+        const isExpert = id === 'expert';
+        setUserType(isExpert ? 'expert' : 'patient');
+        navigate('/');
+      } else {
+        setShowFailModal(true);
+      }
     }
-  };
-
-  const handleLoginConfirm = () => {
-    // 로그인 성공 시 사용자 타입 설정
-    // 아이디가 'expert'로 시작하면 전문가, 그 외는 일반 사용자
-    const isExpert = formData.id.toLowerCase().startsWith('expert');
-    setUserType(isExpert ? 'expert' : 'patient');
-    setShowModal(false);
-    // 로그인 후 홈페이지로 이동 (새로고침 없이)
-    navigate('/');
   };
 
   const handleBack = () => {
@@ -70,17 +69,12 @@ const LoginPage = () => {
     window.history.back();
   };
 
-  useEffect(() => {
-    if (showModal) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [showModal]);
+  const handleFailModalClose = () => {
+    setShowFailModal(false);
+    setTimeout(() => {
+      idInputRef.current?.focus();
+    }, 0);
+  };
 
   return (
     <div className="relative flex flex-col items-center justify-center p-4">
@@ -103,8 +97,15 @@ const LoginPage = () => {
         </h1>
 
         {/* 로그인 폼 */}
-        <div className="w-[385.2px] flex flex-col gap-4">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleLogin();
+          }}
+          className="w-[385.2px] flex flex-col gap-4"
+        >
           <LoginInput
+            ref={idInputRef}
             label="아이디"
             type="text"
             id="id"
@@ -123,31 +124,29 @@ const LoginPage = () => {
             value={formData.password}
             onChange={handleInputChange}
           />
-        </div>
-
-        {/* 로그인 버튼 */}
-        <button
-          className={button({ intent: isFormValid ? "active" : "inactive" })}
-          onClick={handleLogin}
-          disabled={!isFormValid}
-        >
-          로그인
-        </button>
+          {/* 로그인 버튼 */}
+          <button
+            className={button({ intent: isFormValid ? "active" : "inactive" })}
+            type="submit"
+            disabled={!isFormValid}
+          >
+            로그인
+          </button>
+        </form>
            {/* 로그인 유지 체크박스와 아이디/비밀번호 찾기 */}
         <div className="w-[385.2px] flex items-center justify-between mt-6">
           <div className="flex items-center gap-3">
-            <input
-              type="checkbox"
-              id="keepLogin"
-              checked={isKeepLogin}
-              onChange={(e) => setIsKeepLogin(e.target.checked)}
-              className="w-[18px] h-[18px] border border-[#9DA0A3] rounded"
-            />
-            <label
-              htmlFor="keepLogin"
-              className="text-[14px] font-medium text-[#4D5053] leading-[1.714] tracking-[-3%]"
-            >
-              로그인 유지
+            <label className="relative flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                id="keepLogin"
+                checked={isKeepLogin}
+                onChange={(e) => setIsKeepLogin(e.target.checked)}
+                className="w-[18px] h-[18px] border border-[#9DA0A3] rounded-full appearance-none"
+              />
+              <span className="ml-3 text-[14px] font-medium text-[#4D5053] leading-[1.714] tracking-[-3%]">
+                로그인 유지
+              </span>
             </label>
           </div>
           <div className="flex items-center gap-3">
@@ -166,7 +165,10 @@ const LoginPage = () => {
           <span className="text-[12px] font-light text-[#121218] leading-[1.833] tracking-[-3%]">
             아직 마이메디 회원이 아니신가요?
           </span>
-          <span className="text-[16px] font-semibold text-[#121218] leading-[1.4] tracking-[-3%] cursor-pointer">
+          <span
+            className="text-[16px] font-semibold text-[#121218] leading-[1.4] tracking-[-3%] cursor-pointer"
+            onClick={() => navigate('/signup')}
+          >
             회원가입
           </span>
         </div>
@@ -190,12 +192,13 @@ const LoginPage = () => {
           />
         </div>
       </div>
-
-      {showModal && (
+      {showFailModal && (
         <LoginConfirmModal
-          isOpen={showModal}
-          onClose={handleLoginConfirm}
-          title="로그인 성공"
+          isOpen={showFailModal}
+          onClose={handleFailModalClose}
+          title={
+            '아이디 혹은 비밀번호가 올바르지 않습니다'
+          }
         />
       )}
     </div>

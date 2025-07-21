@@ -7,7 +7,7 @@ const Topbar = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-  const { userType } = useAuth();
+  const { userType, setUserType } = useAuth();
 
   const handleNavigate = (path: string) => {
     navigate(path);
@@ -21,6 +21,12 @@ const Topbar = () => {
       navigate(`/search?query=${searchValue.trim()}`);
       setSearchValue('');
     }
+  };
+
+  // 로그아웃 핸들러
+  const handleLogout = () => {
+    setUserType(null);
+    navigate('/login');
   };
 
   return (
@@ -62,12 +68,22 @@ const Topbar = () => {
                   마이홈
                 </p>
               )}
-              <p
-                onClick={() => navigate('/login')}
-                className='text-[#25282B] text-[14px] font-[300] leading-[22px] tracking-[-0.42px] cursor-pointer whitespace-nowrap font-[Pretendard]'
-              >
-                Logout
-              </p>
+              {/* 로그인 상태에 따라 Login/Logout 표시 */}
+              {userType ? (
+                <p
+                  onClick={handleLogout}
+                  className='text-[#25282B] text-[14px] font-[300] leading-[22px] tracking-[-0.42px] cursor-pointer whitespace-nowrap font-[Pretendard]'
+                >
+                  Logout
+                </p>
+              ) : (
+                <p
+                  onClick={() => navigate('/login')}
+                  className='text-[#25282B] text-[14px] font-[300] leading-[22px] tracking-[-0.42px] cursor-pointer whitespace-nowrap font-[Pretendard]'
+                >
+                  Login
+                </p>
+              )}
               <p
                 onClick={() => navigate('/alarm')}
                 className='text-[#25282B] text-[14px] font-[300] leading-[22px] tracking-[-0.42px] cursor-pointer whitespace-nowrap font-[Pretendard]'
