@@ -7,11 +7,11 @@ import Topbar from '../components/Common/layout/Topbar';
 const HomeLayout: React.FC = () => {
   return (
     <div className="w-full"> 
+      <header className='w-full'>
+        <Topbar />
+        <NavBar />
+      </header>
       <div className="max-w-[1920px] mx-auto"> 
-        <header>
-          <Topbar />
-          <NavBar />
-        </header>
         <main className="flex-grow pb-[320px]">
           <Outlet />
         </main>

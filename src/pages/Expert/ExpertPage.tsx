@@ -76,32 +76,34 @@ const ExpertPage = () => {
   // }, [currentPage]);
 
   return (
-    <div className="flex flex-col items-center py-12 ">
+    <div className="flex flex-col items-center py-8 lg:py-12">
       <ExpertIntroSection />
-      <div className="pb-8 lg:pb-[50px]" />
-      <div className="w-full flex flex-col items-center px-2 sm:px-4 md:px-8 lg:px-80">
-        <div className="w-full mx-auto">
+      <div className="pb-6 lg:pb-[50px]" />
+      <div className="w-full flex flex-col items-center px-4 sm:px-6 lg:px-8 xl:px-12 max-w-[1400px] mx-auto">
+        <div className="w-full">
           <ExpertCategoryFilter selected={selectedCategory} onSelect={setSelectedCategory} />
-          <div className="h-[1.5px] bg-[#DBE6FF] w-full max-w-7xl mx-auto mt-3 mb-3" />
-          <div className="pb-8">
+          <div className="h-[1.5px] bg-[#DBE6FF] w-full mx-auto mt-3 mb-3" />
+          <div className="pb-6 lg:pb-8">
             <ExpertCategoryPopover 
               selectedCategories={selectedCategories}
               setSelectedCategories={setSelectedCategories}
             />
           </div>
-          {/* 카드리스트: 반응형(모바일 1개, 태블릿 2개, 데스크탑 3개) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-[32px] max-w-full lg:max-w-[1296px] mx-auto w-full">
+          {/* 카드리스트: 더 안정적인 반응형 그리드 */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6 xl:gap-8 w-full">
             {pagedList.map((expert: Expert, idx: number) => (
               <ExpertCard key={idx} {...expert} onClick={() => setSelectedExpert(mapExpertToDetail(expert))} />
             ))}
           </div>
           {/* 페이지네이션 */}
           {totalPages > 1 && (
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
-            />
+            <div className="mt-8 lg:mt-12">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
+            </div>
           )}
         </div>
       </div>
