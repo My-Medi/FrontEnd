@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { cva } from "class-variance-authority";
 import logo from "../../assets/Login/logo.svg";
 import kakao from "../../assets/Login/kakao.svg";
@@ -8,6 +9,7 @@ import backSvg from "../../assets/Expert/back.svg";
 import LoginInput from "../../components/Login/LoginInput";
 import SocialLoginButton from "../../components/Login/SocialLoginButton";
 import LoginConfirmModal from "../../components/Login/modal/LoginConfirmModal";
+import { useAuth } from "../../contexts/AuthContext";
 
 const button = cva(
   "w-[385.2px] h-[60px] mt-6 text-[19.2px] font-semibold rounded-full flex justify-center items-center gap-2.5 leading-[1.193]",
@@ -32,6 +34,8 @@ const LoginPage = () => {
   });
   const [isKeepLogin, setIsKeepLogin] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const { setUserType } = useAuth();
+  const navigate = useNavigate();
 
   const isFormValid = useMemo(() => {
     return formData.id.length > 0 && formData.password.length > 0;
@@ -49,6 +53,16 @@ const LoginPage = () => {
     if (isFormValid) {
       setShowModal(true);
     }
+  };
+
+  const handleLoginConfirm = () => {
+    // 로그인 성공 시 사용자 타입 설정
+    // 아이디가 'expert'로 시작하면 전문가, 그 외는 일반 사용자
+    const isExpert = formData.id.toLowerCase().startsWith('expert');
+    setUserType(isExpert ? 'expert' : 'patient');
+    setShowModal(false);
+    // 로그인 후 홈페이지로 이동 (새로고침 없이)
+    navigate('/');
   };
 
   const handleBack = () => {
@@ -180,7 +194,7 @@ const LoginPage = () => {
       {showModal && (
         <LoginConfirmModal
           isOpen={showModal}
-          onClose={() => setShowModal(false)}
+          onClose={handleLoginConfirm}
           title="로그인 성공"
         />
       )}
