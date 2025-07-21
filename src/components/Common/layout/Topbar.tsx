@@ -131,6 +131,11 @@ const Topbar = () => {
           <div className='absolute top-20 left-0 w-full bg-white shadow-lg z-50'>
             <nav className='flex flex-col items-center gap-4 py-8'>
               {/* NavBar Links */}
+              <a onClick={() => handleNavigate('/myhome')} className="px-4 py-2 text-lg font-semibold text-gray-700 hover:text-[#1d68ff]">마이 홈</a>
+              <a onClick={() => handleNavigate('/health-result-input')} className="px-4 py-2 text-lg text-gray-700 hover:text-[#1d68ff]">마이 메디컬 리포트</a>
+              <a onClick={() => handleNavigate('/find-expert')} className="px-4 py-2 text-lg text-gray-700 hover:text-[#1d68ff]">전문가 찾기</a>
+              <a onClick={() => handleNavigate('/health-terms')} className="px-4 py-2 text-lg text-gray-700 hover:text-[#1d68ff]">건강용어 알아보기</a>
+              <div className="w-10/12 h-px bg-gray-200 my-4"></div>
               <a
                 onClick={() => handleNavigate('/myhome')}
                 className='px-4 py-2 text-lg font-semibold text-gray-700 hover:text-[#1d68ff] cursor-pointer'
