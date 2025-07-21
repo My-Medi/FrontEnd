@@ -75,13 +75,13 @@ const MyHome: React.FC = () => {
             </>
           );
         case 1: // 환자 관리
-          return <div className="p-6 text-center">환자 관리 페이지</div>;
+          return <div className="text-center">환자 관리 페이지</div>;
         case 2: // 이력서 관리
           return <ResumeManagement />;
         case 3: // 건강관리요청서 확인하기
-          return <div className="p-6 text-center">건강관리요청서 확인하기 페이지</div>;
+          return <div className="text-center">건강관리요청서 확인하기 페이지</div>;
         case 4: // 내 알림
-          return <div className="p-6 text-center">내 알림 페이지</div>;
+          return <div className="text-center">내 알림 페이지</div>;
         default:
           return null;
       }
