@@ -13,7 +13,7 @@ const ResumeManagement: React.FC<ResumeManagementProps> = () => {
   const [selectedFields, setSelectedFields] = useState<string[]>(['영양사']);
   const [companyName, setCompanyName] = useState('');
   const [selfIntroduction, setSelfIntroduction] = useState('');
-  const [representativeSentence, setRepresentativeSentence] = useState('ex) 매일 1%의 건강을 쌓아가요.');
+  const [representativeSentence, setRepresentativeSentence] = useState('');
 
   const handleFieldToggle = (field: string) => {
     // 중복 체크 방지: 항상 단일 선택만 가능
@@ -29,7 +29,9 @@ const ResumeManagement: React.FC<ResumeManagementProps> = () => {
       {/* 헤더 */}
       <div className="text-center">
         <h1 className="text-[20px] font-semibold text-[#121218] mb-[14.4px]">이력서 관리</h1>
-        <p className="text-[14px] font-medium text-[#121218] pb-[37.8px]">튼튼핏 / 이수령</p>
+        <p className="text-[14px] font-medium text-[#121218] pb-[37.8px]">
+          <span className="text-[#1D68FF]">튼튼핏</span> / 이수령
+        </p>
       </div>
 
       {/* 메인 컨텐츠 */}
