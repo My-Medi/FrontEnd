@@ -8,6 +8,8 @@ import ExpertAdvice from '../../components/MyHome/ExpertAdvice';
 import MyConstantMedical from '../../components/MyHome/MyConstantMedical';
 import PatientInfoSection from '../../components/MyHome/ProfileInfo';
 import ScheduleCard from '../../components/MyHome/ScheduleCard';
+import { useAuth } from '../../contexts/AuthContext';
+import ResumeManagement from '../../components/MyHome/Expert_Resume/ResumeManagement';
 
 const scheduleData = [
   {
@@ -40,8 +42,52 @@ const scheduleData = [
 
 const MyHome: React.FC = () => {
   const [selectedMenu, setSelectedMenu] = useState(0);
+  const { userType } = useAuth();
+
+  // 사용자 타입이 없으면 기본값으로 patient 사용
+  const currentUserType = userType || 'patient';
 
   const renderContent = () => {
+    // 전문가인 경우
+    if (currentUserType === 'expert') {
+      switch (selectedMenu) {
+        case 0: // 마이 홈
+          return (
+            <>
+              <PatientInfoSection
+                nickname="하나"
+                name="김민지"
+                age={23}
+                height={168}
+                weight={52}
+                checkupCount={2}
+              />
+              <div className="w-full h-[2px] bg-[#DBE6FF] my-4 lg:my-8" />
+              <MyConstantMedical status="안심" nickname="하나" />
+              <ExpertAdvice adviceText="하루 1시간 이상 걷기, 추천 운동법으로 혈당 수치를 낮춰보세요!" />
+              <div className="w-full h-[2px] bg-[#DBE6FF] my-4 lg:my-8" />
+              <Calendar />
+              <div className="flex flex-col gap-6 mt-8">
+                {scheduleData.map((schedule, index) => (
+                  <ScheduleCard key={index} {...schedule} />
+                ))}
+              </div>
+            </>
+          );
+        case 1: // 환자 관리
+          return <div className="p-6 text-center">환자 관리 페이지</div>;
+        case 2: // 이력서 관리
+          return <ResumeManagement />;
+        case 3: // 건강관리요청서 확인하기
+          return <div className="p-6 text-center">건강관리요청서 확인하기 페이지</div>;
+        case 4: // 내 알림
+          return <div className="p-6 text-center">내 알림 페이지</div>;
+        default:
+          return null;
+      }
+    }
+    
+    // 일반 사용자인 경우 (기존 로직)
     switch (selectedMenu) {
       case 0:
         return (
@@ -67,11 +113,11 @@ const MyHome: React.FC = () => {
           </>
         );
       case 1:
-        return <div className="p-6 text-center">건강관리요청서 작성하기 페이지</div>;
+        return <div className="text-center">건강관리요청서 작성하기 페이지</div>;
       case 2:
-        return <div className="p-6 text-center">내 알림 페이지</div>;
+        return <div className="text-center">내 알림 페이지</div>;
       case 3:
-        return <div className="p-6 text-center">매칭된 전문가 페이지</div>;
+        return <div className="text-center">매칭된 전문가 페이지</div>;
       default:
         return null;
     }
@@ -81,24 +127,28 @@ const MyHome: React.FC = () => {
     <div className="relative w-full">
       <div className="flex flex-col lg:hidden">
         <SideBar
-          userType="patient"
+          userType={currentUserType}
           selectedMenu={selectedMenu}
           onMenuSelect={setSelectedMenu}
         />
         <SimpleBox>
-          <div className="p-4 sm:p-6">{renderContent()}</div>
+          <div className={`${selectedMenu === 2 && currentUserType === 'expert' ? 'p-0' : 'p-4 sm:p-6'}`}>
+            {renderContent()}
+          </div>
         </SimpleBox>
       </div>
 
       <div className="hidden lg:flex lg:justify-center">
         <SideBar
-          userType="patient"
+          userType={currentUserType}
           selectedMenu={selectedMenu}
           onMenuSelect={setSelectedMenu}
         />
         <main className="lg:pt-5 lg:pl-[25px]">
           <SimpleBox>
-            <div className="p-8 xl:p-16">{renderContent()}</div>
+            <div className={`${selectedMenu === 2 && currentUserType === 'expert' ? 'p-0' : 'p-8 xl:p-16'}`}>
+              {renderContent()}
+            </div>
           </SimpleBox>
         </main>
       </div>
