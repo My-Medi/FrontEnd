@@ -97,7 +97,9 @@ const RequestHealthCareCard: React.FC<RequestHealthCareProps> = ({
             className='w-full mt-[8px] whitespace-nowrap text-[#1D68FF] font-semibold flex justify-center items-center cursor-pointer'
             onClick={() => setIsModalOpen(true)}
           >
-            <span className='mr-[20px]'>건강데이터 자세히 보기</span>
+            <span className='mr-[20px] leading-[22px] tracking-[-0.48px]'>
+              건강데이터 자세히 보기
+            </span>
             <FiChevronRight size={30} color='#1D68FF' />
           </div>
         </div>

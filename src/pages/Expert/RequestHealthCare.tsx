@@ -3,6 +3,7 @@ import SideBar from '../../components/MyHome/SideBar';
 import SimpleBox from '../../components/MyHome/SimpleBox';
 import RequestHealthCareCard from '../../components/Expert/RequestHealthCareCard';
 import requestCardData from '../../constants/requestHealthCard';
+import RequsetHealthHeader from '../../components/Expert/RequestHealthCareHeader';
 
 const RequestHealthCare: React.FC = () => {
   const [selectedMenu, setSelectedMenu] = useState(0);
@@ -29,8 +30,12 @@ const RequestHealthCare: React.FC = () => {
         <SideBar userType='patient' selectedMenu={selectedMenu} onMenuSelect={setSelectedMenu} />
         <main className='lg:pt-5 lg:pl-[25px]'>
           <SimpleBox>
-            <div className='p-8 xl:p-16'></div>
-            <RequestHealthCareCards />
+            <div className='p-8 xl:p-16'>
+              <div className='flex justify-center'>
+                <RequsetHealthHeader expertNickname='튼튼핏' expertName='이수형' />
+              </div>
+              <RequestHealthCareCards />
+            </div>
           </SimpleBox>
         </main>
       </div>
