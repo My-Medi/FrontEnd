@@ -4,6 +4,7 @@ import SimpleBox from '../../components/MyHome/SimpleBox';
 import RequestHealthCareCard from '../../components/Expert/RequestHealthCareCard';
 import requestCardData from '../../constants/requestHealthCard';
 import RequsetHealthHeader from '../../components/Expert/RequestHealthCareHeader';
+import RequestHealthPagination from '../../components/Expert/RequestHealthPagination';
 
 const RequestHealthCare: React.FC = () => {
   const [selectedMenu, setSelectedMenu] = useState(0);
@@ -34,7 +35,16 @@ const RequestHealthCare: React.FC = () => {
               <div className='flex justify-center'>
                 <RequsetHealthHeader expertNickname='튼튼핏' expertName='이수형' />
               </div>
-              <RequestHealthCareCards />
+              <div>
+                <RequestHealthCareCards />
+              </div>
+              <div className='justify-center'>
+                <RequestHealthPagination
+                  currentPage={1}
+                  totalPages={10}
+                  onPageChange={(page) => setCurrentPage(page)}
+                />
+              </div>
             </div>
           </SimpleBox>
         </main>
