@@ -90,13 +90,13 @@ const MyHome: React.FC = () => {
         </SimpleBox>
       </div>
 
-      <div className="hidden lg:flex lg:pt-[70px]">
+      <div className="hidden lg:flex lg:justify-center">
         <SideBar
           userType="patient"
           selectedMenu={selectedMenu}
           onMenuSelect={setSelectedMenu}
         />
-        <main className="flex-grow lg:ml-[70px]">
+        <main className="lg:pt-5 lg:pl-[25px]">
           <SimpleBox>
             <div className="p-8 xl:p-16">{renderContent()}</div>
           </SimpleBox>

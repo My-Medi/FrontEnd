@@ -4,12 +4,13 @@ import logo from "../../assets/Login/logo.svg";
 import kakao from "../../assets/Login/kakao.svg";
 import naver from "../../assets/Login/naver.svg";
 import google from "../../assets/Login/google.svg";
+import backSvg from "../../assets/Expert/back.svg";
 import LoginInput from "../../components/Login/LoginInput";
 import SocialLoginButton from "../../components/Login/SocialLoginButton";
 import LoginConfirmModal from "../../components/Login/modal/LoginConfirmModal";
 
 const button = cva(
-  "w-full h-16 mt-8 text-xl font-semibold rounded-full lg:h-24 lg:mt-10 lg:text-3xl flex justify-center items-center gap-2.5",
+  "w-[385.2px] h-[60px] mt-6 text-[19.2px] font-semibold rounded-full flex justify-center items-center gap-2.5 leading-[1.193]",
   {
     variants: {
       intent: {
@@ -18,174 +19,171 @@ const button = cva(
           "bg-[#C5C8CB] text-white",
       },
     },
-  },
+    defaultVariants: {
+      intent: "inactive",
+    },
+  }
 );
 
 const LoginPage = () => {
-  const [id, setId] = useState("");
-  const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
-
-  const isPasswordValid = useMemo(() => {
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*.,?":{}|<>])(?=.{8,})/;
-    return passwordRegex.test(password);
-  }, [password]);
+  const [formData, setFormData] = useState({
+    id: "",
+    password: "",
+  });
+  const [isKeepLogin, setIsKeepLogin] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const isFormValid = useMemo(() => {
-    return id.length > 0 && isPasswordValid;
-  }, [id, isPasswordValid]);
+    return formData.id.length > 0 && formData.password.length > 0;
+  }, [formData]);
 
-  useEffect(() => {
-    const originalOverflow = window.getComputedStyle(document.body).overflow;
-    if (isModalOpen) {
-      const scrollbarWidth =
-        window.innerWidth - document.documentElement.clientWidth;
-      document.body.style.overflow = 'hidden';
-      document.body.style.paddingRight = `${scrollbarWidth}px`;
-    }
-    return () => {
-      document.body.style.overflow = originalOverflow;
-      document.body.style.paddingRight = '0px';
-    };
-  }, [isModalOpen]);
-
-  const handleLogin = () => {
-    // NOTE: This is a temporary login handler for demonstration.
-    // TODO: Replace with actual API call.
-    const MOCK_USERS = [
-      { id: "testuser", password: "Testpassword1!" },
-      { id: "user123", password: "Password123!" },
-    ];
-
-    if (!isFormValid) return;
-
-    const foundUser = MOCK_USERS.find((user) => user.id === id);
-
-    if (!foundUser) {
-      setModalMessage("등록되지 않은 회원입니다.");
-    } else if (foundUser.password !== password) {
-      setModalMessage("아이디 혹은 비밀번호가 올바르지 않습니다.");
-    } else {
-      // This case would be a successful login.
-      console.log("Login Successful");
-      return; // Do not open modal on success
-    }
-    setIsModalOpen(true);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
+  const handleLogin = () => {
+    if (isFormValid) {
+      setShowModal(true);
+    }
+  };
+
+  const handleBack = () => {
+    // 뒤로가기 로직
+    window.history.back();
+  };
+
+  useEffect(() => {
+    if (showModal) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [showModal]);
+
   return (
-    <div className="relative flex flex-col items-center w-full pt-20 lg:pt-44">
-      <img
-        src={logo}
-        alt="MyMedi Logo"
-        className="w-48 h-auto pb-11 lg:w-56"
-      />
-      <h1 className="text-3xl font-semibold text-[#25282B] mb-8 sm:text-4xl lg:text-5xl lg:mb-16">
-        로그인
-      </h1>
-      <div className="flex flex-col items-center w-full max-w-2xl px-4">
-        <div className="flex flex-col w-full gap-y-6">
+    <div className="relative flex flex-col items-center justify-center p-4">
+      {/* 뒤로가기 버튼 */}
+      <button
+        onClick={handleBack}
+        className="absolute w-[17px] h-[35px] flex items-center justify-center top-[65px] left-[312px]"
+        aria-label="뒤로가기"
+      >
+        <img src={backSvg} alt="뒤로가기" className="w-full h-full object-contain" />
+      </button>
+
+      <div className="w-[385.2px] flex flex-col items-center">
+        {/* 로고 */}
+        <img src={logo} alt="로고" className="w-[139.2px] h-[21.6px] mt-[72px] mb-[33px]" />
+
+        {/* 로그인 문구 */}
+        <h1 className="text-[28.8px] font-semibold text-[#121218] mb-8 leading-[1.4] tracking-[-3%]">
+          로그인
+        </h1>
+
+        {/* 로그인 폼 */}
+        <div className="w-[385.2px] flex flex-col gap-4">
           <LoginInput
             label="아이디"
             type="text"
-            id="username"
+            id="id"
+            name="id"
             placeholder="아이디를 입력하세요."
-            value={id}
-            onChange={(e) => setId(e.target.value)}
+            value={formData.id}
+            onChange={handleInputChange}
           />
           <LoginInput
             label="비밀번호"
             type="password"
             id="password"
+            name="password"
             placeholder="비밀번호를 입력하세요."
             errorMessage="소문자, 대문자 , 특수기호 포함 8글자 이상"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={formData.password}
+            onChange={handleInputChange}
           />
         </div>
+
+        {/* 로그인 버튼 */}
         <button
           className={button({ intent: isFormValid ? "active" : "inactive" })}
-          disabled={!isFormValid}
           onClick={handleLogin}
+          disabled={!isFormValid}
         >
           로그인
         </button>
-        <div className="flex flex-col items-center w-full gap-4 mt-4 sm:flex-row sm:justify-between">
-          <div className="relative flex items-center">
+           {/* 로그인 유지 체크박스와 아이디/비밀번호 찾기 */}
+        <div className="w-[385.2px] flex items-center justify-between mt-6">
+          <div className="flex items-center gap-3">
             <input
               type="checkbox"
-              id="remember-me"
-              className="sr-only peer"
-              checked={rememberMe}
-              onChange={() => setRememberMe(!rememberMe)}
+              id="keepLogin"
+              checked={isKeepLogin}
+              onChange={(e) => setIsKeepLogin(e.target.checked)}
+              className="w-[18px] h-[18px] border border-[#9DA0A3] rounded"
             />
             <label
-              htmlFor="remember-me"
-              className="flex items-center gap-4 cursor-pointer"
+              htmlFor="keepLogin"
+              className="text-[14px] font-medium text-[#4D5053] leading-[1.714] tracking-[-3%]"
             >
-              <div className="flex items-center justify-center w-7 h-7 border border-[#9DA0A3] rounded-full shrink-0 peer-checked:bg-blue-600 peer-checked:border-transparent">
-                <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
-                  <path
-                    d="M1.5 3.5L4.5 6.5L10.5 1.5"
-                    className="stroke-[#9DA0A3] peer-checked:stroke-white"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </div>
-              <span className="text-lg font-medium text-[#4D5053] lg:text-2xl">
-                로그인 유지
-              </span>
+              로그인 유지
             </label>
           </div>
-          <div className="flex items-center text-lg font-medium text-[#4D5053] gap-4 lg:text-2xl">
-            <a href="#" className="hover:underline">
+          <div className="flex items-center gap-3">
+            <span className="text-[14px] font-medium text-[#4D5053] leading-[1.714] tracking-[-3%]">
               아이디 찾기
-            </a>
-            <span className="text-gray-300">|</span>
-            <a href="#" className="hover:underline">
+            </span>
+            <div className="w-px h-4 bg-[#C5C8CB]"></div>
+            <span className="text-[14px] font-medium text-[#4D5053] leading-[1.714] tracking-[-3%]">
               비밀번호 찾기
-            </a>
+            </span>
           </div>
         </div>
-        <div className="flex items-baseline mt-8 gap-x-4 lg:mt-12 font-Pretendard">
-          <p className="text-base font-light text-[#121218] lg:text-xl">
+
+        {/* 회원가입 링크 */}
+        <div className="w-[385.2px] flex items-center justify-center gap-2 mt-6">
+          <span className="text-[12px] font-light text-[#121218] leading-[1.833] tracking-[-3%]">
             아직 마이메디 회원이 아니신가요?
-          </p>
-          <a
-            href="/signup"
-            className="text-lg font-semibold text-[#121218] hover:underline lg:text-2xl"
-          >
+          </span>
+          <span className="text-[16px] font-semibold text-[#121218] leading-[1.4] tracking-[-3%] cursor-pointer">
             회원가입
-          </a>
+          </span>
+        </div>
+
+        {/* 소셜 로그인 */}
+        <div className="w-[385.2px] flex flex-col gap-2 mt-6">
+          <SocialLoginButton
+            icon={kakao}
+            text="카카오로 로그인"
+            alt="카카오"
+          />
+          <SocialLoginButton
+            icon={naver}
+            text="네이버로 로그인"
+            alt="네이버"
+          />
+          <SocialLoginButton
+            icon={google}
+            text="구글로 로그인"
+            alt="구글"
+          />
         </div>
       </div>
-      <div className="flex flex-col w-full max-w-2xl px-4 mt-10 gap-y-4 lg:mt-14">
-        <SocialLoginButton
-          icon={kakao}
-          text="카카오로 로그인"
-          alt="kakao icon"
+
+      {showModal && (
+        <LoginConfirmModal
+          isOpen={showModal}
+          onClose={() => setShowModal(false)}
+          title="로그인 성공"
         />
-        <SocialLoginButton
-          icon={naver}
-          text="네이버로 로그인"
-          alt="naver icon"
-        />
-        <SocialLoginButton
-          icon={google}
-          text="구글로 로그인"
-          alt="google icon"
-        />
-      </div>
-      <LoginConfirmModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title={modalMessage}
-      />
+      )}
     </div>
   );
 };

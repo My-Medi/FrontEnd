@@ -6,17 +6,17 @@ import Topbar from '../components/Common/layout/Topbar';
 
 const HomeLayout: React.FC = () => {
   return (
-    <div className="w-full"> {/* 전체 배경을 위한 최상위 div */}
-      <div className="max-w-[1920px] mx-auto"> {/* 콘텐츠 중앙 정렬을 위한 div */}
-        <header>
-          <Topbar />
-          <NavBar />
-        </header>
-        <main className="flex-grow pb-[560px]">
+    <div className="w-full"> 
+      <header className='w-full'>
+        <Topbar />
+        <NavBar />
+      </header>
+      <div className="max-w-[1920px] mx-auto"> 
+        <main className="flex-grow pb-[320px]">
           <Outlet />
         </main>
-        <Footer />
       </div>
+      <Footer />
     </div>
   );
 };
