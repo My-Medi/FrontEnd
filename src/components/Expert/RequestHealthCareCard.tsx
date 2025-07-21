@@ -35,7 +35,7 @@ const RequestHealthCareCard: React.FC<RequestHealthCareProps> = ({
         px-[30px] py-[24px] flex flex-col justify-center items-center gap-[16px]'
         style={{ border: '1.2px solid #DBE6FF' }}
       >
-        <div className='flex w-[621px] h-[266px] flex-col items-center gap-8px'>
+        <div className='flex w-[621px] max-h-[491px] flex-col items-center gap-8px'>
           {/* 제목 */}
           <h3 className='w-full font-semibold'>
             <span className='text-[#1D68FF] font-[Pretendard] text-[20px] leading-[36px] tracking-[-0.6px]'>
@@ -48,7 +48,7 @@ const RequestHealthCareCard: React.FC<RequestHealthCareProps> = ({
 
           {/* 기본 정보 */}
           <div className='w-full flex flex-col items-start mt-[8px]'>
-            <p className='text-[#25282B] font-semibold font-[Pretendard] text-[16px] leading-[22px] tracking-[-0.48px]'>
+            <p className='mb-[4px] text-[#25282B] font-semibold font-[Pretendard] text-[16px] leading-[22px] tracking-[-0.48px]'>
               기본 정보
             </p>
             <div className='flex w-[617.4px] max-w-[617.4px] items-start gap-[9.6px] h-[22px]'>
@@ -72,12 +72,25 @@ const RequestHealthCareCard: React.FC<RequestHealthCareProps> = ({
 
           {/* 요청 사항 */}
           <div className='w-full flex flex-col items-start gap-4px mt-[8px]'>
-            <p className='font-semibold font-[Pretendard] text-[#25282B] text-[16px] leading-[22px] tracking-[-0.48px]'>
+            <p className='mb-[4px] font-semibold font-[Pretendard] text-[#25282B] text-[16px] leading-[22px] tracking-[-0.48px]'>
               요청사항
             </p>
-            <span className='max-w-[617.4px] font-[Pretendard] text-[14px] text-[#121218] font-light leading-[22px] tracking-[-0.42px] whitespace-pre-wrap'>
-              {requestMessage}
-            </span>
+            <div className='max-w-[618px] max-h-[214px] overflow-y-auto'>
+              {requestMessage.split('\n').map((line, index) =>
+                line.trim() === '' ? (
+                  // 엔터 2번으로 생긴 빈 줄일 경우 → 더 넓은 여백
+                  <div key={index} className='my-[6px]' />
+                ) : (
+                  // 일반적인 줄 → 기본 마진과 줄 간격 유지
+                  <p
+                    key={index}
+                    className='text-[14px] text-[#121218] font-light font-[Pretendard] leading-[22px] tracking-[-0.4px]'
+                  >
+                    {line}
+                  </p>
+                ),
+              )}
+            </div>
           </div>
           {/* 건강데이터 보기 버튼 */}
           <div
