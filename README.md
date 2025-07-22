@@ -18,12 +18,6 @@
       </a>
     </td>
     <td align="center" style="padding: 20px;">
-      <a href="https://github.com/mkyoung29">
-        <img src="https://github.com/mkyoung29.png" width="130px;" alt="mkyoung29"/><br />
-        <div style="font-size:18px;"><b>최민경</b></div>
-      </a>
-    </td>
-    <td align="center" style="padding: 20px;">
       <a href="https://github.com/Hminkyung">
         <img src="https://github.com/Hminkyung.png" width="130px;" alt="Hminkyung"/><br />
         <div style="font-size:18px;"><b>황민경</b></div>
