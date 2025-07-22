@@ -1,5 +1,3 @@
-import React from "react";
-
 interface SocialLoginButtonProps {
   icon: string;
   text: string;

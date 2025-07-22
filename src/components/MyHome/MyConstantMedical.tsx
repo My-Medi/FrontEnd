@@ -1,7 +1,6 @@
-import {
-    healthStatusMap,
-    type HealthStatus,
-  } from "../../constants/healthStatus";
+import { healthStatusMap, type HealthStatus } from "../../constants/healthStatus";
+
+
   
   interface Props {
     status: HealthStatus;

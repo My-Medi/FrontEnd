@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 
 interface LoginConfirmModalProps {
@@ -12,6 +12,20 @@ const LoginConfirmModal: React.FC<LoginConfirmModalProps> = ({
   onClose,
   title,
 }) => {
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        e.stopPropagation();
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) {
     return null;
   }
@@ -19,21 +33,21 @@ const LoginConfirmModal: React.FC<LoginConfirmModalProps> = ({
   return ReactDOM.createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div
-        className="absolute inset-0 bg-[#1212184D]"
+        className="absolute inset-0 bg-[#121218]/40"
         onClick={onClose}
       />
       <div
-        className="relative z-10 bg-white rounded-[30px] py-[45px] px-[104px] flex flex-col items-center gap-7 w-auto h-auto"
+        className="relative z-10 bg-white rounded-[30px] flex flex-col items-center w-auto h-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="py-[100px] pl-20 pr-20">
-          <h2 className="text-5xl font-medium text-[#25282B] leading-9">
+        <div className="px-[70px] pt-[92px] mb-[64.2px]">
+          <h2 className="text-[29px] font-medium text-[#25282B] leading-9">
             {title}
           </h2>
         </div>
         <button
           onClick={onClose}
-          className="w-[360px] text-white bg-[#1D68FF] rounded-[60px] py-5 px-20 text-3xl font-semibold"
+          className="w-[216px] text-white bg-[#1D68FF] rounded-[60px] py-3 px-[91px] text-[19.2px] font-semibold mb-[32px]"
         >
           확인
         </button>

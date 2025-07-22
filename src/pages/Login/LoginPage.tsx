@@ -1,13 +1,9 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { cva } from "class-variance-authority";
-import logo from "../../assets/Login/logo.svg";
-import kakao from "../../assets/Login/kakao.svg";
-import naver from "../../assets/Login/naver.svg";
-import google from "../../assets/Login/google.svg";
+import logo from "../../assets/Login/mymedi.svg";
 import backSvg from "../../assets/Expert/back.svg";
 import LoginInput from "../../components/Login/LoginInput";
-import SocialLoginButton from "../../components/Login/SocialLoginButton";
 import { useAuth } from "../../contexts/AuthContext";
 import LoginConfirmModal from "../../components/Login/modal/LoginConfirmModal";
 
@@ -89,7 +85,7 @@ const LoginPage = () => {
 
       <div className="w-[385.2px] flex flex-col items-center">
         {/* 로고 */}
-        <img src={logo} alt="로고" className="w-[139.2px] h-[21.6px] mt-[72px] mb-[33px]" />
+        <img src={logo} alt="로고" className="w-[111.6px] h-[20.4px] mt-[72px] mb-[15.6px]" />
 
         {/* 로그인 문구 */}
         <h1 className="text-[28.8px] font-semibold text-[#121218] mb-8 leading-[1.4] tracking-[-3%]">
@@ -130,7 +126,7 @@ const LoginPage = () => {
             type="submit"
             disabled={!isFormValid}
           >
-            로그인
+            <span className="font-semibold text-[18px]">로그인</span>
           </button>
         </form>
            {/* 로그인 유지 체크박스와 아이디/비밀번호 찾기 */}
@@ -173,24 +169,6 @@ const LoginPage = () => {
           </span>
         </div>
 
-        {/* 소셜 로그인 */}
-        <div className="w-[385.2px] flex flex-col gap-2 mt-6">
-          <SocialLoginButton
-            icon={kakao}
-            text="카카오로 로그인"
-            alt="카카오"
-          />
-          <SocialLoginButton
-            icon={naver}
-            text="네이버로 로그인"
-            alt="네이버"
-          />
-          <SocialLoginButton
-            icon={google}
-            text="구글로 로그인"
-            alt="구글"
-          />
-        </div>
       </div>
       {showFailModal && (
         <LoginConfirmModal
