@@ -10,6 +10,7 @@ import IntroducePage from "./pages/Introduce/IntroducePage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 import HealthCheckupResultInput from "./pages/HealthCheckupResultInput/HealthCheckupResultInput";
 import ExpertPage from "./pages/Expert/ExpertPage";
+import { AuthProvider } from "./contexts/AuthContext";
 
 const router = createBrowserRouter([
   {
@@ -30,9 +31,9 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <>
+    <AuthProvider>
       <RouterProvider router={router} />
-    </>
+    </AuthProvider>
   );
 }
 

@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import myHomeIcon from '../../assets/MyHome/SideBar/home.svg';
 import scheduleIcon from '../../assets/MyHome/SideBar/write.svg';
 import recordIcon from '../../assets/MyHome/SideBar/write2.svg';
-import requestCheckIcon from '../../assets/MyHome/SideBar/write.svg';
 import expertNotificationIcon from '../../assets/MyHome/SideBar/notification.svg';
 import notificationIcon from '../../assets/MyHome/SideBar/notification.svg';
 import expertIcon from '../../assets/MyHome/SideBar/expert.svg';
+import resuumeIcon from '../../assets/MyHome/SideBar/resume.svg';
+import checkIcon from '../../assets/MyHome/SideBar/check.svg';
 
 const DottedIndicator: React.FC = () => {
     const createDots = (direction: 'left' | 'right') => Array.from({ length: 8 }, (_, i) => (
@@ -64,8 +65,8 @@ const patientMenuItems: MenuItem[] = [
 const expertMenuItems: MenuItem[] = [
   { id: 0, title: ['마이 홈'], icon: myHomeIcon },
   { id: 1, title: ['환자 관리'], icon: expertIcon },
-  { id: 2, title: ['이력서 관리'], icon: expertIcon },
-  { id: 3, title: ['건강관리요청서', '확인하기'], icon: requestCheckIcon },
+  { id: 2, title: ['이력서 관리'], icon: resuumeIcon },
+  { id: 3, title: ['건강관리요청서', '확인하기'], icon: checkIcon },
   { id: 4, title: ['내 알림'], icon: expertNotificationIcon },
 ];
 
