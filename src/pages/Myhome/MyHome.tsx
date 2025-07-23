@@ -8,6 +8,7 @@ import ExpertAdvice from '../../components/MyHome/ExpertAdvice';
 import MyConstantMedical from '../../components/MyHome/MyConstantMedical';
 import PatientInfoSection from '../../components/MyHome/ProfileInfo';
 import ScheduleCard from '../../components/MyHome/ScheduleCard';
+import RequestForm from '../../components/HealthCareRequest/RequestForm';
 
 const scheduleData = [
   {
@@ -71,7 +72,7 @@ const MyHome: React.FC = () => {
       case 2:
         return <div className="p-6 text-center">내 알림 페이지</div>;
       case 3:
-        return <div className="p-6 text-center">매칭된 전문가 페이지</div>;
+        return <RequestForm />
       default:
         return null;
     }
