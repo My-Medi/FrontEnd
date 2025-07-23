@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import SideBar from '../../components/MyHome/SideBar';
 import SimpleBox from '../../components/MyHome/SimpleBox';
-import RequestHealthCareCard from '../../components/Expert/RequestHealthCareCard';
-import requestCardData from '../../constants/requestHealthCard';
-import RequsetHealthHeader from '../../components/Expert/RequestHealthCareHeader';
-import RequestHealthPagination from '../../components/Expert/RequestHealthPagination';
+import RequestHealthCareCard from '../../components/RequestHealthCare/HealthCareCard';
+import RequsetHealthHeader from '../../components/RequestHealthCare/Header';
+import RequestHealthPagination from '../../components/RequestHealthCare/PaginationHealthCare';
+import requestCardData from '../../data/requestHealthCard';
 
 const RequestHealthCare: React.FC = () => {
   const [selectedMenu, setSelectedMenu] = useState(0);
