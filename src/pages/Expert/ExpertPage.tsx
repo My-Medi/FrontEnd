@@ -85,7 +85,7 @@ const ExpertPage = () => {
       <div className="w-full flex flex-col items-center px-4 sm:px-6 lg:px-8 xl:px-12 max-w-[1400px] mx-auto">
         <div className="w-full">
           <ExpertCategoryFilter selected={selectedCategory} onSelect={setSelectedCategory} />
-          <div className="h-[1.5px] bg-[#DBE6FF] w-full mx-auto mt-3 mb-3" />
+          <div className="h-[1.5px] bg-[#DBE6FF] w-full mx-auto mt-4 mb-4" />
           <div className="pb-6 lg:pb-8">
             <ExpertCategoryPopover 
               selectedCategories={selectedCategories}

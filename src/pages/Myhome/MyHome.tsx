@@ -9,6 +9,7 @@ import MyConstantMedical from '../../components/MyHome/MyConstantMedical';
 import PatientInfoSection from '../../components/MyHome/ProfileInfo';
 import ScheduleCard from '../../components/MyHome/ScheduleCard';
 import RequestForm from '../../components/HealthCareRequest/RequestForm';
+import MatchedExperts from '../../components/MyHome/User_MatchingExpert/MatchedExperts';
 import { useAuth } from '../../contexts/AuthContext';
 import ResumeManagement from '../../components/MyHome/Expert_Resume/ResumeManagement';
 
@@ -112,9 +113,9 @@ const MyHome: React.FC = () => {
           </>
         );
       case 1:
-        return <div className='text-center'>건강관리요청서 작성하기 페이지</div>;
-      case 2:
         return <div className='text-center'>내 알림 페이지</div>;
+      case 2:
+        return <MatchedExperts />;
       case 3:
         return <RequestForm />;
       default:

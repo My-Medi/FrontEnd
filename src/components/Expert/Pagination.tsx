@@ -22,22 +22,22 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
   }
 
   return (
-    <div className="flex justify-center items-center gap-9 pt-20">
+    <div className="flex justify-center items-center gap-7 pt-12">
       <button
         className="bg-transparent border-none p-0 transition disabled:opacity-50 disabled:cursor-not-allowed"
         onClick={() => onPageChange(Math.max(1, currentPage - 1))}
         disabled={currentPage === 1}
         tabIndex={0}
       >
-        <img src={downIcon} alt="이전" className="w-9 h-9" />
+        <img src={downIcon} alt="이전" className="w-8 h-8" />
       </button>
       {visiblePages.map((num) => (
         <button
           key={num}
-          className={`font-pretendard text-[1.5rem] leading-[1.125em] bg-transparent border-none p-0 transition text-center
+          className={`font-pretendard text-[1.25rem] leading-[1.125em] bg-transparent border-none p-0 transition text-center
             ${currentPage === num
-              ? "font-pretendard font-normal text-[2.25rem] leading-[27px] tracking-normal text-center text-[#25282B]"
-              : "font-pretendard font-light text-[1.5rem] leading-[27px] tracking-normal text-center text-[#75787B] hover:text-[#1D68FF]"}
+              ? "font-pretendard font-normal text-[1.875rem] leading-[25px] tracking-normal text-center text-[#25282B]"
+              : "font-pretendard font-light text-[1.25rem] leading-[25px] tracking-normal text-center text-[#75787B] hover:text-[#1D68FF]"}
           `}
           onClick={() => onPageChange(num)}
           tabIndex={0}
@@ -51,7 +51,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
         disabled={currentPage === totalPages}
         tabIndex={0}
       >
-        <img src={nextIcon} alt="다음" className="w-9 h-9" />
+        <img src={nextIcon} alt="다음" className="w-8 h-8" />
       </button>
       <button
         className="bg-transparent border-none p-0 transition disabled:opacity-50 disabled:cursor-not-allowed"
@@ -59,7 +59,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
         disabled={currentPage === totalPages}
         tabIndex={0}
       >
-        <img src={next2Icon} alt="마지막" className="w-9 h-9" />
+        <img src={next2Icon} alt="마지막" className="w-8 h-8" />
       </button>
     </div>
   );

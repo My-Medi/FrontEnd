@@ -1,20 +1,22 @@
 import React from "react";
 import categoryIcon from "../../assets/Expert/category.svg";
+import closeIcon from "../../assets/Expert/close.svg";
 
 const allCategories = ["웰니스 코치", "건강관리사", "영양사", "운동처방사"];
 
-const CategoryChip = ({ label, onRemove }: { label: string; onRemove: () => void }) => (
+const CategoryChip = ({ label, onRemove, isOutside = false }: { label: string; onRemove: () => void; isOutside?: boolean }) => (
   <div
-    className="flex items-center bg-white border border-[#C5C8CB] rounded-full h-[30px] px-[22.5px] pl-[30px] py-[9px] mr-[7.5px] text-[16px] font-light leading-[22px] tracking-[-0.03em] text-[#4D5053]"
-    style={{ borderWidth: '1.5px' }}
+    className={`font-light flex items-center rounded-full mr-[7.5px] leading-[22px] tracking-[-0.03em] text-center ${
+      isOutside ? 'border-[1.5px] border-[#C5C8CB] h-[30px] px-[30px] py-3 text-[16px]' : 'border border-[#C5C8CB] px-[15px] text-[12px]'
+    }`}
   >
     {label}
     <button
       onClick={onRemove}
-      className="ml-2 text-[18px] font-bold leading-none text-[#9DA0A3] flex items-center"
+      className="pl-2 flex items-center"
       type="button"
     >
-      ×
+      <img src={closeIcon} alt="닫기" className={isOutside ? "w-3 h-3" : "w-2 h-2"} />
     </button>
   </div>
 );
@@ -41,27 +43,32 @@ const ExpertCategoryPopover: React.FC<ExpertCategoryPopoverProps> = ({ selectedC
     <div className="relative flex items-center min-h-[38px]">
       <button
         onClick={() => setIsOpen((v) => !v)}
-        className="flex justify-center items-center bg-white border border-[#C5C8CB] rounded-full h-[30px] px-[28px] py-[9px] mr-[7.5px] gap-[7.5px]"
+        className="flex justify-center items-center bg-white border border-[#C5C8CB] rounded-full h-[30px] px-[30px] py-3 mr-[7.5px] gap-[7.5px]"
         style={{ borderWidth: '1.5px' }}
         type="button"
       >
         <img src={categoryIcon} alt="카테고리 필터" className="w-4 h-4 sm:w-5 sm:h-5" />
       </button>
       {selectedCategories.map((cat) => (
-        <CategoryChip key={cat} label={cat} onRemove={() => removeCategory(cat)} />
+        <CategoryChip key={cat} label={cat} onRemove={() => removeCategory(cat)} isOutside={true} />
       ))}
       {isOpen && (
         <div className="absolute left-0 top-12 z-10 bg-white border border-gray-300 rounded-xl shadow-lg min-w-[280px] p-4">
-          <div className="flex flex-wrap gap-2 mb-2">
-            {selectedCategories.map((cat) => (
-              <CategoryChip key={cat} label={cat} onRemove={() => removeCategory(cat)} />
-            ))}
+          {/* 상단 영역 - 닫기 버튼과 선택된 카테고리들 */}
+          <div className="flex justify-between items-start mb-2">
+            {/* 선택된 카테고리 칩들 */}
+            <div className="flex flex-wrap flex-1 mt-6">
+              {selectedCategories.map((cat) => (
+                <CategoryChip key={cat} label={cat} onRemove={() => removeCategory(cat)} isOutside={false} />
+              ))}
+            </div>
+            {/* 닫기 버튼 */}
             <button
               onClick={closePopover}
-              className="ml-auto text-[22px] text-gray-400 hover:text-blue-500 transition-colors font-bold leading-none"
+              className="ml-2 text-[22px] text-gray-400 hover:text-blue-500 transition-colors font-bold leading-none flex-shrink-0"
               type="button"
             >
-              ×
+              <img src={closeIcon} alt="닫기" className="w-5 h-5" />
             </button>
           </div>
           <hr className="border-gray-200 my-2" />
@@ -70,8 +77,7 @@ const ExpertCategoryPopover: React.FC<ExpertCategoryPopoverProps> = ({ selectedC
               <button
                 key={cat}
                 onClick={() => toggleCategory(cat)}
-                className={`inline-flex items-center border border-[#C5C8CB] rounded-full px-[15px] py-1 gap-2 text-[16px] font-light leading-[22px] tracking-[-0.03em] text-[#4D5053] ${selectedCategories.includes(cat) ? 'bg-gray-100' : 'bg-white'}`}
-                style={{ borderWidth: '1.5px' }}
+                className={`inline-flex items-center border border-[#C5C8CB] rounded-full px-[15px] gap-2 text-[12px] font-light leading-[22px] tracking-[-0.03em] text-[#4D5053] text-center ${selectedCategories.includes(cat) ? 'bg-gray-100' : 'bg-white'}`}
                 type="button"
               >
                 {cat}
