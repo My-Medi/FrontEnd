@@ -1,4 +1,4 @@
-<img width="1920" height="1080" alt="표지" src="https://github.com/user-attachments/assets/de63b1bd-d738-479b-82aa-ef1408057efa" />
+<img width="1920" height="1080" alt="표지" src="https://github.com/user-attachments/assets/07801c12-f933-4603-a03f-8e805a84ee26" />
 
 
 ## 🧑‍💻 Team My-Medi Fronted Developers
@@ -15,12 +15,6 @@
       <a href="https://github.com/dokyung17">
         <img src="https://github.com/dokyung17.png" width="130px;" alt="dokyung17"/><br />
         <div style="font-size:18px;"><b>곽도경</b></div>
-      </a>
-    </td>
-    <td align="center" style="padding: 20px;">
-      <a href="https://github.com/mkyoung29">
-        <img src="https://github.com/mkyoung29.png" width="130px;" alt="mkyoung29"/><br />
-        <div style="font-size:18px;"><b>최민경</b></div>
       </a>
     </td>
     <td align="center" style="padding: 20px;">
