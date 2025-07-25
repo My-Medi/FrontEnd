@@ -3,7 +3,7 @@ import ExpertCard from "../../components/Expert/ExpertCard";
 import ExpertIntroSection from "../../components/Expert/ExpertIntroSection";
 import ExpertCategoryFilter from "../../components/Expert/ExpertCategoryFilter";
 import ExpertCategoryPopover from "../../components/Expert/ExpertCategoryPopover";
-import ExpertDetailModal from '../../components/Expert/ExpertDetailModal';
+import ExpertDetailModal from '../../components/Expert/Modal/ExpertDetailModal';
 import { expertList } from "../../data/experts";
 import type { Expert } from "../../data/experts";
 import Pagination from "../../components/Expert/Pagination";
@@ -12,6 +12,7 @@ import Pagination from "../../components/Expert/Pagination";
 interface ExpertDetail {
   name: string;
   position: string;
+  realName: string;
   profileImage?: string;
   slogan: string;
   introduction: string;
@@ -23,7 +24,8 @@ interface ExpertDetail {
 // Expert -> ExpertDetail 변환 함수
 const mapExpertToDetail = (expert: Expert): ExpertDetail => ({
   name: expert.nickname,
-  position: expert.realname,
+  position: expert.role,
+  realName: expert.realname,
   profileImage: typeof expert.profile === 'string' ? expert.profile : '',
   slogan: expert.slogan,
   introduction: expert.description,
@@ -40,6 +42,7 @@ const ExpertPage = () => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedExpert, setSelectedExpert] = useState<ExpertDetail | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
 
   // 중복 제거 함수 (nickname 기준)
   const getUniqueExperts = (list: Expert[]): Expert[] => {
