@@ -12,6 +12,7 @@ import Pagination from "../../components/Expert/Pagination";
 interface ExpertDetail {
   name: string;
   position: string;
+  realName: string;
   profileImage?: string;
   slogan: string;
   introduction: string;
@@ -23,7 +24,8 @@ interface ExpertDetail {
 // Expert -> ExpertDetail 변환 함수
 const mapExpertToDetail = (expert: Expert): ExpertDetail => ({
   name: expert.nickname,
-  position: expert.realname,
+  position: expert.role,
+  realName: expert.realname,
   profileImage: typeof expert.profile === 'string' ? expert.profile : '',
   slogan: expert.slogan,
   introduction: expert.description,

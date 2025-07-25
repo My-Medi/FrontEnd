@@ -8,6 +8,7 @@ interface ExpertDetailModalProps {
   expert: {
     name: string;
     position: string;
+    realName: string;
     profileImage?: string;
     slogan: string;
     introduction: string;
@@ -38,10 +39,16 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, onClose }
     console.log('요청사항:', request);
     // 여기에 실제 요청사항 제출 로직을 추가할 수 있습니다
     // 예: API 호출, 상태 업데이트 등
+    
+    // 성공 처리 후 모달들 닫기
+    setShowRequestModal(false);
+    onClose();
   };
 
   const handleRequestClose = () => {
+    console.log('ExpertDetailModal handleRequestClose 호출됨');
     setShowRequestModal(false);
+    onClose(); // ExpertDetailModal도 함께 닫기
   };
 
   return (
@@ -154,7 +161,9 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, onClose }
         <RequestModal
           isOpen={showRequestModal}
           onClose={handleRequestClose}
-          onSubmit={handleRequestSubmit}
+          expertName={expert.name}
+          expertPosition={expert.position}
+          expertRealName={expert.realName}
         />
       )}
     </>
