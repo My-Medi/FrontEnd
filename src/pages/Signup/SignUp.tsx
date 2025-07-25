@@ -140,7 +140,7 @@ const SignUp: React.FC = () => {
 
 
             {/* 약관동의 폼 */}
-            <TermsAgreement onNext={handleNext} onPrev={handlePrev} />
+            <TermsAgreement onNext={handleNext} />
           </div>
         );
       case "info":
@@ -202,7 +202,7 @@ const SignUp: React.FC = () => {
             </div>
 
             {/* 회원가입 완료 */}
-            <SignUpComplete onPrev={handlePrev} onComplete={handleComplete} />
+            <SignUpComplete onComplete={handleComplete} />
           </div>
         );
       default:

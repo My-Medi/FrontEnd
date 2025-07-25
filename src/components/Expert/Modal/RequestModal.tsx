@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import backSvg from '../../../assets/Expert/back.svg';
 import closeSvg from '../../../assets/Expert/close.svg';
 import ConfirmRequestModal from './ConfirmRequestModal';
-import SuccessModal from './SuccessModal';
 
 interface RequestModalProps {
   isOpen: boolean;
@@ -16,7 +15,6 @@ const RequestModal: React.FC<RequestModalProps> = ({ isOpen, onClose, expertName
   const [requestText, setRequestText] = useState('');
   const [isVisible, setIsVisible] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const maxLength = 200;
 
   useEffect(() => {
@@ -31,12 +29,6 @@ const RequestModal: React.FC<RequestModalProps> = ({ isOpen, onClose, expertName
     if (requestText.trim()) {
       setShowConfirmModal(true);
     }
-  };
-
-  const handleSuccessClose = () => {
-    console.log('RequestModal handleSuccessClose 호출됨');
-    setShowSuccessModal(false);
-    onClose(); // 모든 상위 모달들 닫기 (ExpertDetailModal)
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -54,7 +46,7 @@ const RequestModal: React.FC<RequestModalProps> = ({ isOpen, onClose, expertName
         {/* Backdrop */}
         <div 
           className={`absolute inset-0 bg-[#121218]/40 transition-opacity duration-300 ${
-            isVisible && !showConfirmModal && !showSuccessModal ? 'opacity-100' : 'opacity-0'
+            isVisible && !showConfirmModal ? 'opacity-100' : 'opacity-0'
           }`}
           onClick={onClose}
         />
@@ -62,7 +54,7 @@ const RequestModal: React.FC<RequestModalProps> = ({ isOpen, onClose, expertName
         {/* Modal */}
         <div 
           className={`relative w-[744px] h-[568px] bg-white/96 rounded-[40px] transition-all duration-300 ${
-            isVisible && !showConfirmModal && !showSuccessModal ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+            isVisible && !showConfirmModal ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
           }`}
           onClick={(e) => e.stopPropagation()}
           style={{ 
@@ -120,7 +112,10 @@ const RequestModal: React.FC<RequestModalProps> = ({ isOpen, onClose, expertName
             </div>
           </div>
           <button
-            onClick={onClose}
+            onClick={() => {
+              // 뒤로가기 시 모달을 닫지 않고 이전 단계로 돌아감
+              setShowConfirmModal(false);
+            }}
             className="absolute top-12 left-12 w-[17px] h-[35px] flex items-center justify-center"
           >
             <img src={backSvg} alt="뒤로가기" className="w-full h-full object-contain" />
@@ -141,27 +136,20 @@ const RequestModal: React.FC<RequestModalProps> = ({ isOpen, onClose, expertName
         onClose={() => {
           console.log('RequestModal ConfirmRequestModal onClose 호출됨');
           setShowConfirmModal(false);
-          onClose(); // RequestModal도 함께 닫기
+          // RequestModal 자체도 닫기
+          onClose();
         }}
         onConfirm={() => {
           console.log('요청사항:', requestText);
           // 여기에 실제 요청사항 제출 로직을 추가할 수 있습니다
           // 예: API 호출, 상태 업데이트 등
           
-          setRequestText('');
-          setShowConfirmModal(false);
-          setShowSuccessModal(true);
-          // onClose() 제거 - 성공 모달에서 확인 버튼 클릭 시에만 닫기
+          // 2단계 모달은 닫지 않고 SuccessModal이 표시되도록 함
+          // setShowConfirmModal(false); // 이 줄 제거
         }}
         expertName={expertName}
         expertPosition={expertPosition}
         expertRealName={expertRealName}
-      />
-
-      {/* Success Modal */}
-      <SuccessModal
-        isOpen={showSuccessModal}
-        onClose={handleSuccessClose}
       />
     </>
   );

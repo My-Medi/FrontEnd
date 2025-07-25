@@ -7,11 +7,10 @@ const MatchedExperts: React.FC = () => {
   const [experts, setExperts] = useState<MatchedExpert[]>(matchedExpertsData);
 
   const FilterButton: React.FC<{ 
-    type: 'connected' | 'requested' | 'rejected'; 
     label: string; 
     isSelected: boolean;
     onClick: () => void;
-  }> = ({ type, label, isSelected, onClick }) => (
+  }> = ({ label, isSelected, onClick }) => (
     <div className="flex flex-col items-center gap-0">
       <button
         onClick={onClick}
@@ -83,19 +82,16 @@ const MatchedExperts: React.FC = () => {
       {/* 필터 버튼들 */}
       <div className="flex gap-0">
         <FilterButton
-          type="connected"
           label="연결된 전문가"
           isSelected={selectedFilter === 'connected'}
           onClick={() => setSelectedFilter('connected')}
         />
         <FilterButton
-          type="requested"
           label="요청"
           isSelected={selectedFilter === 'requested'}
           onClick={() => setSelectedFilter('requested')}
         />
         <FilterButton
-          type="rejected"
           label="거절"
           isSelected={selectedFilter === 'rejected'}
           onClick={() => setSelectedFilter('rejected')}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import ExpertCard from "../../components/Expert/ExpertCard";
 import ExpertIntroSection from "../../components/Expert/ExpertIntroSection";
 import ExpertCategoryFilter from "../../components/Expert/ExpertCategoryFilter";
@@ -38,21 +38,11 @@ const CARDS_PER_PAGE = 15;
 
 const ExpertPage = () => {
   const [selectedCategory, setSelectedCategory] = useState("전체");
-  const [isChecked, setIsChecked] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedExpert, setSelectedExpert] = useState<ExpertDetail | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
 
-  // 중복 제거 함수 (nickname 기준)
-  const getUniqueExperts = (list: Expert[]): Expert[] => {
-    const seen = new Set<string>();
-    return list.filter((expert: Expert) => {
-      if (seen.has(expert.nickname)) return false;
-      seen.add(expert.nickname);
-      return true;
-    });
-  };
+
 
   // 카테고리와 필터 모두 반영
   const filteredList = expertList.filter(expert => {
@@ -63,7 +53,7 @@ const ExpertPage = () => {
     return categoryMatch && filterMatch;
   });
 
-  const displayList: Expert[] = isChecked ? getUniqueExperts(filteredList) : filteredList;
+  const displayList: Expert[] = filteredList;
 
   // 페이지네이션 로직
   const totalPages = Math.ceil(displayList.length / CARDS_PER_PAGE);
@@ -71,7 +61,7 @@ const ExpertPage = () => {
     (currentPage - 1) * CARDS_PER_PAGE,
     currentPage * CARDS_PER_PAGE
   );
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+
 
   // 페이지 변경 시 스크롤 상단 이동(선택사항)
   // React.useEffect(() => {

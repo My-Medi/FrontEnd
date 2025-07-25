@@ -1,4 +1,3 @@
-import React from "react";
 import expertBg from "../../assets/Expert/ExpertBackground.svg";
 
 const ExpertIntroSection = () => (

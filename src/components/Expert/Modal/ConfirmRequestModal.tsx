@@ -15,7 +15,7 @@ interface ConfirmRequestModalProps {
 const ConfirmRequestModal: React.FC<ConfirmRequestModalProps> = ({ 
   isOpen, 
   onClose, 
-  onConfirm, 
+  onConfirm,
   expertName, 
   expertPosition,
   expertRealName
@@ -32,14 +32,23 @@ const ConfirmRequestModal: React.FC<ConfirmRequestModalProps> = ({
   }, [isOpen]);
 
   const handleConfirm = () => {
-    // 성공 모달만 표시 (상위 모달들은 닫지 않음)
+    // 실제 요청 제출 로직 실행
+    onConfirm();
+    // 성공 모달 표시
     setShowSuccessModal(true);
   };
 
   const handleSuccessClose = () => {
     console.log('ConfirmRequestModal handleSuccessClose 호출됨');
     setShowSuccessModal(false);
-    onClose(); // 모든 상위 모달들 닫기 (RequestModal, ExpertDetailModal)
+    // 모든 상위 모달들 닫기 (RequestModal, ExpertDetailModal)
+    onClose();
+  };
+
+  const handleBack = () => {
+    // 뒤로가기 시 이전 단계(요청사항 작성)로 돌아감
+    setShowSuccessModal(false);
+    onClose(); // ConfirmRequestModal 닫기
   };
 
   if (!isOpen) return null;
@@ -107,7 +116,7 @@ const ConfirmRequestModal: React.FC<ConfirmRequestModalProps> = ({
 
           {/* Back button */}
           <button
-            onClick={onClose}
+            onClick={handleBack}
             className="absolute top-12 left-12 w-[17px] h-[35px] flex items-center justify-center"
           >
             <img src={backSvg} alt="뒤로가기" className="w-full h-full object-contain" />
