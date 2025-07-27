@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FiChevronRight } from 'react-icons/fi';
-import HealthDataModal from './DetailModal';
+import HealthDataModal from './DetailModal/DetailModal';
 
 interface RequestHealthCareProps {
   nickname: string;
