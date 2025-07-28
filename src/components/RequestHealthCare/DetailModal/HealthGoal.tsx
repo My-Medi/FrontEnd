@@ -4,7 +4,7 @@ interface GoalProps {
 
 const RequestHealthGoal: React.FC<GoalProps> = ({ goal }) => {
   return (
-    <div className='w-[817px] h-[86px] flex flex-col items-start font-[Pretendard]'>
+    <div className='w-[817px] h-[86px] flex flex-col items-start font-[Pretendard] mt-[20px]'>
       {/* 제목 + 파란 네모 아이콘 */}
       <div className='flex items-center'>
         <div className='w-[14.25px] h-[14.25px] bg-[#1D68FF] rounded-[4.5px] mr-[16px]' />

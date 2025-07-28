@@ -3,6 +3,7 @@ import BackIcon from '/src/assets/back.svg';
 import RequestHealthGoal from './HealthGoal';
 import RequestMessage from './RequestMessage';
 import PatientInfo from './PatientInfo';
+import AbnormalPart from './AbnormalPart';
 
 interface DetailModalProps {
   nickname: string;
@@ -49,13 +50,13 @@ const HealthDataModal: React.FC<DetailModalProps> = ({ nickname, onClose, onAcce
             healthInterest='영양관리, 체중조절, 혈당관리'
           />
         </div>
-        <div className='w-max-[496px]'>
+        <div className='flex flex-col gap-[32px] w-max-[496px]'>
           <RequestHealthGoal
             goal='식단 플래너 공유, 1:1 메시지 상담, 주간 체크리스트 제공 등 2개월정도 관리 생각하고 있고
           체중 3kg 감량과 혈당 정상화, 그리고 꾸준한 식단 루틴을 만들고 싶어요!'
           />
+          <AbnormalPart abnormal={['공복 혈당', 'BMI / 체지방률']} />
         </div>
-
         {/* 하단 버튼 */}
         <div className='flex flex-col items-center border-t-[1.2px] border-[#DBE6FF] pt-8 w-[300px] h-[56px] gap-4 mt-6'>
           <div className='flex gap-[96px]'>
