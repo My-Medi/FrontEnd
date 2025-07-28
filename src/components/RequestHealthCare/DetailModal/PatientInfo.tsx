@@ -34,7 +34,7 @@ const PatientInfo: React.FC<PatientInfoProps> = ({
       </div>
 
       {/* 회원 정보 텍스트 */}
-      <div className='text-[14px] font-medium leading-[24px] tracking-[-0.42px] text-[#121218] font-pretendard'>
+      <div className='text-[14px] font-medium font-[Pretendard] leading-[24px] tracking-[-0.42px] text-[#121218] font-pretendard'>
         <p className='text-[#1D68FF]'>{nickname}</p>
         <p>
           만 {age}세 / {gender}
