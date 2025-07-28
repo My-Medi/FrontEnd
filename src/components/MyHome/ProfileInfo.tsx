@@ -9,6 +9,7 @@ interface PatientInfoProps {
   weight: number;
   checkupCount: number;
   profileImageUrl?: string;
+  onEditInfo?: () => void;
 }
 
 const PatientInfoSection: React.FC<PatientInfoProps> = ({
@@ -19,6 +20,7 @@ const PatientInfoSection: React.FC<PatientInfoProps> = ({
   weight,
   checkupCount,
   profileImageUrl,
+  onEditInfo,
 }) => {
   return (
     <section className="w-full bg-white p-4 lg:p-0">
@@ -75,12 +77,12 @@ const PatientInfoSection: React.FC<PatientInfoProps> = ({
 
         {/* 회원정보 수정하기 */}
         <div className="mt-8 self-end lg:mt-[38px] lg:mb-[23px]">
-          <a
-            href="#"
+          <button
+            onClick={onEditInfo}
             className="text-base text-[#1D68FF] hover:underline lg:whitespace-nowrap lg:text-[20px]"
           >
             회원정보 수정하기 &gt;
-          </a>
+          </button>
         </div>
       </div>
     </section>
