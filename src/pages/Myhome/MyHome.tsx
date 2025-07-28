@@ -12,6 +12,8 @@ import RequestForm from '../../components/HealthCareRequest/RequestForm';
 import MatchedExperts from '../../components/MyHome/User_MatchingExpert/MatchedExperts';
 import { useAuth } from '../../contexts/AuthContext';
 import ResumeManagement from '../../components/MyHome/Expert_Resume/ResumeManagement';
+import EditInfo from '../../components/MyHome/MyHomeEdit/EditInfo';
+import ConfirmModal from '../../components/MyHome/MyHomeEdit/ConfirmModal';
 
 const scheduleData = [
   {
@@ -42,12 +44,55 @@ const scheduleData = [
 
 const MyHome: React.FC = () => {
   const [selectedMenu, setSelectedMenu] = useState(0);
+  const [showEditInfo, setShowEditInfo] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [pendingMenuIndex, setPendingMenuIndex] = useState<number | null>(null);
   const { userType } = useAuth();
+
+  // 메뉴 선택 핸들러
+  const handleMenuSelect = (menuIndex: number) => {
+    // EditInfo 페이지가 열려있고 변경사항이 있다면 확인 모달 표시
+    if (showEditInfo && hasChanges) {
+      setPendingMenuIndex(menuIndex);
+      setShowConfirmModal(true);
+    } else {
+      setSelectedMenu(menuIndex);
+      if (showEditInfo) {
+        setShowEditInfo(false);
+      }
+    }
+  };
+
+  // 확인 모달에서 저장 선택 시
+  const handleConfirmSave = () => {
+    setShowConfirmModal(false);
+    if (pendingMenuIndex !== null) {
+      setSelectedMenu(pendingMenuIndex);
+      setShowEditInfo(false);
+      setPendingMenuIndex(null);
+    }
+  };
+
+  // 확인 모달에서 취소 선택 시
+  const handleConfirmCancel = () => {
+    setShowConfirmModal(false);
+    setPendingMenuIndex(null);
+  };
 
   // 사용자 타입이 없으면 기본값으로 patient 사용
   const currentUserType = userType || 'patient';
 
   const renderContent = () => {
+    // 회원정보 수정 페이지가 활성화된 경우
+    if (showEditInfo) {
+      return <EditInfo 
+        userType={currentUserType} 
+        onBack={() => setShowEditInfo(false)}
+        onHasChanges={setHasChanges}
+      />;
+    }
+
     // 전문가인 경우
     if (currentUserType === 'expert') {
       switch (selectedMenu) {
@@ -61,6 +106,7 @@ const MyHome: React.FC = () => {
                 height={168}
                 weight={52}
                 checkupCount={2}
+                onEditInfo={() => setShowEditInfo(true)}
               />
               <div className='w-full h-[2px] bg-[#DBE6FF] my-4 lg:my-8' />
               <MyConstantMedical status='안심' nickname='하나' />
@@ -99,6 +145,7 @@ const MyHome: React.FC = () => {
               height={168}
               weight={52}
               checkupCount={2}
+              onEditInfo={() => setShowEditInfo(true)}
             />
             <div className='w-full h-[2px] bg-[#DBE6FF] my-4 lg:my-8' />
             <MyConstantMedical status='안심' nickname='하나' />
@@ -129,7 +176,7 @@ const MyHome: React.FC = () => {
         <SideBar
           userType={currentUserType}
           selectedMenu={selectedMenu}
-          onMenuSelect={setSelectedMenu}
+          onMenuSelect={handleMenuSelect}
         />
         <SimpleBox>
           <div
@@ -144,7 +191,7 @@ const MyHome: React.FC = () => {
         <SideBar
           userType={currentUserType}
           selectedMenu={selectedMenu}
-          onMenuSelect={setSelectedMenu}
+          onMenuSelect={handleMenuSelect}
         />
         <main className='lg:pt-5 lg:pl-[25px]'>
           <SimpleBox>
@@ -152,6 +199,14 @@ const MyHome: React.FC = () => {
           </SimpleBox>
         </main>
       </div>
+
+      {/* 확인 모달 */}
+      <ConfirmModal
+        isOpen={showConfirmModal}
+        onClose={() => setShowConfirmModal(false)}
+        onConfirm={handleConfirmSave}
+        onCancel={handleConfirmCancel}
+      />
     </div>
   );
 };
