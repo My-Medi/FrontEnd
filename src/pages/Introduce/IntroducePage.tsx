@@ -36,8 +36,8 @@ const IntroducePage: React.FC = () => {
   return (
     <div>
       {/* 광고 배너 섹션 */}
-      <div className="w-full flex justify-center px-4 pt-[22px] pb-9 lg:px-4 md:px-6 sm:px-4">
-        <div className="w-full max-w-[1300px] lg:max-w-[1300px] md:max-w-[1300px]">
+      <div className="w-full flex justify-center px-4 pt-6 pb-9 lg:px-4 md:px-6 sm:px-4">
+        <div className="w-full max-w-7xl lg:max-w-7xl md:max-w-7xl">
           <div className="relative">
             <AdBanner variant={currentBanner} onVariantChange={handleBannerChange} />
           </div>
@@ -45,7 +45,7 @@ const IntroducePage: React.FC = () => {
       </div>
 
       {/* 문제 상황 카드들 */}
-      <div className="w-full max-w-[1920px] mx-auto pt-9 lg:max-w-[1920px] md:max-w-full">
+      <div className="w-full mx-auto max-w-1920">
         <ProblemCards />
       </div>
 

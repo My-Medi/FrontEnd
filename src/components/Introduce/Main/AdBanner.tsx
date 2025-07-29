@@ -55,17 +55,18 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
 
   return (
     <div 
-      className="relative w-full h-[521px] rounded-[20px] overflow-hidden shadow-lg transition-all duration-500 ease-in-out lg:h-[521px] lg:rounded-[20px] md:h-[400px] md:rounded-[16px] sm:h-[300px] sm:rounded-[12px]"
+      className="relative w-full h-[521px] rounded-[20px] overflow-hidden transition-all duration-500 ease-in-out lg:h-[521px] lg:rounded-[20px] md:h-[400px] md:rounded-[16px] sm:h-[300px] sm:rounded-[12px]"
       style={{
         backgroundImage: `url(${getBackgroundImage()})`,
         backgroundSize: '100% 100%',
         backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat'
+        backgroundRepeat: 'no-repeat',
+        boxShadow: '0px 3px 6px 0px #1D68FF12, 0px 11px 11px 0px #1D68FF0F, 0px 26px 15px 0px #1D68FF08, 0px 46px 18px 0px #1D68FF03, 0px 71px 20px 0px #1D68FF00'
       }}
     >
       {/* 두 번째 배너에만 버튼 표시 */}
       {variant === '2' && (
-        <div className="relative z-10 flex flex-col justify-end items-start h-full pb-[107px] pl-[110px] lg:pb-[107px] lg:pl-[110px] md:pb-16 md:pl-8 md:justify-end sm:pb-12 sm:pl-6 sm:justify-end">
+        <div className="relative z-10 flex flex-col justify-end items-start h-full pb-[107px] pl-[0 px] lg:pb-[107px] lg:pl-[100px] md:pb-16 md:pl-1 md:justify-end sm:pb-12 sm:pl-6 sm:justify-end">
           <CTAButton>
             지금 바로 건강 기록하기
             <svg width="8.1" height="16.2" viewBox="0 0 8 16" fill="none" className="lg:w-[8.1px] lg:h-[16.2px] md:w-2 md:h-4 sm:w-1.5 sm:h-3">

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface ServiceCardProps {
   title: string;
@@ -12,14 +13,21 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   description
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate();
 
   const cardStyle = {
-    background: 'rgba(255, 255, 255, 0.1)',
-    boxShadow: '0px 46px 18px rgba(29, 104, 255, 0.01), 0px 26px 15px rgba(29, 104, 255, 0.03), 0px 11px 11px rgba(29, 104, 255, 0.06), 0px 3px 6px rgba(29, 104, 255, 0.07)',
+    background: 'rgba(255, 255, 255, 0.90)',
+    boxShadow: '0px 3px 6px 0px #1D68FF12, 0px 11px 11px 0px #1D68FF0F, 0px 26px 15px 0px #1D68FF08, 0px 46px 18px 0px #1D68FF03, 0px 71px 20px 0px #1D68FF00',
     borderRadius: '20px',
     border: isHovered ? '3px solid #1D68FF' : '3px solid #ffffff',
     transition: 'border-color 0.3s ease',
     boxSizing: 'border-box' as const
+  };
+
+  const handleClick = () => {
+    if (title === '건강관리 캘린더') {
+      navigate('/calendar-intro');
+    }
   };
 
   return (
@@ -28,6 +36,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       style={cardStyle}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={handleClick}
     >
       <div className="flex flex-col gap-2 pl-[72px] pt-[41px] pr-10 pb-10 lg:pl-[72px] lg:pt-[41px] lg:pr-10 lg:pb-10 md:pl-8 md:pt-8 md:pr-6 md:pb-8 sm:pl-6 sm:pt-6 sm:pr-4 sm:pb-6">
         <div className="flex flex-col gap-2 lg:gap-2 md:gap-1.5 sm:gap-1">
