@@ -65,7 +65,7 @@ const Topbar = () => {
                   onClick={() => navigate('/health-terms')}
                   className='text-[#25282B] text-[14px] font-[300] leading-[22px] tracking-[-0.42px] cursor-pointer whitespace-nowrap font-[Pretendard]'
                 >
-                  건강용어 알아보기
+                  건강용어
                 </p>
               )}
               {/* 전문가 로그인 시 마이홈 메뉴 추가 */}
@@ -97,7 +97,7 @@ const Topbar = () => {
                 onClick={() => navigate('/alarm')}
                 className='text-[#25282B] text-[14px] font-[300] leading-[22px] tracking-[-0.42px] cursor-pointer whitespace-nowrap font-[Pretendard]'
               >
-                내 알림
+                알림
               </p>
 
               <form
