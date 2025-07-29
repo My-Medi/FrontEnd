@@ -4,6 +4,7 @@ import RequestHealthGoal from './HealthGoal';
 import RequestMessage from './RequestMessage';
 import PatientInfo from './PatientInfo';
 import AbnormalPart from './AbnormalPart';
+import ReportSummary from './ReportSummary';
 
 interface DetailModalProps {
   nickname: string;
@@ -12,10 +13,30 @@ interface DetailModalProps {
   onReject: () => void;
 }
 
+const reportData = {
+  nickname: '하나',
+  bmi: 17.4,
+  waist: 62,
+  sp: 117,
+  dp: 62,
+  fastingBlood: 130,
+  creatinine: 0.9,
+  eGFR: 72,
+  ast: 18,
+  alt: 9,
+  gtp: 17,
+  hemoglobin: 17.2,
+  cholesterol: 100,
+  hdl: 78,
+  neutralFat: 64,
+  ldl: 100,
+  urineProtein: '정상',
+};
+
 const HealthDataModal: React.FC<DetailModalProps> = ({ nickname, onClose, onAccept, onReject }) => {
   return (
     <div className='fixed inset-0 z-50 bg-[#121218]/10 flex justify-center items-center'>
-      <div className='flex flex-col items-center gap-6 relative w-[984px] pt-[50px] pl-[50px] pr-[50px] pb-[50px] rounded-[40px] bg-white'>
+      <div className='flex flex-col max-h-[90vh] overflow-y-auto items-center gap-6 relative w-[984px] pt-[50px] pl-[50px] pr-[50px] pb-[50px] rounded-[40px] bg-white'>
         {/* 상단 헤더 */}
         <div className='flex items-center gap-6  self-start'>
           {/* 뒤로가기 버튼 */}
@@ -29,7 +50,7 @@ const HealthDataModal: React.FC<DetailModalProps> = ({ nickname, onClose, onAcce
               건강 데이터 상세
             </p>
             <p className='text-[#121218] text-[24px] font-semibold font-[Pretendard] leading-[36px] tracking-[-0.72px]'>
-              {nickname} 회원님의 건강관리 요청서
+              {(nickname = '하나')} 회원님의 건강관리 요청서
             </p>
           </div>
         </div>
@@ -56,6 +77,7 @@ const HealthDataModal: React.FC<DetailModalProps> = ({ nickname, onClose, onAcce
           체중 3kg 감량과 혈당 정상화, 그리고 꾸준한 식단 루틴을 만들고 싶어요!'
           />
           <AbnormalPart abnormal={['공복 혈당', 'BMI / 체지방률']} />
+          <ReportSummary {...reportData} />
         </div>
         {/* 하단 버튼 */}
         <div className='flex flex-col items-center border-t-[1.2px] border-[#DBE6FF] pt-8 w-[300px] h-[56px] gap-4 mt-6'>
