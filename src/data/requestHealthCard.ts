@@ -1,5 +1,6 @@
 const requestCardData = [
   {
+    id: 1,
     nickname: '수정',
     gender: '여성',
     age: 35,
@@ -10,6 +11,7 @@ const requestCardData = [
     하루 식사 타이밍이나 음식 조합 등에 대해 조언을 받고 싶고, 장 건강까지 고려한 관리 방향이 있다면 함께 제안받고 싶습니다.`,
   },
   {
+    id: 2,
     nickname: '하나',
     gender: '여성',
     age: 23,
@@ -20,6 +22,7 @@ const requestCardData = [
 따라서 콜레스테롤 수치를 낮추기 위한 식이조절법, 영양 정보, 실생활에서 적용 가능한 레시피나 습관 변화 방법 등에 대해 구체적인 조언을 받고 싶습니다.`,
   },
   {
+    id: 3,
     nickname: '조이',
     gender: '여성',
     age: 27,

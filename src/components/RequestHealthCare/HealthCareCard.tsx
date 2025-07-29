@@ -22,6 +22,15 @@ const RequestHealthCareCard: React.FC<RequestHealthCareProps> = ({
   receivedDate,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleAccept = () => {
+    console.log(`${nickname} 수락됨`);
+    setIsModalOpen(false);
+  };
+
+  const handleReject = () => {
+    console.log(`${nickname} 거절됨`);
+    setIsModalOpen(false);
+  };
   return (
     <div className='w-[771px] mx-auto mb-10 flex flex-col'>
       {/* 날짜 텍스트 */}
@@ -108,30 +117,44 @@ const RequestHealthCareCard: React.FC<RequestHealthCareProps> = ({
           <div className='flex gap-[105.6px]'>
             {/* 거절하기 버튼 */}
             <button
-              className='flex justify-center items-center gap-[6px] w-[180px] h-[42px] rounded-full bg-white text-[#25282B] text-[16px] font-medium border border-[#E3E6EB] font-[Pretendard] leading-[36px] tracking-[-0.48px]'
+              className='flex justify-center items-center gap-[6px] w-[180px] h-[42px] rounded-full bg-white text-[#25282B] text-[16px] font-medium border border-[#E3E6EB] font-[Pretendard] leading-[36px] tracking-[-0.48px] cursor-pointer'
               style={{
                 backgroundColor: '#FFFFFF',
-
                 boxShadow: '0px 0px 5px 5px rgba(29, 104, 255, 0.05)',
               }}
+              onClick={handleReject}
             >
               거절하기
             </button>
 
             {/* 수락하기 버튼 */}
             <button
-              className='flex justify-center items-center gap-[6px] w-[180px] h-[42px] rounded-full text-[#FFF] text-[16px] font-medium font-[Pretendard] leading-[22.4px], tracking-[-0.48px]'
+              className='flex justify-center items-center gap-[6px] w-[180px] h-[42px] rounded-full text-[#FFF] text-[16px] font-medium font-[Pretendard] leading-[22.4px], tracking-[-0.48px] cursor-pointer'
               style={{
                 backgroundColor: '#1D68FF',
                 boxShadow: '0px 0px 5px 5px rgba(29, 104, 255, 0.08)',
               }}
+              onClick={handleAccept}
             >
               수락하기
             </button>
           </div>
         </div>
       </div>
-      {isModalOpen && <HealthDataModal onClose={() => setIsModalOpen(false)} />}
+      {isModalOpen && (
+        <HealthDataModal
+          nickname={nickname}
+          onClose={() => setIsModalOpen(false)}
+          onAccept={() => {
+            console.log(`${nickname} 수락`);
+            setIsModalOpen(false); // 모달 닫기
+          }}
+          onReject={() => {
+            console.log(`${nickname} 거절`);
+            setIsModalOpen(false); // 모달 닫기
+          }}
+        />
+      )}
     </div>
   );
 };

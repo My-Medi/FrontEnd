@@ -36,8 +36,8 @@ const reportData = {
 const HealthDataModal: React.FC<DetailModalProps> = ({ nickname, onClose, onAccept, onReject }) => {
   return (
     <>
-      <div className='fixed inset-0 bg-[#000000]/30 z-40 pointer-events-none' />
-      <div className='relative z-50 flex justify-center'>
+      <div className='fixed inset-0 bg-black/30 z-40' />
+      <div className='absolute left-1/2 -translate-x-1/2 z-50 top-[20px]'>
         <div className='flex flex-col items-center gap-6 relative w-[984px] pt-[50px] pl-[50px] pr-[50px] pb-[50px] rounded-[40px] bg-white shadow-md'>
           {/* 상단 헤더 */}
           <div className='flex items-center gap-6  self-start'>
@@ -85,11 +85,14 @@ const HealthDataModal: React.FC<DetailModalProps> = ({ nickname, onClose, onAcce
             <ReportSummary {...reportData} />
           </div>
           {/* 하단 버튼 */}
-          <div className='flex flex-col items-center border-t-[1.2px] border-[#DBE6FF] pt-8 w-[300px] h-[56px] gap-4 mt-6'>
+          <div className='flex flex-col items-center border-[#DBE6FF] pt-8 w-[300px] h-[56px] gap-4 mt-6 mb-[50px]'>
             <div className='flex gap-[96px]'>
               {/* 거절하기 버튼 */}
               <button
-                onClick={onReject}
+                onClick={() => {
+                  onReject();
+                  onClose(); // 모달 닫기
+                }}
                 className='flex justify-center items-center gap-[6px] w-[300px] h-[56px] rounded-full text-[#25282B] text-[20px] font-medium font-[Pretendard] border border-[#E3E6EB] leading-[36px] tracking-[-0.6px] shadow-[0px_0px_5px_5px_rgba(29,104,255,0.05)] cursor-pointer'
               >
                 거절하기
@@ -97,7 +100,10 @@ const HealthDataModal: React.FC<DetailModalProps> = ({ nickname, onClose, onAcce
 
               {/* 수락하기 버튼 */}
               <button
-                onClick={onAccept}
+                onClick={() => {
+                  onAccept();
+                  onClose(); // 모달 닫기
+                }}
                 className='flex justify-center items-center gap-[6px] w-[300px] h-[56px] rounded-full text-white text-[20px] font-medium font-[Pretendard] leading-[36px] tracking-[-0.6px] bg-[#1D68FF] shadow-[0px_0px_5px_5px_rgba(29,104,255,0.08)] cursor-pointer'
               >
                 수락하기
