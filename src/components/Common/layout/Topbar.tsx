@@ -33,7 +33,7 @@ const Topbar = () => {
     <>
       {/* Desktop View: xl(1280px) 이상에서만 보임. Figma 디자인에 맞춰 스타일 수정 */}
       <div className='hidden lg:block w-full bg-white'>
-        <div className='flex justify-center items-center w-full h-[128px] px-[60px] py-[32px]'>
+        <div className='flex justify-center items-center w-full h-[128px] px-[60px] pt-[32px] pb-0'>
           <div className='flex items-center justify-between w-full max-w-[1301px]'>
             <div className='flex items-center gap-[10px]'>
               <img
@@ -47,8 +47,8 @@ const Topbar = () => {
                 <span className='text-[#75787B] text-[14px] font-[300] leading-[22px] tracking-[-0.42px] font-[Pretendard]'>
                   마이 메디컬 리포트
                 </span>
-                <span className='text-[#121218] text-[14px] font-[500] leading-[22px] tracking-[-0.42px] font-[Pretendard]'>
-                  마이메디
+                <span className={`text-[14px] font-[500] leading-[22px] tracking-[-0.42px] font-[Pretendard] ${userType === 'expert' ? 'text-[#1D68FF]' : 'text-[#121218]'}`}>
+                  {userType === 'expert' ? '전문가' : '마이메디'}
                 </span>
               </div>
             </div>
