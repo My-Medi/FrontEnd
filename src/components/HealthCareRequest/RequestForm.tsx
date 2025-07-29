@@ -52,7 +52,7 @@ const RequestForm = () => {
   };
 
   return (
-    <section className='p-8 xl:p-16'>
+    <section className='pl-[155px] pr-[135px] pt-[50px] pb-[50px]'>
       <h2 className='text-2xl font-bold text-center mb-2'>건강 관리 요청서</h2>
       <p className='text-center text-gray-500 mb-6'>건강 고민들을 최대한 자세하게 작성해주세요!</p>
       {/* 건강검진 내역 불러오기 UI */}
