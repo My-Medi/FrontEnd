@@ -14,6 +14,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import ResumeManagement from '../../components/MyHome/Expert_Resume/ResumeManagement';
 import EditInfo from '../../components/MyHome/MyHomeEdit/EditInfo';
 import ConfirmModal from '../../components/MyHome/MyHomeEdit/ConfirmModal';
+import RequestHealthCare from '../../components/RequestHealthCare/RequestHealthCare';
 
 const scheduleData = [
   {
@@ -86,11 +87,13 @@ const MyHome: React.FC = () => {
   const renderContent = () => {
     // 회원정보 수정 페이지가 활성화된 경우
     if (showEditInfo) {
-      return <EditInfo 
-        userType={currentUserType} 
-        onBack={() => setShowEditInfo(false)}
-        onHasChanges={setHasChanges}
-      />;
+      return (
+        <EditInfo
+          userType={currentUserType}
+          onBack={() => setShowEditInfo(false)}
+          onHasChanges={setHasChanges}
+        />
+      );
     }
 
     // 전문가인 경우
@@ -125,7 +128,7 @@ const MyHome: React.FC = () => {
         case 2: // 이력서 관리
           return <ResumeManagement />;
         case 3: // 건강관리요청서 확인하기
-          return <div className='text-center'>건강관리요청서 확인하기 페이지</div>;
+          return <RequestHealthCare />;
         case 4: // 내 알림
           return <div className='text-center'>내 알림 페이지</div>;
         default:
