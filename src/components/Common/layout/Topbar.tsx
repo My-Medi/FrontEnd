@@ -59,6 +59,15 @@ const Topbar = () => {
               >
                 Mymedi 소개
               </p>
+              {/* 전문가 로그인 시 건강용어 알아보기 메뉴 추가 */}
+              {userType === 'expert' && (
+                <p
+                  onClick={() => navigate('/health-terms')}
+                  className='text-[#25282B] text-[14px] font-[300] leading-[22px] tracking-[-0.42px] cursor-pointer whitespace-nowrap font-[Pretendard]'
+                >
+                  건강용어 알아보기
+                </p>
+              )}
               {/* 전문가 로그인 시 마이홈 메뉴 추가 */}
               {userType === 'expert' && (
                 <p
