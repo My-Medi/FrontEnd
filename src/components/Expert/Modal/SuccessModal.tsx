@@ -40,7 +40,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({ isOpen, onClose }) => {
       
       {/* Modal Container */}
       <div 
-        className={`relative w-[605px] bg-white rounded-[18px] transition-all duration-300 ${
+        className={`relative w-[744px] bg-white rounded-[18px] transition-all duration-300 ${
           isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
         }`}
         onClick={(e) => e.stopPropagation()}

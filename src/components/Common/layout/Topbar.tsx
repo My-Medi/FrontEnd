@@ -33,7 +33,7 @@ const Topbar = () => {
     <>
       {/* Desktop View: xl(1280px) 이상에서만 보임. Figma 디자인에 맞춰 스타일 수정 */}
       <div className='hidden lg:block w-full bg-white'>
-        <div className='flex justify-center items-center w-full h-[128px] px-[60px] pt-[32px] pb-0'>
+        <div className='flex justify-center items-center w-full h-[128px] px-[60px] pb-0'>
           <div className='flex items-center justify-between w-full max-w-[1301px]'>
             <div className='flex items-center gap-[10px]'>
               <img

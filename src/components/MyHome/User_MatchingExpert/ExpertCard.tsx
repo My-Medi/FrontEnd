@@ -8,9 +8,10 @@ interface ExpertCardProps {
   expert: MatchedExpert;
   onUnmatch?: (expertId: string) => void;
   onCancelRequest?: (expertId: string) => void;
+  onClick?: () => void;
 }
 
-const ExpertCard: React.FC<ExpertCardProps> = ({ expert, onUnmatch, onCancelRequest }) => {
+const ExpertCard: React.FC<ExpertCardProps> = ({ expert, onUnmatch, onCancelRequest, onClick }) => {
   const navigate = useNavigate();
   
   const handleUnmatch = () => {
@@ -99,7 +100,10 @@ const ExpertCard: React.FC<ExpertCardProps> = ({ expert, onUnmatch, onCancelRequ
       )}
       
       {/* 전문가 카드 */}
-      <div className="w-[319px] h-[384px] bg-white border border-[#DBE6FF] rounded-[15px] p-6 flex flex-col items-center">
+      <div 
+        className="w-[319px] h-[384px] bg-white border border-[#DBE6FF] rounded-[15px] p-6 flex flex-col items-center cursor-pointer"
+        onClick={onClick}
+      >
         {/* 상단 정보 */}
         <div className="flex flex-col items-center gap-2 mb-2">
           <div className="text-[14px] font-medium text-[#9DA0A3] leading-[24px] tracking-[-3%] text-center">
@@ -137,9 +141,12 @@ const ExpertCard: React.FC<ExpertCardProps> = ({ expert, onUnmatch, onCancelRequ
           <div className="text-[16px] font-medium text-[#25282B] leading-[36px] tracking-[-3%] w-[269px] truncate">
             {expert.description}
           </div>
-          <div className="text-[16px] font-light text-[#25282B] leading-[22px] tracking-[-3%]">
-            {expert.phone}
-          </div>
+          {/* 연결된 전문가일 때만 전화번호 표시 */}
+          {expert.status === 'matched' && (
+            <div className="text-[16px] font-light text-[#25282B] leading-[22px] tracking-[-3%]">
+              {expert.phone}
+            </div>
+          )}
         </div>
       </div>
     </div>
