@@ -5,9 +5,12 @@ import RequestHealthCareCard from '../../components/RequestHealthCare/HealthCare
 import RequsetHealthHeader from '../../components/RequestHealthCare/Header';
 import RequestHealthPagination from '../../components/RequestHealthCare/PaginationHealthCare';
 import requestCardData from '../../data/requestHealthCard';
+import Pagination from '../../components/Expert/Pagination';
 
 const RequestHealthCare: React.FC = () => {
   const [selectedMenu, setSelectedMenu] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 10; //예시
   const RequestHealthCareCards = () => {
     return (
       <div className='p-10 max-w-[900px] mx-auto'>
@@ -39,9 +42,9 @@ const RequestHealthCare: React.FC = () => {
                 <RequestHealthCareCards />
               </div>
               <div className='justify-center'>
-                <RequestHealthPagination
-                  currentPage={1}
-                  totalPages={10}
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
                   onPageChange={(page) => setCurrentPage(page)}
                 />
               </div>
