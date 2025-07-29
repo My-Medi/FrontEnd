@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import HeroSection from '../../components/Introduce/HeroSection';
-import AdBanner from '../../components/Introduce/AdBanner';
-import ServiceSection from '../../components/Introduce/ServiceSection';
-import ProblemCards from '../../components/Introduce/ProblemCards';
+import HeroSection from '../../components/Introduce/Main/HeroSection';
+import AdBanner from '../../components/Introduce/Main/AdBanner';
+import ServiceSection from '../../components/Introduce/Main/ServiceSection';
+import ProblemCards from '../../components/Introduce/Main/ProblemCards';
 
 const IntroducePage: React.FC = () => {
   const [currentBanner, setCurrentBanner] = useState<'1' | '2' | '3' | '4'>('1');
