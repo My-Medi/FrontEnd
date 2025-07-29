@@ -134,7 +134,7 @@ const ExpertCard: React.FC<ExpertCardProps> = ({ expert, onUnmatch, onCancelRequ
             <span className="text-[#1D68FF]"> / </span>
             <span className="text-[#121218]">{expert.realName}</span>
           </div>
-          <div className="text-[16px] font-medium text-[#25282B] leading-[36px] tracking-[-3%] w-[269px]">
+          <div className="text-[16px] font-medium text-[#25282B] leading-[36px] tracking-[-3%] w-[269px] truncate">
             {expert.description}
           </div>
           <div className="text-[16px] font-light text-[#25282B] leading-[22px] tracking-[-3%]">
