@@ -288,7 +288,7 @@ const ReportSummary: React.FC<ReportProps> = ({
               <p className='text-[#121218] text-[16px] leading-[36px] font-medium tracking-[-0.48px]'>
                 비만/복부비만
               </p>
-              <div className='flex flex-col mt-[8px] gap-1 text-[14px] font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
+              <div className='flex flex-col mt-[7px] gap-1 text-[14px] font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
                 <p>체질량 지수 : {bmi} kg/m²</p>
                 <p>허리둘레 : {waist} mm/HG</p>
               </div>
@@ -301,7 +301,7 @@ const ReportSummary: React.FC<ReportProps> = ({
               <p className='text-[#121218] text-[16px] leading-[36px] font-medium tracking-[-0.48px]'>
                 고혈압
               </p>
-              <div className='flex flex-col mt-[10px] gap-1 text-[14px] font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
+              <div className='flex flex-col mt-[8px] gap-1 text-[14px] font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
                 <p>수축기 혈압 : {sp} kg/m²</p>
                 <p>이완기 혈압 : {dp} mm/HG</p>
               </div>
@@ -339,7 +339,7 @@ const ReportSummary: React.FC<ReportProps> = ({
               <p className='text-[16px] font-medium leading-[36px] tracking-[-0.48px] text-[#121218]'>
                 간장질환
               </p>
-              <div className='text-[14px] gap-1 mt-[8px] flex-col font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
+              <div className='text-[14px] gap-1 mt-[7px] flex-col font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
                 <p>AST : {ast} IU/L</p>
                 <p>ALT : {alt} IU/L</p>
                 <p>감마-GTP(Y-GTP) : {gtp} IU/L</p>
