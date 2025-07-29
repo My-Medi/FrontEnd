@@ -7,6 +7,7 @@ interface SuccessModalProps {
 }
 
 const SuccessModal: React.FC<SuccessModalProps> = ({ isOpen, onClose, message }) => {
+  console.log('ErrorModal 렌더링:', { isOpen, message });
   if (!isOpen) return null;
 
   return (
