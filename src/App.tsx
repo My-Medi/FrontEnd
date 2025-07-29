@@ -8,8 +8,10 @@ import HomePage from './pages/Home/HomePage';
 import LoginPage from './pages/Login/LoginPage';
 import IntroducePage from './pages/Introduce/IntroducePage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
+import HealthCheckupResultInput from './pages/HealthCheckupResultInput/HealthCheckupResultInput';
 import ExpertPage from './pages/Expert/ExpertPage';
 import RequestHealthCare from './pages/Expert/RequestHealthCare';
+import { AuthProvider } from './contexts/AuthContext';
 
 const router = createBrowserRouter([
   {
@@ -22,6 +24,7 @@ const router = createBrowserRouter([
       { path: 'signup', element: <SignUp /> },
       { path: 'login', element: <LoginPage /> },
       { path: 'introduce', element: <IntroducePage /> },
+      { path: 'health-result-input', element: <HealthCheckupResultInput /> },
       { path: 'expert', element: <ExpertPage /> },
       { path: 'requesthealth', element: <RequestHealthCare /> },
     ],
@@ -30,9 +33,9 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <>
+    <AuthProvider>
       <RouterProvider router={router} />
-    </>
+    </AuthProvider>
   );
 }
 

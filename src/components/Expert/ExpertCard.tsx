@@ -23,7 +23,7 @@ const ExpertCard: React.FC<ExpertCardProps> = ({
   onClick,
 }) => (
   <div
-    className="w-full max-w-[25rem] h-[31.25rem] bg-[rgba(255,255,255,0.8)] rounded-[15px] border border-[#DBE6FF] border-[0.5px] flex flex-col items-center justify-center gap-4 px-6 py-10 cursor-pointer transition"
+    className="w-full max-w-[25rem] h-[31.25rem] bg-[rgba(255,255,255,0.8)] rounded-[15px] border border-[#DBE6FF] border-[0.5px] flex flex-col items-center justify-center gap-4 px-6 py-10 cursor-pointer transition pl-[31px]"
     style={{ boxShadow: 'none' }}
     onClick={onClick}
   >
