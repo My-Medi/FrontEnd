@@ -1,42 +1,67 @@
-import React, { useState, useEffect } from 'react';
-import LoginInput from '../LoginInput';
+import { useState, useMemo, useRef, useEffect } from "react";
 import logo from "../../../assets/Login/mymedi.svg";
 import backSvg from "../../../assets/Expert/back.svg";
+import LoginInput from "../LoginInput";
 import ErrorModal from './ErrorModal';
+import ResetPassword from './ResetPassword';
 
-interface FindIDProps {
+interface FindPWProps {
   onBack: () => void;
 }
 
-const FindID: React.FC<FindIDProps> = ({ onBack }) => {
-  const [email, setEmail] = useState('');
+const FindPW = ({ onBack }: FindPWProps) => {
+  const [formData, setFormData] = useState({
+    id: "",
+    email: "",
+  });
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [showVerificationErrorModal, setShowVerificationErrorModal] = useState(false);
   const [showVerificationStep, setShowVerificationStep] = useState(false);
   const [verificationCode, setVerificationCode] = useState('');
   const [timeLeft, setTimeLeft] = useState(180); // 3분 타이머
   const [showSuccessStep, setShowSuccessStep] = useState(false);
-  const [foundId, setFoundId] = useState(''); // 찾은 아이디
-  const [userName, setUserName] = useState(''); // 찾은 사용자 이름
+  const [showTempPasswordModal, setShowTempPasswordModal] = useState(false);
+  const [showResetPasswordStep, setShowResetPasswordStep] = useState(false);
+  const idInputRef = useRef<HTMLInputElement>(null);
 
-  const handleGetVerificationCode = () => {
-    // 등록된 사용자 정보 목록 (실제로는 서버에서 확인)
-    const registeredUsers = [
-      { id: 'user123', email: 'user@example.com', name: '홍길동' },
-      { id: 'test789', email: 'test@example.com', name: '이테스트' }
-    ];
-    
-    const foundUser = registeredUsers.find(user => user.email === email);
-    
-    if (!foundUser) {
-      setShowErrorModal(true);
-    } else {
-      // 정상적인 경우 인증번호 발송 로직
-      console.log('인증번호 받기:', email);
-      setFoundId(foundUser.id);
-      setUserName(foundUser.name);
-      setShowVerificationStep(true);
-      setTimeLeft(180); // 타이머 시작
+  const isFormValid = useMemo(() => {
+    return formData.id.length > 0 && formData.email.length > 0;
+  }, [formData]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSendVerificationCode = () => {
+    if (isFormValid) {
+      // 등록된 사용자 정보 목록 (실제로는 서버에서 확인)
+      const registeredUsers = [
+        { id: 'user', email: 'user@example.com' },
+        { id: 'expert', email: 'expert@example.com' }
+      ];
+      
+      // 아이디가 등록되어 있는지 확인
+      const isIdRegistered = registeredUsers.some(user => user.id === formData.id);
+      // 이메일이 등록되어 있는지 확인
+      const isEmailRegistered = registeredUsers.some(user => user.email === formData.email);
+      
+      console.log('입력된 정보:', formData);
+      console.log('아이디 등록됨?:', isIdRegistered);
+      console.log('이메일 등록됨?:', isEmailRegistered);
+      
+      // 아이디나 이메일 중 하나라도 등록되지 않았으면 에러
+      if (!isIdRegistered || !isEmailRegistered) {
+        setShowErrorModal(true);
+      } else {
+        // 정상적인 경우 인증번호 발송 로직
+        console.log("인증번호 발송:", formData);
+        setShowVerificationStep(true);
+        setTimeLeft(180); // 타이머 시작
+      }
     }
   };
 
@@ -46,6 +71,12 @@ const FindID: React.FC<FindIDProps> = ({ onBack }) => {
 
   const handleVerificationErrorModalClose = () => {
     setShowVerificationErrorModal(false);
+  };
+
+  const handleTempPasswordModalClose = () => {
+    setShowTempPasswordModal(false);
+    window.location.href = '/login';
+
   };
 
   const handleVerifyCode = () => {
@@ -81,7 +112,16 @@ const FindID: React.FC<FindIDProps> = ({ onBack }) => {
     }
   }, [showVerificationStep, timeLeft]);
 
-  // 성공 화면
+  // 비밀번호 재설정 화면
+  if (showResetPasswordStep) {
+    return (
+      <ResetPassword
+        onBack={() => setShowResetPasswordStep(false)}
+      />
+    );
+  }
+
+  // 성공 화면 - 두 가지 선택지
   if (showSuccessStep) {
     return (
       <div className="relative flex flex-col items-center justify-center p-4">
@@ -98,44 +138,43 @@ const FindID: React.FC<FindIDProps> = ({ onBack }) => {
           {/* 로고 */}
           <img src={logo} alt="로고" className="w-[111.6px] h-[20.4px] mt-[72px] mb-[15.6px]" />
 
-          {/* 아이디 찾기 문구 */}
+          {/* 비밀번호 찾기 문구 */}
           <h1 className="text-[28.8px] font-semibold text-[#121218] mb-[32px] leading-[1.4] tracking-[-3%]">
-            아이디 찾기
+            비밀번호 찾기
           </h1>
 
-          {/* 성공 메시지 */}
-          <div className="text-center mb-[32px]">
-            <p className="text-[24px] font-medium leading-[1.4] tracking-[-3%]">
-              <span className="text-[#1D68FF]">{userName}</span>
-              <span className="text-[#121218]">님의 아이디는 {foundId} 입니다.</span>
-            </p>
-          </div>
-
-          {/* 버튼들 */}
-          <div className="w-[385.2px] flex flex-col gap-3">
-            {/* 바로 로그인하기 버튼 */}
-            <button
-              onClick={() => {
-                // 로그인 페이지로 이동
-                window.location.href = '/login';
-              }}
-              className="w-[300px] h-[60px] bg-[#1D68FF] text-white text-[18px] ml-[42px] mb-[24px]font-semibold rounded-[60px] flex justify-center items-center  transition-colors"
-            >
-              바로 로그인하기
-            </button>
-
-            {/* 비밀번호 찾기 버튼 */}
-            <button
-              onClick={() => {
-                // 비밀번호 찾기 페이지로 이동 (추후 구현)
-                
-              }}
-              className="w-[300px] h-[60px] bg-white text-[#121218] text-[18px] ml-[42px] font-semibold rounded-[60px] flex justify-center items-center  shadow-[0_0_6px_4px_rgba(29,104,255,0.10)] transition-colors"
-            >
-              비밀번호 찾기
-            </button>
-          </div>
+                      {/* 두 가지 선택지 버튼 */}
+            <div className="w-[385.2px] flex flex-col gap-4">
+              <button
+                onClick={() => {
+                  // 임시 비밀번호 전송 로직
+                  console.log("임시 비밀번호 전송");
+                  // TODO: 실제 임시 비밀번호 전송 API 호출
+                  setShowTempPasswordModal(true);
+                }}
+                className="w-[385.2px] h-[60px] bg-gray-200 text-black text-[18px] font-semibold rounded-[12px] flex justify-center items-center transition-colors "
+              >
+                이메일로 임시 비밀번호 전송
+              </button>
+              <button
+                onClick={() => {
+                  setShowResetPasswordStep(true);
+                }}
+                className="w-[385.2px] h-[60px] bg-gray-100 text-black text-[18px] font-semibold rounded-[12px] flex justify-center items-center transition-colors"
+              >
+                새 비밀번호 재설정
+              </button>
+            </div>
         </div>
+
+              {/* 임시 비밀번호 전송 성공 모달 */}
+      {showTempPasswordModal && (
+        <ErrorModal
+          isOpen={showTempPasswordModal}
+          onClose={handleTempPasswordModalClose}
+          message="이메일로 임시 비밀번호가 전송되었습니다!"
+        />
+      )}
       </div>
     );
   }
@@ -157,9 +196,9 @@ const FindID: React.FC<FindIDProps> = ({ onBack }) => {
           {/* 로고 */}
           <img src={logo} alt="로고" className="w-[111.6px] h-[20.4px] mt-[72px] mb-[15.6px]" />
 
-          {/* 아이디 찾기 문구 */}
+          {/* 비밀번호 찾기 문구 */}
           <h1 className="text-[28.8px] font-semibold text-[#121218] mb-[32px] leading-[1.4] tracking-[-3%]">
-            아이디 찾기
+            비밀번호 찾기
           </h1>
 
           {/* 안내 문구 */}
@@ -237,71 +276,76 @@ const FindID: React.FC<FindIDProps> = ({ onBack }) => {
         {/* 로고 */}
         <img src={logo} alt="로고" className="w-[111.6px] h-[20.4px] mt-[72px] mb-[15.6px]" />
 
-        {/* 아이디 찾기 문구 */}
-        <h1 className="text-[28.8px] font-semibold text-[#121218] mb-[32px] leading-[1.4] tracking-[-3%]">
-          아이디 찾기
+        {/* 비밀번호 찾기 문구 */}
+        <h1 className="text-[28.8px] font-semibold text-[#121218] mb-8 leading-[1.4] tracking-[-3%]">
+          비밀번호 찾기
         </h1>
 
-
         {/* 안내 문구 */}
-        <p className="text-[14px] font-medium text-[#4D5053] mb-[32px] leading-[1.714] tracking-[-3%] text-center">
-          회원정보에 등록된 이메일을 입력하세요.
+        <p className="text-[16px] font-medium text-[#4D5053] mb-8 leading-[1.4] tracking-[-3%] text-center">
+          회원정보에 등록된 아이디와 이메일을 입력해주세요.
         </p>
 
-        {/* 이메일 입력 폼 */}
+        {/* 비밀번호 찾기 폼 */}
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            handleGetVerificationCode();
+            handleSendVerificationCode();
           }}
           className="w-[385.2px] flex flex-col gap-4"
         >
           <LoginInput
-            label=""
+            ref={idInputRef}
+            label="아이디"
+            type="text"
+            id="id"
+            name="id"
+            placeholder="아이디를 입력하세요."
+            value={formData.id}
+            onChange={handleInputChange}
+          />
+          <LoginInput
+            label="이메일"
             type="email"
             id="email"
             name="email"
             placeholder="이메일을 입력하세요."
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={formData.email}
+            onChange={handleInputChange}
           />
           
           {/* 인증번호 받기 버튼 */}
           <button
+            className={`w-[385.2px] h-[60px] mt-[32px] text-[18px] font-semibold rounded-[14px] flex justify-center items-center gap-2.5 leading-[1.193] ${isFormValid ? "text-black bg-gray-100" : "bg-gray-100 text-black cursor-not-allowed"}`}
             type="submit"
-            disabled={!email}
-            className={`w-[385.2px] h-[60px] mt-[32px] text-[18px] font-semibold rounded-[14px] flex justify-center items-center gap-2.5 leading-[1.193] ${
-              email 
-                ? 'text-black bg-gray-100' 
-                : 'bg-gray-100 text-black cursor-not-allowed'
-            }`}
+            disabled={!isFormValid}
           >
             <span className="font-semibold text-[18px]">인증번호 받기</span>
           </button>
         </form>
       </div>
-      
+
       {/* 에러 모달 */}
       {showErrorModal && (
         <ErrorModal
           isOpen={showErrorModal}
           onClose={handleErrorModalClose}
-          message="회원 등록되지 않은 이메일입니다."
+          message="등록되지 않은 아이디 또는 이메일입니다."
         />
       )}
 
       {/* 인증번호 에러 모달 */}
       {showVerificationErrorModal && (
-        <div>
-          <ErrorModal
-            isOpen={showVerificationErrorModal}
-            onClose={handleVerificationErrorModalClose}
-            message="인증번호가 올바르지 않습니다."
-          />
-        </div>
+        <ErrorModal
+          isOpen={showVerificationErrorModal}
+          onClose={handleVerificationErrorModalClose}
+          message="인증번호가 올바르지 않습니다."
+        />
       )}
+
+
     </div>
   );
 };
 
-export default FindID;
+export default FindPW;

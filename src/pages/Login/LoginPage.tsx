@@ -7,6 +7,7 @@ import LoginInput from "../../components/Login/LoginInput";
 import { useAuth } from "../../contexts/AuthContext";
 import LoginConfirmModal from "../../components/Login/modal/LoginConfirmModal";
 import FindID from "../../components/Login/find/findID";
+import FindPW from "../../components/Login/find/findPW";
 
 const button = cva(
   "w-[385.2px] h-[60px] mt-6 text-[19.2px] font-semibold rounded-full flex justify-center items-center gap-2.5 leading-[1.193]",
@@ -31,6 +32,7 @@ const LoginPage = () => {
   });
   const [isKeepLogin, setIsKeepLogin] = useState(false);
   const [showFindID, setShowFindID] = useState(false);
+  const [showFindPW, setShowFindPW] = useState(false);
   const { setUserType } = useAuth();
   const navigate = useNavigate();
   const [showFailModal, setShowFailModal] = useState(false);
@@ -83,9 +85,18 @@ const LoginPage = () => {
     setShowFindID(false);
   };
 
+  const handleBackFromFindPW = () => {
+    setShowFindPW(false);
+  };
+
   // 아이디 찾기 화면이 표시되면 FindID 컴포넌트를 렌더링
   if (showFindID) {
     return <FindID onBack={handleBackFromFindID} />;
+  }
+
+  // 비밀번호 찾기 화면이 표시되면 FindPW 컴포넌트를 렌더링
+  if (showFindPW) {
+    return <FindPW onBack={handleBackFromFindPW} />;
   }
 
   return (
@@ -170,9 +181,13 @@ const LoginPage = () => {
               아이디 찾기
             </button>
             <div className="w-px h-4 bg-[#C5C8CB]"></div>
-            <span className="text-[14px] font-medium text-[#4D5053] leading-[1.714] tracking-[-3%]">
+            <button 
+              type="button"
+              className="text-[14px] font-medium text-[#4D5053] leading-[1.714] tracking-[-3%] cursor-pointer hover:text-[#1D68FF] bg-transparent border-none p-0"
+              onClick={() => setShowFindPW(true)}
+            >
               비밀번호 찾기
-            </span>
+            </button>
           </div>
         </div>
 

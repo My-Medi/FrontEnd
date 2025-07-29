@@ -1,12 +1,12 @@
 import React from 'react';
 
-interface SuccessModalProps {
+interface ErrorModalProps {
   isOpen: boolean;
   onClose: () => void;
   message: string;
 }
 
-const SuccessModal: React.FC<SuccessModalProps> = ({ isOpen, onClose, message }) => {
+const ErrorModal: React.FC<ErrorModalProps> = ({ isOpen, onClose, message }) => {
   console.log('ErrorModal 렌더링:', { isOpen, message });
   if (!isOpen) return null;
 
@@ -36,4 +36,4 @@ const SuccessModal: React.FC<SuccessModalProps> = ({ isOpen, onClose, message })
   );
 };
 
-export default SuccessModal; 
+export default ErrorModal; 
