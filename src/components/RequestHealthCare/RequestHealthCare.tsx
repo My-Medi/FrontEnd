@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
-import SideBar from '../MyHome/SideBar';
-import SimpleBox from '../MyHome/SimpleBox';
 import RequestHealthCareCard from './HealthCareCard';
 import RequsetHealthHeader from './Header';
-import RequestHealthPagination from './PaginationHealthCare';
 import requestCardData from '../../data/requestHealthCard';
 import Pagination from '../Expert/Pagination';
 
 const RequestHealthCare: React.FC = () => {
-  const [selectedMenu, setSelectedMenu] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 10; //예시
   const RequestHealthCareCards = () => {
