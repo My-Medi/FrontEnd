@@ -17,7 +17,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
   onSelectChange,
 }) => {
   return (
-    <div className='flex items-center w-full ml-[-10px] gap-[16px]'>
+    <div className='flex items-center w-full ml-[-10px] gap-[16px] mb-[10px]'>
       {/*체크박스: 알림 상자 바깥쪽 */}
       {selectable && (
         <div className='relative w-[22.5px] h-[22.5px] shrink-0'>
@@ -47,28 +47,25 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
         className={`
           flex items-center
           h-[97px] w-full
-          rounded-[20px]
+          rounded-[20px] shadow-[0px_0px_5px_5px_rgba(29,104,255,0.05)]
           ${isNew ? 'bg-[#1D68FF]' : 'bg-[#C5C8CB]'}
         `}
       >
         <div
           className={`
             flex items-center
-            px-[32px] py-[10px] sm:px-4
-            h-[97px] w-full
-            rounded-[50px_20px_20px_20px]
-            border-2
-            ${isNew ? 'border-[#1D68FF]' : 'border-[#C5C8CB]'}
-            bg-white
+            h-full w-full
+      px-[32px] py-[10px] gap-[10px]
+      rounded-[50px_20px_20px_20px]
+      border-2 ${isNew ? 'border-[#1D68FF]' : 'border-[#C5C8CB]'}
+      bg-white
           `}
         >
           <p
             className={`
-              text-[20px] sm:text-[16px] ml-[0px]
-              font-medium leading-normal font-[Pretendard] tracking-[-0.48px]
-              text-[#25282B]
-              text-center sm:text-left
-              w-full
+              text-[#25282B] text-center sm:text-left
+        font-[Pretendard] font-medium text-[20px] tracking-[-0.6px]
+        w-full
             `}
           >
             {message}

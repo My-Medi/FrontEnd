@@ -128,14 +128,14 @@ export const NotificationList: React.FC<NotificationListProps> = ({ notification
           {newNotices.map((n) => (
             <NotificationItem key={n.id} message={n.message} isNew />
           ))}
-          <hr className='w-full h-px border-0 bg-[#C5C8CB] my-[24px]' />
-          <div className='flex items-center gap-2'>
+          <hr className='w-full h-px border-0 bg-[#C5C8CB] my-[24px] mt-[-5px]' />
+          <div className='flex items-center gap-2 mt-[-30px]'>
             <img src={pastIcon} alt='past' />
-            <span className='text-[#25282B] text-[18px] font-medium leading-[36px] tracking-[-0.54px] font-[Pretendard]'>
+            <span className='text-[#75787B] text-[18px] font-medium leading-[36px] tracking-[-0.54px] font-[Pretendard]'>
               지난 알림
             </span>
           </div>
-          <div className='flex flex-col gap-[16px] mt-[16px] w-full'>
+          <div className='flex flex-col gap-[16px] mt-[-10px] w-full'>
             {oldNotices.slice(0, 4).map((n) => (
               <NotificationItem key={n.id} message={n.message} isNew={false} />
             ))}
