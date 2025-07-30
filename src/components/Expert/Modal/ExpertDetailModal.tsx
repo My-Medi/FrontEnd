@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import unionSvg from '../../../assets/Expert/Union.svg';
 import backSvg from '../../../assets/Expert/back.svg';
 import RequestModal from './RequestModal';
+import ReRequestConfirmModal from './ReRequestConfirmModal';
 
 interface ExpertDetailModalProps {
   expert: {
@@ -16,11 +17,13 @@ interface ExpertDetailModalProps {
     specialty: string;
     career: string;
   };
+  expertStatus?: 'matched' | 'request' | 'rejected';
   onClose: () => void;
 }
 
-const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, onClose }) => {
+const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertStatus, onClose }) => {
   const [showRequestModal, setShowRequestModal] = useState(false);
+  const [showReRequestModal, setShowReRequestModal] = useState(false);
 
   // 모달 오픈 시 body 스크롤 방지
   useEffect(() => {
@@ -32,7 +35,18 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, onClose }
   }, []);
 
   const handleRequestClick = () => {
-    setShowRequestModal(true);
+    if (expertStatus === 'request') {
+      // 요청 상태일 때는 재요청 확인 모달 먼저 표시
+      setShowReRequestModal(true);
+    } else {
+      // 거절 상태일 때는 바로 요청 모달 표시
+      setShowRequestModal(true);
+    }
+  };
+
+  const handleReRequestConfirm = () => {
+    setShowReRequestModal(false);
+    onClose(); // 모든 모달 종료
   };
 
   const handleRequestSubmit = (request: string) => {
@@ -53,15 +67,16 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, onClose }
 
   return (
     <>
+      {/* ExpertDetailModal */}
       <div
         className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-300 ${
-          showRequestModal ? 'opacity-0 pointer-events-none' : 'opacity-100'
+          showRequestModal || showReRequestModal ? 'opacity-0 pointer-events-none' : 'opacity-100'
         }`}
       >
         {/* 모달 배경 */}
         <div className='absolute inset-0 bg-[#121218]/40' onClick={onClose} />
         <div
-          className='relative bg-white/96 rounded-[40px] w-[744px] min-h-[600px] max-h-[90vh] flex flex-col overflow-hidden'
+          className='relative bg-white/96 rounded-[40px] w-[744px] min-h-[500px] max-h-[90vh] flex flex-col overflow-hidden'
           onClick={(e) => e.stopPropagation()}
           style={{
             opacity: 1,
@@ -155,29 +170,57 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, onClose }
           </div>
           {/* 하단 버튼 */}
           <div className='w-full flex flex-row justify-center gap-12 px-6 pb-12 flex-shrink-0'>
-            <button
-              onClick={onClose}
-              className='w-[300px] h-14 rounded-full border border-[#FFFFFF] text-[#25282B] hover:bg-[#EDF0F3] text-xl font-medium transition cursor-pointer'
-              style={{
-                boxShadow:
-                  '0px 0px 2px 4px rgba(29, 104, 255, 0.03), 0px 0px 4px 12px rgba(29, 104, 255, 0.02), 0px 0px 6px 8px rgba(29, 104, 255, 0.01), 0px 0px 8px 0px rgba(29, 104, 255, 0)',
-              }}
-            >
-              목록으로
-            </button>
-            <button
-              onClick={handleRequestClick}
-              className='w-[300px] h-14 rounded-full bg-[#1D68FF] text-white text-xl font-semibold transition cursor-pointer'
-              style={{
-                boxShadow:
-                  '0px 0px 2px 6px rgba(29, 104, 255, 0.06), 0px 0px 4px 6px rgba(29, 104, 255, 0.04), 0px 0px 6px 6px rgba(29, 104, 255, 0.02), 0px 0px 8px 0px rgba(29, 104, 255, 0)',
-              }}
-            >
-              건강관리요청서 보내기
-            </button>
+            {/* 연결된 전문가일 때는 목록으로 버튼만 */}
+            {expertStatus === 'matched' ? (
+                 <button
+                 onClick={onClose}
+                 className='w-[300px] h-14 rounded-full border border-[#FFFFFF] text-[#25282B] hover:bg-[#EDF0F3] text-xl font-medium transition cursor-pointer'
+                 style={{
+                   boxShadow:
+                     '0px 0px 2px 4px rgba(29, 104, 255, 0.03), 0px 0px 4px 12px rgba(29, 104, 255, 0.02), 0px 0px 6px 8px rgba(29, 104, 255, 0.01), 0px 0px 8px 0px rgba(29, 104, 255, 0)',
+                 }}
+               >
+                 목록으로
+               </button>
+            ) : (
+              <>
+                <button
+                  onClick={onClose}
+                  className='w-[300px] h-14 rounded-full border border-[#FFFFFF] text-[#25282B] hover:bg-[#EDF0F3] text-xl font-medium transition cursor-pointer'
+                  style={{
+                    boxShadow:
+                      '0px 0px 2px 4px rgba(29, 104, 255, 0.03), 0px 0px 4px 12px rgba(29, 104, 255, 0.02), 0px 0px 6px 8px rgba(29, 104, 255, 0.01), 0px 0px 8px 0px rgba(29, 104, 255, 0)',
+                  }}
+                >
+                  목록으로
+                </button>
+                <button
+                  onClick={handleRequestClick}
+                  className='w-[300px] h-14 rounded-full bg-[#1D68FF] text-white text-xl font-semibold transition cursor-pointer'
+                  style={{
+                    boxShadow:
+                      '0px 0px 2px 6px rgba(29, 104, 255, 0.06), 0px 0px 4px 6px rgba(29, 104, 255, 0.04), 0px 0px 6px 6px rgba(29, 104, 255, 0.02), 0px 0px 8px 0px rgba(29, 104, 255, 0)',
+                  }}
+                >
+                  {expertStatus === 'request' ? '다시 요청서 보내기' : '건강관리요청서 보내기'}
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>
+
+            {/* 재요청 확인 모달 */}
+      {showReRequestModal && (
+        <ReRequestConfirmModal
+          isOpen={showReRequestModal}
+          onClose={() => setShowReRequestModal(false)}
+          onConfirm={handleReRequestConfirm}
+          expertName={expert.name}
+          expertPosition={expert.position}
+          expertRealName={expert.realName}
+        />
+      )}
 
       {/* 요청사항 작성 모달 */}
       {showRequestModal && (

@@ -113,6 +113,7 @@ const ExpertPage = () => {
       {selectedExpert && (
         <ExpertDetailModal
           expert={selectedExpert}
+          expertStatus="rejected" // 기본값으로 rejected 설정 (요청 가능한 상태)
           onClose={() => setSelectedExpert(null)}
         />
       )}
