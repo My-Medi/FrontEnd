@@ -19,7 +19,7 @@ const RepresentativeSentenceSection: React.FC<RepresentativeSentenceSectionProps
         <textarea
           value={representativeSentence}
           onChange={(e) => onRepresentativeSentenceChange(e.target.value)}
-          className="flex-1 resize-none border-none outline-none text-[14px] font-light text-[#75787B]"
+          className="flex-1 resize-none border-none outline-none text-[14px] font-light text-[#121218]"
           placeholder="ex) 매일 1%의 건강을 쌓아가요."
         />
       </div>

@@ -45,7 +45,7 @@ const CTAButton: React.FC<CTAButtonProps> = ({
             top: '16.5%', // 점선이 있는 중간 지점부터 시작
             height: '50%', // 하단 50%만 차지
             background: 'linear-gradient(180deg, rgba(29, 104, 255, 0.2) -3.73%, rgba(255, 255, 255, 0.2) 100%)',
-            filter: 'blur(5px)',
+            filter: 'blur(10px)',
             zIndex: 1,
           }}
         />
