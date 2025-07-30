@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import nextIcon from '../../../assets/Introduce/next.svg';
 import bottomImage from '../../../assets/Introduce/Calendar/bottom.png';
 
@@ -17,16 +17,39 @@ const CTAButton: React.FC<CTAButtonProps> = ({
   className = '',
   hoverColor = '#0F4CCC'
 }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isButtonHovered, setIsButtonHovered] = useState(false);
+  
+  // CTAButton 영역에 마우스 진입 시 블러 효과, 버튼에 마우스 호버 시 폰트 변경
+  const shouldShowBlur = isHovered;
+
   return (
     <>
-      <div className="relative">
+      <div 
+        className="relative w-full h-full cursor-pointer"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         <img 
           src={bottomImage} 
           alt="Bottom image" 
           className="w-full object-contain"
           loading="lazy"
         />
-          <div className="absolute inset-0 flex items-center justify-center pt-6">
+        {/* BackgroundBlur 효과 - 점선 아래 부분에만 적용 */}
+        <div 
+          className={`absolute w-full transition-all duration-700 ease-in-out ${
+            shouldShowBlur ? 'opacity-100' : 'opacity-0'
+          }`}
+          style={{
+            top: '16.5%', // 점선이 있는 중간 지점부터 시작
+            height: '50%', // 하단 50%만 차지
+            background: 'linear-gradient(180deg, rgba(29, 104, 255, 0.2) -3.73%, rgba(255, 255, 255, 0.2) 100%)',
+            filter: 'blur(5px)',
+            zIndex: 1,
+          }}
+        />
+        <div className="absolute inset-0 flex items-center justify-center pt-6" style={{ zIndex: 2 }}>
             <div className="flex flex-col justify-center items-center py-8 md:py-12 lg:py-16 px-4 lg:px-0">
               {description && (
                 <p 
@@ -42,20 +65,24 @@ const CTAButton: React.FC<CTAButtonProps> = ({
               )}
               <button
                 onClick={onClick}
+                onMouseEnter={() => setIsButtonHovered(true)}
+                onMouseLeave={() => setIsButtonHovered(false)}
                 className={`
                   text-white 
                   px-4 md:px-6 lg:px-[62px] 
                   py-3 md:py-4 lg:py-[25px] 
                   rounded-full lg:rounded-[60px] 
-                  text-base md:text-lg lg:text-2xl 
-                  font-medium 
-                  transition-colors 
+                  text-2xl
+                  ${isButtonHovered ? 'font-bold' : 'font-medium'}
+                  transition-all duration-300
                   whitespace-nowrap 
                   bg-[#1D68FF] 
-                  hover:bg-[${hoverColor}] 
                   flex items-center justify-center 
                   gap-2 md:gap-4 lg:gap-[40px] 
                   shadow-lg lg:shadow-[0px_46px_18px_rgba(29,104,255,0.01),0px_26px_15px_rgba(29,104,255,0.03),0px_11px_11px_rgba(29,104,255,0.06),0px_3px_6px_rgba(29,104,255,0.07)] 
+                  leading-10
+                  tracking-[-0.03em]
+                  cursor-pointer
                   ${className}
                 `}
               >
