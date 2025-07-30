@@ -62,7 +62,7 @@ export const NotificationList: React.FC<NotificationListProps> = ({ notification
             />
           </button>
           <div className='flex items-center gap-[8px]'>
-            <img src={pastTitleIcon} alt='지내 알림 아이콘' />
+            <img src={pastTitleIcon} alt='지난 알림 아이콘' />
             <h2 className='text-[24px] font-semibold leading-[36px] tracking-[-0.72px] text-[#121218] font-[Pretendard]'>
               지난 알림
             </h2>
@@ -125,9 +125,11 @@ export const NotificationList: React.FC<NotificationListProps> = ({ notification
               신규 알림 {newNotices.length}개
             </span>
           </div>
-          {newNotices.map((n) => (
-            <NotificationItem key={n.id} message={n.message} isNew />
-          ))}
+          <div className='flex flex-col gap-[24px] w-full'>
+            {newNotices.map((n) => (
+              <NotificationItem key={n.id} message={n.message} isNew />
+            ))}
+          </div>
           <hr className='w-full h-px border-0 bg-[#C5C8CB] my-[24px] mt-[-5px]' />
           <div className='flex items-center gap-2 mt-[-30px]'>
             <img src={pastIcon} alt='past' />
@@ -135,7 +137,7 @@ export const NotificationList: React.FC<NotificationListProps> = ({ notification
               지난 알림
             </span>
           </div>
-          <div className='flex flex-col gap-[16px] mt-[-10px] w-full'>
+          <div className='flex flex-col gap-[24px] mt-[-10px] w-full'>
             {oldNotices.slice(0, 4).map((n) => (
               <NotificationItem key={n.id} message={n.message} isNew={false} />
             ))}

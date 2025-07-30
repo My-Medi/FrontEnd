@@ -17,7 +17,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
   onSelectChange,
 }) => {
   return (
-    <div className='flex items-center w-full ml-[-10px] gap-[16px] mb-[10px]'>
+    <div className='flex items-center w-full ml-[-10px] gap-[16px]'>
       {/*체크박스: 알림 상자 바깥쪽 */}
       {selectable && (
         <div className='relative w-[22.5px] h-[22.5px] shrink-0'>
