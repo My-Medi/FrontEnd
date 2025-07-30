@@ -35,7 +35,7 @@ const RequestHealthCareCard: React.FC<RequestHealthCareProps> = ({
       {/* 데스크탑 전용 UI */}
       <div className='hidden lg:block'>
         {/* 날짜 텍스트 */}
-        <p className='text-[#4D5053] items-start text-[14px] font-medium leading-[24px] tracking-[-0.42px] mb-2 font-[Pretendard]'>
+        <p className='text-[#4D5053] ml-[34px] items-start text-[14px] font-medium leading-[24px] tracking-[-0.42px] mb-2 font-[Pretendard]'>
           {receivedDate}
         </p>
 
