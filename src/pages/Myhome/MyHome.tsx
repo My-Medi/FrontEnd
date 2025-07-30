@@ -16,7 +16,8 @@ import EditInfo from '../../components/MyHome/MyHomeEdit/EditInfo';
 import ConfirmModal from '../../components/MyHome/MyHomeEdit/ConfirmModal';
 import RequestHealthCare from '../../components/RequestHealthCare/RequestHealthCare';
 import { NotificationList } from '../../components/Alarm/NotificationList';
-import { notificationList } from '../../data/notificationList';
+import { patientNotificationList } from '../../data/patientNotificationList';
+import { expertNotificationList } from '../../data/expertNotificationList';
 
 const scheduleData = [
   {
@@ -132,7 +133,7 @@ const MyHome: React.FC = () => {
         case 3: // 건강관리요청서 확인하기
           return <RequestHealthCare />;
         case 4: // 내 알림
-          return <div className='text-center'>내 알림 페이지</div>;
+          return <NotificationList notifications={expertNotificationList} />;
         default:
           return null;
       }
@@ -165,7 +166,7 @@ const MyHome: React.FC = () => {
           </>
         );
       case 1:
-        return <NotificationList notifications={notificationList} />;
+        return <NotificationList notifications={patientNotificationList} />;
       case 2:
         return <MatchedExperts />;
       case 3:

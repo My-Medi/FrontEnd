@@ -4,11 +4,10 @@ export interface Notification {
   isNew: boolean;
 }
 
-export const notificationList: Notification[] = [
+export const expertNotificationList: Notification[] = [
   {
     id: '1',
-    message:
-      '진호핏 영양사님께서 공유캘린더에 상담예약일을 등록했어요! 마이홈에서 캘린더를 확인해보세요!',
+    message: '환자분의 건강요청서가 도착했어요! 확인해보세요!',
     isNew: true,
   },
   {

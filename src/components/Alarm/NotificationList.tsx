@@ -15,6 +15,7 @@ interface Notification {
 
 interface NotificationListProps {
   notifications: Notification[];
+  userType?: 'patient' | 'expert';
 }
 
 export const NotificationList: React.FC<NotificationListProps> = ({ notifications }) => {
@@ -154,7 +155,7 @@ export const NotificationList: React.FC<NotificationListProps> = ({ notification
           )}
         </div>
       ) : (
-        <div className='flex flex-col gap-[16px] w-full mt-[16px]'>
+        <div className='flex flex-col gap-[24px] w-full mt-[16px]'>
           {oldNotices.map((n) => (
             <NotificationItem
               key={n.id}
