@@ -26,7 +26,7 @@ const CTAButton: React.FC<CTAButtonProps> = ({
   return (
     <>
       <div 
-        className="relative w-full h-full cursor-pointer"
+        className="relative w-full h-full"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
