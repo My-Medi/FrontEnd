@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import unionSvg from '../../../assets/Expert/Union.svg';
 import backSvg from '../../../assets/Expert/back.svg';
 import RequestModal from './RequestModal';
+import ReRequestConfirmModal from './ReRequestConfirmModal';
 
 interface ExpertDetailModalProps {
   expert: {
@@ -22,6 +23,7 @@ interface ExpertDetailModalProps {
 
 const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertStatus, onClose }) => {
   const [showRequestModal, setShowRequestModal] = useState(false);
+  const [showReRequestModal, setShowReRequestModal] = useState(false);
 
   // 모달 오픈 시 body 스크롤 방지
   useEffect(() => {
@@ -33,7 +35,18 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
   }, []);
 
   const handleRequestClick = () => {
-    setShowRequestModal(true);
+    if (expertStatus === 'request') {
+      // 요청 상태일 때는 재요청 확인 모달 먼저 표시
+      setShowReRequestModal(true);
+    } else {
+      // 거절 상태일 때는 바로 요청 모달 표시
+      setShowRequestModal(true);
+    }
+  };
+
+  const handleReRequestConfirm = () => {
+    setShowReRequestModal(false);
+    onClose(); // 모든 모달 종료
   };
 
   const handleRequestSubmit = (request: string) => {
@@ -54,9 +67,10 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
 
   return (
     <>
+      {/* ExpertDetailModal */}
       <div
         className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-300 ${
-          showRequestModal ? 'opacity-0 pointer-events-none' : 'opacity-100'
+          showRequestModal || showReRequestModal ? 'opacity-0 pointer-events-none' : 'opacity-100'
         }`}
       >
         {/* 모달 배경 */}
@@ -195,6 +209,18 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
           </div>
         </div>
       </div>
+
+            {/* 재요청 확인 모달 */}
+      {showReRequestModal && (
+        <ReRequestConfirmModal
+          isOpen={showReRequestModal}
+          onClose={() => setShowReRequestModal(false)}
+          onConfirm={handleReRequestConfirm}
+          expertName={expert.name}
+          expertPosition={expert.position}
+          expertRealName={expert.realName}
+        />
+      )}
 
       {/* 요청사항 작성 모달 */}
       {showRequestModal && (

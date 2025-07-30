@@ -1,33 +1,33 @@
-import { useState } from 'react';
+import React, { useState, memo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../../assets/Login/logo.svg';
 import { useAuth } from '../../../contexts/AuthContext';
 
-const Topbar = () => {
+const Topbar = memo(() => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const { userType, setUserType } = useAuth();
 
-  const handleNavigate = (path: string) => {
+  const handleNavigate = useCallback((path: string) => {
     navigate(path);
     setIsMenuOpen(false);
-  };
+  }, [navigate]);
 
   // 추후에 기능을 더 넣을 때 수정하겠지만 -> 검색 창이 입력+검색 되도록 수정
-  const handleSearchSubmit = (e: React.FormEvent) => {
+  const handleSearchSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (searchValue.trim()) {
       navigate(`/search?query=${searchValue.trim()}`);
       setSearchValue('');
     }
-  };
+  }, [navigate, searchValue]);
 
   // 로그아웃 핸들러
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     setUserType(null);
     navigate('/login');
-  };
+  }, [setUserType, navigate]);
 
   return (
     <>
@@ -222,6 +222,6 @@ const Topbar = () => {
       </div>
     </>
   );
-};
+});
 
 export default Topbar;
