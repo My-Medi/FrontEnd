@@ -6,34 +6,33 @@ const CertificateSection: React.FC = () => {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // 경력 row 데이터 상태로 관리
-  const [careerRows, setCareerRows] = useState([
+  
+  // 자격증 row 데이터 상태로 관리
+  const [certificateRows, setCertificateRows] = useState([
     {
-      company: '대한영양사협회',
-      start: '2022.05.24',
-      end: '2025.05.12',
-      role: '식단 계획 및 조리',
+      certificateName: '영양사 자격증',
+      issueDate: '2022.05.24',
+      issuingOrganization: '대한영양사협회',
     },
     {
-      company: '대한영양사협회',
-      start: '2022.05.24',
-      end: '2025.05.12',
-      role: '식단 계획 및 조리',
+      certificateName: '식품위생교육 이수증',
+      issueDate: '2023.01.15',
+      issuingOrganization: '식품의약품안전처',
     },
   ]);
 
-  const handleAddCareerRow = () => {
-    setCareerRows(prev => [
+  const handleAddCertificateRow = () => {
+    setCertificateRows(prev => [
       ...prev,
       {
-        company: '',
-        start: '',
-        end: '',
-        role: '',
+        certificateName: '',
+        issueDate: '',
+        issuingOrganization: '',
       },
     ]);
   };
+
+
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -83,22 +82,6 @@ const CertificateSection: React.FC = () => {
   const handleUploadAreaClick = () => {
     fileInputRef.current?.click();
   };
-
-  // 경력 row 데이터 예시
-  // const careerRows = [
-  //   {
-  //     company: '대한영양사협회',
-  //     start: '2022.05.24',
-  //     end: '2025.05.12',
-  //     role: '식단 계획 및 조리',
-  //   },
-  //   {
-  //     company: '대한영양사협회',
-  //     start: '2022.05.24',
-  //     end: '2025.05.12',
-  //     role: '식단 계획 및 조리',
-  //   },
-  // ];
 
   return (
     <div className="space-y-[19.2px] w-[780.6px]">
@@ -167,48 +150,76 @@ const CertificateSection: React.FC = () => {
         </div>
       </div>
 
-      {/* 경력사항 테이블 */}
-      <div className="border border-[#DBE6FF] rounded-[8.4px] overflow-hidden">
+      {/* 자격증 테이블 */}
+      <div className="border border-[#DBE6FF] rounded-[8.4px] overflow-hidden mb-[9.6px]">
         {/* 테이블 헤더 */}
-        <div className="grid grid-cols-[184.8px_314.4px_281.4px] bg-white border-b border-[#DBE6FF]">
-          <div className="p-[6px_12px] text-center text-[14px] font-medium text-[#121218] font-pretendard leading-[1.714] tracking-[-0.03em] border-r border-[#DBE6FF] w-[184.8px] flex items-center justify-center">
-            회사/기관명
+        <div className="grid grid-cols-[246px_246px_246px] bg-white border-b border-[#DBE6FF]">
+          <div className="px-[12px] py-[6px] text-center text-[14px] font-medium text-[#121218] font-pretendard leading-[1.714] tracking-[-0.03em] border-r border-[#DBE6FF] w-[246px] flex items-center justify-center">
+            자격증명
           </div>
-          <div className="p-[6px_12px] text-center text-[14px] font-medium text-[#121218] font-pretendard leading-[1.714] tracking-[-0.03em] border-r border-[#DBE6FF] w-[314.4px] flex items-center justify-center">
-            근무기간
+          <div className="px-[12px] py-[6px] text-center text-[14px] font-medium text-[#121218] font-pretendard leading-[1.714] tracking-[-0.03em] border-r border-[#DBE6FF] w-[246px] flex items-center justify-center">
+            자격증 발급일
           </div>
-          <div className="p-[6px_12px] text-center text-[14px] font-medium text-[#121218] font-pretendard leading-[1.714] tracking-[-0.03em] w-[246px] flex items-center justify-center">
-            역할입력
+          <div className="px-[12px] py-[6px] text-center text-[14px] font-medium text-[#121218] font-pretendard leading-[1.714] tracking-[-0.03em] w-[246px] flex items-center justify-center">
+            자격증 내용
           </div>
         </div>
 
         {/* 테이블 데이터 */}
-        {careerRows.map((row, idx) => (
+        {certificateRows.map((row, idx) => (
           <div
             key={idx}
-            className={`grid grid-cols-[184.8px_314.4px_281.4px] bg-white${idx !== careerRows.length - 1 ? ' border-b border-[#DBE6FF]' : ''}`}
+            className={`grid grid-cols-[246px_246px_246px] bg-white${idx !== certificateRows.length - 1 ? ' border-b border-[#DBE6FF]' : ''}`}
           >
-            <div className="p-[6px_12px] text-center text-[14px] font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em] border-r border-[#DBE6FF] w-[184.8px] flex items-center justify-center">
-              {row.company}
+            <div className="px-[12px] py-[6px] text-center text-[14px] font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em] border-r border-[#DBE6FF] w-[246px] flex items-center justify-center">
+              <input
+                type="text"
+                value={row.certificateName}
+                onChange={(e) => {
+                  const newRows = [...certificateRows];
+                  newRows[idx].certificateName = e.target.value;
+                  setCertificateRows(newRows);
+                }}
+                className="w-full text-center bg-transparent border-none outline-none text-[14px] font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em]"
+                placeholder="자격증명 입력"
+              />
             </div>
-            <div className="p-[6px_12px] flex items-center justify-center gap-[6px] border-r border-[#DBE6FF] w-[314.4px] text-[14px] font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em]">
-              <div className="w-[108px] text-center">{row.start}</div>
-              <div className="w-[24px] text-center">-</div>
-              <div className="w-[108px] text-center">{row.end}</div>
+            <div className="px-[12px] py-[6px] text-center text-[14px] font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em] border-r border-[#DBE6FF] w-[246px] flex items-center justify-center">
+              <input
+                type="text"
+                value={row.issueDate}
+                onChange={(e) => {
+                  const newRows = [...certificateRows];
+                  newRows[idx].issueDate = e.target.value;
+                  setCertificateRows(newRows);
+                }}
+                className="w-full text-center bg-transparent border-none outline-none text-[14px] font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em]"
+                placeholder="발급일 입력"
+              />
             </div>
-            <div className="p-[6px_12px] text-center text-[14px] font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em] w-[246px] flex items-center justify-center">
-              {row.role}
+            <div className="px-[12px] py-[6px] text-center text-[14px] font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em] w-[246px] flex items-center justify-center">
+              <input
+                type="text"
+                value={row.issuingOrganization}
+                onChange={(e) => {
+                  const newRows = [...certificateRows];
+                  newRows[idx].issuingOrganization = e.target.value;
+                  setCertificateRows(newRows);
+                }}
+                className="w-full text-center bg-transparent border-none outline-none text-[14px] font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em]"
+                placeholder="발급기관 입력"
+              />
             </div>
           </div>
         ))}
       </div>
 
-      {/* 경력 추가 버튼 */}
+      {/* 자격증 추가 버튼 */}
       <div className="flex justify-center">
         <button
           type="button"
-          onClick={handleAddCareerRow}
-          className="w-[247.8px] h-[30px] border border-[#DBE6FF] rounded-[30px] flex items-center justify-center p-[6px]"
+          onClick={handleAddCertificateRow}
+          className="w-[247.8px] h-[30px] border border-[#DBE6FF] rounded-[30px] flex items-center justify-center"
         >
           <svg width="13.76" height="13.76" viewBox="0 0 14 14" fill="none">
             <path d="M7 0V14" stroke="#75787B" strokeWidth="1.8"/>
@@ -216,6 +227,7 @@ const CertificateSection: React.FC = () => {
           </svg>
         </button>
       </div>
+
     </div>
   );
 };
