@@ -37,7 +37,7 @@ const ServiceIntroPage: React.FC<ServiceIntroPageProps> = ({
           <img 
             src={combinedImageSrc} 
             alt={combinedImageAlt || 'Combined image'} 
-            className="object-fill w-full max-w-none"
+            className="object-fill w-full max-w-[1920px]"
             style={{
               width: combinedImageWidth,
               height: combinedImageHeight,

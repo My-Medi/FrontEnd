@@ -1,17 +1,37 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ServiceIntroPage from '../Common/ServiceIntroPage';
 import BackgroundBlur from '../Common/BackgroundBlur';
 import calendarImage from '../../../assets/Introduce/Calendar/calendar.svg';
-import backIcon from '../../../assets/back.svg';
+import backIcon from '../../../assets/back2.svg';
 import combinedImage from '../../../assets/Introduce/Calendar/c.png'; // 통합된 이미지
 
 const CalendarIntroPage: React.FC = () => {
   const navigate = useNavigate();
+  const [imagesLoaded, setImagesLoaded] = useState(false);
 
   // 페이지 진입 시 스크롤을 최상단으로
   React.useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  // 이미지 로딩 상태 관리
+  useEffect(() => {
+    const images = [calendarImage, combinedImage];
+    let loadedCount = 0;
+
+    const handleImageLoad = () => {
+      loadedCount++;
+      if (loadedCount === images.length) {
+        setImagesLoaded(true);
+      }
+    };
+
+    images.forEach(src => {
+      const img = new Image();
+      img.onload = handleImageLoad;
+      img.src = src;
+    });
   }, []);
 
   const handleBackClick = () => {
@@ -19,18 +39,6 @@ const CalendarIntroPage: React.FC = () => {
   };
 
   const calendarData = {
-    imageSrc: calendarImage,
-    imageAlt: 'Calendar',
-    title: '건강관리 캘린더',
-    subtitle: '전문가와 함께 건강관리 공유 캘린더 서비스',
-    descriptions: [
-      '나와 매칭된 전문가와의 함께 만드는 공유형 건강관리 캘린더입니다.',
-      '건강관리 캘린더를 통해 실천가능한 건강 미션부터 식단, 운동, 생활습관 체크까지 체계적으로!'
-    ],
-    backIconSrc: backIcon,
-    onBackClick: handleBackClick,
-    showBackButton: true,
-    imagePosition: 'left' as const,
     features: [
       { text: '매칭된 전문가를 통한 지속적인 맞춤 관리 계획을 제공' },
       { text: '다가오는 상담 예약일 알림' },
@@ -41,9 +49,20 @@ const CalendarIntroPage: React.FC = () => {
     onCTAClick: () => navigate('/myhome'),
     combinedImageSrc: combinedImage,
     combinedImageAlt: 'Calendar Features Combined',
-    combinedImageWidth: '1920px',
+    combinedImageWidth: '100%',
     combinedImageHeight: '2916px',
   };
+
+  if (!imagesLoaded) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[#1D68FF] mx-auto mb-4"></div>
+          <p className="text-[#4D5053] text-lg">이미지를 불러오는 중...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto">

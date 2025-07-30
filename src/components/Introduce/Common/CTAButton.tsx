@@ -35,6 +35,8 @@ const CTAButton: React.FC<CTAButtonProps> = ({
                     __html: description
                       .replace(/전문적 조언/g, '<span class="font-bold text-[32px] text-[#121218] leading-[40px] tracking-[-0.03em] not-italic">전문적 조언</span>')
                       .replace(/실질적 도움/g, '<span class="font-bold text-[32px] text-[#121218] leading-[40px] tracking-[-0.03em] not-italic">실질적 도움</span>')
+                      .replace(/나의 건강검진결과를 모아/g, '<span class="font-bold text-[32px] text-[#121218] leading-[40px] tracking-[-0.03em] not-italic">나의 건강검진결과를 모아</span>')
+                      .replace(/자동분석으로 쉽게 이해/g, '<span class="font-bold text-[32px] text-[#121218] leading-[40px] tracking-[-0.03em] not-italic">자동분석으로 쉽게 이해</span>')
                   }}
                 />
               )}
