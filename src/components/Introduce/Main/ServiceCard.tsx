@@ -29,6 +29,8 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       navigate('/calendar-intro');
     } else if (title === '마이메디 전문가 매칭') {
       navigate('/expert-matching-intro');
+    } else if (title === '마이메디컬리포트') {
+      navigate('/medical-report-intro');
     }
   };
 

@@ -1,17 +1,37 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ServiceIntroPage from '../Common/ServiceIntroPage';
 import BackgroundBlur from '../Common/BackgroundBlur';
-import backIcon from '../../../assets/back.svg';
+import backIcon from '../../../assets/back2.svg';
 import expertIcon from '../../../assets/Introduce/Matching/matching.svg';
 import matchingImage from '../../../assets/Introduce/Matching/m.png';
 
 const ExpertMatchingIntroPage: React.FC = () => {
   const navigate = useNavigate();
+  const [imagesLoaded, setImagesLoaded] = useState(false);
 
   // 페이지 진입 시 스크롤을 최상단으로
   React.useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  // 이미지 로딩 상태 관리
+  useEffect(() => {
+    const images = [expertIcon, matchingImage];
+    let loadedCount = 0;
+
+    const handleImageLoad = () => {
+      loadedCount++;
+      if (loadedCount === images.length) {
+        setImagesLoaded(true);
+      }
+    };
+
+    images.forEach(src => {
+      const img = new Image();
+      img.onload = handleImageLoad;
+      img.src = src;
+    });
   }, []);
 
   const handleBackClick = () => {
@@ -19,18 +39,6 @@ const ExpertMatchingIntroPage: React.FC = () => {
   };
 
   const expertMatchingData = {
-    imageSrc: expertIcon,
-    imageAlt: 'Expert Matching',
-    title: '마이메디 전문가 매칭',
-    subtitle: '건강 관리를 위한 효율적인 전문가 매칭 서비스',
-    descriptions: [
-      '건강관리사, 영양사, 웰니스 코치 등 내 건강 상태에 딱 맞는 전문가와 연결됩니다.',
-      '스스로 하는 건강관리! 전문가의 도움으로 더 체계적으로 만들어가세요!'
-    ],
-    backIconSrc: backIcon,
-    onBackClick: handleBackClick,
-    showBackButton: true,
-    imagePosition: 'left' as const,
     features: [
       { text: '전문가 찾기를 통해 자신과 맞는 분야의 전문가를 더 넓은 선택지로 제공' },
       { text: '내가 원하는 전문가와 함께 체계적이고 전문적인 건강관리 가능' },
@@ -41,10 +49,20 @@ const ExpertMatchingIntroPage: React.FC = () => {
     onCTAClick: () => navigate('/expert'),
     combinedImageSrc: matchingImage,
     combinedImageAlt: 'Expert Matching Features',
-    combinedImageWidth: '1920px',
-    combinedImageHeight: '3301px',
-    className: ''
+    combinedImageWidth: '100%',
+    combinedImageHeight: '3301px'
   };
+
+  if (!imagesLoaded) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[#1D68FF] mx-auto mb-4"></div>
+          <p className="text-[#4D5053] text-lg">로딩 중...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto">
