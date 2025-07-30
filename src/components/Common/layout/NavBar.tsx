@@ -27,23 +27,23 @@ const NavBar = memo(() => {
               <div className='flex items-center gap-[32px] px-0 py-[14px] h-[40px] w-fit'>
                 <p
                   onClick={() => handleNavigate('/myhome')}
-                  className='cursor-pointer text-[#121218] text-[16px] leading-[36px] tracking-[-0.48px] font-[Pretendard] font-medium'
+                  className='cursor-pointer text-[#121218] text-[16px] leading-[36px] tracking-[-0.48px] font-[Pretendard] font-medium hover:text-[#1D68FF] transition-colors duration-200'
                 >
                   마이 홈
                 </p>
                 <p 
                   onClick={() => handleNavigate('/health-result-input')}
-                  className='cursor-pointer text-[#121218] text-[16px] leading-[36px] tracking-[-0.48px] font-[Pretendard] font-medium'
+                  className='cursor-pointer text-[#121218] text-[16px] leading-[36px] tracking-[-0.48px] font-[Pretendard] font-medium hover:text-[#1D68FF] transition-colors duration-200'
                 >
                   마이 메디컬 리포트
                 </p>
                 <p
                   onClick={() => handleNavigate('/expert')}
-                  className='cursor-pointer text-[#121218] text-[16px] leading-[36px] tracking-[-0.48px] font-[Pretendard] font-medium'
+                  className='cursor-pointer text-[#121218] text-[16px] leading-[36px] tracking-[-0.48px] font-[Pretendard] font-medium hover:text-[#1D68FF] transition-colors duration-200'
                 >
                   전문가 찾기
                 </p>
-                <p className='cursor-pointer text-[#121218] text-[16px] leading-[36px] tracking-[-0.48px] font-[Pretendard] font-medium'>
+                <p className='cursor-pointer text-[#121218] text-[16px] leading-[36px] tracking-[-0.48px] font-[Pretendard] font-medium hover:text-[#1D68FF] transition-colors duration-200'>
                   건강용어 알아보기
                 </p>
               </div>

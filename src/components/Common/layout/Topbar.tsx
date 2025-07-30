@@ -55,7 +55,7 @@ const Topbar = memo(() => {
             <div className='flex items-center gap-[16px]'>
               <p
                 onClick={() => navigate('/introduce')}
-                className='text-[#25282B] text-[14px] font-[300] leading-[22px] tracking-[-0.42px] cursor-pointer whitespace-nowrap font-[Pretendard]'
+                className='text-[#25282B] text-[14px] font-[300] leading-[22px] tracking-[-0.42px] cursor-pointer whitespace-nowrap font-[Pretendard] hover:text-[#1D68FF] transition-colors duration-200'
               >
                 Mymedi 소개
               </p>
@@ -63,7 +63,7 @@ const Topbar = memo(() => {
               {userType === 'expert' && (
                 <p
                   onClick={() => navigate('/health-terms')}
-                  className='text-[#25282B] text-[14px] font-[300] leading-[22px] tracking-[-0.42px] cursor-pointer whitespace-nowrap font-[Pretendard]'
+                  className='text-[#25282B] text-[14px] font-[300] leading-[22px] tracking-[-0.42px] cursor-pointer whitespace-nowrap font-[Pretendard] hover:text-[#1D68FF] transition-colors duration-200'
                 >
                   건강용어
                 </p>
@@ -72,7 +72,7 @@ const Topbar = memo(() => {
               {userType === 'expert' && (
                 <p
                   onClick={() => navigate('/myhome')}
-                  className='text-[#25282B] text-[14px] font-[300] leading-[22px] tracking-[-0.42px] cursor-pointer whitespace-nowrap font-[Pretendard]'
+                  className='text-[#25282B] text-[14px] font-[300] leading-[22px] tracking-[-0.42px] cursor-pointer whitespace-nowrap font-[Pretendard] hover:text-[#1D68FF] transition-colors duration-200'
                 >
                   마이홈
                 </p>
@@ -81,21 +81,21 @@ const Topbar = memo(() => {
               {userType ? (
                 <p
                   onClick={handleLogout}
-                  className='text-[#25282B] text-[14px] font-[300] leading-[22px] tracking-[-0.42px] cursor-pointer whitespace-nowrap font-[Pretendard]'
+                  className='text-[#25282B] text-[14px] font-[300] leading-[22px] tracking-[-0.42px] cursor-pointer whitespace-nowrap font-[Pretendard] hover:text-[#1D68FF] transition-colors duration-200'
                 >
                   Logout
                 </p>
               ) : (
                 <p
                   onClick={() => navigate('/login')}
-                  className='text-[#25282B] text-[14px] font-[300] leading-[22px] tracking-[-0.42px] cursor-pointer whitespace-nowrap font-[Pretendard]'
+                  className='text-[#25282B] text-[14px] font-[300] leading-[22px] tracking-[-0.42px] cursor-pointer whitespace-nowrap font-[Pretendard] hover:text-[#1D68FF] transition-colors duration-200'
                 >
                   Login
                 </p>
               )}
               <p
                 onClick={() => navigate('/alarm')}
-                className='text-[#25282B] text-[14px] font-[300] leading-[22px] tracking-[-0.42px] cursor-pointer whitespace-nowrap font-[Pretendard]'
+                className='text-[#25282B] text-[14px] font-[300] leading-[22px] tracking-[-0.42px] cursor-pointer whitespace-nowrap font-[Pretendard] hover:text-[#1D68FF] transition-colors duration-200'
               >
                 알림
               </p>
