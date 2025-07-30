@@ -15,6 +15,8 @@ import ResumeManagement from '../../components/MyHome/Expert_Resume/ResumeManage
 import EditInfo from '../../components/MyHome/MyHomeEdit/EditInfo';
 import ConfirmModal from '../../components/MyHome/MyHomeEdit/ConfirmModal';
 import RequestHealthCare from '../../components/RequestHealthCare/RequestHealthCare';
+import { NotificationList } from '../../components/Alarm/NotificationList';
+import { notificationList } from '../../data/notificationList';
 
 const scheduleData = [
   {
@@ -163,7 +165,7 @@ const MyHome: React.FC = () => {
           </>
         );
       case 1:
-        return <div className='text-center'>내 알림 페이지</div>;
+        return <NotificationList notifications={notificationList} />;
       case 2:
         return <MatchedExperts />;
       case 3:
