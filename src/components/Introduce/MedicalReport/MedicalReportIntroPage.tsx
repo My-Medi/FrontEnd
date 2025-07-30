@@ -111,7 +111,7 @@ const MedicalReportIntroPage: React.FC = () => {
                 <div>
                   <p className="text-[#4D5053] font-medium text-lg leading-[36px] tracking-[-0.03em]">
                     용어도 어렵고 해석도 복잡한 건강검진결과지!<br />
-                    MyMedi가 자동 분석하여 위험 수치와 주요 질환 가능성, 생활습관 개선 포인트까지 한눈에 제공합니다.
+                    <span className="whitespace-nowrap">MyMedi가 자동 분석하여 위험 수치와 주요 질환 가능성, 생활습관 개선 포인트까지 한눈에 제공합니다.</span>
                   </p>
                 </div>
               </div>
