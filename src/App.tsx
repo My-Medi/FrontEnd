@@ -4,7 +4,6 @@ import './App.css';
 import HomeLayout from './layout/HomeLayout';
 import MyHome from './pages/Myhome/MyHome';
 import SignUp from './pages/Signup/SignUp';
-import HomePage from './pages/Home/HomePage';
 import LoginPage from './pages/Login/LoginPage';
 import IntroducePage from './pages/Introduce/IntroducePage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
@@ -21,7 +20,7 @@ const router = createBrowserRouter([
     element: <HomeLayout />,
     errorElement: <NotFoundPage />,
     children: [
-      { index: true, element: <HomePage /> },
+      { index: true, element: <IntroducePage /> },
       { path: 'myhome', element: <MyHome /> },
       { path: 'signup', element: <SignUp /> },
       { path: 'login', element: <LoginPage /> },
