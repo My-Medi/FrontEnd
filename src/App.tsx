@@ -11,7 +11,7 @@ import ExpertPage from './pages/Expert/ExpertPage';
 import CalendarIntroPage from './pages/Introduce/CalendarIntroPage';
 import ExpertMatchingIntroPage from './pages/Introduce/ExpertMatchingPage';
 import MedicalReportPage from './pages/Introduce/MedicalReportPage';
-import HealthTermsPage from './components/HealthTerms/HealthTermsPage';
+import HealthTermsPage from './pages/HealthTerms/HealthTerm';
 import { AuthProvider } from './contexts/AuthContext';
 
 const router = createBrowserRouter([
