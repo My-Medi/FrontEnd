@@ -37,6 +37,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // localStorage에서 초기값 가져오기
   const [userType, setUserTypeState] = useState<'patient' | 'expert' | null>(() => {
     const saved = localStorage.getItem('userType');
+    console.log('AuthContext 초기화 - localStorage userType:', saved);
     return saved as 'patient' | 'expert' | null || null;
   });
 

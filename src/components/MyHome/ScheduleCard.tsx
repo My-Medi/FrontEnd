@@ -3,7 +3,7 @@ import locationIcon from '../../assets/MyHome/location.png';
 import timeIcon from '../../assets/MyHome/time.png';
 import { getEventColor, getTextColorClass } from '../../constants/colors';
 
-export type ScheduleType = 'report' | 'birthday' | 'appointment';
+export type ScheduleType = 'report' | 'birthday' | 'appointment' | 'consultation' | 'meeting';
 
 interface ScheduleCardProps {
   type: ScheduleType;

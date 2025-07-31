@@ -19,8 +19,16 @@ export interface ScheduleData {
 
 export const scheduleData: ScheduleData[] = [
   {
+    type: 'appointment',
+    date: { month: 8, day: 1, year: 2025 },
+    title: '김환자님 상담 예약',
+    description: '혈당 관리 상담 및 운동 처방 상담',
+    source: { text: '강남 메디컬센터' },
+    time: { text: '2:00 pm - 3:00 pm' },
+  },
+  {
     type: 'report',
-    date: { month: 6, day: 15, year: 2024 },
+    date: { month: 6, day: 15, year: 2025 },
     title: '마이메디컬리포트 시작일',
     description: '국가건강검진결과를 마이메디컬리포트로 쉽게 이해할 수 있어요!',
     source: { text: '마이메디' },
@@ -28,7 +36,7 @@ export const scheduleData: ScheduleData[] = [
   },
   {
     type: 'birthday',
-    date: { month: 6, day: 17, year: 2024 },
+    date: { month: 6, day: 17, year: 2025 },
     title: '하나 님의 생일',
     description: '마이메디가 하나님의 생일을 축하드립니다!! 생일에도 마이메디와 함께 건강지키기!',
     source: { text: '마이메디' },
@@ -36,7 +44,7 @@ export const scheduleData: ScheduleData[] = [
   },
   {
     type: 'appointment',
-    date: { month: 6, day: 25, year: 2024 },
+    date: { month: 6, day: 25, year: 2025 },
     title: '00운동처방사와 상담예약일',
     description: '00운동처방사와 화상 상담받기, 일주일 동안 운동 기록 정리해올 것.',
     source: { text: '여의도 스타벅스' },
@@ -44,7 +52,7 @@ export const scheduleData: ScheduleData[] = [
   },
   {
     type: 'appointment',
-    date: { month: 6, day: 7, year: 2024 },
+    date: { month: 6, day: 7, year: 2025 },
     title: '건강검진 예약',
     description: '종합건강검진 예약일입니다. 검진 전 12시간 금식이 필요합니다.',
     source: { text: '서울대병원' },
@@ -52,7 +60,7 @@ export const scheduleData: ScheduleData[] = [
   },
   {
     type: 'appointment',
-    date: { month: 6, day: 12, year: 2024 },
+    date: { month: 6, day: 12, year: 2025 },
     title: '운동처방사 상담',
     description: '개인 맞춤 운동 프로그램 상담을 받습니다.',
     source: { text: '마이메디 센터' },
@@ -60,7 +68,7 @@ export const scheduleData: ScheduleData[] = [
   },
   {
     type: 'report',
-    date: { month: 6, day: 15, year: 2024 },
+    date: { month: 6, day: 15, year: 2025 },
     title: '이력서 등록일',
     description: '전문가 이력서를 등록하여 환자와 매칭을 시작합니다.',
     source: { text: '마이메디' },

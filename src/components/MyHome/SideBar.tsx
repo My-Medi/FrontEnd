@@ -9,20 +9,20 @@ import resuumeIcon from '../../assets/MyHome/SideBar/resume.svg';
 import checkIcon from '../../assets/MyHome/SideBar/check.svg';
 
 const DottedIndicator: React.FC = () => {
-    const createDots = (direction: 'left' | 'right') => Array.from({ length: 8 }, (_, i) => (
-        <div key={`${direction}-${i}`} className="absolute bg-[#1D68FF]" style={{
-            [direction === 'left' ? 'right' : 'left']: `${15 + (i * 8)}%`,
-            top: '0', width: '5%', height: '100%'
-        }} />
-    ));
     return (
       <div className="absolute top-1/2 -translate-y-1/2 z-10 
-                      left-28 w-20 h-1 
-                      lg:left-[90px] lg:w-[60px] lg:h-[3px]">
+                      left-[85.2px] w-[25.6px] h-[9.6px] 
+                      lg:left-[85.2px] lg:w-[25.6px] lg:h-[9.6px]">
         <div className="absolute bg-[#1D68FF] rounded-full
-                        left-[4.8px] top-1/2 -translate-y-1/2
-                        w-5 h-5 lg:w-[9.6px] lg:h-[9.6px]" />
-        {createDots('right')}
+                        left-0 top-1/2 -translate-y-1/2
+                        w-[9.6px] h-[9.6px] lg:w-[9.6px] lg:h-[9.6px]" />
+        <div className="absolute left-[9.6px] top-1/2 -translate-y-1/2 w-[20px] h-[3.2px] flex items-center">
+          <div className="w-[2px] h-[3.2px] bg-[#1D68FF] mr-[2px]"></div>
+          <div className="w-[2px] h-[3.2px] bg-[#1D68FF] mr-[2px]"></div>
+          <div className="w-[2px] h-[3.2px] bg-[#1D68FF] mr-[2px]"></div>
+          <div className="w-[2px] h-[3.2px] bg-[#1D68FF] mr-[2px]"></div>
+          <div className="w-[2px] h-[3.2px] bg-[#1D68FF]"></div>
+        </div>
       </div>
     );
 };
@@ -81,7 +81,7 @@ const SideBar: React.FC<SideBarProps> = ({
   };
 
   return (
-    <div className="relative m-4 z-10 lg:m-0 lg:pb-6 lg:pt-8">
+    <div className="relative m-6 z-10 lg:m-0 lg:pb-6 lg:pt-8">
       {menuItems.map((item, index) => {
         const isSelected = selectedMenu === index;
         return (
