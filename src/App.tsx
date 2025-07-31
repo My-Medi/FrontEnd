@@ -10,6 +10,7 @@ import IntroducePage from "./pages/Introduce/IntroducePage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 import HealthCheckupResultInput from "./pages/HealthCheckupResultInput/HealthCheckupResultInput";
 import ExpertPage from "./pages/Expert/ExpertPage";
+import HealthTermsPage from "./components/HealthTerms/HealthTermsPage";
 import { AuthProvider } from "./contexts/AuthContext";
 
 const router = createBrowserRouter([
@@ -25,6 +26,7 @@ const router = createBrowserRouter([
       { path: "introduce", element: <IntroducePage /> },
       { path: "health-result-input", element: <HealthCheckupResultInput />},
       { path: "expert", element: <ExpertPage /> },
+      { path: "health-terms", element: <HealthTermsPage /> },
     ],
   },
 ]);

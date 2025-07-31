@@ -38,7 +38,10 @@ const NavBar = () => {
                 >
                   전문가 찾기
                 </p>
-                <p className='cursor-pointer text-[#121218] text-[16px] leading-[36px] tracking-[-0.48px] font-[Pretendard] font-medium'>
+                <p 
+                  onClick={() => navigate('/health-terms')}
+                  className='cursor-pointer text-[#121218] text-[16px] leading-[36px] tracking-[-0.48px] font-[Pretendard] font-medium'
+                >
                   건강용어 알아보기
                 </p>
               </div>
