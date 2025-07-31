@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import fileIcon from '@/assets/MyHome/Resume/file.svg';
-import fileboxIcon from '@/assets/MyHome/Resume/filebox.svg';
+import fileIcon from '../../../assets/MyHome/Resume/file.svg';
+import fileboxIcon from '../../../assets/MyHome/Resume/filebox.svg';
 
 const CertificateSection: React.FC = () => {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
@@ -31,8 +31,6 @@ const CertificateSection: React.FC = () => {
       },
     ]);
   };
-
-
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -84,15 +82,15 @@ const CertificateSection: React.FC = () => {
   };
 
   return (
-    <div className="space-y-[19.2px] w-[780.6px]">
-      <div className="flex items-center gap-[14.4px]">
-        <div className="w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px]"></div>
-        <span className="text-[16.8px] font-medium text-[#121218] font-pretendard">자격증</span>
+    <div className="space-y-5 xl:space-y-[1.2rem] w-full xl:w-[48.8rem]">
+      <div className="flex items-center gap-4 xl:gap-[0.9rem]">
+        <div className="w-3 h-3 xl:w-[0.7rem] xl:h-[0.7rem] bg-[#1D68FF] rounded-[0.225rem] xl:rounded-[0.225rem]"></div>
+        <span className="text-base xl:text-[1.05rem] font-medium text-[#121218] font-pretendard">자격증</span>
       </div>
       
       {/* 파일 업로드 영역 */}
       <div 
-        className={`w-[780.6px] h-[94.2px] border border-[#DBE6FF] rounded-[8.4px] flex items-center justify-center cursor-pointer transition-colors p-[12px] ${
+        className={`w-full xl:w-[48.8rem] h-auto min-h-[5.9rem] xl:h-[5.9rem] border border-[#DBE6FF] rounded-[0.525rem] xl:rounded-[0.525rem] flex items-center justify-center cursor-pointer transition-colors p-3 xl:p-3 ${
           isDragOver ? 'bg-[#F0F4FF] border-[#1D68FF]' : 'bg-white'
         }`}
         onDragOver={handleDragOver}
@@ -100,9 +98,9 @@ const CertificateSection: React.FC = () => {
         onDrop={handleDrop}
         onClick={handleUploadAreaClick}
       >
-        <div className="flex items-center gap-[6px]">
-          <img src={fileIcon} alt="파일 업로드" className="w-[14.4px] h-[18px]" />
-          <p className="text-[14px] font-medium text-[#9DA0A3] font-pretendard leading-[1.714] tracking-[-0.03em] text-center">
+        <div className="flex items-center gap-2 xl:gap-[0.375rem]">
+          <img src={fileIcon} alt="파일 업로드" className="w-4 h-5 xl:w-[0.9rem] xl:h-[1.1rem]" />
+          <p className="text-sm xl:text-sm font-medium text-[#9DA0A3] font-pretendard leading-[1.714] tracking-[-0.03em] text-center">
             {isDragOver ? '파일을 여기에 놓으세요' : '여기에 파일을 마우스로 끌어오세요.'}
           </p>
         </div>
@@ -118,13 +116,13 @@ const CertificateSection: React.FC = () => {
 
       {/* 업로드된 파일들 */}
       {uploadedFiles.length > 0 && (
-        <div className="space-y-[9.6px]">
+        <div className="space-y-2 xl:space-y-[0.6rem]">
           {uploadedFiles.map((file, index) => (
             <div key={index} className="flex justify-center">
-              <div className="w-[395.4px] h-[40.8px] bg-[#DBE6FF] rounded-[8.4px] flex items-center justify-between px-[14.4px]">
-                <div className="flex items-center gap-[14.4px]">
-                  <img src={fileboxIcon} alt="업로드된 파일" className="w-[34.8px] h-[25.75px]" />
-                  <span className="text-[14px] font-medium text-[#25282B] font-pretendard leading-[1.714] tracking-[-0.03em]">
+              <div className="w-full max-w-[24.7rem] xl:w-[24.7rem] h-auto min-h-[2.6rem] xl:h-[2.6rem] bg-[#DBE6FF] rounded-[0.525rem] xl:rounded-[0.525rem] flex items-center justify-between px-4 xl:px-[0.9rem]">
+                <div className="flex items-center gap-4 xl:gap-[0.9rem]">
+                  <img src={fileboxIcon} alt="업로드된 파일" className="w-8 h-6 xl:w-[2.2rem] xl:h-[1.6rem]" />
+                  <span className="text-sm xl:text-sm font-medium text-[#25282B] font-pretendard leading-[1.714] tracking-[-0.03em]">
                     {file.name}
                   </span>
                 </div>
@@ -142,25 +140,25 @@ const CertificateSection: React.FC = () => {
 
       {/* 이미지 파일 업로드 안내 박스 */}
       <div className="flex justify-center">
-        <div className="w-[395.4px] h-[40.8px] bg-[#DBE6FF] rounded-[8.4px] flex items-center justify-center gap-[14.4px]">
-          <img src={fileboxIcon} alt="업로드된 파일" className="w-[34.8px] h-[25.75px]" />
-          <span className="text-[14px] font-medium text-[#25282B] font-pretendard leading-[1.714] tracking-[-0.03em]">
+        <div className="w-full max-w-[24.7rem] xl:w-[24.7rem] h-auto min-h-[2.6rem] xl:h-[2.6rem] bg-[#DBE6FF] rounded-[0.525rem] xl:rounded-[0.525rem] flex items-center justify-center gap-4 xl:gap-[0.9rem]">
+          <img src={fileboxIcon} alt="업로드된 파일" className="w-8 h-6 xl:w-[2.2rem] xl:h-[1.6rem]" />
+          <span className="text-sm xl:text-sm font-medium text-[#25282B] font-pretendard leading-[1.714] tracking-[-0.03em]">
             이미지 파일 업로드(png,jpg,pdf)
           </span>
         </div>
       </div>
 
       {/* 자격증 테이블 */}
-      <div className="border border-[#DBE6FF] rounded-[8.4px] overflow-hidden mb-[9.6px]">
+      <div className="border border-[#DBE6FF] rounded-[0.525rem] xl:rounded-[0.525rem] overflow-hidden mb-2 xl:mb-[0.6rem] overflow-x-auto">
         {/* 테이블 헤더 */}
-        <div className="grid grid-cols-[246px_246px_246px] bg-white border-b border-[#DBE6FF]">
-          <div className="px-[12px] py-[6px] text-center text-[14px] font-medium text-[#121218] font-pretendard leading-[1.714] tracking-[-0.03em] border-r border-[#DBE6FF] w-[246px] flex items-center justify-center">
+        <div className="grid grid-cols-[1fr_1fr_1fr] xl:grid-cols-[15.4rem_15.4rem_15.4rem] bg-white border-b border-[#DBE6FF] min-w-[30rem] xl:min-w-0">
+          <div className="px-3 xl:px-3 py-2 xl:py-[0.375rem] text-center text-sm xl:text-sm font-medium text-[#121218] font-pretendard leading-[1.714] tracking-[-0.03em] border-r border-[#DBE6FF] flex items-center justify-center">
             자격증명
           </div>
-          <div className="px-[12px] py-[6px] text-center text-[14px] font-medium text-[#121218] font-pretendard leading-[1.714] tracking-[-0.03em] border-r border-[#DBE6FF] w-[246px] flex items-center justify-center">
+          <div className="px-3 xl:px-3 py-2 xl:py-[0.375rem] text-center text-sm xl:text-sm font-medium text-[#121218] font-pretendard leading-[1.714] tracking-[-0.03em] border-r border-[#DBE6FF] flex items-center justify-center">
             자격증 발급일
           </div>
-          <div className="px-[12px] py-[6px] text-center text-[14px] font-medium text-[#121218] font-pretendard leading-[1.714] tracking-[-0.03em] w-[246px] flex items-center justify-center">
+          <div className="px-3 xl:px-3 py-2 xl:py-[0.375rem] text-center text-sm xl:text-sm font-medium text-[#121218] font-pretendard leading-[1.714] tracking-[-0.03em] flex items-center justify-center">
             자격증 내용
           </div>
         </div>
@@ -169,9 +167,9 @@ const CertificateSection: React.FC = () => {
         {certificateRows.map((row, idx) => (
           <div
             key={idx}
-            className={`grid grid-cols-[246px_246px_246px] bg-white${idx !== certificateRows.length - 1 ? ' border-b border-[#DBE6FF]' : ''}`}
+            className={`grid grid-cols-[1fr_1fr_1fr] xl:grid-cols-[15.4rem_15.4rem_15.4rem] bg-white min-w-[30rem] xl:min-w-0${idx !== certificateRows.length - 1 ? ' border-b border-[#DBE6FF]' : ''}`}
           >
-            <div className="px-[12px] py-[6px] text-center text-[14px] font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em] border-r border-[#DBE6FF] w-[246px] flex items-center justify-center">
+            <div className="px-3 xl:px-3 py-2 xl:py-[0.375rem] text-center text-sm xl:text-sm font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em] border-r border-[#DBE6FF] flex items-center justify-center">
               <input
                 type="text"
                 value={row.certificateName}
@@ -180,11 +178,11 @@ const CertificateSection: React.FC = () => {
                   newRows[idx].certificateName = e.target.value;
                   setCertificateRows(newRows);
                 }}
-                className="w-full text-center bg-transparent border-none outline-none text-[14px] font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em]"
+                className="w-full text-center bg-transparent border-none outline-none text-sm xl:text-sm font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em]"
                 placeholder="자격증명 입력"
               />
             </div>
-            <div className="px-[12px] py-[6px] text-center text-[14px] font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em] border-r border-[#DBE6FF] w-[246px] flex items-center justify-center">
+            <div className="px-3 xl:px-3 py-2 xl:py-[0.375rem] text-center text-sm xl:text-sm font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em] border-r border-[#DBE6FF] flex items-center justify-center">
               <input
                 type="text"
                 value={row.issueDate}
@@ -193,11 +191,11 @@ const CertificateSection: React.FC = () => {
                   newRows[idx].issueDate = e.target.value;
                   setCertificateRows(newRows);
                 }}
-                className="w-full text-center bg-transparent border-none outline-none text-[14px] font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em]"
+                className="w-full text-center bg-transparent border-none outline-none text-sm xl:text-sm font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em]"
                 placeholder="발급일 입력"
               />
             </div>
-            <div className="px-[12px] py-[6px] text-center text-[14px] font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em] w-[246px] flex items-center justify-center">
+            <div className="px-3 xl:px-3 py-2 xl:py-[0.375rem] text-center text-sm xl:text-sm font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em] flex items-center justify-center">
               <input
                 type="text"
                 value={row.issuingOrganization}
@@ -206,7 +204,7 @@ const CertificateSection: React.FC = () => {
                   newRows[idx].issuingOrganization = e.target.value;
                   setCertificateRows(newRows);
                 }}
-                className="w-full text-center bg-transparent border-none outline-none text-[14px] font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em]"
+                className="w-full text-center bg-transparent border-none outline-none text-sm xl:text-sm font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em]"
                 placeholder="발급기관 입력"
               />
             </div>
@@ -219,7 +217,7 @@ const CertificateSection: React.FC = () => {
         <button
           type="button"
           onClick={handleAddCertificateRow}
-          className="w-[247.8px] h-[30px] border border-[#DBE6FF] rounded-[30px] flex items-center justify-center"
+          className="w-[15.5rem] xl:w-[15.5rem] h-8 xl:h-[1.9rem] border border-[#DBE6FF] rounded-[1.9rem] xl:rounded-[1.9rem] flex items-center justify-center"
         >
           <svg width="13.76" height="13.76" viewBox="0 0 14 14" fill="none">
             <path d="M7 0V14" stroke="#75787B" strokeWidth="1.8"/>

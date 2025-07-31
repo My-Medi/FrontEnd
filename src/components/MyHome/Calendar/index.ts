@@ -1,3 +1,4 @@
+export { default } from './Calendar';
 export { default as CalendarHeader } from './CalendarHeader';
 export { default as WeekdayHeader } from './WeekdayHeader';
 export { default as CalendarDay } from './CalendarDay';

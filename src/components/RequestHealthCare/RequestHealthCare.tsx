@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import RequestHealthCareCard from './HealthCareCard';
 import RequsetHealthHeader from './Header';
 import requestCardData from '../../data/requestHealthCard';
-import Pagination from '../Expert/Pagination';
+import Pagination from '../Expert/Intro/Pagination';
 
 const RequestHealthCare: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);

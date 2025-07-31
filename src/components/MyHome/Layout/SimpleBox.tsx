@@ -14,7 +14,7 @@ const SimpleBox: React.FC<SimpleBoxProps> = ({ children, fullWidthContent, class
           box-border bg-white border border-[#DBE6FF] rounded-3xl overflow-hidden overflow-y-auto
           flex flex-col
           
-          lg:w-[1184px] lg:rounded-[20px]
+          xl:w-[74rem] xl:rounded-[1.25rem]
           
           ${className || ''}
         `}

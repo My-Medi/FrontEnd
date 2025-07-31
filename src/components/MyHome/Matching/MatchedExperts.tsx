@@ -89,7 +89,7 @@ const MatchedExperts: React.FC = () => {
          }}>
       
       {/* 제목 */}
-      <h1 className="text-[24px] font-semibold text-black leading-[36px] tracking-[-3%] text-center">
+      <h1 className="text-lg md:text-xl lg:text-[24px] font-semibold text-black leading-[1.4] md:leading-[1.5] lg:leading-[36px] tracking-[-3%] text-center">
         매칭 전문가
       </h1>
 

@@ -36,22 +36,22 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
 
   return (
     <div 
-      className="w-full rounded-[20px] cursor-pointer box-border lg:rounded-[20px] md:rounded-[16px] sm:rounded-[12px]"
+      className="w-full rounded-5 xl:rounded-5 cursor-pointer box-border md:rounded-4 sm:rounded-3"
       style={cardStyle}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleClick}
     >
-      <div className="flex flex-col gap-2 pl-[72px] pt-[41px] pr-10 pb-10 lg:pl-[72px] lg:pt-[41px] lg:pr-10 lg:pb-10 md:pl-8 md:pt-8 md:pr-6 md:pb-8 sm:pl-6 sm:pt-6 sm:pr-4 sm:pb-6">
-        <div className="flex flex-col gap-2 lg:gap-2 md:gap-1.5 sm:gap-1">
-          <h3 className="text-[28px] font-semibold text-[#1D68FF] leading-[1.43] tracking-[-3%] lg:text-[28px] md:text-2xl sm:text-xl lg:leading-[1.43] md:leading-[1.3] sm:leading-[1.2]">
+      <div className="flex flex-col gap-2 pl-18 xl:pl-18 pt-10 xl:pt-10 pr-10 xl:pr-10 pb-10 xl:pb-10 md:pl-8 md:pt-8 md:pr-6 md:pb-8 sm:pl-6 sm:pt-6 sm:pr-4 sm:pb-6">
+        <div className="flex flex-col gap-2 xl:gap-2 md:gap-1.5 sm:gap-1">
+          <h3 className="text-2xl xl:text-[1.8rem] font-semibold text-[#1D68FF] leading-[1.43] xl:leading-[1.43] tracking-[-3%] md:text-2xl md:leading-[1.3] sm:text-xl sm:leading-[1.2]">
             {title}
           </h3>
-          <p className="text-[24px] font-medium text-[#121218] leading-[1.19] tracking-[-3%] lg:text-[24px] md:text-lg sm:text-base lg:leading-[1.19] md:leading-[1.3] sm:leading-[1.4]">
+          <p className="text-xl xl:text-[1.5rem] font-medium text-[#121218] leading-[1.19] xl:leading-[1.19] tracking-[-3%] md:text-lg md:leading-[1.3] sm:text-base sm:leading-[1.4]">
             {subtitle}
           </p>
         </div>
-        <p className="text-[18px] font-normal text-[#121218] leading-[1.5] tracking-[-3%] whitespace-pre-line lg:text-[18px] md:text-base sm:text-sm lg:leading-[1.5] md:leading-[1.6] sm:leading-[1.7]">
+        <p className="text-lg xl:text-[1.1rem] font-normal text-[#121218] leading-[1.5] xl:leading-[1.5] tracking-[-3%] whitespace-pre-line md:text-base md:leading-[1.6] sm:text-sm sm:leading-[1.7]">
           {description}
         </p>
       </div>

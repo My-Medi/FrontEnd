@@ -1,11 +1,11 @@
 import React, { useState, useMemo } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import SideBar from '../../components/MyHome/SideBar';
-import SimpleBox from '../../components/MyHome/SimpleBox';
-import ConfirmModal from '../../components/MyHome/MyHomeEdit/ConfirmModal';
-import EditInfo from '../../components/MyHome/MyHomeEdit/EditInfo';
-import ExpertHome from '../../components/MyHome/ExpertHome';
-import PatientHome from '../../components/MyHome/PatientHome';
+import SideBar from '../../components/MyHome/Layout/SideBar';
+import SimpleBox from '../../components/MyHome/Layout/SimpleBox';
+import ConfirmModal from '../../components/MyHome/Edit/ConfirmModal';
+import EditInfo from '../../components/MyHome/Edit/EditInfo';
+import ExpertHome from '../../components/MyHome/Expert/ExpertHome';
+import PatientHome from '../../components/MyHome/Patient/PatientHome';
 import { initializeRandomSchedules } from '../../data/scheduleData';
 
 
@@ -114,28 +114,37 @@ const MyHome: React.FC = () => {
 
   return (
     <div className='relative w-full'>
-      <div className='flex flex-col lg:hidden'>
-        <SideBar
-          userType={currentUserType}
-          selectedMenu={selectedMenu}
-          onMenuSelect={handleMenuSelect}
-        />
-        <SimpleBox>
-          <div
-            className={`${selectedMenu === 2 && currentUserType === 'expert' ? 'p-0' : 'p-4 sm:p-6'}`}
-          >
-            {renderContent()}
-          </div>
-        </SimpleBox>
+      {/* 모바일/태블릿 레이아웃 (1024px 미만) */}
+      <div className='xl:hidden'>
+        {/* 사이드바 - 가로 배치 */}
+        <div className='flex justify-center w-full bg-white border-b border-[#DBE6FF] py-4'>
+          <SideBar
+            userType={currentUserType}
+            selectedMenu={selectedMenu}
+            onMenuSelect={handleMenuSelect}
+          />
+        </div>
+        
+        {/* 메인 컨텐츠 */}
+        <div className='mt-4'>
+          <SimpleBox>
+            <div
+              className={`${selectedMenu === 2 && currentUserType === 'expert' ? 'p-0' : 'p-4 sm:p-6'}`}
+            >
+              {renderContent()}
+            </div>
+          </SimpleBox>
+        </div>
       </div>
 
-      <div className='hidden lg:flex lg:justify-center'>
+      {/* 데스크톱 레이아웃 (1025px 이상) - Figma 1:1 스타일링 */}
+      <div className='hidden xl:flex xl:justify-center'>
         <SideBar
           userType={currentUserType}
           selectedMenu={selectedMenu}
           onMenuSelect={handleMenuSelect}
         />
-        <main className='lg:pt-5 lg:pl-[25px]'>
+        <main className='xl:pt-5 xl:pl-6'>
           <SimpleBox>
             <div>{renderContent()}</div>
           </SimpleBox>

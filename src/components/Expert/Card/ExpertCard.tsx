@@ -1,5 +1,5 @@
 import React from "react";
-import unionSvg from '../../assets/Expert/Union.svg';
+import unionSvg from '../../../assets/Expert/Union.svg';
 
 interface ExpertCardProps {
   nickname: string;

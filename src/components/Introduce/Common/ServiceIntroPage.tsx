@@ -37,10 +37,10 @@ const ServiceIntroPage: React.FC<ServiceIntroPageProps> = ({
           <img 
             src={combinedImageSrc} 
             alt={combinedImageAlt || 'Combined image'} 
-            className="object-fill w-full max-w-[1920px]"
+            className="object-contain w-full max-w-[1920px] h-auto"
             style={{
               width: combinedImageWidth,
-              height: combinedImageHeight,
+              maxHeight: 'auto',
               imageRendering: 'crisp-edges'
             }}
             loading="lazy"

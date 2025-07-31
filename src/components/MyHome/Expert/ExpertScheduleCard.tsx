@@ -1,7 +1,7 @@
 import React from 'react';
-import locationIcon from '../../assets/MyHome/location.png';
-import timeIcon from '../../assets/MyHome/time.png';
-import { getEventColor, getTextColorClass } from '../../constants/colors';
+import locationIcon from '../../../assets/MyHome/location.png';
+import timeIcon from '../../../assets/MyHome/time.png';
+import { getEventColor, getTextColorClass } from '../../../constants/colors';
 
 export type ExpertScheduleType = 'report' | 'birthday' | 'appointment' | 'consultation' | 'meeting';
 

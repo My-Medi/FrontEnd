@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Calendar from '../Calendar';
-import ScheduleCard from '../ScheduleCard';
+import ScheduleCard from './ScheduleCard';
 import { getSchedulesForDate, getTodaySchedules } from '../../../data/scheduleData';
 
 interface HomeCalendarProps {

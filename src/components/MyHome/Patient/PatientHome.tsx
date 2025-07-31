@@ -1,12 +1,12 @@
 import React from 'react';
-import PatientInfoSection from './ProfileInfo';
+import PatientInfoSection from '../Profile/ProfileInfo';
 import MyConstantMedical from './MyConstantMedical';
 import ExpertAdvice from './ExpertAdvice';
-import HomeCalendar from './Common/HomeCalendar';
-import { NotificationList } from '../Alarm/NotificationList';
-import { patientNotificationList } from '../../data/patientNotificationList';
-import MatchedExperts from './User_MatchingExpert/MatchedExperts';
-import RequestForm from '../HealthCareRequest/RequestForm';
+import HomeCalendar from '../Common/HomeCalendar';
+import { NotificationList } from '../../Alarm/NotificationList';
+import { patientNotificationList } from '../../../data/patientNotificationList';
+import MatchedExperts from '../Matching/MatchedExperts';
+import RequestForm from '../../HealthCareRequest/RequestForm';
 
 interface PatientHomeProps {
   selectedMenu: number;

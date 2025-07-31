@@ -44,10 +44,10 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
             console.error('onVariantChange 함수가 없습니다!');
           }
         }}
-        className={`rounded-[20px] transition-all duration-300 ease-in-out cursor-pointer lg:rounded-[20px] md:rounded-[16px] sm:rounded-[12px] ${
+        className={`rounded-5 xl:rounded-5 transition-all duration-300 ease-in-out cursor-pointer md:rounded-4 sm:rounded-3 ${
           button.isActive 
-            ? 'w-[48px] h-[6px] bg-white lg:w-[48px] lg:h-[6px] md:w-[40px] md:h-[5px] sm:w-[32px] sm:h-[4px]' 
-            : 'w-[23px] h-[6px] bg-[#C5C8CB] hover:bg-gray-300 lg:w-[23px] lg:h-[6px] md:w-[20px] md:h-[5px] sm:w-[16px] sm:h-[4px]'
+            ? 'w-12 xl:w-12 h-1.5 xl:h-1.5 bg-white md:w-10 md:h-1.25 sm:w-8 sm:h-1' 
+            : 'w-6 xl:w-6 h-1.5 xl:h-1.5 bg-[#C5C8CB] hover:bg-gray-300 md:w-5 md:h-1.25 sm:w-4 sm:h-1'
         }`}
       />
     ));
@@ -55,7 +55,7 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
 
   return (
     <div 
-      className="relative w-full h-[521px] rounded-[20px] overflow-hidden transition-all duration-500 ease-in-out lg:h-[521px] lg:rounded-[20px] md:h-[400px] md:rounded-[16px] sm:h-[300px] sm:rounded-[12px]"
+      className="relative w-full h-[32.6rem] xl:h-[32.6rem] rounded-5 xl:rounded-5 overflow-hidden transition-all duration-500 ease-in-out md:h-[25rem] md:rounded-4 sm:h-[18.8rem] sm:rounded-3"
       style={{
         backgroundImage: `url(${getBackgroundImage()})`,
         backgroundSize: '100% 100%',
@@ -66,10 +66,10 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
     >
       {/* 두 번째 배너에만 버튼 표시 */}
       {variant === '2' && (
-        <div className="relative z-10 flex flex-col justify-end items-start h-full pb-[107px] pl-[0 px] lg:pb-[107px] lg:pl-[100px] md:pb-16 md:pl-1 md:justify-end sm:pb-12 sm:pl-6 sm:justify-end">
+        <div className="relative z-10 flex flex-col justify-end items-start h-full pb-[6.7rem] xl:pb-[6.7rem] pl-0 xl:pl-[6.3rem] md:pb-16 md:pl-4 md:justify-end sm:pb-12 sm:pl-6 sm:justify-end">
           <CTAButton>
-            지금 바로 건강 기록하기
-            <svg width="8.1" height="16.2" viewBox="0 0 8 16" fill="none" className="lg:w-[8.1px] lg:h-[16.2px] md:w-2 md:h-4 sm:w-1.5 sm:h-3">
+            <span className="xl:text-xl md:text-lg sm:text-base">지금 바로 건강 기록하기</span>
+            <svg width="8.1" height="16.2" viewBox="0 0 8 16" fill="none" className="xl:w-[0.5rem] xl:h-[1rem] md:w-2 md:h-4 sm:w-1.5 sm:h-3">
               <path d="M1 1L7 8L1 15" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </CTAButton>
@@ -78,10 +78,10 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
 
       {/* 세 번째 배너에만 버튼 표시 */}
       {variant === '3' && (
-        <div className="relative z-10 flex flex-col justify-end items-start h-full pb-[107px] pl-[110px] lg:pb-[107px] lg:pl-[110px] md:pb-16 md:pl-8 md:justify-end sm:pb-12 sm:pl-6 sm:justify-end">
+        <div className="relative z-10 flex flex-col justify-end items-start h-full pb-[6.7rem] xl:pb-[6.7rem] pl-[6.9rem] xl:pl-[6.9rem] md:pb-16 md:pl-8 md:justify-end sm:pb-12 sm:pl-6 sm:justify-end">
           <CTAButton onClick={() => navigate('/expert')}>
-            전문가 찾기
-            <svg width="8.1" height="16.2" viewBox="0 0 8 16" fill="none" className="lg:w-[8.1px] lg:h-[16.2px] md:w-2 md:h-4 sm:w-1.5 sm:h-3">
+            <span className="xl:text-xl md:text-lg sm:text-base">전문가 찾기</span>
+            <svg width="8.1" height="16.2" viewBox="0 0 8 16" fill="none" className="xl:w-[0.5rem] xl:h-[1rem] md:w-2 md:h-4 sm:w-1.5 sm:h-3">
               <path d="M1 1L7 8L1 15" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </CTAButton>
@@ -90,11 +90,11 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
 
       {/* 네 번째 배너에만 버튼 표시 */}
       {variant === '4' && (
-         <div className="relative z-10 flex flex-col justify-end items-start h-full pb-[158px] pl-[440px] lg:pb-[158px] lg:pl-[440px] md:pb-16 md:pl-8 sm:pb-12 sm:pl-6">
+         <div className="relative z-10 flex flex-col justify-end items-start h-full pb-[9.9rem] xl:pb-[9.9rem] pl-[27.5rem] xl:pl-[27.5rem] md:pb-16 md:pl-8 sm:pb-12 sm:pl-6">
           <div className="text-center">
             <CTAButton onClick={() => navigate('/myhome')}>
-              마이홈 캘린더 가기
-              <svg width="8.1" height="16.2" viewBox="0 0 8 16" fill="none" className="lg:w-[8.1px] lg:h-[16.2px] md:w-2 md:h-4 sm:w-1.5 sm:h-3">
+              <span className="xl:text-xl md:text-lg sm:text-base">마이홈 캘린더 가기</span>
+              <svg width="8.1" height="16.2" viewBox="0 0 8 16" fill="none" className="xl:w-[0.5rem] xl:h-[1rem] md:w-2 md:h-4 sm:w-1.5 sm:h-3">
                 <path d="M1 1L7 8L1 15" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </CTAButton>
@@ -103,7 +103,7 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
       )}
 
       {/* 페이지네이션 */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-[9px] z-20 lg:bottom-8 lg:gap-[9px] md:bottom-6 md:gap-2 sm:bottom-4 sm:gap-1.5">
+      <div className="absolute bottom-8 xl:bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2 xl:gap-2 z-20 md:bottom-6 md:gap-2 sm:bottom-4 sm:gap-1.5">
         {getPaginationButtons()}
       </div>
     </div>

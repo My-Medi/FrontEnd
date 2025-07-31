@@ -26,13 +26,13 @@ const ServiceSection: React.FC = () => {
   ];
 
   return (
-    <div className="w-full max-w-[1307px] mx-auto px-4 pt-16 lg:max-w-[1307px] lg:pt-16 md:max-w-full md:pt-12 md:px-6 sm:pt-10 sm:px-4">
-      <div className="flex flex-col items-center gap-8 lg:gap-8 md:gap-6 sm:gap-4">
-        <h2 className="text-[22px] font-semibold text-[#121218] leading-[2.17] tracking-[-3%] text-center lg:text-[22px] md:text-xl sm:text-lg lg:leading-[2.17] md:leading-[1.8] sm:leading-[1.6]">
+    <div className="w-full max-w-[81.7rem] xl:max-w-[81.7rem] mx-auto px-4 pt-16 xl:pt-16 md:max-w-full md:pt-12 md:px-6 sm:pt-10 sm:px-4">
+      <div className="flex flex-col items-center gap-8 xl:gap-8 md:gap-6 sm:gap-4">
+        <h2 className="text-xl xl:text-[1.4rem] font-semibold text-[#121218] leading-[2.17] xl:leading-[2.17] tracking-[-3%] text-center md:text-xl md:leading-[1.8] sm:text-lg sm:leading-[1.6]">
           서비스 소개
         </h2>
         
-        <div className="flex flex-col gap-20 w-full lg:gap-20 md:gap-12 sm:gap-8">
+        <div className="flex flex-col gap-20 xl:gap-20 w-full md:gap-12 sm:gap-8">
           {services.map((service, index) => (
             <ServiceCard
               key={index}

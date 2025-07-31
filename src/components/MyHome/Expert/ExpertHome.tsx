@@ -1,10 +1,10 @@
 import React from 'react';
-import PatientInfoSection from './ProfileInfo';
-import HomeCalendar from './Common/HomeCalendar';
-import ResumeManagement from './Expert_Resume/ResumeManagement';
-import RequestHealthCare from '../RequestHealthCare/RequestHealthCare';
-import { NotificationList } from '../Alarm/NotificationList';
-import { expertNotificationList } from '../../data/expertNotificationList';
+import PatientInfoSection from '../Profile/ProfileInfo';
+import HomeCalendar from '../Common/HomeCalendar';
+import ResumeManagement from '../Resume/ResumeManagement';
+import RequestHealthCare from '../../RequestHealthCare/RequestHealthCare';
+import { NotificationList } from '../../Alarm/NotificationList';
+import { expertNotificationList } from '../../../data/expertNotificationList';
 import ExpertSchedule from './ExpertSchedule';
 
 interface ExpertHomeProps {
@@ -38,7 +38,7 @@ const ExpertHome: React.FC<ExpertHomeProps> = ({
             onEditInfo={onEditInfo}
             userType='expert'
           />
-                           <ExpertSchedule onMenuSelect={onMenuSelect} />
+          <ExpertSchedule />
           <HomeCalendar
             selectedDate={selectedDate}
             today={today}

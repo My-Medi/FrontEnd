@@ -1,6 +1,6 @@
 import React from "react";
-import categoryIcon from "../../assets/Expert/category.svg";
-import closeIcon from "../../assets/Expert/close.svg";
+import categoryIcon from '../../../assets/Expert/category.svg';
+import closeIcon from '../../../assets/Expert/close.svg';
 
 const allCategories = ["웰니스 코치", "건강관리사", "영양사", "운동처방사"];
 

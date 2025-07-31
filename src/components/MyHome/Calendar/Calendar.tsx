@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import CalendarHeader from './Calendar/CalendarHeader';
-import WeekdayHeader from './Calendar/WeekdayHeader';
-import CalendarGrid from './Calendar/CalendarGrid';
-import { generateCalendarData } from './Calendar/calendarUtils';
+import CalendarHeader from './CalendarHeader';
+import WeekdayHeader from './WeekdayHeader';
+import CalendarGrid from './CalendarGrid';
+import { generateCalendarData } from './calendarUtils';
 
 interface CalendarProps {
   selectedDate?: number;

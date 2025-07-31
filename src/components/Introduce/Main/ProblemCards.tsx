@@ -8,7 +8,7 @@ const ProblemCards: React.FC = () => {
         <img 
           src={problemImage} 
           alt="Problem Cards" 
-          className="w-full h-auto object-contain max-w-[1920px]"
+          className="w-full h-auto object-contain max-w-[120rem]"
         />
       </div>
     </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import ExpertScheduleCard from './ExpertScheduleCard';
-import ActionButton from './Common/ActionButton';
-import { getSchedulesForDate, getTodaySchedules } from '../../data/scheduleData';
+import ActionButton from '../Common/ActionButton';
+import { getSchedulesForDate } from '../../../data/scheduleData';
 
 const ExpertSchedule: React.FC = () => {
   // 현재 날짜 기준으로 가장 가까운 일정 가져오기

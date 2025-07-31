@@ -14,21 +14,21 @@ const ExpertiseSection: React.FC<ExpertiseSectionProps> = ({ selectedFields, onF
   };
 
   return (
-    <div className="flex items-center">
-      <div className="flex items-center gap-[14.4px]">
-        <div className="w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px]"></div>
-        <span className="text-[16.8px] font-medium text-[#121218] font-pretendard">전문분야</span>
+    <div className="flex flex-col xl:flex-row xl:items-center gap-4 xl:gap-0">
+      <div className="flex items-center gap-4 xl:gap-[0.9rem]">
+        <div className="w-3 h-3 xl:w-[0.7rem] xl:h-[0.7rem] bg-[#1D68FF] rounded-[0.225rem] xl:rounded-[0.225rem]"></div>
+        <span className="text-base xl:text-[1.05rem] font-medium text-[#121218] font-pretendard">전문분야</span>
       </div>
       
       {/* 점선 구분선 */}
-      <div className="w-[0px] h-[52.2px] border border-dashed border-[#DBE6FF] ml-[83px] mr-[37.8px]"></div>
+      <div className="hidden xl:block w-0 h-[3.3rem] border border-dashed border-[#DBE6FF] mx-5 xl:mx-[5.2rem] xl:mr-[2.4rem]"></div>
       
-      <div className="flex items-center gap-[19.2px] flex-shrink-0">
+      <div className="flex flex-wrap xl:flex-nowrap items-center gap-4 xl:gap-[1.2rem] flex-shrink-0">
         {fields.map((field) => (
-          <div key={field} className="flex items-center gap-[10.8px]">
+          <div key={field} className="flex items-center gap-3 xl:gap-[0.7rem]">
             <button
               onClick={() => handleFieldToggle(field)}
-              className={`w-[18px] h-[18px] rounded-[4.8px] border flex items-center justify-center ${
+              className={`w-[1.1rem] h-[1.1rem] xl:w-[1.1rem] xl:h-[1.1rem] rounded-[0.3rem] xl:rounded-[0.3rem] border flex items-center justify-center ${
                 selectedFields.includes(field)
                   ? 'bg-[#1D68FF] border-[#1D68FF]'
                   : 'bg-white border-[#9DA0A3]'
@@ -40,7 +40,7 @@ const ExpertiseSection: React.FC<ExpertiseSectionProps> = ({ selectedFields, onF
                 </svg>
               )}
             </button>
-            <span className={`text-[16px] font-medium font-pretendard leading-[2.25] tracking-[-0.03em] ${
+            <span className={`text-sm xl:text-base font-medium font-pretendard leading-[2.25] tracking-[-0.03em] ${
               selectedFields.includes(field) ? 'text-[#121218]' : 'text-[#4D5053]'
             }`}>
               {field}

@@ -17,10 +17,20 @@ const MedicalReportIntroPage: React.FC = () => {
 
   // 이미지 로딩 상태 관리
   useEffect(() => {
-    const images = [reportIcon, mdImage];
+    const images = [backIcon, reportIcon, mdImage];
     let loadedCount = 0;
 
     const handleImageLoad = () => {
+      loadedCount++;
+      console.log(`이미지 로딩 완료: ${loadedCount}/${images.length}`);
+      if (loadedCount === images.length) {
+        console.log('모든 이미지 로딩 완료!');
+        setImagesLoaded(true);
+      }
+    };
+
+    const handleImageError = (src: string) => {
+      console.error(`이미지 로딩 실패: ${src}`);
       loadedCount++;
       if (loadedCount === images.length) {
         setImagesLoaded(true);
@@ -30,6 +40,7 @@ const MedicalReportIntroPage: React.FC = () => {
     images.forEach(src => {
       const img = new Image();
       img.onload = handleImageLoad;
+      img.onerror = () => handleImageError(src);
       img.src = src;
     });
   }, []);
@@ -101,17 +112,17 @@ const MedicalReportIntroPage: React.FC = () => {
               </div>
               
               {/* 텍스트 설명 */}
-              <div className="flex-1 max-w-sm md:max-w-md lg:max-w-lg xl:max-w-2xl mb-14 px-4 lg:px-0">
-                <h2 className="text-[#1D68FF] font-semibold text-3xl leading-[36px] tracking-[-0.03em] mb-2">
+              <div className="flex-1 max-w-sm md:max-w-md lg:max-w-lg xl:max-w-2xl mb-8 md:mb-10 lg:mb-12 xl:mb-14 px-4 lg:px-0">
+                <h2 className="text-[#1D68FF] font-semibold text-xl md:text-2xl lg:text-3xl leading-[1.2] md:leading-[1.3] lg:leading-[36px] tracking-[-0.03em] mb-2">
                   마이메디컬리포트
                 </h2>
-                <p className="text-[#4D5053] font-semibold text-xl leading-[36px] tracking-[-0.03em] mb-4 md:mb-6 lg:mb-8">
+                <p className="text-[#4D5053] font-semibold text-lg md:text-xl leading-[1.3] md:leading-[1.4] lg:leading-[36px] tracking-[-0.03em] mb-3 md:mb-4 lg:mb-6 xl:mb-8">
                   건강검진 결과 자동 분석 서비스
                 </p>
                 <div>
-                  <p className="text-[#4D5053] font-medium text-lg leading-[36px] tracking-[-0.03em]">
+                  <p className="text-[#4D5053] font-medium text-base md:text-lg leading-[1.4] md:leading-[1.5] lg:leading-[36px] tracking-[-0.03em]">
                     용어도 어렵고 해석도 복잡한 건강검진결과지!<br />
-                    <span className="whitespace-nowrap">MyMedi가 자동 분석하여 위험 수치와 주요 질환 가능성, 생활습관 개선 포인트까지 한눈에 제공합니다.</span>
+                    <span className="whitespace-normal md:whitespace-nowrap">MyMedi가 자동 분석하여 위험 수치와 주요 질환 가능성, 생활습관 개선 포인트까지 한눈에 제공합니다.</span>
                   </p>
                 </div>
               </div>

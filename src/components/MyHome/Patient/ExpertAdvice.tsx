@@ -1,5 +1,5 @@
 import React from "react";
-import ActionButton from "./Common/ActionButton";
+import ActionButton from "../Common/ActionButton";
 
 interface Props {
     adviceText: string;
