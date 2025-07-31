@@ -14,6 +14,15 @@ const Topbar = memo(() => {
     setIsMenuOpen(false);
   }, [navigate]);
 
+  // 로고 클릭 핸들러 - 로그인 상태에 따라 다른 페이지로 이동
+  const handleLogoClick = useCallback(() => {
+    if (userType) {
+      navigate('/myhome');
+    } else {
+      navigate('/introduce');
+    }
+  }, [userType, navigate]);
+
   // 추후에 기능을 더 넣을 때 수정하겠지만 -> 검색 창이 입력+검색 되도록 수정
   const handleSearchSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
@@ -40,7 +49,7 @@ const Topbar = memo(() => {
                 src={logo}
                 alt='logo'
                 className='w-[241px] h-[38px] object-contain cursor-pointer'
-                onClick={() => navigate('/')}
+                onClick={handleLogoClick}
               />
               <div className='w-[532px] h-[22px] flex gap-[4px] items-center mt-[15px]'>
                 {' '}
@@ -142,7 +151,7 @@ const Topbar = memo(() => {
           {' '}
           <div
             className='flex items-center gap-2.5 cursor-pointer'
-            onClick={() => handleNavigate('/')}
+            onClick={handleLogoClick}
           >
             <img src='/MyMedi_logo.png' className='w-10 h-10 object-cover' alt='MyMedi Logo' />
             <p className='text-3xl font-semibold text-[#1d68ff]'>MYMEDi</p>

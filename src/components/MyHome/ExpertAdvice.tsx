@@ -1,42 +1,43 @@
+import React from "react";
+import ActionButton from "./Common/ActionButton";
+
 interface Props {
     adviceText: string;
+    onMenuSelect?: (menuIndex: number) => void;
   }
   
-  const ExpertAdvice: React.FC<Props> = ({ adviceText }) => {
+  const ExpertAdvice: React.FC<Props> = ({ adviceText, onMenuSelect }) => {
+    const handleExpertClick = () => {
+      if (onMenuSelect) {
+        onMenuSelect(2); // 매칭된 전문가 메뉴 (인덱스 2)
+      }
+    };
+
     return (
-      <section className="w-full max-w-[1980px] mx-auto p-4 lg:py-[38px] lg:space-y-[28px] lg:mt-[10px]">
+      <div className="w-full pt-[44px] pl-[39px]">
         {/* 제목 */}
-        <h2 className="font-medium text-xl text-[#121218] mb-4 lg:text-[24px] lg:mt-[-38px]">
-          전문가 한마디
-        </h2>
-        {/* 카드 + 링크 한 줄 수평 정렬 */}
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center lg:mt-[-15px] lg:mb-[6px]">
-          {/* 전문가 조언 텍스트 부분 */}
+        <div className="text-[#121212] text-[18px] font-[600] leading-[1.5] tracking-[-0.54px]">
+          등록된 전문가의 조언!
+        </div>
+        
+        {/* 카드와 버튼 컨테이너 */}
+        <div className="mt-[17px] flex justify-between items-end">
+          {/* 전문가 조언 카드 */}
           <div
-            className="flex items-center justify-center
-            rounded-lg px-4 py-3 border w-full h-auto
-            lg:rounded-[20px] lg:px-[40px]
-            lg:py-[10px] lg:w-[960px]
-            lg:h-[100px] lg:mr-[24px]"
-            style={{
-              borderColor: "#82ABFD",
-            }}
+            className="w-[780px] h-[76px] flex items-center px-8 py-2.5 border-t border-b border-[#82ABFD]"
           >
-            <p className="font-semibold text-base leading-tight lg:font-pretendard lg:text-[24px] lg:leading-[140%]">
+            <p className="text-[18px] font-medium leading-[2] tracking-[-0.54px] text-[#121218]">
               {adviceText}
             </p>
           </div>
-  
-          {/* 오른쪽 링크 */}
-          <a
-            href="#"
-            className="text-base text-[#1D68FF] hover:underline mt-4 self-end 
-                       lg:whitespace-nowrap lg:text-[20px] lg:ml-[20px] lg:mt-[73px]"
-          >
-            매칭된 전문가 보기 &gt;
-          </a>
+          
+          {/* 매칭된 전문가 보기 버튼 */}
+          <ActionButton 
+            text="매칭된 전문가 보기" 
+            onClick={handleExpertClick} 
+          />
         </div>
-      </section>
+      </div>
     );
   };
   

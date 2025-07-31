@@ -1,6 +1,7 @@
 import React from 'react';
 import locationIcon from '../../assets/MyHome/location.png';
 import timeIcon from '../../assets/MyHome/time.png';
+import { getEventColor, getTextColorClass } from '../../constants/colors';
 
 export type ScheduleType = 'report' | 'birthday' | 'appointment';
 
@@ -9,6 +10,7 @@ interface ScheduleCardProps {
   date: {
     month: number;
     day: number;
+    year: number;
   };
   title: string;
   description: string;
@@ -20,18 +22,6 @@ interface ScheduleCardProps {
   };
 }
 
-const typeStyles = {
-  report: {
-    dateColor: 'text-[#A1F68E]',
-  },
-  birthday: {
-    dateColor: 'text-[#FFCC00]',
-  },
-  appointment: {
-    dateColor: 'text-[rgba(29,104,255,0.8)]',
-  },
-};
-
 const ScheduleCard: React.FC<ScheduleCardProps> = ({
   type,
   date,
@@ -40,34 +30,35 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
   source,
   time,
 }) => {
-  const styles = typeStyles[type];
+  // 공통 색상 팔레트에서 색상 가져오기
+  const eventColor = getEventColor(title);
 
   return (
-    <div className="flex items-center gap-8 p-3 bg-white border-2 border-[#DBE6FF] rounded-2xl w-full">
-      <div className="flex-shrink-0 text-center pl-6">
-        <div className={`font-semibold text-3xl leading-tight ${styles.dateColor}`}>
+    <div className="flex items-center gap-[30px] p-[10px_39px] bg-white border-2 border-[#DBE6FF] rounded-[20px] w-[1101px] mx-auto">
+      <div className="flex-shrink-0 text-center w-[67px] h-[72px]">
+        <div className={`font-semibold text-[32px] leading-[1.125] text-center whitespace-nowrap ${getTextColorClass(eventColor)}`}>
           {date.month}월
         </div>
-        <div className={`font-semibold text-3xl leading-tight ${styles.dateColor}`}>
+        <div className={`font-semibold text-[32px] leading-[1.125] text-center whitespace-nowrap ${getTextColorClass(eventColor)}`}>
           {date.day}일
         </div>
       </div>
 
-      <div className="flex flex-col gap-2 flex-grow">
-        <h3 className="font-semibold text-2xl text-[#121218]">{title}</h3>
-        <p className="font-medium text-base text-[#4D5053] leading-relaxed">
+      <div className="flex flex-col flex-grow">
+        <h3 className="font-semibold text-[22px] leading-[1.636] text-[#121218]">{title}</h3>
+        <p className="font-semibold text-[15px] leading-[2.4] text-[#4D5053]">
           {description}
         </p>
         
         {/* Footer Section */}
-        <div className="flex items-center gap-4 mt-2 text-[#4D5053] text-sm">
-          <div className="flex items-center gap-2">
-            <img src={locationIcon} alt="location icon" className="w-5 h-5 object-contain" />
-            <span>{source.text}</span>
+        <div className="flex items-center gap-[20px] text-[#4D5053]">
+          <div className="flex items-center gap-[10px]">
+            <img src={locationIcon} alt="location icon" className="w-[16.51px] h-[20.17px] object-contain" />
+            <span className="font-medium text-[14px] leading-[2.571]">{source.text}</span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-[10px]">
             <img src={timeIcon} alt="time icon" className="w-5 h-5 object-contain" />
-            <span>{time.text}</span>
+            <span className="font-medium text-[14px] leading-[2.571]">{time.text}</span>
           </div>
         </div>
       </div>
