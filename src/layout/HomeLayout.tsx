@@ -7,6 +7,10 @@ import Topbar from '../components/Common/layout/Topbar';
 const HomeLayout: React.FC = () => {
   const location = useLocation();
   const isIntroducePage = location.pathname === '/introduce';
+  const isCalendarIntroPage = location.pathname === '/calendar-intro';
+  const isExpertMatchingIntroPage = location.pathname === '/expert-matching-intro';
+  const isMedicalReportIntroPage = location.pathname === '/medical-report-intro';
+  const shouldUseFullWidth = isIntroducePage || isCalendarIntroPage || isExpertMatchingIntroPage || isMedicalReportIntroPage;
 
   return (
     <div className="w-full"> 
@@ -14,7 +18,7 @@ const HomeLayout: React.FC = () => {
         <Topbar />
         <NavBar />
       </header>
-      <div className={isIntroducePage ? "mx-auto" : "max-w-[1920px] mx-auto"}> 
+      <div className={shouldUseFullWidth ? "mx-auto" : "max-w-[1920px] mx-auto"}> 
         <main className="flex-grow pb-[320px]">
           <Outlet />
         </main>

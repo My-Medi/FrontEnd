@@ -10,7 +10,7 @@ import FindID from "../../components/Login/find/findID";
 import FindPW from "../../components/Login/find/findPW";
 
 const button = cva(
-  "w-[385.2px] h-[60px] mt-6 text-[19.2px] font-semibold rounded-full flex justify-center items-center gap-2.5 leading-[1.193]",
+  "w-full max-w-[24rem] xl:w-[24rem] md:w-full sm:w-full h-15 xl:h-15 md:h-14 sm:h-12 mt-6 text-lg xl:text-lg md:text-base sm:text-sm font-semibold rounded-full flex justify-center items-center gap-2.5 leading-[1.193]",
   {
     variants: {
       intent: {
@@ -104,13 +104,13 @@ const LoginPage = () => {
       {/* 뒤로가기 버튼 */}
       <button
         onClick={handleBack}
-        className="absolute w-[17px] h-[35px] flex items-center justify-center top-[65px] left-[312px]"
+        className="absolute w-[17px] h-[35px] flex items-center justify-center top-[65px] left-[312px] lg:flex md:hidden sm:hidden"
         aria-label="뒤로가기"
       >
         <img src={backSvg} alt="뒤로가기" className="w-full h-full object-contain" />
       </button>
 
-      <div className="w-[385.2px] flex flex-col items-center">
+      <div className="w-full max-w-[24rem] xl:w-[24rem] md:w-full sm:w-full flex flex-col items-center">
         {/* 로고 */}
         <img src={logo} alt="로고" className="w-[111.6px] h-[20.4px] mt-[72px] mb-[15.6px]" />
 

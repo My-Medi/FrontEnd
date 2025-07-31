@@ -18,7 +18,7 @@ export const matchedExpertsData: MatchedExpert[] = [
     realName: '정희정',
     position: '영양사',
     startDate: '2023. 08. 23.',
-    description: '작은 습관의 변화로 큰 건강을 얻을 수 .',
+    description: '작은 습관의 변화로 큰 건강을 얻을 수 있어요.',
     phone: '010-9238-0044',
     status: 'matched'
   },

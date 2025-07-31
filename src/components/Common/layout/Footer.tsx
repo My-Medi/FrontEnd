@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { memo } from 'react';
 
-const Footer: React.FC = () => {
+const Footer: React.FC = memo(() => {
   return (
     <footer className="w-full bg-white pb-12">
       {/* 파란선: 패딩 없이 w-full, 아래 mb-8(32px) */}
@@ -64,6 +64,6 @@ const Footer: React.FC = () => {
       </div>
     </footer>
   );
-};
+});
 
 export default Footer;
