@@ -8,6 +8,9 @@ import { useAuth } from "../../contexts/AuthContext";
 import LoginConfirmModal from "../../components/Login/modal/LoginConfirmModal";
 import FindID from "../../components/Login/find/findID";
 import FindPW from "../../components/Login/find/findPW";
+import type { LoginRequest } from "../../types";
+import { useLoginMutation } from "../../hooks/tokens/useLoginMutation";
+import LoadingSpinner from "../../components/Common/LoadingSpinner";
 
 const button = cva(
   "w-full max-w-[24rem] xl:w-[24rem] md:w-full sm:w-full h-15 xl:h-15 md:h-14 sm:h-12 mt-6 text-lg xl:text-lg md:text-base sm:text-sm font-semibold rounded-full flex justify-center items-center gap-2.5 leading-[1.193]",
@@ -26,8 +29,8 @@ const button = cva(
 );
 
 const LoginPage = () => {
-  const [formData, setFormData] = useState({
-    id: "",
+  const [formData, setFormData] = useState<LoginRequest>({
+    loginId: "",
     password: "",
   });
   const [isKeepLogin, setIsKeepLogin] = useState(false);
@@ -37,9 +40,22 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const [showFailModal, setShowFailModal] = useState(false);
   const idInputRef = useRef<HTMLInputElement>(null);
+  const loginMutation = useLoginMutation({
+    onSuccess: (data) => {
+      if (data.result) {
+        // 사용자 타입 설정 (role에서 추출)
+        const role = data.result.role;
+        const isExpert = role.includes('ROLE_EXPERT');
+        setUserType(isExpert ? 'expert' : 'patient');
+      }
+    },
+    onError: () => {
+      setShowFailModal(true);
+    },
+  });
 
   const isFormValid = useMemo(() => {
-    return formData.id.length > 0 && formData.password.length > 0;
+    return formData.loginId.length > 0 && formData.password.length > 0;
   }, [formData]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,15 +68,7 @@ const LoginPage = () => {
 
   const handleLogin = () => {
     if (isFormValid) {
-      // 아이디가 'user' 또는 'expert'일 때만 로그인 성공
-      const id = formData.id.toLowerCase();
-      if (id === 'user' || id === 'expert') {
-        const isExpert = id === 'expert';
-        setUserType(isExpert ? 'expert' : 'patient');
-        navigate('/');
-      } else {
-        setShowFailModal(true);
-      }
+      loginMutation.mutate(formData);
     }
   };
 
@@ -99,6 +107,11 @@ const LoginPage = () => {
     return <FindPW onBack={handleBackFromFindPW} />;
   }
 
+  // 로딩 중일 때 스피너 표시
+  if (loginMutation.isPending) {
+    return <LoadingSpinner message="로그인 중..." />;
+  }
+
   return (
     <div className="relative flex flex-col items-center justify-center p-4">
       {/* 뒤로가기 버튼 */}
@@ -131,10 +144,10 @@ const LoginPage = () => {
             ref={idInputRef}
             label="아이디"
             type="text"
-            id="id"
-            name="id"
+            id="loginId"
+            name="loginId"
             placeholder="아이디를 입력하세요."
-            value={formData.id}
+            value={formData.loginId}
             onChange={handleInputChange}
           />
           <LoginInput
