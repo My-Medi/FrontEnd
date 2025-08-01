@@ -1,7 +1,7 @@
 import axios from "axios";
 import { AUTH_ENDPOINTS } from "../types";
 import { getCookie, TOKEN_COOKIES } from "../utils/cookies";
-import { saveTokens, clearTokens } from "../utils/tokenStorage";
+import { saveTokens, clearTokens, getTokens } from "../utils/tokenStorage";
 
 // 백엔드 API 기본 URL
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -17,9 +17,9 @@ export const API = axios.create({
 // 요청 인터셉터 - 토큰 추가
 API.interceptors.request.use(
   (config) => {
-    const token = getCookie(TOKEN_COOKIES.ACCESS_TOKEN);
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    const { accessToken } = getTokens();
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
     }
     return config;
   },
@@ -41,22 +41,22 @@ API.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const refreshToken = getCookie(TOKEN_COOKIES.REFRESH_TOKEN);
+        const { refreshToken, accessToken } = getTokens();
         if (refreshToken) {
           // 토큰 재발급 요청 (GET 방식, 쿼리 파라미터로 refreshToken 전달)
           const response = await axios.get(`${BASE_URL}${AUTH_ENDPOINTS.REISSUE}?refresh=${refreshToken}`, {
             headers: {
-              Authorization: `Bearer ${getCookie(TOKEN_COOKIES.ACCESS_TOKEN)}`
+              Authorization: `Bearer ${accessToken}`
             }
           });
 
-          const { accessToken, refreshToken: newRefreshToken } = response.data.result;
+          const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data.result;
           
           // 새로운 토큰 저장
-          saveTokens(accessToken, newRefreshToken);
+          saveTokens(newAccessToken, newRefreshToken);
 
           // 원래 요청 재시도
-          originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return API(originalRequest);
         }
       } catch (refreshError) {
