@@ -69,9 +69,15 @@ const PatientInfoSection: React.FC<PatientInfoProps> = ({
     <div className="w-full pt-12 pl-10 xl:pt-12 xl:pl-10 md:pt-8 md:pl-6 sm:pt-6 sm:pl-4">
       <div className="text-[#121212] text-xl font-medium leading-[1.19] tracking-[-0.66px] xl:text-xl md:text-lg sm:text-base">
         {userType === 'expert' ? (
-          <>안녕하세요! <span className="text-[#1D68FF]">{displayNickname}</span>전문가님! 오늘도 마이메디와 함께 행복한 하루 보내세요.</>
+          <>
+            안녕하세요! <span className="text-[#1D68FF]">{displayNickname}</span>전문가님! 오늘도 마이메디와 함께 행복한 하루 보내세요.
+            <img src="/src/assets/MyHome/smile.svg" alt="smile" className="inline-block pl-2 w-7 h-7" />
+          </>
         ) : (
-          <>안녕하세요! <span className="text-[#1D68FF]">{displayNickname}</span>님! 오늘도 마이메디와 함께 행복한 하루 보내세요.</>
+          <>
+            안녕하세요! <span className="text-[#1D68FF]">{displayNickname}</span>님! 오늘도 마이메디와 함께 행복한 하루 보내세요.
+            <img src="/src/assets/MyHome/smile.svg" alt="smile" className="inline-block pl-2 w-7 h-7" />
+          </>
         )}
       </div>
       
