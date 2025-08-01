@@ -3,6 +3,7 @@ import HeroSection from '../../components/Introduce/Main/HeroSection';
 import AdBanner from '../../components/Introduce/Main/AdBanner';
 import ServiceSection from '../../components/Introduce/Main/ServiceSection';
 import ProblemCards from '../../components/Introduce/Main/ProblemCards';
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
 import bg1 from '../../assets/Introduce/1.png';
 import bg2 from '../../assets/Introduce/2.png';
 import bg3 from '../../assets/Introduce/3.png';
@@ -59,14 +60,7 @@ const IntroducePage: React.FC = () => {
   }, [isAutoPlaying]); // isAutoPlaying을 의존성 배열에 추가
 
   if (!imagesLoaded) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[#1D68FF] mx-auto mb-4"></div>
-          <p className="text-[#4D5053] text-lg">이미지를 불러오는 중...</p>
-        </div>
-      </div>
-    );
+    return <LoadingSpinner message="이미지를 불러오는 중..." size="lg" />;
   }
 
   return (

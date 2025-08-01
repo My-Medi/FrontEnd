@@ -100,7 +100,7 @@ const HealthTermsPage: React.FC = () => {
   ];
 
   return (
-    <div className="w-full bg-white min-h-screen">
+    <div className="w-full">
       <div className="max-w-[1301px] mx-auto px-[100px] py-[60px]">
         {/* 뒤로가기 버튼과 카테고리 제목 */}
         <div className="mb-[12px]">

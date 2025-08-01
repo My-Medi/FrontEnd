@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ServiceIntroPage from '../Common/ServiceIntroPage';
 import BackgroundBlur from '../Common/BackgroundBlur';
+import LoadingSpinner from '../../Common/LoadingSpinner';
 import backIcon from '../../../assets/back2.svg';
 import expertIcon from '../../../assets/Introduce/Matching/matching.svg';
 import matchingImage from '../../../assets/Introduce/Matching/m.png';
@@ -54,14 +55,7 @@ const ExpertMatchingIntroPage: React.FC = () => {
   };
 
   if (!imagesLoaded) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[#1D68FF] mx-auto mb-4"></div>
-          <p className="text-[#4D5053] text-lg">로딩 중...</p>
-        </div>
-      </div>
-    );
+    return <LoadingSpinner message="로딩 중..." size="lg" />;
   }
 
   return (

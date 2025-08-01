@@ -19,7 +19,7 @@ const HealthTermInfo: React.FC<HealthTermInfoProps> = ({ selectedTerm, healthTer
 
   return (
     <div className="mb-[60px]">
-      <div className="max-w-[800px] mx-auto">
+      <div className="max-w-[1300px] mx-auto">
         {/* 인용구 */}
         <div className="text-center mb-[24px]">
           <p className="text-[20px] text-[#1D68FF] font-medium">
