@@ -6,6 +6,7 @@ import RequestHealthCare from '../../RequestHealthCare/RequestHealthCare';
 import { NotificationList } from '../../Alarm/NotificationList';
 import { expertNotificationList } from '../../../data/expertNotificationList';
 import ExpertSchedule from './ExpertSchedule';
+import PatientManagementList from '../../PatientManagement/memberList';
 
 interface ExpertHomeProps {
   selectedMenu: number;
@@ -39,15 +40,11 @@ const ExpertHome: React.FC<ExpertHomeProps> = ({
             userType='expert'
           />
           <ExpertSchedule />
-          <HomeCalendar
-            selectedDate={selectedDate}
-            today={today}
-            onDateSelect={onDateSelect}
-          />
+          <HomeCalendar selectedDate={selectedDate} today={today} onDateSelect={onDateSelect} />
         </>
       );
     case 1: // 환자 관리
-      return <div className='text-center'>환자 관리 페이지</div>;
+      return <PatientManagementList />;
     case 2: // 이력서 관리
       return <ResumeManagement />;
     case 3: // 건강관리요청서 확인하기
@@ -59,4 +56,4 @@ const ExpertHome: React.FC<ExpertHomeProps> = ({
   }
 };
 
-export default ExpertHome; 
+export default ExpertHome;
