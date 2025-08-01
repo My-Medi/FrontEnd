@@ -2,4 +2,7 @@
 export * from './common';
 
 // 토큰 관련 타입들
-export * from './token'; 
+export * from './token';
+
+// 전문가 관련 타입들
+export * from './expert'; 

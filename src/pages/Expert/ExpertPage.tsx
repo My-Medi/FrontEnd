@@ -5,8 +5,9 @@ import ExpertCard from '../../components/Expert/Card/ExpertCard';
 import ExpertCategoryPopover from '../../components/Expert/Filter/ExpertCategoryPopover';
 import ExpertDetailModal from '../../components/Expert/Modal/ExpertDetailModal';
 import Pagination from '../../components/Expert/Intro/Pagination';
-import { expertList } from '../../data/experts';
-import type { Expert } from "../../data/experts";
+import { useExpertListQuery } from '../../hooks/experts/useExpertListQuery';
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
+import type { ExpertSummaryProfile } from '../../types/expert';
 
 // ExpertDetailModal에 넘길 타입
 interface ExpertDetail {
@@ -21,17 +22,17 @@ interface ExpertDetail {
   career: string;
 }
 
-// Expert -> ExpertDetail 변환 함수
-const mapExpertToDetail = (expert: Expert): ExpertDetail => ({
-  name: expert.nickname,
-  position: expert.role,
-  realName: expert.realname,
-  profileImage: typeof expert.profile === 'string' ? expert.profile : '',
-  slogan: expert.slogan,
-  introduction: expert.description,
-  affiliation: '소속 정보 없음',
-  specialty: expert.role,
-  career: expert.careers.join('\n'),
+// ExpertSummaryProfile -> ExpertDetail 변환 함수
+const mapExpertToDetail = (expert: ExpertSummaryProfile): ExpertDetail => ({
+  name: expert.nickname || expert.name,
+  position: expert.specialty,
+  realName: expert.name,
+  profileImage: '',
+  slogan: '전문가 슬로건',
+  introduction: expert.introduction,
+  affiliation: expert.organizationName,
+  specialty: expert.specialty,
+  career: '전문가 경력 정보',
 });
 
 const CARDS_PER_PAGE = 15;
@@ -44,39 +45,46 @@ const ExpertPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
 
-  // 중복 제거 함수 (nickname 기준)
-  const getUniqueExperts = (list: Expert[]): Expert[] => {
-    const seen = new Set<string>();
-    return list.filter((expert: Expert) => {
-      if (seen.has(expert.nickname)) return false;
-      seen.add(expert.nickname);
-      return true;
-    });
-  };
-
-  // 카테고리와 필터 모두 반영
-  const filteredList = expertList.filter(expert => {
-    // 카테고리(상단 버튼) 전체 or 일치
-    const categoryMatch = selectedCategory === "전체" || expert.role === selectedCategory;
-    // 필터(팝오버) 선택이 있을 경우, 해당 카테고리 중 하나라도 포함
-    const filterMatch = selectedCategories.length === 0 || selectedCategories.includes(expert.role);
-    return categoryMatch && filterMatch;
+  // API로 전문가 목록 조회
+  const { data: expertListData, isLoading, error } = useExpertListQuery({
+    currentPage: currentPage,
+    pageSize: CARDS_PER_PAGE
   });
 
-  const displayList: Expert[] = isChecked ? getUniqueExperts(filteredList) : filteredList;
+  // API 데이터가 없을 때 기본값
+  const expertList = expertListData?.expertSummaryProfileDtoList || [];
+  const totalPages = expertListData?.totalPages || 1;
 
-  // 페이지네이션 로직
-  const totalPages = Math.ceil(displayList.length / CARDS_PER_PAGE);
-  const pagedList = displayList.slice(
-    (currentPage - 1) * CARDS_PER_PAGE,
-    currentPage * CARDS_PER_PAGE
-  );
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+  // API 데이터 로깅 (디버깅용)
+  console.log('ExpertPage - 전문가 목록 데이터:', expertListData);
+  console.log('ExpertPage - 전문가 리스트:', expertList);
+  console.log('ExpertPage - 총 페이지 수:', totalPages);
+  console.log('ExpertPage - 현재 페이지:', currentPage);
 
-  // 페이지 변경 시 스크롤 상단 이동(선택사항)
-  // React.useEffect(() => {
-  //   window.scrollTo({ top: 0, behavior: 'smooth' });
-  // }, [currentPage]);
+  // 페이지 변경 핸들러
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    // 페이지 변경 시 스크롤 상단으로 이동
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // 로딩 중일 때
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+  // 에러 발생 시
+  if (error) {
+    return (
+      <div className="text-red-500 text-center">
+        전문가 목록을 불러오는데 실패했습니다.
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center py-8 xl:py-12">
@@ -94,8 +102,8 @@ const ExpertPage = () => {
           </div>
           {/* 카드리스트: 더 안정적인 반응형 그리드 */}
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 xl:gap-6 xl:gap-8 w-full">
-            {pagedList.map((expert: Expert, idx: number) => (
-              <ExpertCard key={idx} {...expert} onClick={() => setSelectedExpert(mapExpertToDetail(expert))} />
+            {expertList.map((expert: ExpertSummaryProfile, idx: number) => (
+              <ExpertCard key={expert.expertId} {...expert} onClick={() => setSelectedExpert(mapExpertToDetail(expert))} />
             ))}
           </div>
           {/* 페이지네이션 */}
@@ -104,7 +112,7 @@ const ExpertPage = () => {
               <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}
-                onPageChange={setCurrentPage}
+                onPageChange={handlePageChange}
               />
             </div>
           )}

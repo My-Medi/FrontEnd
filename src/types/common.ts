@@ -36,5 +36,6 @@ export const AUTH_ENDPOINTS = {
 
 // 사용자 관련 엔드포인트
 export const USER_ENDPOINTS = {
-  PROFILE: '/users'
+  PROFILE: '/users',
+  EXPERTS: '/users/experts'
 } as const;
