@@ -2,6 +2,7 @@ import React, { useState, memo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../../assets/Login/logo.svg';
 import { useAuth } from '../../../contexts/AuthContext';
+import { clearTokens } from '../../../utils/tokenStorage';
 
 const Topbar = memo(() => {
   const navigate = useNavigate();
@@ -34,7 +35,11 @@ const Topbar = memo(() => {
 
   // 로그아웃 핸들러
   const handleLogout = useCallback(() => {
+    // 토큰 삭제
+    clearTokens();
+    // 사용자 타입 초기화
     setUserType(null);
+    // 로그인 페이지로 이동
     navigate('/login');
   }, [setUserType, navigate]);
 
