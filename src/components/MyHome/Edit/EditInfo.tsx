@@ -3,6 +3,8 @@ import CustomCheckboxButton from '../../HealthCareRequest/CustomCheckboxButton';
 import { useAuth } from '../../../contexts/AuthContext';
 import SuccessModal from './SuccessModal';
 import ConfirmModal from './ConfirmModal';
+import { useUserProfileQuery } from '../../../hooks/users/useUserProfileQuery';
+import LoadingSpinner from '../../Common/LoadingSpinner';
 
 interface EditInfoProps {
   userType: 'patient' | 'expert';
@@ -13,6 +15,9 @@ interface EditInfoProps {
 
 const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onMenuSelect, onHasChanges }) => {
   const { userInfo, setUserInfo } = useAuth();
+  
+  // 사용자 프로필 API 데이터 가져오기
+  const { data: userProfile } = useUserProfileQuery();
   
   const [formData, setFormData] = useState({
     name: userInfo?.name || '',
@@ -34,9 +39,35 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onMenuSelect, onH
   const [hasChanges, setHasChanges] = useState(false);
   const [initialData, setInitialData] = useState(formData);
 
+  // API 데이터로 폼 초기화 (기존 userInfo가 없을 때만)
+  useEffect(() => {
+    if (userProfile && !userInfo) {
+      const emailParts = userProfile.email.split('@');
+      const emailDomain = emailParts.length > 1 ? emailParts[1] : '직접입력';
+      
+      const newFormData = {
+        name: userProfile.name || '',
+        birthDate: userProfile.birthDate ? userProfile.birthDate.replace(/-/g, '').slice(0, 6) : '', // YYYY-MM-DD를 6자리로 변환
+        gender: (userProfile.gender === 'MALE' ? 'male' : 'female') as 'male' | 'female',
+        nickname: userProfile.name || '', // API에는 nickname이 없으므로 name 사용
+        userId: userProfile.username || '',
+        password: '',
+        confirmPassword: '',
+        email: emailParts[0] || '',
+        emailDomain: emailDomain,
+        contact: userProfile.phoneNumber || ''
+      };
+      
+      setFormData(newFormData);
+      setInitialData(newFormData);
+    }
+  }, [userProfile, userInfo]);
+
   // 초기 데이터 설정
   useEffect(() => {
-    setInitialData(formData);
+    if (!userProfile && !userInfo) {
+      setInitialData(formData);
+    }
   }, []);
 
   // 변경사항 추적
@@ -94,6 +125,7 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onMenuSelect, onH
   };
 
   const emailDomains = ['직접입력', 'gmail.com', 'naver.com', 'daum.net', 'hanmail.net'];
+
 
   return (
     <div className='max-w-2xl mx-auto'>

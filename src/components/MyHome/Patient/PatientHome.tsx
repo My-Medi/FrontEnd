@@ -33,11 +33,12 @@ const PatientHome: React.FC<PatientHomeProps> = ({
             nickname='하나'
             name='김민지'
             age={23}
-            height={168}
-            weight={52}
+            height={174}
+            weight={70}
             checkupCount={2}
             onEditInfo={onEditInfo}
             userType='patient'
+            useApiData={true} // API 데이터 사용 (API가 없으면 기본값 사용)
           />
           <MyConstantMedical status='안심' nickname='하나' />
           <ExpertAdvice 
