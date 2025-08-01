@@ -44,7 +44,7 @@ const queryClient = new QueryClient({
       refetchOnWindowFocus: false,
     },
     mutations: {
-      retry: 3,
+      retry: 1,
     },
   },
 });
