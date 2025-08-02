@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { FiChevronLeft } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import StepSelector from "../../components/SignUp/StepSelector";
 import TermsAgreement from "../../components/SignUp/TermsAgreement";
@@ -216,7 +215,7 @@ const SignUp: React.FC = () => {
             </div>
 
             {/* 회원가입 완료 */}
-            <SignUpComplete onPrev={handlePrev} onComplete={handleComplete} />
+            <SignUpComplete />
           </div>
         );
       default:
