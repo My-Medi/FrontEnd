@@ -58,7 +58,7 @@ const Stepper: React.FC<StepperProps> = ({ currentStep, userType }) => {
       // 현재 단계 표시
       <div key={stepNumber} className="flex flex-col items-center z-10">
         <div 
-          className={`w-17 h-17 rounded-full flex items-center justify-center text-2xl font-bold ${
+          className={`w-15 h-15 rounded-full flex items-center justify-center text-2xl font-bold ${
             status === "completed" || status === "active"
               ? "bg-[#1D68FF] text-white shadow-[0_0_16px_0_rgba(29,104,255,0.25)]"
               : "border-2 border-[#B5D0FF] text-[#888] bg-white"

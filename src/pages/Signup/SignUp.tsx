@@ -7,6 +7,7 @@ import SignUpInfo from "../../components/SignUp/Info";
 import ExpertInputForm from "../../components/SignUp/ExpertInputForm";
 import SignUpComplete from "../../components/SignUp/SignUpComplete";
 import Stepper from "../../components/SignUp/Stepper";
+import backSvg from "../../assets/back.svg";
 
 type SignUpStep = "select" | "terms" | "info" | "expert-info" | "complete";
 
@@ -110,11 +111,14 @@ const SignUp: React.FC = () => {
         return (
           <div className="flex flex-col items-center justify-center min-h-[10vh] w-full">
             {/* 제목 */}
-            <div className="mt-20 mb-10 flex items-center justify-center w-full relative">
-              <button type="button" className="absolute left-[184px]" onClick={handlePrev}>
-                <FiChevronLeft size={60} className="text-gray-400" />
+            <div className="mt-[64px] mb-[96px] flex items-center justify-center w-full relative">
+              {/* 뒤로가기 버튼 */}
+              <button onClick={handlePrev} 
+              className="absolute w-[17px] h-[35px] flex items-center justify-center bottom-[10px] left-[312px] lg:flex md:hidden sm:hidden" 
+              aria-label="뒤로가기">
+                <img src={backSvg} alt="뒤로가기" className="w-full h-full object-contain" />
               </button>
-              <h2 className="text-2xl font-bold">마이메디 회원가입</h2>
+              <h2 className="text-[24px] font-bold">마이메디 회원가입</h2>
             </div>
             
             <StepSelector 
@@ -128,9 +132,12 @@ const SignUp: React.FC = () => {
         return (
           <div className="flex flex-col items-center justify-center min-h-[70vh] w-full">
             {/* 제목 */}
-            <div className="mt-20 mb-10 flex items-center justify-center w-full relative">
-              <button type="button" className="absolute left-[184px]" onClick={handlePrev}>
-                <FiChevronLeft size={60} className="text-gray-400" />
+            <div className="mt-[64px] mb-[96px] flex items-center justify-center w-full relative">
+              {/* 뒤로가기 버튼 */}
+              <button onClick={handlePrev} 
+              className="absolute w-[17px] h-[35px] flex items-center justify-center bottom-[10px] left-[312px] lg:flex md:hidden sm:hidden" 
+              aria-label="뒤로가기">
+                <img src={backSvg} alt="뒤로가기" className="w-full h-full object-contain" />
               </button>
               <h2 className="text-2xl font-bold">마이메디 회원가입</h2>
             </div>
@@ -146,15 +153,17 @@ const SignUp: React.FC = () => {
       case "info":
         return (
           <div className="flex flex-col items-center justify-center w-full">
-            <div className="mt-20 relative w-full mb-10 flex items-center justify-center">
-              <button type="button" className="absolute left-[184px]" onClick={handlePrev}>
-                <FiChevronLeft size={60} className="text-gray-400" />
+            <div className="mt-[64px] relative w-full mb-[96px] flex items-center justify-center">
+              {/* 뒤로가기 버튼 */}
+              <button onClick={handlePrev} 
+              className="absolute w-[17px] h-[35px] flex items-center justify-center bottom-[10px] left-[312px] lg:flex md:hidden sm:hidden" 
+              aria-label="뒤로가기">
+                <img src={backSvg} alt="뒤로가기" className="w-full h-full object-contain" />
               </button>
               <h2 className="text-2xl font-bold">마이메디 회원가입</h2>
             </div>
-            <div className="mb-10">
             <Stepper currentStep={currentStep} userType={userType || undefined} />
-            </div>
+
             <SignUpInfo
               values={signUpData}
               onChange={handleDataChange}
@@ -169,17 +178,19 @@ const SignUp: React.FC = () => {
         return (
           <div className="flex flex-col items-center justify-center min-h-[70vh] w-full">
             {/* 제목 */}
-            <div className="mt-20 mb-10 flex items-center justify-center w-full relative">
-              <button type="button" className="absolute left-[184px]" onClick={handlePrev}>
-                <FiChevronLeft size={60} className="text-gray-400" />
+            <div className="mt-[64px] mb-[96px] flex items-center justify-center w-full relative">
+              {/* 뒤로가기 버튼 */}
+              <button onClick={handlePrev} 
+              className="absolute w-[17px] h-[35px] flex items-center justify-center bottom-[10px] left-[312px] lg:flex md:hidden sm:hidden" 
+              aria-label="뒤로가기">
+                <img src={backSvg} alt="뒤로가기" className="w-full h-full object-contain" />
               </button>
               <h2 className="text-2xl font-bold">마이메디 회원가입</h2>
             </div>
 
             {/* Stepper */}
-            <div className="mb-10">
+
               <Stepper currentStep={currentStep} userType={userType || undefined} />
-            </div>
 
             {/* 전문가 정보 입력 폼 */}
             <ExpertInputForm onNext={handleNext} onPrev={handlePrev} />
@@ -189,9 +200,12 @@ const SignUp: React.FC = () => {
         return (
           <div className="flex flex-col items-center justify-center w-full">
             {/* 제목 */}
-            <div className="mt-20 mb-10 flex items-center justify-center w-full relative">
-              <button type="button" className="absolute left-[184px]" onClick={handlePrev}>
-                <FiChevronLeft size={60} className="text-gray-400" />
+            <div className="mt-[64px] mb-[96px] flex items-center justify-center w-full relative">
+              {/* 뒤로가기 버튼 */}
+              <button onClick={handlePrev} 
+              className="absolute w-[17px] h-[35px] flex items-center justify-center bottom-[10px] left-[312px] lg:flex md:hidden sm:hidden" 
+              aria-label="뒤로가기">
+                <img src={backSvg} alt="뒤로가기" className="w-full h-full object-contain" />
               </button>
               <h2 className="text-2xl font-bold">마이메디 회원가입</h2>
             </div>

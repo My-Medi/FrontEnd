@@ -18,10 +18,10 @@ const TermsAgreement: React.FC<TermsAgreementProps> = ({ onNext, onPrev }) => {
     <div className="flex flex-col items-center bg-white">
 
       {/* 하단 약관 영역 */}
-      <div className="flex flex-col items-start bg-white border border-[#DBE6FF]  shadow-md w-[1000px] rounded-[20px]">
-        <p className="text-[30px] font-medium mt-10 ml-15 text-[#121212] mb-[32px]">약관동의</p>
-        <div className="ml-15 mb-10 w-[900px] h-[544px] overflow-y-auto bg-[#e7e9ec] relative z-10 p-5 rounded-[15px]">
-          <div className="text-[20px] font-medium text-black whitespace-pre-line break-words leading-normal">
+      <div className="flex flex-col items-start bg-white border border-[#DBE6FF]  shadow-md w-[716px] h-[497px] rounded-[18px]">
+        <p className="font-size-[16px] mt-[22px] ml-[40px] text-[#121212]">약관동의</p>
+        <div className="ml-[24px] mt-[13px] ml-[40px] mb-[18px] mr-[40px] w-[634px] h-[379px] overflow-y-auto bg-[#e7e9ec] relative z-10 p-5 rounded-[12px]">
+          <div className="font-size-[12px]  text-black whitespace-pre-line break-words leading-normal">
             {` MyMedi 이용약관
 
             서비스 이용약관 주요 조항
@@ -30,9 +30,9 @@ const TermsAgreement: React.FC<TermsAgreementProps> = ({ onNext, onPrev }) => {
             이 약관은 MyMedi(이하 '회사')가 제공하는 건강정보 중개 서비스(이하 '서비스')의 이용 조건 및 절차, 회사와 이용자의 권리·의무 및 책임사항 등을 규정함을 목적으로 합니다.
 
             제2조 (용어의 정의)
-            1. ‘서비스’란 회사가 제공하는 건강검진 결과 해석, 전문가 매칭, 건강관리 캘린더 등의 정보를 말합니다.
-            2. ‘이용자’란 본 약관에 따라 회사가 제공하는 서비스를 이용하는 회원을 말합니다.
-            3. ‘전문가’란 영양사, 건강관리사 등 회사와 협약을 맺고 정보를 제공하는 비의료인을 의미합니다.
+            1. '서비스'란 회사가 제공하는 건강검진 결과 해석, 전문가 매칭, 건강관리 캘린더 등의 정보를 말합니다.
+            2. '이용자'란 본 약관에 따라 회사가 제공하는 서비스를 이용하는 회원을 말합니다.
+            3. '전문가'란 영양사, 건강관리사 등 회사와 협약을 맺고 정보를 제공하는 비의료인을 의미합니다.
 
             제3조 (약관의 효력 및 변경)
             1. 본 약관은 서비스를 이용하고자 하는 모든 이용자에 대하여 그 효력을 가집니다.
@@ -82,14 +82,29 @@ const TermsAgreement: React.FC<TermsAgreementProps> = ({ onNext, onPrev }) => {
         </div>
         <div className=" font-medium  ml-15 text-[#121212] mb-[32px]">
           <label htmlFor="agree" className="flex items-center cursor-pointer">
-          <input
-            id="agree"
-            type="checkbox"
-            checked={agreed}
-            onChange={(e) => setAgreed(e.target.checked)}
-            className="mr-2 h-5 w-5"
-          />
-          <span className="text-[20px] text-#9DA0A3">서비스 이용약관에 모두 동의합니다.</span>
+            <input
+              id="agree"
+              type="checkbox"
+              checked={agreed}
+              onChange={(e) => setAgreed(e.target.checked)}
+              className="hidden"
+            />
+            <div className="mr-2">
+              {agreed ? (
+                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+                  <rect x="1.09688" y="0.700391" width="17.4" height="17.4" rx="8.7" fill="#1D68FF"/>
+                  <rect x="1.09688" y="0.700391" width="17.4" height="17.4" rx="8.7" stroke="#1D68FF" strokeWidth="0.6"/>
+                  <path d="M6.19531 9.12128L8.99952 11.8006L13.3953 7.60059" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+                  <rect x="1.09688" y="0.700391" width="17.4" height="17.4" rx="8.7" fill="white"/>
+                  <rect x="1.09688" y="0.700391" width="17.4" height="17.4" rx="8.7" stroke="#9DA0A3" strokeWidth="0.6"/>
+                  <path d="M6.19531 9.12128L8.99952 11.8006L13.3953 7.60059" stroke="#9DA0A3" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              )}
+            </div>
+          <span className="font-size-[20px] text-#9DA0A3">위의 약관에 동의합니다.</span>
         </label>
         </div>
       </div>
@@ -97,7 +112,7 @@ const TermsAgreement: React.FC<TermsAgreementProps> = ({ onNext, onPrev }) => {
       <button
         onClick={handleNext}
         disabled={!agreed}
-        className={`w-[300px] h-[70px] text-[32px] py-2 text-xl mt-10 font-bold text-white rounded-full ${
+        className={`w-[300px] h-[60px] text-[20px] py-2 text-xl mt-10 font-bold text-white rounded-full ${
           agreed ? "bg-[#1D68FF] hover:bg-blue-700" : "bg-gray-400 cursor-not-allowed"
         } mt-4`}
       >
