@@ -4,10 +4,10 @@ import ServiceIntroPage from '../Common/ServiceIntroPage';
 import BackgroundBlur from '../Common/BackgroundBlur';
 import LoadingSpinner from '../../Common/LoadingSpinner';
 import backIcon from '../../../assets/back2.svg';
-import reportIcon from '../../../assets/Introduce/MedicalReport/mymedical.svg';
-import mdImage from '../../../assets/Introduce/MedicalReport/md.png';
+import aiHealthCareIcon from '../../../assets/Introduce/AIHealthCare/l.svg';
+import aiHealthCareImage from '../../../assets/Introduce/AIHealthCare/llm.png';
 
-const MedicalReportIntroPage: React.FC = () => {
+const AIHealthCareIntroPage: React.FC = () => {
   const navigate = useNavigate();
   const [imagesLoaded, setImagesLoaded] = useState(false);
 
@@ -18,7 +18,7 @@ const MedicalReportIntroPage: React.FC = () => {
 
   // 이미지 로딩 상태 관리
   useEffect(() => {
-    const images = [backIcon, reportIcon, mdImage];
+    const images = [backIcon, aiHealthCareIcon, aiHealthCareImage];
     let loadedCount = 0;
 
     const handleImageLoad = () => {
@@ -50,19 +50,19 @@ const MedicalReportIntroPage: React.FC = () => {
     window.history.back();
   };
 
-  const medicalReportData = {
+  const aiHealthCareData = {
     features: [
-      { text: '검사 결과를 분석·시각화하여 이해하기 쉽게 제시' },
-      { text: '질환별 수치를 색상으로 구분하고 종합 건강 지수를 함께 제공' },
-      { text: '현재 건강 상태를 같은 연령대 평균과 비교해 객관적으로 평가' },
-      { text: '2년마다 받은 검진 결과를 한 곳에서 통합 관리해 추세를 파악' }
+      { text: 'MyMedi AI가 건강검진결과를 기반으로 사용자의 건강을 객관적으로 분석' },
+      { text: '현재 건강 상태의 주요 이상 수치 요약 제공' },
+      { text: '발병 위험 질환 TOP3 제공' },
+      { text: '생활 속 건강관리의 주요 포인트를 안내하여 효과적인 건강관리 방향성 제시' }
     ],
     ctaDescription: '마이메디로 나의 건강검진결과를 모아보고 자동분석으로 쉽게 이해하고\n나의 몸을 더 건강하게 장기적으로 관리해보세요!',
-    onCTAClick: () => navigate('/health-result-input'),
-    combinedImageSrc: mdImage,
-    combinedImageAlt: 'Medical Report Features',
+    onCTAClick: () => navigate('/health-terms'),
+    combinedImageSrc: aiHealthCareImage,
+    combinedImageAlt: 'AI Health Care Features',
     combinedImageWidth: '100%',
-    combinedImageHeight: '1894px'
+    combinedImageHeight: '2526px'
   };
 
   if (!imagesLoaded) {
@@ -71,7 +71,7 @@ const MedicalReportIntroPage: React.FC = () => {
 
   return (
     <div className="mx-auto">
-      {/* 마이메디컬리포트 인트로 섹션 */}
+      {/* AI추천건강관리법 인트로 섹션 */}
       <BackgroundBlur>
         {/* 콘텐츠 - 중앙 정렬 */}
         <div className="px-4 lg:px-8 xl:px-16">
@@ -81,7 +81,7 @@ const MedicalReportIntroPage: React.FC = () => {
               {/* 이미지 - 왼쪽 */}
               <div className="mt-8 relative flex justify-center">
                 {/* Back 아이콘 */}
-                <div className="absolute -left-8 md:-left-10 lg:-left-25 top-2 md:top-3 lg:top-4 cursor-pointer hidden md:block" onClick={handleBackClick}>
+                <div className="absolute -left-25 top-2 md:top-3 lg:top-4 cursor-pointer hidden md:block" onClick={handleBackClick}>
                   <img 
                     src={backIcon} 
                     alt="Back" 
@@ -90,8 +90,8 @@ const MedicalReportIntroPage: React.FC = () => {
                 </div>
                 <div className="relative">
                   <img 
-                    src={reportIcon} 
-                    alt="Medical Report" 
+                    src={aiHealthCareIcon} 
+                    alt="AI Health Care" 
                     className="w-full max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl h-auto object-contain"
                   />
                   {/* 이미지 하단 그라데이션 효과 */}
@@ -106,17 +106,17 @@ const MedicalReportIntroPage: React.FC = () => {
               </div>
               
               {/* 텍스트 설명 */}
-              <div className="flex-1 max-w-sm md:max-w-md lg:max-w-lg xl:max-w-2xl mb-8 md:mb-10 lg:mb-12 xl:mb-14 px-4 lg:px-0">
-                <h2 className="text-[#1D68FF] font-semibold text-xl md:text-2xl lg:text-3xl leading-[1.2] md:leading-[1.3] lg:leading-[36px] tracking-[-0.03em] mb-2">
-                  마이메디컬리포트
+              <div className="flex-1 max-w-sm md:max-w-md lg:max-w-lg xl:max-w-2xl mb-14 px-4 lg:px-0">
+                <h2 className="text-[#1D68FF] font-semibold text-3xl leading-[36px] tracking-[-0.03em] mb-2">
+                  AI 기반 건강검진 분석
                 </h2>
-                <p className="text-[#4D5053] font-semibold text-lg md:text-xl leading-[1.3] md:leading-[1.4] lg:leading-[36px] tracking-[-0.03em] mb-3 md:mb-4 lg:mb-6 xl:mb-8">
-                  건강검진 결과 자동 분석 서비스
+                <p className="text-[#4D5053] font-semibold text-xl leading-[36px] tracking-[-0.03em] mb-4 md:mb-6 lg:mb-8">
+                  건강검진결과기반, 객관적 분석과 건강관리 방향성 제안 서비스
                 </p>
                 <div>
-                  <p className="text-[#4D5053] font-medium text-base md:text-lg leading-[1.4] md:leading-[1.5] lg:leading-[36px] tracking-[-0.03em]">
-                  나 혼자만의 수치가 아닌, 같은 연령대 사람들과의 비교로<br />
-                  내 건강 상태를 더 객관적이고 정확하게 확인해보세요.
+                  <p className="text-[#4D5053] font-medium text-lg leading-[36px] tracking-[-0.03em]">
+                    MyMedi AI로 건강검진결과지만으로 알 수 없는<br />
+                    주요 이상 수치, 발병 위험 질환 순위, 생활습관 분석 및 개선 포인트까지 한눈에 확인하세요.
                   </p>
                 </div>
               </div>
@@ -126,9 +126,9 @@ const MedicalReportIntroPage: React.FC = () => {
       </BackgroundBlur>
       
       {/* 나머지 섹션들 */}
-      <ServiceIntroPage {...medicalReportData} />
+      <ServiceIntroPage {...aiHealthCareData} />
     </div>
   );
 };
 
-export default MedicalReportIntroPage; 
+export default AIHealthCareIntroPage; 
