@@ -12,6 +12,7 @@ import ExpertPage from './pages/Expert/ExpertPage';
 import CalendarIntroPage from './pages/Introduce/CalendarIntroPage';
 import ExpertMatchingIntroPage from './pages/Introduce/ExpertMatchingPage';
 import MedicalReportPage from './pages/Introduce/MedicalReportPage';
+import AIHealthCarePage from './pages/Introduce/AIHealthCarePage';
 import HealthTermsPage from './pages/HealthTerms/HealthTerm';
 import { AuthProvider } from './contexts/AuthContext';
 
@@ -32,6 +33,7 @@ const router = createBrowserRouter([
       { path: 'calendar-intro', element: <CalendarIntroPage /> },
       { path: 'expert-matching-intro', element: <ExpertMatchingIntroPage /> },
       { path: 'medical-report-intro', element: <MedicalReportPage /> },
+      { path: 'ai-healthcare-intro', element: <AIHealthCarePage /> },
     ],
   },
 ]);

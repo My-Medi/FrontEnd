@@ -10,7 +10,8 @@ const HomeLayout: React.FC = () => {
   const isCalendarIntroPage = location.pathname === '/calendar-intro';
   const isExpertMatchingIntroPage = location.pathname === '/expert-matching-intro';
   const isMedicalReportIntroPage = location.pathname === '/medical-report-intro';
-  const shouldUseFullWidth = isIntroducePage || isCalendarIntroPage || isExpertMatchingIntroPage || isMedicalReportIntroPage;
+  const isAIHealthCareIntroPage = location.pathname === '/ai-healthcare-intro';
+  const shouldUseFullWidth = isIntroducePage || isCalendarIntroPage || isExpertMatchingIntroPage || isMedicalReportIntroPage || isAIHealthCareIntroPage;
 
   return (
     <div className="w-full"> 
