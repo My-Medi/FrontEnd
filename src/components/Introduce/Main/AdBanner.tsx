@@ -66,7 +66,7 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
     >
       {/* 두 번째 배너에만 버튼 표시 */}
       {variant === '2' && (
-        <div className="relative z-10 flex flex-col justify-end items-start h-full pb-[6.7rem] xl:pb-[6.7rem] pl-0 xl:pl-[6.3rem] md:pb-16 md:pl-4 md:justify-end sm:pb-12 sm:pl-6 sm:justify-end">
+        <div className="relative z-10 flex flex-col justify-end items-start h-full pb-[6.7rem] xl:pb-[6.7rem] pl-[1rem] xl:pl-[7.3rem] md:pb-16 md:pl-5 md:justify-end sm:pb-12 sm:pl-7 sm:justify-end">
           <CTAButton>
             <span className="xl:text-xl md:text-lg sm:text-base">지금 바로 건강 기록하기</span>
             <svg width="8.1" height="16.2" viewBox="0 0 8 16" fill="none" className="xl:w-[0.5rem] xl:h-[1rem] md:w-2 md:h-4 sm:w-1.5 sm:h-3">
@@ -78,7 +78,7 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
 
       {/* 세 번째 배너에만 버튼 표시 */}
       {variant === '3' && (
-        <div className="relative z-10 flex flex-col justify-end items-start h-full pb-[6.7rem] xl:pb-[6.7rem] pl-[6.9rem] xl:pl-[6.9rem] md:pb-16 md:pl-8 md:justify-end sm:pb-12 sm:pl-6 sm:justify-end">
+        <div className="relative z-10 flex flex-col justify-end items-start h-full pb-[6.7rem] xl:pb-[6.7rem] pl-[7.4rem] xl:pl-[7.4rem] md:pb-16 md:pl-8.5 md:justify-end sm:pb-12 sm:pl-6.5 sm:justify-end">
           <CTAButton onClick={() => navigate('/expert')}>
             <span className="xl:text-xl md:text-lg sm:text-base">전문가 찾기</span>
             <svg width="8.1" height="16.2" viewBox="0 0 8 16" fill="none" className="xl:w-[0.5rem] xl:h-[1rem] md:w-2 md:h-4 sm:w-1.5 sm:h-3">
