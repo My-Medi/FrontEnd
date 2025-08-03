@@ -14,7 +14,19 @@ import ExpertMatchingIntroPage from './pages/Introduce/ExpertMatchingPage';
 import MedicalReportPage from './pages/Introduce/MedicalReportPage';
 import AIHealthCarePage from './pages/Introduce/AIHealthCarePage';
 import HealthTermsPage from './pages/HealthTerms/HealthTerm';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import LoadingSpinner from './components/Common/LoadingSpinner';
+
+// 로딩 상태를 처리하는 컴포넌트
+const AppContent = () => {
+  const { isLoading } = useAuth();
+
+  if (isLoading) {
+    return <LoadingSpinner message="로그인 상태 확인 중..." />;
+  }
+
+  return <RouterProvider router={router} />;
+};
 
 const router = createBrowserRouter([
   {
@@ -55,7 +67,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <RouterProvider router={router} />
+        <AppContent />
       </AuthProvider>
     </QueryClientProvider>
   );

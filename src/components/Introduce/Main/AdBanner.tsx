@@ -44,7 +44,7 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
             console.error('onVariantChange 함수가 없습니다!');
           }
         }}
-        className={`rounded-5 xl:rounded-5 transition-all duration-300 ease-in-out cursor-pointer md:rounded-4 sm:rounded-3 ${
+        className={`rounded-full xl:rounded-full transition-all duration-300 ease-in-out cursor-pointer md:rounded-full sm:rounded-full ${
           button.isActive 
             ? 'w-12 xl:w-12 h-1.5 xl:h-1.5 bg-white md:w-10 md:h-1.25 sm:w-8 sm:h-1' 
             : 'w-6 xl:w-6 h-1.5 xl:h-1.5 bg-[#C5C8CB] hover:bg-gray-300 md:w-5 md:h-1.25 sm:w-4 sm:h-1'

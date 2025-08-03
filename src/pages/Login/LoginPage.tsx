@@ -68,7 +68,10 @@ const LoginPage = () => {
 
   const handleLogin = () => {
     if (isFormValid) {
-      loginMutation.mutate(formData);
+      loginMutation.mutate({
+        ...formData,
+        isKeepLogin
+      });
     }
   };
 
