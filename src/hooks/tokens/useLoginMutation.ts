@@ -10,6 +10,11 @@ interface UseLoginMutationProps {
   onError?: (error: AxiosError) => void;
 }
 
+// 로그인 요청 데이터에 isKeepLogin 추가
+interface LoginRequestWithKeepLogin extends LoginRequest {
+  isKeepLogin?: boolean;
+}
+
 // 우회 로그인 계정 설정
 const BYPASS_ACCOUNTS = {
   'expert': 'password123'
@@ -18,8 +23,8 @@ const BYPASS_ACCOUNTS = {
 export const useLoginMutation = ({ onSuccess, onError }: UseLoginMutationProps = {}) => {
   const navigate = useNavigate();
   
-  return useMutation<LoginResponse, AxiosError, LoginRequest>({
-    mutationFn: async (data: LoginRequest) => {
+  return useMutation<LoginResponse, AxiosError, LoginRequestWithKeepLogin>({
+    mutationFn: async (data: LoginRequestWithKeepLogin) => {
       // 우회 계정 확인
       if (BYPASS_ACCOUNTS[data.loginId as keyof typeof BYPASS_ACCOUNTS] === data.password) {
         console.log('우회 로그인 성공:', data.loginId);
@@ -45,11 +50,11 @@ export const useLoginMutation = ({ onSuccess, onError }: UseLoginMutationProps =
       // 일반 로그인 API 호출
       return tokenAPI.login(data);
     },
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       
       if (data.isSuccess && data.result) {
-        // 토큰 저장
-        saveTokens(data.result.accessToken, data.result.refreshToken);
+        // 로그인 유지 여부에 따라 토큰 저장
+        saveTokens(data.result.accessToken, data.result.refreshToken, variables.isKeepLogin);
         
         // 기본 성공 처리
         navigate('/myhome');
