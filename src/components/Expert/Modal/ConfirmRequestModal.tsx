@@ -15,7 +15,7 @@ interface ConfirmRequestModalProps {
 const ConfirmRequestModal: React.FC<ConfirmRequestModalProps> = ({ 
   isOpen, 
   onClose, 
-  onConfirm, 
+  // onConfirm, 
   expertName, 
   expertPosition,
   expertRealName

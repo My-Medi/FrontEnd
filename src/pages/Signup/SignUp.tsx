@@ -171,11 +171,11 @@ const SignUp: React.FC = () => {
     console.log("아이디 확인:", signUpData.id);
   };
 
-  const handleComplete = () => {
-    // 회원가입 완료 처리
-    console.log("회원가입 완료:", signUpData);
-    navigate("/");
-  };
+  // const handleComplete = () => {
+  //   // 회원가입 완료 처리
+  //   console.log("회원가입 완료:", signUpData);
+  //   navigate("/");
+  // };
 
   const renderCurrentStep = () => {
     // 로딩 중일 때 스피너 표시

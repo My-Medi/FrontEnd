@@ -15,7 +15,7 @@ const CTAButton: React.FC<CTAButtonProps> = ({
   description,
   onClick,
   className = '',
-  hoverColor = '#0F4CCC'
+  // hoverColor = '#0F4CCC'
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isButtonHovered, setIsButtonHovered] = useState(false);

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import RoundSelector from './RoundSelector';
 import { FiChevronLeft } from 'react-icons/fi';
-import { useNavigate } from 'react-router-dom';
 import AdditionalExamSection from './AdditionalExamSection';
 
 // 커스텀 체크박스 컴포넌트
@@ -29,7 +28,6 @@ const HealthCheckupForm = () => {
   // 회차 상태 관리
   const [rounds, setRounds] = useState([1]);
   const [currentRound, setCurrentRound] = useState(1);
-  const navigate = useNavigate();
   // 회차 추가 핸들러
   const onAddRound = () => {
     const next = Math.max(...rounds) + 1;
@@ -53,15 +51,15 @@ const HealthCheckupForm = () => {
   const [bpLow, setBpLow] = useState('');
   const [bpType, setBpType] = useState('유질환자');
 
-  const [bloodSugar, setBloodSugar] = useState('');
-  const [bloodSugarType, setBloodSugarType] = useState('정상');
+  // const [bloodSugar, setBloodSugar] = useState('');
+  // const [bloodSugarType, setBloodSugarType] = useState('정상');
   const [cholesterol, setCholesterol] = useState('');
   const [hdl, setHdl] = useState('');
   const [ldl, setLdl] = useState('');
   const [triglyceride, setTriglyceride] = useState('');
   const [lipidProfile, setLipidProfile] = useState('정상');
   const [protein, setProtein] = useState('');
-  const [proteinType, setProteinType] = useState('정상');
+  // const [proteinType, setProteinType] = useState('정상');
   const [serumCreatinine, setSerumCreatinine] = useState('');
 
     const [kidneyFunction, setKidneyFunction] = useState('정상');
@@ -69,7 +67,7 @@ const HealthCheckupForm = () => {
   const [alt, setAlt] = useState('');
   const [gammaGtp, setGammaGtp] = useState('');
   const [liverFunction, setLiverFunction] = useState('정상');
-  const [urineProtein, setUrineProtein] = useState('');
+  // const [urineProtein, setUrineProtein] = useState('');
   const [urineProteinType, setUrineProteinType] = useState('정상');
   const [chestXray, setChestXray] = useState('정상');
   const [history, setHistory] = useState('무');
@@ -140,9 +138,9 @@ const HealthCheckupForm = () => {
     );
   };
 
-  const handlePrev = () => {
-    navigate("/");
-  };
+  // const handlePrev = () => {
+  //   navigate("/");
+  // };
 
   // 뒤로가기 핸들러 (임시)
   const handleBack = () => {

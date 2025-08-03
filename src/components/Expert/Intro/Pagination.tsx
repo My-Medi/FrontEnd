@@ -10,7 +10,7 @@ interface PaginationProps {
 }
 
 const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+  // const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
   let start = Math.max(1, currentPage - 2);
   let end = Math.min(totalPages, start + 4);
   if (end - start < 4) {

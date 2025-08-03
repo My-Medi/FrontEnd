@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import myHomeIcon from '../../../assets/MyHome/SideBar/home.svg';
 import scheduleIcon from '../../../assets/MyHome/SideBar/write.svg';
 import recordIcon from '../../../assets/MyHome/SideBar/write2.svg';

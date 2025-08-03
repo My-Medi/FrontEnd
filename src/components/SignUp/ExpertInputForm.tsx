@@ -106,11 +106,11 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({ onNext, onPrev }) => 
     }]);
   };
 
-  const removeCareerRow = (id: number) => {
-    if (careerRows.length > 1) {
-      setCareerRows(prev => prev.filter(row => row.id !== id));
-    }
-  };
+  // const removeCareerRow = (id: number) => {
+  //   if (careerRows.length > 1) {
+  //     setCareerRows(prev => prev.filter(row => row.id !== id));
+  //   }
+  // };
 
   const addCertificateRow = () => {
     setCertificateRows(prev => [

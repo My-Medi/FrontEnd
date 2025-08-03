@@ -76,7 +76,7 @@ const RequestForm = () => {
           <div>
             <label className='block font-semibold mb-2'>2. 건강 관심 분야 (중복 선택 가능)</label>
             <div className='flex flex-col gap-2'>
-              {healthFields.map((field, idx) => (
+              {healthFields.map((field) => (
                 <div key={field} className={field === '기타' ? 'col-span-2' : ''}>
                   <CustomCheckboxButton
                     checked={checkedFields.includes(field)}
@@ -94,7 +94,7 @@ const RequestForm = () => {
               3. 최근 건강검진 결과 중 이상 수치가 있던 항목이 있다면 선택해주세요.
             </label>
             <div className='flex flex-col gap-2'>
-              {healthAbnormalFields.map((field, idx) => (
+              {healthAbnormalFields.map((field) => (
                 <div key={field} className={field === '건강검진 결과가 없어요' ? 'col-span-2' : ''}>
                   <CustomCheckboxButton
                     checked={checkedFields.includes(field)}
@@ -112,7 +112,7 @@ const RequestForm = () => {
               4. 어떤 전문가에게 도움을 받고 싶으신가요?
             </label>
             <div className='flex flex-col gap-2'>
-              {helpFields.map((field, idx) => (
+              {helpFields.map((field) => (
                 <div key={field} className={field === '잘 모르겠어요' ? 'col-span-2' : ''}>
                   <CustomCheckboxButton
                     checked={checkedFields.includes(field)}

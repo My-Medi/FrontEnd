@@ -23,7 +23,7 @@ const ExpertHome: React.FC<ExpertHomeProps> = ({
   today,
   onDateSelect,
   onEditInfo,
-  onMenuSelect,
+  // onMenuSelect,
 }) => {
   switch (selectedMenu) {
     case 0: // 마이 홈

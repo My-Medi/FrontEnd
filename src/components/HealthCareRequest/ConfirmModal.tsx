@@ -9,7 +9,7 @@ interface ConfirmModalProps {
   userName?: string; // 사용자 이름 prop 추가
 }
 
-const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onClose, onConfirm, onCancel, userName = '사용자' }) => {
+const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onConfirm, onCancel, userName = '사용자' }) => {
   const navigate = useNavigate();
 
   const handleExpertSearch = () => {

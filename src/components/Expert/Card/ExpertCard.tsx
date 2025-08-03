@@ -12,7 +12,7 @@ interface ExpertCardProps {
 }
 
 const ExpertCard: React.FC<ExpertCardProps> = ({
-  expertId,
+  // expertId,
   specialty,
   name,
   nickname,

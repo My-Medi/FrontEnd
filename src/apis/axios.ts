@@ -1,6 +1,5 @@
 import axios from "axios";
 import { AUTH_ENDPOINTS } from "../types";
-import { getCookie, TOKEN_COOKIES } from "../utils/cookies";
 import { saveTokens, clearTokens, getTokens } from "../utils/tokenStorage";
 
 // 백엔드 API 기본 URL

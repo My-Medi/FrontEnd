@@ -14,7 +14,7 @@ const MatchedExperts: React.FC = () => {
     label: string; 
     isSelected: boolean;
     onClick: () => void;
-  }> = ({ type, label, isSelected, onClick }) => (
+  }> = ({ label, isSelected, onClick }) => (
     <div className="flex flex-col items-center gap-0">
       <button
         onClick={onClick}

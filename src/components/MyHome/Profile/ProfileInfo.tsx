@@ -3,7 +3,7 @@ import defaultProfileImage from "../../../assets/MyHome/profile.svg";
 import ActionButton from "../Common/ActionButton";
 import { useUserProfileQuery } from "../../../hooks/users/useUserProfileQuery";
 import { calculateAge } from "../../../utils/dateUtils";
-import LoadingSpinner from "../../Common/LoadingSpinner";
+// import LoadingSpinner from "../../Common/LoadingSpinner";
 
 interface PatientInfoProps {
   nickname?: string;
@@ -46,7 +46,7 @@ const PatientInfoSection: React.FC<PatientInfoProps> = ({
   useApiData = false,
 }) => {
   // API 데이터 사용 시
-  const { data: userProfile, isLoading, error } = useUserProfileQuery();
+  const { data: userProfile } = useUserProfileQuery();
 
   // API 데이터 사용 시 실제 데이터 사용, 그렇지 않으면 props 사용
   // API 데이터가 없거나 에러가 있을 때는 기본값 사용

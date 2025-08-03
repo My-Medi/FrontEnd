@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState } from 'react';
 import ExpertIntroSection from '../../components/Expert/Intro/ExpertIntroSection';
 import ExpertCategoryFilter from '../../components/Expert/Filter/ExpertCategoryFilter';
 import ExpertCard from '../../components/Expert/Card/ExpertCard';
@@ -39,11 +39,11 @@ const CARDS_PER_PAGE = 15;
 
 const ExpertPage = () => {
   const [selectedCategory, setSelectedCategory] = useState("전체");
-  const [isChecked, setIsChecked] = useState(false);
+  // const [isChecked, setIsChecked] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedExpert, setSelectedExpert] = useState<ExpertDetail | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
+  // const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
 
   // API로 전문가 목록 조회
   const { data: expertListData, isLoading, error } = useExpertListQuery({
@@ -102,7 +102,7 @@ const ExpertPage = () => {
           </div>
           {/* 카드리스트: 더 안정적인 반응형 그리드 */}
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 xl:gap-6 xl:gap-8 w-full">
-            {expertList.map((expert: ExpertSummaryProfile, idx: number) => (
+            {expertList.map((expert: ExpertSummaryProfile) => (
               <ExpertCard key={expert.expertId} {...expert} onClick={() => setSelectedExpert(mapExpertToDetail(expert))} />
             ))}
           </div>

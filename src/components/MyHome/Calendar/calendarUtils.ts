@@ -1,4 +1,4 @@
-import { scheduleData, getSchedulesForDate } from '../../../data/scheduleData';
+import { getSchedulesForDate } from '../../../data/scheduleData';
 
 export interface CalendarDay {
   date: number;

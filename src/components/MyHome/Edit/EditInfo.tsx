@@ -4,7 +4,7 @@ import { useAuth } from '../../../contexts/AuthContext';
 import SuccessModal from './SuccessModal';
 import ConfirmModal from './ConfirmModal';
 import { useUserProfileQuery } from '../../../hooks/users/useUserProfileQuery';
-import LoadingSpinner from '../../Common/LoadingSpinner';
+// import LoadingSpinner from '../../Common/LoadingSpinner';
 
 interface EditInfoProps {
   userType: 'patient' | 'expert';
@@ -13,7 +13,7 @@ interface EditInfoProps {
   onHasChanges?: (hasChanges: boolean) => void;
 }
 
-const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onMenuSelect, onHasChanges }) => {
+const EditInfo: React.FC<EditInfoProps> = ({ onBack, onHasChanges }) => {
   const { userInfo, setUserInfo } = useAuth();
   
   // 사용자 프로필 API 데이터 가져오기
