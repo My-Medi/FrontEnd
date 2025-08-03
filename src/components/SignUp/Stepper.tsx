@@ -58,7 +58,7 @@ const Stepper: React.FC<StepperProps> = ({ currentStep, userType }) => {
       // 현재 단계 표시
       <div key={stepNumber} className="flex flex-col items-center z-10">
         <div 
-          className={`w-15 h-15 rounded-full flex items-center justify-center text-2xl font-bold ${
+          className={`w-[40px] h-[40px] rounded-full flex items-center justify-center font-size-[19px] font-bold ${
             status === "completed" || status === "active"
               ? "bg-[#1D68FF] text-white shadow-[0_0_16px_0_rgba(29,104,255,0.25)]"
               : "border-2 border-[#B5D0FF] text-[#888] bg-white"
@@ -68,7 +68,7 @@ const Stepper: React.FC<StepperProps> = ({ currentStep, userType }) => {
         </div>
         {/* 단계 라벨 표시 */}
         <span 
-          className={`mt-2 text-lg font-semibold ${
+          className={`mt-2 font-size-[12px] font-semibold ${
             status === "completed" || status === "active" ? "text-black" : "text-[#888]"
           }`}
         >
@@ -88,10 +88,10 @@ const Stepper: React.FC<StepperProps> = ({ currentStep, userType }) => {
       // 단계 구분선 표시
       <div 
         key={`divider-${stepNumber}`}
-        className={`h-1 w-45 -ml-7 -mr-7 mb-[38px] z-0 ${
+        className={`h-[3px] w-[154px] -ml-7 -mr-7 mb-[38px] z-0 ${
           status === "completed" 
             ? "bg-[#1D68FF]" 
-            : "border-b-4 border-dashed border-[#B5D0FF]"
+            : "border-b-[3px] border-dashed border-[#B5D0FF]"
         }`}
       />
     );
