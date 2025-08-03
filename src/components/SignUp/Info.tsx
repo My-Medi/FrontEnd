@@ -136,7 +136,7 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
         {/* 닉네임 아래 점선 */}
         <div className='flex justify-center mb-[32px]'>
           <svg xmlns="http://www.w3.org/2000/svg" width="700" height="2" viewBox="0 0 700 2" fill="none">
-            <path d="M1 1L700 1.00005" stroke="#1D68FF" strokeWidth="0.5" strokeLinecap="square" strokeLinejoin="round" strokeDasharray="1.8 1.8"/>
+            <path d="M1 1L700 1.00005" stroke="#DBE6FF" strokeWidth="0.5" strokeLinecap="square" strokeLinejoin="round" strokeDasharray="1.8 1.8"/>
           </svg>
         </div>
 
@@ -216,7 +216,7 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
         {/* 비밀번호 확인 아래 점선 */}
         <div className='flex justify-center mb-[32px]'>
           <svg xmlns="http://www.w3.org/2000/svg" width="700" height="2" viewBox="0 0 700 2" fill="none">
-            <path d="M1 1L700 1.00005" stroke="#1D68FF" strokeWidth="0.5" strokeLinecap="square" strokeLinejoin="round" strokeDasharray="1.8 1.8"/>
+            <path d="M1 1L700 1.00005" stroke="#DBE6FF" strokeWidth="0.5" strokeLinecap="square" strokeLinejoin="round" strokeDasharray="1.8 1.8"/>
           </svg>
         </div>
 
@@ -257,6 +257,14 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
             className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[180px]'
           />
         </div>
+
+        {/* 연락처 아래 점선 */}
+        <div className='flex justify-center mb-[32px]'>
+          <svg xmlns="http://www.w3.org/2000/svg" width="700" height="2" viewBox="0 0 700 2" fill="none">
+            <path d="M1 1L700 1.00005" stroke="#DBE6FF" strokeWidth="0.5" strokeLinecap="square" strokeLinejoin="round" strokeDasharray="1.8 1.8"/>
+          </svg>
+        </div>
+
         {/* 동의 */}
         <div className=" font-medium  text-[#121212] mb-[80px]">
           <label htmlFor="agree" className="flex items-center cursor-pointer ">

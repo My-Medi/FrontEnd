@@ -178,8 +178,15 @@ const LoginPage = () => {
                 id="keepLogin"
                 checked={isKeepLogin}
                 onChange={(e) => setIsKeepLogin(e.target.checked)}
-                className="w-[18px] h-[18px] border border-[#9DA0A3] rounded-full appearance-none"
+                className="hidden"
               />
+              <div className="w-[18px] h-[18px] border border-[#9DA0A3] rounded-full flex items-center justify-center">
+                {isKeepLogin && (
+                  <svg width="10" height="7" viewBox="0 0 10 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1 3L4 6L9 1" stroke="#1D68FF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                )}
+              </div>
               <span className="ml-3 text-[14px] font-medium text-[#4D5053] leading-[1.714] tracking-[-3%]">
                 로그인 유지
               </span>

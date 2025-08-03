@@ -27,30 +27,14 @@ const healthAbnormalFields = [
 
 const helpFields = ['영양사', '건강관리사', '피트니스 코치', '운동처방사', '기타'];
 
-const MOCK_LIST = ['마이메디컬리포트 3회차', '마이메디컬리포트 2회차', '마이메디컬리포트 1회차'];
-
 const RequestForm = () => {
   const [checkedFields, setCheckedFields] = useState<string[]>([]);
-  const [reportInput, setReportInput] = useState('');
-  const [selectedReports, setSelectedReports] = useState<string[]>([]);
-  const [reportList] = useState(MOCK_LIST);
-  const [showReportList, setShowReportList] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
   const handleCheck = (field: string) => {
     setCheckedFields((prev) =>
       prev.includes(field) ? prev.filter((f) => f !== field) : [...prev, field],
     );
-  };
-
-  const handleSelectReport = (item: string) => {
-    if (!selectedReports.includes(item)) setSelectedReports([...selectedReports, item]);
-  };
-  const handleRemoveReport = (item: string) => {
-    setSelectedReports(selectedReports.filter((i) => i !== item));
-  };
-  const handleToggleReportList = () => {
-    setShowReportList((prev) => !prev);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -77,54 +61,6 @@ const RequestForm = () => {
       <section className='pl-[155px] pr-[135px] pt-[50px] pb-[50px]'>
         <h2 className='text-2xl font-bold text-center mb-2'>건강 관리 요청서</h2>
         <p className='text-center text-gray-500 mb-6'>건강 고민들을 최대한 자세하게 작성해주세요!</p>
-        {/* 건강검진 내역 불러오기 UI */}
-        <div className='bg-white rounded-2xl p-4 shadow mb-8'>
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-1 flex-wrap gap-2 border rounded-2xl bg-[#F7F8F9] h-12 items-center px-2 overflow-x-auto max-w-[600px] min-w-[200px]'>
-              {selectedReports.map((item) => (
-                <span
-                  key={item}
-                  className='flex items-center border border-gray-300 rounded-full px-4 py-1 text-gray-700 text-sm bg-white'
-                >
-                  {item}
-                  <button
-                    className='ml-2 text-gray-400 hover:text-red-400'
-                    onClick={() => handleRemoveReport(item)}
-                    type='button'
-                  >
-                    ×
-                  </button>
-                </span>
-              ))}
-            </div>
-            <button
-              type='button'
-              className='h-14 px-8 rounded-[60px] bg-[#93B8FF] text-white text-lg font-semibold whitespace-nowrap shadow'
-              style={{
-                boxShadow:
-                  '0px 2px 8px 0px rgba(29,104,255,0.10), 0px 1px 4px 0px rgba(29,104,255,0.17)',
-              }}
-              onClick={handleToggleReportList}
-            >
-              내 건강검진 내역 불러오기
-            </button>
-          </div>
-
-          {/* 리스트: 버튼 클릭 시에만 노출 */}
-          {showReportList && (
-            <div className='divide-y divide-gray-200 border rounded-xl overflow-hidden mt-4'>
-              {reportList.map((item) => (
-                <div
-                  key={item}
-                  className={`h-12 flex items-center px-6 cursor-pointer text-gray-500 hover:bg-blue-50 ${selectedReports.includes(item) ? 'opacity-50 pointer-events-none' : ''}`}
-                  onClick={() => handleSelectReport(item)}
-                >
-                  {item}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
         <form className='space-y-8' onSubmit={handleSubmit}>
           {/* 1. 직업 및 생활패턴 */}
           <div>

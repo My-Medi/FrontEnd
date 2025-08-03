@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import fileboxIcon from '../../assets/MyHome/Resume/filebox.svg';
 
 interface ExpertInputFormProps {
   onNext: () => void;
@@ -130,12 +131,18 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({ onNext, onPrev }) => 
 
   return (
     <div className="w-full bg-white flex flex-col items-center py-[30px]">
-      {/* 전문분야 */}
-      <div className="w-[716px] mb-8">
-        <div className="flex items-center gap-4 xl:gap-[0.9rem] mb-4 xl:mb-[0.9rem] ">
-          <div className="w-3 h-3 xl:w-[0.7rem] xl:h-[0.7rem] bg-[#1D68FF] rounded-[0.225rem] xl:rounded-[0.225rem]"></div>
-          <span className="text-base xl:text-[1.05rem] font-medium text-[#121218] font-pretendard">전문분야</span>
-          <div className="ml-[120px] flex flex-wrap xl:flex-nowrap items-center gap-4 xl:gap-[1.2rem] flex-shrink-0">
+             {/* 전문분야 */}
+       <div className="w-[716px] mb-8">
+         <div className="flex flex-col xl:flex-row xl:items-center gap-4 xl:gap-0">
+           <div className="flex items-center gap-4 xl:gap-[0.9rem]">
+             <div className="w-3 h-3 xl:w-[0.7rem] xl:h-[0.7rem] bg-[#1D68FF] rounded-[0.225rem] xl:rounded-[0.225rem]"></div>
+             <span className="text-base xl:text-[1.05rem] font-medium text-[#121218] font-pretendard">전문분야</span>
+           </div>
+           
+           {/* 점선 구분선 */}
+           <div className="hidden xl:block w-0 h-[3.3rem] border border-dashed border-[#DBE6FF] mx-5 xl:mx-[5.5rem] xl:mr-[2.4rem]"></div>
+           
+           <div className="flex flex-wrap xl:flex-nowrap items-center gap-4 xl:gap-[1.2rem] flex-shrink-0">
           {["영양사", "건강관리사", "웰니스 코치", "운동처방사", "기타"].map((field) => (
             <div key={field} className="flex items-center gap-3 xl:gap-[0.7rem]">
               <button
@@ -165,12 +172,18 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({ onNext, onPrev }) => 
         
       </div>
 
-      {/* 소속 회사/기관명 */}
-      <div className="w-[716px] mb-8">
-        <div className="flex items-center gap-4 xl:gap-[0.875rem] mb-4 xl:mb-[0.875rem]">
-          <div className="w-3 h-3 xl:w-[0.7rem] xl:h-[0.7rem] bg-[#1D68FF] rounded-[0.2rem] xl:rounded-[0.2rem]"></div>
-          <span className="text-base xl:text-[1.1rem] font-medium text-[#121218]">소속 회사/기관명</span>
-          <div className="ml-[60px] flex items-center gap-6 xl:gap-[1.5rem]">
+             {/* 소속 회사/기관명 */}
+       <div className="w-[716px] mb-8">
+         <div className="flex flex-col xl:flex-row xl:items-center gap-4 xl:gap-0">
+           <div className="flex items-center gap-4 xl:gap-[0.875rem]">
+             <div className="w-3 h-3 xl:w-[0.7rem] xl:h-[0.7rem] bg-[#1D68FF] rounded-[0.2rem] xl:rounded-[0.2rem]"></div>
+             <span className="text-base xl:text-[1.1rem] font-medium text-[#121218]">소속 회사/기관명</span>
+           </div>
+           
+           {/* 점선 구분선 */}
+           <div className="hidden xl:block w-[3.3rem] h-0 border border-dashed border-[#DBE6FF] transform rotate-90 mx-5 xl:mx-[0.3rem]"></div>
+           
+           <div className="flex items-center gap-6 xl:gap-[1.5rem]">
           <input
             type="text"
             value={companyName}
@@ -201,8 +214,8 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({ onNext, onPrev }) => 
           onClick={handleFileInputClick}
         >
           <div className="flex items-center gap-2 xl:gap-[0.375rem]">
-            <svg width={20} height={25} viewBox="0 0 20 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M11.25 9V2.25L18.25 9M2.5 0.5C1.335 0.5 0 1.835 0 3.5V22.5C0 23.2956 0.31607 24.0587 0.87868 24.6213C1.44129 25.1839 2.20435 25.5 3 25.5H17C17.7956 25.5 18.5587 25.1839 19.1213 24.6213C19.6839 24.0587 20 23.2956 20 22.5V7.5L12.5 0.5H2.5Z" fill="#9DA0A3" />
+            <svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 7.2V2.88L14.4 7.2M2 0.4C1.068 0.4 0 1.468 0 2.8V18C0 18.6364 0.252857 19.247 0.702944 19.6971C1.15303 20.1471 1.76364 20.4 2.4 20.4H13.6C14.2364 20.4 14.847 20.1471 15.2971 19.6971C15.7471 19.247 16 18.6364 16 18V6L10 0.4H2Z" fill="#9DA0A3"/>
             </svg>
             <p className="text-sm xl:text-sm font-medium text-[#9DA0A3] font-pretendard leading-[1.714] tracking-[-0.03em] text-center">
               {isDragOver ? '파일을 여기에 놓으세요' : '여기에 파일을 마우스로 끌어오세요.'}
@@ -240,10 +253,7 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({ onNext, onPrev }) => 
         {/* 이미지 파일 업로드 안내 박스 */}
         <div className="flex justify-center mb-4">
           <div className="w-full max-w-[24.7rem] xl:w-[24.7rem] h-auto min-h-[2.6rem] xl:h-[2.6rem] bg-[#DBE6FF] rounded-[0.525rem] xl:rounded-[0.525rem] flex items-center justify-center gap-4 xl:gap-[0.9rem]">
-            <svg width="32" height="24" viewBox="0 0 32 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M8 4H24C26.2091 4 28 5.79086 28 8V16C28 18.2091 26.2091 20 24 20H8C5.79086 20 4 18.2091 4 16V8C4 5.79086 5.79086 4 8 4Z" fill="#9DA0A3"/>
-              <path d="M12 8H20M12 12H20M12 16H16" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+            <img src={fileboxIcon} alt="업로드된 파일" className="w-8 h-6 xl:w-[2.2rem] xl:h-[1.6rem]" />
             <span className="text-sm xl:text-sm font-medium text-[#25282B] font-pretendard leading-[1.714] tracking-[-0.03em]">
               이미지 파일 업로드(png,jpg,pdf)
             </span>
@@ -251,9 +261,9 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({ onNext, onPrev }) => 
         </div>
 
         {/* 자격증 테이블 */}
-        <div className="border border-[#DBE6FF] rounded-[0.525rem] xl:rounded-[0.525rem] overflow-hidden mb-2 xl:mb-[0.6rem] overflow-x-auto">
+        <div className="border border-[#DBE6FF] rounded-[0.525rem] xl:rounded-[0.525rem] overflow-hidden mb-2 xl:mb-[0.6rem]">
           {/* 테이블 헤더 */}
-          <div className="grid grid-cols-[1fr_1fr_1fr] xl:grid-cols-[15.4rem_15.4rem_15.4rem] bg-white border-b border-[#DBE6FF] min-w-[30rem] xl:min-w-0">
+          <div className="grid grid-cols-[1fr_1fr_1fr] xl:grid-cols-[15.4rem_15.4rem_15.4rem] bg-white border-b border-[#DBE6FF]">
             <div className="px-3 xl:px-3 py-2 xl:py-[0.375rem] text-center text-sm xl:text-sm font-medium text-[#121218] font-pretendard leading-[1.714] tracking-[-0.03em] border-r border-[#DBE6FF] flex items-center justify-center">
               자격증명
             </div>
@@ -269,7 +279,7 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({ onNext, onPrev }) => 
           {certificateRows.map((row, idx) => (
             <div
               key={idx}
-              className={`grid grid-cols-[1fr_1fr_1fr] xl:grid-cols-[15.4rem_15.4rem_15.4rem] bg-white min-w-[30rem] xl:min-w-0${idx !== certificateRows.length - 1 ? ' border-b border-[#DBE6FF]' : ''}`}
+              className={`grid grid-cols-[1fr_1fr_1fr] xl:grid-cols-[15.4rem_15.4rem_15.4rem] bg-white${idx !== certificateRows.length - 1 ? ' border-b border-[#DBE6FF]' : ''}`}
             >
               <div className="px-3 xl:px-3 py-2 xl:py-[0.375rem] text-center text-sm xl:text-sm font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em] border-r border-[#DBE6FF] flex items-center justify-center">
                 <input
@@ -325,9 +335,9 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({ onNext, onPrev }) => 
         </div>
 
         {/* 경력사항 테이블 */}
-        <div className="border border-[#DBE6FF] rounded-[0.525rem] xl:rounded-[0.525rem] overflow-hidden mb-2 xl:mb-[0.6rem] overflow-x-auto">
+        <div className="border border-[#DBE6FF] rounded-[0.525rem] xl:rounded-[0.525rem] overflow-hidden mb-2 xl:mb-[0.6rem]">
           {/* 테이블 헤더 */}
-          <div className="grid grid-cols-[1fr_1fr_1fr] xl:grid-cols-[11.6rem_19.7rem_15.4rem] bg-white border-b border-[#DBE6FF] min-w-[30rem] xl:min-w-0">
+          <div className="grid grid-cols-[1fr_1fr_1fr] xl:grid-cols-[11.6rem_19.7rem_15.4rem] bg-white border-b border-[#DBE6FF]">
             <div className="p-2 xl:p-[0.375rem_0.75rem] text-center text-sm xl:text-sm font-medium text-[#121218] font-pretendard leading-[1.714] tracking-[-0.03em] border-r border-[#DBE6FF] flex items-center justify-center">
               회사/기관명
             </div>
@@ -343,7 +353,7 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({ onNext, onPrev }) => 
           {careerRows.map((row, idx) => (
             <div
               key={row.id}
-              className={`grid grid-cols-[1fr_1fr_1fr] xl:grid-cols-[11.6rem_19.7rem_15.4rem] bg-white min-w-[30rem] xl:min-w-0${idx !== careerRows.length - 1 ? ' border-b border-[#DBE6FF]' : ''}`}
+              className={`grid grid-cols-[1fr_1fr_1fr] xl:grid-cols-[11.6rem_19.7rem_15.4rem] bg-white${idx !== careerRows.length - 1 ? ' border-b border-[#DBE6FF]' : ''}`}
             >
               <div className="p-2 xl:p-[0.375rem_0.75rem] text-center text-sm xl:text-sm font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em] border-r border-[#DBE6FF] flex items-center justify-center">
                 <input
