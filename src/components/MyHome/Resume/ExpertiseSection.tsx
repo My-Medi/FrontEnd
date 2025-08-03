@@ -21,7 +21,7 @@ const ExpertiseSection: React.FC<ExpertiseSectionProps> = ({ selectedFields, onF
       </div>
       
       {/* 점선 구분선 */}
-      <div className="hidden xl:block w-0 h-[3.3rem] border border-dashed border-[#DBE6FF] mx-5 xl:mx-[5.2rem] xl:mr-[2.4rem]"></div>
+      <div className="hidden xl:block w-0 h-[3.3rem] border border-dashed border-[#DBE6FF] mx-5 xl:mx-[5.5rem] xl:mr-[2.4rem]"></div>
       
       <div className="flex flex-wrap xl:flex-nowrap items-center gap-4 xl:gap-[1.2rem] flex-shrink-0">
         {fields.map((field) => (
