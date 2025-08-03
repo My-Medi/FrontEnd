@@ -4,7 +4,6 @@ import smileIcon from "../../../assets/MyHome/smile.svg";
 import ActionButton from "../Common/ActionButton";
 import { useUserProfileQuery } from "../../../hooks/users/useUserProfileQuery";
 import { calculateAge } from "../../../utils/dateUtils";
-// import LoadingSpinner from "../../Common/LoadingSpinner";
 
 interface PatientInfoProps {
   nickname?: string;

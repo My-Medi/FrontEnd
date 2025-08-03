@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import CustomCheckboxButton from './CustomCheckboxButton';
 import ConfirmModal from './ConfirmModal';
 
-// import CustomButton from "../Common/CustomButton"; // Removed as per edit hint
-
 const healthFields = [
   '체중감량 / 비만',
   '불면/수면문제, 만성피로(무기력, 업무집중력저하 등)',

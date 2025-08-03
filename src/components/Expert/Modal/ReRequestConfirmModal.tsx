@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// import backSvg from '../../../assets/Expert/back.svg';
-// import closeSvg from '../../../assets/Expert/close.svg';
 import SuccessModal from './SuccessModal';
 
 interface ReRequestConfirmModalProps {
@@ -16,7 +14,7 @@ const ReRequestConfirmModal: React.FC<ReRequestConfirmModalProps> = ({
   isOpen, 
   onClose, 
   onConfirm, 
-    // expertName,
+  // expertName,
   // expertPosition,
   // expertRealName
 }) => {

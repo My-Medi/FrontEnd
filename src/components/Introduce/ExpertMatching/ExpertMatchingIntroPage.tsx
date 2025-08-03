@@ -18,7 +18,7 @@ const ExpertMatchingIntroPage: React.FC = () => {
 
   // 이미지 로딩 상태 관리
   useEffect(() => {
-    const images = [expertIcon, matchingImage];
+    const images = [expertIcon]; // matchingImage는 지연 로딩
     let loadedCount = 0;
 
     const handleImageLoad = () => {
@@ -55,7 +55,7 @@ const ExpertMatchingIntroPage: React.FC = () => {
   };
 
   if (!imagesLoaded) {
-    return <LoadingSpinner message="로딩 중..." size="lg" />;
+    return <LoadingSpinner message="로딩중..." size="lg" />;
   }
 
   return (

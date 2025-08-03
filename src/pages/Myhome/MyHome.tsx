@@ -39,29 +39,51 @@ const MyHome: React.FC = () => {
   // 사이드바 이미지 사전 로딩
   useEffect(() => {
     const preloadSidebarImages = async () => {
+      // 실제 SideBar에서 사용되는 이미지들 (import된 경로 사용)
       const sidebarImages = [
-        '/src/assets/MyHome/SideBar/home.svg',
-        '/src/assets/MyHome/SideBar/write.svg',
-        '/src/assets/MyHome/SideBar/resume.svg',
-        '/src/assets/MyHome/SideBar/expert.svg',
-        '/src/assets/MyHome/SideBar/notification.svg',
-        '/src/assets/MyHome/SideBar/check.svg'
+        '/assets/MyHome/SideBar/home.svg',
+        '/assets/MyHome/SideBar/write.svg',
+        '/assets/MyHome/SideBar/resume.svg',
+        '/assets/MyHome/SideBar/expert.svg',
+        '/assets/MyHome/SideBar/notification.svg',
+        '/assets/MyHome/SideBar/check.svg'
       ];
 
       try {
-        await Promise.all(
-          sidebarImages.map(src => {
-            return new Promise((resolve, reject) => {
-              const img = new Image();
-              img.onload = resolve;
-              img.onerror = reject;
-              img.src = src;
-            });
-          })
-        );
+        // 최대 2초 타임아웃 설정 (더 빠른 응답)
+        const timeoutPromise = new Promise<void>((_, reject) => {
+          setTimeout(() => reject(new Error('이미지 로딩 타임아웃')), 2000);
+        });
+
+        // 병렬 로딩으로 속도 향상, 하지만 제한된 동시 요청
+        const loadPromise = (async () => {
+          const batchSize = 3; // 한 번에 3개씩 로딩
+          for (let i = 0; i < sidebarImages.length; i += batchSize) {
+            const batch = sidebarImages.slice(i, i + batchSize);
+            await Promise.all(
+              batch.map((src) => {
+                return new Promise<void>((resolve) => {
+                  const img = new Image();
+                  img.onload = () => {
+                    console.log(`이미지 로딩 완료: ${src}`);
+                    resolve();
+                  };
+                  img.onerror = () => {
+                    console.warn(`이미지 로딩 실패: ${src}`);
+                    resolve(); // 개별 이미지 실패해도 계속 진행
+                  };
+                  img.src = src;
+                });
+              })
+            );
+          }
+        })();
+
+        await Promise.race([loadPromise, timeoutPromise]);
+        console.log('모든 사이드바 이미지 로딩 완료');
         setImagesLoaded(true);
       } catch (error) {
-        console.error('이미지 로딩 실패:', error);
+        console.error('이미지 로딩 중 오류 발생:', error);
         setImagesLoaded(true); // 에러가 있어도 페이지는 표시
       }
     };
@@ -150,9 +172,11 @@ const MyHome: React.FC = () => {
   // 이미지 로딩 중일 때 로딩 스피너 표시
   if (!imagesLoaded) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <LoadingSpinner message="페이지를 불러오는 중..." size="lg" />
-      </div>
+      <LoadingSpinner 
+        message="로딩중..." 
+        size="lg" 
+        className="bg-white"
+      />
     );
   }
 

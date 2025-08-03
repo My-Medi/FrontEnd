@@ -4,7 +4,6 @@ import { useAuth } from '../../../contexts/AuthContext';
 import SuccessModal from './SuccessModal';
 import ConfirmModal from './ConfirmModal';
 import { useUserProfileQuery } from '../../../hooks/users/useUserProfileQuery';
-// import LoadingSpinner from '../../Common/LoadingSpinner';
 
 interface EditInfoProps {
   userType: 'patient' | 'expert';

@@ -55,7 +55,7 @@ const CalendarIntroPage: React.FC = () => {
   };
 
   if (!imagesLoaded) {
-    return <LoadingSpinner message="이미지를 불러오는 중..." size="lg" />;
+    return <LoadingSpinner message="로딩중..." size="lg" />;
   }
 
   return (
