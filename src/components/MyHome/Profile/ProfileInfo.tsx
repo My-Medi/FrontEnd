@@ -112,9 +112,9 @@ const PatientInfoSection: React.FC<PatientInfoProps> = ({
               </div>
             )}
           </div>
-          {checkupCount && (
+          {checkupCount !== undefined && (
             <div className="pt-2 text-[#121218] font-normal text-lg leading-[36px] tracking-[-0.54px] xl:text-lg md:text-base sm:text-sm">
-              국가건강검진 <span className="text-[#DBE6FF]">| </span>{checkupCount}회
+              국가건강검진 <span className="text-[#DBE6FF]">| </span>{checkupCount || 0}회
             </div>
           )}
         </div>

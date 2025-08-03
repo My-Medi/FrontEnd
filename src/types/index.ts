@@ -5,4 +5,7 @@ export * from './common';
 export * from './token';
 
 // 전문가 관련 타입들
-export * from './expert'; 
+export * from './expert';
+
+// 사용자 관련 타입들
+export * from './user'; 

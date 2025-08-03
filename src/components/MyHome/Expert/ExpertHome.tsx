@@ -35,7 +35,7 @@ const ExpertHome: React.FC<ExpertHomeProps> = ({
             age={23}
             height={168}
             weight={52}
-            checkupCount={2}
+            checkupCount={0}
             onEditInfo={onEditInfo}
             userType='expert'
           />
