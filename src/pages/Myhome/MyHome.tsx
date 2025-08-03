@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import SideBar from '../../components/MyHome/Layout/SideBar';
 import SimpleBox from '../../components/MyHome/Layout/SimpleBox';
@@ -6,6 +6,7 @@ import ConfirmModal from '../../components/MyHome/Edit/ConfirmModal';
 import EditInfo from '../../components/MyHome/Edit/EditInfo';
 import ExpertHome from '../../components/MyHome/Expert/ExpertHome';
 import PatientHome from '../../components/MyHome/Patient/PatientHome';
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
 import { initializeRandomSchedules } from '../../data/scheduleData';
 
 
@@ -18,6 +19,7 @@ const MyHome: React.FC = () => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [pendingMenuIndex, setPendingMenuIndex] = useState<number | null>(null);
   const [selectedDate, setSelectedDate] = useState<number | undefined>(undefined);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
   const { userType } = useAuth();
 
 
@@ -32,6 +34,39 @@ const MyHome: React.FC = () => {
   // 랜덤 일정 초기화 (컴포넌트 마운트 시 한 번만 실행)
   useMemo(() => {
     initializeRandomSchedules(15); // 15개의 랜덤 일정 생성
+  }, []);
+
+  // 사이드바 이미지 사전 로딩
+  useEffect(() => {
+    const preloadSidebarImages = async () => {
+      const sidebarImages = [
+        '/src/assets/MyHome/SideBar/home.svg',
+        '/src/assets/MyHome/SideBar/write.svg',
+        '/src/assets/MyHome/SideBar/resume.svg',
+        '/src/assets/MyHome/SideBar/expert.svg',
+        '/src/assets/MyHome/SideBar/notification.svg',
+        '/src/assets/MyHome/SideBar/check.svg'
+      ];
+
+      try {
+        await Promise.all(
+          sidebarImages.map(src => {
+            return new Promise((resolve, reject) => {
+              const img = new Image();
+              img.onload = resolve;
+              img.onerror = reject;
+              img.src = src;
+            });
+          })
+        );
+        setImagesLoaded(true);
+      } catch (error) {
+        console.error('이미지 로딩 실패:', error);
+        setImagesLoaded(true); // 에러가 있어도 페이지는 표시
+      }
+    };
+
+    preloadSidebarImages();
   }, []);
 
 
@@ -111,6 +146,15 @@ const MyHome: React.FC = () => {
       );
     }
   };
+
+  // 이미지 로딩 중일 때 로딩 스피너 표시
+  if (!imagesLoaded) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <LoadingSpinner message="페이지를 불러오는 중..." size="lg" />
+      </div>
+    );
+  }
 
   return (
     <div className='relative w-full'>

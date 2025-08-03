@@ -60,7 +60,7 @@ const IntroducePage: React.FC = () => {
   }, [isAutoPlaying]); // isAutoPlaying을 의존성 배열에 추가
 
   if (!imagesLoaded) {
-    return <LoadingSpinner message="이미지를 불러오는 중..." size="lg" />;
+    return <LoadingSpinner message="로딩 중" size="lg" />;
   }
 
   return (
