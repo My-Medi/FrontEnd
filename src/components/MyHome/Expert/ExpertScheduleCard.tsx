@@ -1,6 +1,6 @@
 import React from 'react';
-import locationIcon from '../../../assets/MyHome/location.png';
-import timeIcon from '../../../assets/MyHome/time.png';
+import locationIcon from '../../../assets/MyHome/location.svg';
+import timeIcon from '../../../assets/MyHome/time.svg';
 import { getEventColor, getTextColorClass } from '../../../constants/colors';
 import type { ScheduleType } from '../../../data/scheduleData';
 

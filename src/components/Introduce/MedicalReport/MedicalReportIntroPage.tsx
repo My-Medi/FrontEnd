@@ -5,7 +5,7 @@ import BackgroundBlur from '../Common/BackgroundBlur';
 import LoadingSpinner from '../../Common/LoadingSpinner';
 import backIcon from '../../../assets/back2.svg';
 import reportIcon from '../../../assets/Introduce/MedicalReport/mymedical.svg';
-import mdImage from '../../../assets/Introduce/MedicalReport/md.png';
+import mdImage from '../../../assets/Introduce/MedicalReport/md.svg';
 
 const MedicalReportIntroPage: React.FC = () => {
   const navigate = useNavigate();

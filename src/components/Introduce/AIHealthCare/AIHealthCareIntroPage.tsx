@@ -5,7 +5,7 @@ import BackgroundBlur from '../Common/BackgroundBlur';
 import LoadingSpinner from '../../Common/LoadingSpinner';
 import backIcon from '../../../assets/back2.svg';
 import aiHealthCareIcon from '../../../assets/Introduce/AIHealthCare/l.svg';
-import aiHealthCareImage from '../../../assets/Introduce/AIHealthCare/llm.png';
+import aiHealthCareImage from '../../../assets/Introduce/AIHealthCare/llm.svg';
 
 const AIHealthCareIntroPage: React.FC = () => {
   const navigate = useNavigate();

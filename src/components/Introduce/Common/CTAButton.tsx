@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import nextIcon from '../../../assets/Introduce/next.svg';
-import bottomImage from '../../../assets/Introduce/Calendar/bottom.png';
+import bottomImage from '../../../assets/Introduce/Calendar/bottom.svg';
 
 interface CTAButtonProps {
   description?: string;

@@ -5,7 +5,7 @@ import BackgroundBlur from '../Common/BackgroundBlur';
 import LoadingSpinner from '../../Common/LoadingSpinner';
 import backIcon from '../../../assets/back2.svg';
 import expertIcon from '../../../assets/Introduce/Matching/matching.svg';
-import matchingImage from '../../../assets/Introduce/Matching/m.png';
+import matchingImage from '../../../assets/Introduce/Matching/m.svg';
 
 const ExpertMatchingIntroPage: React.FC = () => {
   const navigate = useNavigate();

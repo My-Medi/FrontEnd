@@ -5,7 +5,7 @@ import BackgroundBlur from '../Common/BackgroundBlur';
 import LoadingSpinner from '../../Common/LoadingSpinner';
 import calendarImage from '../../../assets/Introduce/Calendar/calendar.svg';
 import backIcon from '../../../assets/back2.svg';
-import combinedImage from '../../../assets/Introduce/Calendar/c.png'; // 통합된 이미지
+import combinedImage from '../../../assets/Introduce/Calendar/c.svg'; // 통합된 이미지
 
 const CalendarIntroPage: React.FC = () => {
   const navigate = useNavigate();
