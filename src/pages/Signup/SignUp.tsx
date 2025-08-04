@@ -180,7 +180,7 @@ const SignUp: React.FC = () => {
   const renderCurrentStep = () => {
     // 로딩 중일 때 스피너 표시
     if (signUpMutation.isPending) {
-      return <LoadingSpinner message="회원가입 중..." />;
+      return <LoadingSpinner />;
     }
 
     switch (currentStep) {

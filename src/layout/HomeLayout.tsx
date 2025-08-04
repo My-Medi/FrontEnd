@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import NavBar from '../components/Common/layout/NavBar';
 import Footer from '../components/Common/layout/Footer';
@@ -6,6 +6,12 @@ import Topbar from '../components/Common/layout/Topbar';
 
 const HomeLayout: React.FC = () => {
   const location = useLocation();
+  
+  // 페이지 변경 시 스크롤을 맨 위로 이동
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+  
   const isIntroducePage = location.pathname === '/introduce';
   const isCalendarIntroPage = location.pathname === '/calendar-intro';
   const isExpertMatchingIntroPage = location.pathname === '/expert-matching-intro';

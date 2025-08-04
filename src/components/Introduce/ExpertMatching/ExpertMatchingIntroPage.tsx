@@ -11,14 +11,11 @@ const ExpertMatchingIntroPage: React.FC = () => {
   const navigate = useNavigate();
   const [imagesLoaded, setImagesLoaded] = useState(false);
 
-  // 페이지 진입 시 스크롤을 최상단으로
-  React.useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+
 
   // 이미지 로딩 상태 관리
   useEffect(() => {
-    const images = [expertIcon]; // matchingImage는 지연 로딩
+    const images = [expertIcon, matchingImage]; // matchingImage는 지연 로딩
     let loadedCount = 0;
 
     const handleImageLoad = () => {
@@ -55,7 +52,7 @@ const ExpertMatchingIntroPage: React.FC = () => {
   };
 
   if (!imagesLoaded) {
-    return <LoadingSpinner message="로딩중..." size="lg" />;
+    return <LoadingSpinner size="lg" />;
   }
 
   return (
