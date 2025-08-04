@@ -173,7 +173,6 @@ const MyHome: React.FC = () => {
   if (!imagesLoaded) {
     return (
       <LoadingSpinner 
-        message="로딩중..." 
         size="lg" 
         className="bg-white"
       />
