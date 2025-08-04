@@ -5,7 +5,7 @@ interface TermsAgreementProps {
   onPrev: () => void;
 }
 
-const TermsAgreement: React.FC<TermsAgreementProps> = ({ onNext, onPrev }) => {
+const TermsAgreement: React.FC<TermsAgreementProps> = ({ onNext }) => {
   const [agreed, setAgreed] = useState(false);
 
   const handleNext = () => {

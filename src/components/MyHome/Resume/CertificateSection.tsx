@@ -151,14 +151,14 @@ const CertificateSection: React.FC = () => {
       {/* 자격증 테이블 */}
       <div className="border border-[#DBE6FF] rounded-[0.525rem] xl:rounded-[0.525rem] overflow-hidden mb-2 xl:mb-[0.6rem] overflow-x-auto">
         {/* 테이블 헤더 */}
-        <div className="grid grid-cols-[1fr_1fr_1fr] xl:grid-cols-[15.4rem_15.4rem_15.4rem] bg-white border-b border-[#DBE6FF] min-w-[30rem] xl:min-w-0">
-          <div className="px-3 xl:px-3 py-2 xl:py-[0.375rem] text-center text-sm xl:text-sm font-medium text-[#121218] font-pretendard leading-[1.714] tracking-[-0.03em] border-r border-[#DBE6FF] flex items-center justify-center">
+        <div className="grid grid-cols-[1fr_1fr_1fr] xl:grid-cols-[11.6rem_19.7rem_15.4rem] bg-white border-b border-[#DBE6FF] min-w-[30rem] xl:min-w-0">
+          <div className="p-2 xl:p-[0.375rem_0.75rem] text-center text-sm xl:text-sm font-medium text-[#121218] font-pretendard leading-[1.714] tracking-[-0.03em] border-r border-[#DBE6FF] flex items-center justify-center">
             자격증명
           </div>
-          <div className="px-3 xl:px-3 py-2 xl:py-[0.375rem] text-center text-sm xl:text-sm font-medium text-[#121218] font-pretendard leading-[1.714] tracking-[-0.03em] border-r border-[#DBE6FF] flex items-center justify-center">
+          <div className="p-2 xl:p-[0.375rem_0.75rem] text-center text-sm xl:text-sm font-medium text-[#121218] font-pretendard leading-[1.714] tracking-[-0.03em] border-r border-[#DBE6FF] flex items-center justify-center">
             자격증 발급일
           </div>
-          <div className="px-3 xl:px-3 py-2 xl:py-[0.375rem] text-center text-sm xl:text-sm font-medium text-[#121218] font-pretendard leading-[1.714] tracking-[-0.03em] flex items-center justify-center">
+          <div className="p-2 xl:p-[0.375rem_0.75rem] text-center text-sm xl:text-sm font-medium text-[#121218] font-pretendard leading-[1.714] tracking-[-0.03em] flex items-center justify-center">
             자격증 내용
           </div>
         </div>
@@ -167,9 +167,9 @@ const CertificateSection: React.FC = () => {
         {certificateRows.map((row, idx) => (
           <div
             key={idx}
-            className={`grid grid-cols-[1fr_1fr_1fr] xl:grid-cols-[15.4rem_15.4rem_15.4rem] bg-white min-w-[30rem] xl:min-w-0${idx !== certificateRows.length - 1 ? ' border-b border-[#DBE6FF]' : ''}`}
+            className={`grid grid-cols-[1fr_1fr_1fr] xl:grid-cols-[11.6rem_19.7rem_15.4rem] bg-white min-w-[30rem] xl:min-w-0${idx !== certificateRows.length - 1 ? ' border-b border-[#DBE6FF]' : ''}`}
           >
-            <div className="px-3 xl:px-3 py-2 xl:py-[0.375rem] text-center text-sm xl:text-sm font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em] border-r border-[#DBE6FF] flex items-center justify-center">
+            <div className="p-2 xl:p-[0.375rem_0.75rem] text-center text-sm xl:text-sm font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em] border-r border-[#DBE6FF] flex items-center justify-center">
               <input
                 type="text"
                 value={row.certificateName}
@@ -182,7 +182,7 @@ const CertificateSection: React.FC = () => {
                 placeholder="자격증명 입력"
               />
             </div>
-            <div className="px-3 xl:px-3 py-2 xl:py-[0.375rem] text-center text-sm xl:text-sm font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em] border-r border-[#DBE6FF] flex items-center justify-center">
+            <div className="p-2 xl:p-[0.375rem_0.75rem] flex items-center justify-center gap-2 xl:gap-[0.375rem] border-r border-[#DBE6FF] text-sm xl:text-sm font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em]">
               <input
                 type="text"
                 value={row.issueDate}
@@ -191,11 +191,11 @@ const CertificateSection: React.FC = () => {
                   newRows[idx].issueDate = e.target.value;
                   setCertificateRows(newRows);
                 }}
-                className="w-full text-center bg-transparent border-none outline-none text-sm xl:text-sm font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em]"
-                placeholder="발급일 입력"
+                className="w-[6.8rem] xl:w-[6.8rem] text-center bg-transparent border-none outline-none text-sm xl:text-sm font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em]"
+                placeholder="발급일"
               />
             </div>
-            <div className="px-3 xl:px-3 py-2 xl:py-[0.375rem] text-center text-sm xl:text-sm font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em] flex items-center justify-center">
+            <div className="p-2 xl:p-[0.375rem_0.75rem] text-center text-sm xl:text-sm font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em] flex items-center justify-center">
               <input
                 type="text"
                 value={row.issuingOrganization}

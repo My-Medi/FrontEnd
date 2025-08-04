@@ -14,7 +14,7 @@ interface CalendarDayProps {
 const CalendarDay: React.FC<CalendarDayProps> = ({ 
   date, 
   isCurrentMonth, 
-  isToday, 
+  // isToday, 
   hasEvent,
   isSelected = false,
   isDefaultSelected = false,

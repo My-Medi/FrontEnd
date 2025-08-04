@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { cva } from "class-variance-authority";
 import logo from "../../assets/Login/mymedi.svg";

@@ -5,7 +5,7 @@ import BackgroundBlur from '../Common/BackgroundBlur';
 import LoadingSpinner from '../../Common/LoadingSpinner';
 import backIcon from '../../../assets/back2.svg';
 import aiHealthCareIcon from '../../../assets/Introduce/AIHealthCare/l.svg';
-import aiHealthCareImage from '../../../assets/Introduce/AIHealthCare/llm.png';
+import aiHealthCareImage from '../../../assets/Introduce/AIHealthCare/llm.svg';
 
 const AIHealthCareIntroPage: React.FC = () => {
   const navigate = useNavigate();
@@ -18,14 +18,14 @@ const AIHealthCareIntroPage: React.FC = () => {
 
   // 이미지 로딩 상태 관리
   useEffect(() => {
-    const images = [backIcon, aiHealthCareIcon, aiHealthCareImage];
+    const images = [backIcon, aiHealthCareIcon]; // aiHealthCareImage는 지연 로딩
     let loadedCount = 0;
 
     const handleImageLoad = () => {
       loadedCount++;
       console.log(`이미지 로딩 완료: ${loadedCount}/${images.length}`);
       if (loadedCount === images.length) {
-        console.log('모든 이미지 로딩 완료!');
+        console.log('기본 이미지 로딩 완료!');
         setImagesLoaded(true);
       }
     };
@@ -66,7 +66,7 @@ const AIHealthCareIntroPage: React.FC = () => {
   };
 
   if (!imagesLoaded) {
-    return <LoadingSpinner message="이미지를 불러오는 중..." size="lg" />;
+    return <LoadingSpinner message="로딩중..." size="lg" />;
   }
 
   return (

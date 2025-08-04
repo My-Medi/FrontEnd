@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import backSvg from '../../../assets/Expert/back.svg';
-import closeSvg from '../../../assets/Expert/close.svg';
 import SuccessModal from './SuccessModal';
+import useModalScrollLock from '../../../hooks/useModalScrollLock';
 
 interface ReRequestConfirmModalProps {
   isOpen: boolean;
@@ -16,12 +15,14 @@ const ReRequestConfirmModal: React.FC<ReRequestConfirmModalProps> = ({
   isOpen, 
   onClose, 
   onConfirm, 
-  expertName, 
-  expertPosition,
-  expertRealName
+  // expertName,
+  // expertPosition,
+  // expertRealName
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  useModalScrollLock(isOpen && !showSuccessModal);
 
   useEffect(() => {
     if (isOpen) {

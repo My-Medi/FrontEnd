@@ -1,12 +1,11 @@
 import React from 'react';
-import locationIcon from '../../../assets/MyHome/location.png';
-import timeIcon from '../../../assets/MyHome/time.png';
+import locationIcon from '../../../assets/MyHome/location.svg';
+import timeIcon from '../../../assets/MyHome/time.svg';
 import { getEventColor, getTextColorClass } from '../../../constants/colors';
+import type { ScheduleType } from '../../../data/scheduleData';
 
-export type ExpertScheduleType = 'report' | 'birthday' | 'appointment' | 'consultation' | 'meeting';
-
-interface ExpertScheduleCardProps {
-  type: ExpertScheduleType;
+export interface ExpertScheduleCardProps {
+  type: ScheduleType;
   date: {
     month: number;
     day: number;
@@ -23,7 +22,7 @@ interface ExpertScheduleCardProps {
 }
 
 const ExpertScheduleCard: React.FC<ExpertScheduleCardProps> = ({
-  type,
+  // type,
   date,
   title,
   description,

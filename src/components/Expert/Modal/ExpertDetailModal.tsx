@@ -4,6 +4,7 @@ import unionSvg from '../../../assets/Expert/Union.svg';
 import backSvg from '../../../assets/Expert/back.svg';
 import RequestModal from './RequestModal';
 import ReRequestConfirmModal from './ReRequestConfirmModal';
+import useModalScrollLock from '../../../hooks/useModalScrollLock';
 
 interface ExpertDetailModalProps {
   expert: {
@@ -25,14 +26,7 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
   const [showRequestModal, setShowRequestModal] = useState(false);
   const [showReRequestModal, setShowReRequestModal] = useState(false);
 
-  // 모달 오픈 시 body 스크롤 방지
-  useEffect(() => {
-    const original = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = original;
-    };
-  }, []);
+  useModalScrollLock(!showRequestModal && !showReRequestModal);
 
   const handleRequestClick = () => {
     if (expertStatus === 'request') {
@@ -49,15 +43,15 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
     onClose(); // 모든 모달 종료
   };
 
-  const handleRequestSubmit = (request: string) => {
-    console.log('요청사항:', request);
-    // 여기에 실제 요청사항 제출 로직을 추가할 수 있습니다
-    // 예: API 호출, 상태 업데이트 등
+  // const handleRequestSubmit = (request: string) => {
+  //   console.log('요청사항:', request);
+  //   // 여기에 실제 요청사항 제출 로직을 추가할 수 있습니다
+  //   // 예: API 호출, 상태 업데이트 등
 
-    // 성공 처리 후 모달들 닫기
-    setShowRequestModal(false);
-    onClose();
-  };
+  //   // 성공 처리 후 모달들 닫기
+  //   setShowRequestModal(false);
+  //   onClose();
+  // };
 
   const handleRequestClose = () => {
     console.log('ExpertDetailModal handleRequestClose 호출됨');
@@ -174,11 +168,7 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
             {expertStatus === 'matched' ? (
                  <button
                  onClick={onClose}
-                 className='w-[300px] h-14 rounded-full border border-[#FFFFFF] text-[#25282B] hover:bg-[#EDF0F3] text-xl font-medium transition cursor-pointer'
-                 style={{
-                   boxShadow:
-                     '0px 0px 2px 4px rgba(29, 104, 255, 0.03), 0px 0px 4px 12px rgba(29, 104, 255, 0.02), 0px 0px 6px 8px rgba(29, 104, 255, 0.01), 0px 0px 8px 0px rgba(29, 104, 255, 0)',
-                 }}
+                 className='w-[300px] h-14 rounded-full border border-[#FFFFFF] text-[#25282B] hover:bg-[#EDF0F3] text-xl font-medium transition cursor-pointer bg-white shadow-[0px_0px_1px_2px_rgba(29,104,255,0.015),0px_0px_2px_6px_rgba(29,104,255,0.01),0px_0px_3px_4px_rgba(29,104,255,0.005),0px_0px_4px_0px_rgba(29,104,255,0)]'
                >
                  목록으로
                </button>
@@ -186,21 +176,13 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
               <>
                 <button
                   onClick={onClose}
-                  className='w-[300px] h-14 rounded-full border border-[#FFFFFF] text-[#25282B] hover:bg-[#EDF0F3] text-xl font-medium transition cursor-pointer'
-                  style={{
-                    boxShadow:
-                      '0px 0px 2px 4px rgba(29, 104, 255, 0.03), 0px 0px 4px 12px rgba(29, 104, 255, 0.02), 0px 0px 6px 8px rgba(29, 104, 255, 0.01), 0px 0px 8px 0px rgba(29, 104, 255, 0)',
-                  }}
+                  className='w-[300px] h-14 rounded-full border border-[#FFFFFF] text-[#25282B] hover:bg-[#EDF0F3] text-xl font-medium transition cursor-pointer bg-white shadow-[0px_0px_1px_2px_rgba(29,104,255,0.015),0px_0px_2px_6px_rgba(29,104,255,0.01),0px_0px_3px_4px_rgba(29,104,255,0.005),0px_0px_4px_0px_rgba(29,104,255,0)]'
                 >
                   목록으로
                 </button>
                 <button
                   onClick={handleRequestClick}
-                  className='w-[300px] h-14 rounded-full bg-[#1D68FF] text-white text-xl font-semibold transition cursor-pointer'
-                  style={{
-                    boxShadow:
-                      '0px 0px 2px 6px rgba(29, 104, 255, 0.06), 0px 0px 4px 6px rgba(29, 104, 255, 0.04), 0px 0px 6px 6px rgba(29, 104, 255, 0.02), 0px 0px 8px 0px rgba(29, 104, 255, 0)',
-                  }}
+                  className='w-[300px] h-14 rounded-full bg-[#1D68FF] text-white text-xl font-semibold transition cursor-pointer shadow-[0px_0px_1px_3px_rgba(29,104,255,0.03),0px_0px_2px_3px_rgba(29,104,255,0.02),0px_0px_3px_3px_rgba(29,104,255,0.01),0px_0px_4px_0px_rgba(29,104,255,0)]'
                 >
                   {expertStatus === 'request' ? '다시 요청서 보내기' : '건강관리요청서 보내기'}
                 </button>

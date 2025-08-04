@@ -14,7 +14,7 @@ const MatchedExperts: React.FC = () => {
     label: string; 
     isSelected: boolean;
     onClick: () => void;
-  }> = ({ type, label, isSelected, onClick }) => (
+  }> = ({ label, isSelected, onClick }) => (
     <div className="flex flex-col items-center gap-0">
       <button
         onClick={onClick}
@@ -79,7 +79,7 @@ const MatchedExperts: React.FC = () => {
   const filteredExperts = getFilteredExperts();
 
   return (
-    <div className={`w-full mx-auto rounded-[20px] py-[50px] flex flex-col items-center gap-8 ${
+    <div className={`w-full mx-auto rounded-[20px] py-[50px] px-4 flex flex-col items-center gap-8 ${
       selectedFilter === 'rejected' 
         ? 'bg-[#EDF0F3]' 
         : 'bg-[#F6F9FF]'
@@ -116,7 +116,7 @@ const MatchedExperts: React.FC = () => {
       </div>
 
       {/* 전문가 목록 */}
-      <div className="flex flex-wrap justify-center gap-8 max-w-[1021px]">
+      <div className="flex flex-wrap justify-start gap-8 max-w-[1021px] w-full">
         {filteredExperts.map((expert) => (
           <ExpertCard 
             key={expert.id} 

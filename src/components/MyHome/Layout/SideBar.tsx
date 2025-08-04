@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import myHomeIcon from '../../../assets/MyHome/SideBar/home.svg';
 import scheduleIcon from '../../../assets/MyHome/SideBar/write.svg';
-import recordIcon from '../../../assets/MyHome/SideBar/write2.svg';
 import resumeIcon from '../../../assets/MyHome/SideBar/resume.svg';
 import expertIcon from '../../../assets/MyHome/SideBar/expert.svg';
 import notificationIcon from '../../../assets/MyHome/SideBar/notification.svg';
@@ -30,7 +29,13 @@ const OverlayIcon: React.FC<{ src: string; position: "center" | "right"; alt?: s
         center: `top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-9 xl:w-[2.2rem] xl:h-[2.4rem]`,
         right: `top-1/4 -right-1 -translate-y-1/2 w-4 h-4 xl:-right-[5%] xl:w-[0.9rem] xl:h-[0.9rem]`
     };
-    return <img src={src} alt={alt} className={`absolute object-contain z-[2] ${positionClasses[position]}`} />;
+    return <img 
+      src={src} 
+      alt={alt} 
+      className={`absolute object-contain z-[2] ${positionClasses[position]}`} 
+      loading="eager"
+      fetchPriority="high"
+    />;
 };
 
 interface MenuItem {
@@ -55,8 +60,6 @@ const patientMenuItems: MenuItem[] = [
     id: 3,
     title: ['건강관리요청서', '작성하기'],
     icon: scheduleIcon,
-    overlayIcon: recordIcon,
-    overlayPosition: 'right',
   },
 ];
 
@@ -74,6 +77,7 @@ const SideBar: React.FC<SideBarProps> = ({
   userType,
 }) => {
   const menuItems = userType === 'expert' ? expertMenuItems : patientMenuItems;
+  
   const handleMenuClick = (index: number) => {
     onMenuSelect?.(index);
   };
@@ -95,7 +99,13 @@ const SideBar: React.FC<SideBarProps> = ({
           >
             {isSelected && <DottedIndicator />}
             <div className="relative w-8 h-9 xl:w-[2.2rem] xl:h-[2.4rem]">
-              <img src={item.icon} alt={item.title.join(" ")} className="w-full h-full object-contain" />
+              <img 
+                src={item.icon} 
+                alt={item.title.join(" ")} 
+                className="w-full h-full object-contain" 
+                loading="eager"
+                fetchPriority="high"
+              />
               {item.overlayIcon && item.overlayPosition && (
                 <OverlayIcon src={item.overlayIcon} position={item.overlayPosition} alt={`${item.title.join(" ")} overlay`} />
               )}

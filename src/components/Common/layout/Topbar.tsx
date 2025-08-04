@@ -1,6 +1,7 @@
 import React, { useState, memo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../../assets/Login/logo.svg';
+import mainLogo from '../../../assets/mainlog.svg';
 import { useAuth } from '../../../contexts/AuthContext';
 import { clearTokens } from '../../../utils/tokenStorage';
 
@@ -158,7 +159,7 @@ const Topbar = memo(() => {
             className='flex items-center gap-2.5 cursor-pointer'
             onClick={handleLogoClick}
           >
-            <img src='/MyMedi_logo.png' className='w-10 h-10 object-cover' alt='MyMedi Logo' />
+            <img src={mainLogo} className='w-10 h-10 object-contain' alt='MyMedi Logo' />
             <p className='text-3xl font-semibold text-[#1d68ff]'>MYMEDi</p>
           </div>
           <button onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label='메뉴 열기'>

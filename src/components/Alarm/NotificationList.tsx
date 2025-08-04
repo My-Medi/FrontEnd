@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiChevronRight, FiChevronLeft } from 'react-icons/fi';
 import { NotificationItem } from './NotificationItem';
 import DeleteModal from './DeleteModal';
@@ -23,6 +23,25 @@ export const NotificationList: React.FC<NotificationListProps> = ({ notification
   const [selectMode, setSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // 알림 이미지 사전 로딩
+  useEffect(() => {
+    const preloadImages = () => {
+      const images = [
+        recentIcon,
+        pastIcon,
+        pastTitleIcon,
+        checkIcon
+      ];
+      
+      images.forEach(src => {
+        const img = new Image();
+        img.src = src;
+      });
+    };
+    
+    preloadImages();
+  }, []);
 
   const newNotices = notifications.filter((n) => n.isNew).slice(0, 3);
   const oldNotices = notifications.filter((n) => !n.isNew).slice(0, 8);
@@ -63,7 +82,7 @@ export const NotificationList: React.FC<NotificationListProps> = ({ notification
             />
           </button>
           <div className='flex items-center gap-[8px]'>
-            <img src={pastTitleIcon} alt='지난 알림 아이콘' />
+            <img src={pastTitleIcon} alt='지난 알림 아이콘' loading="eager" fetchPriority="high" />
             <h2 className='text-[24px] font-semibold leading-[36px] tracking-[-0.72px] text-[#121218] font-[Pretendard]'>
               지난 알림
             </h2>
@@ -97,6 +116,8 @@ export const NotificationList: React.FC<NotificationListProps> = ({ notification
                     src={checkIcon}
                     alt='check'
                     className='absolute top-0 left-0 w-[22.5px] h-[22.5px]'
+                    loading="eager"
+                    fetchPriority="high"
                   />
                 )}
               </button>

@@ -1,4 +1,5 @@
-import type { ScheduleType } from '../components/MyHome/ScheduleCard';
+// ScheduleType을 여기서 직접 정의하거나 다른 방법으로 해결
+export type ScheduleType = 'consultation' | 'examination' | 'treatment' | 'appointment' | 'report' | 'birthday';
 
 export interface ScheduleData {
   type: ScheduleType;

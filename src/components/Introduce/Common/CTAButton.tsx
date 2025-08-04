@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import nextIcon from '../../../assets/Introduce/next.svg';
-import bottomImage from '../../../assets/Introduce/Calendar/bottom.png';
+import bottomImage from '../../../assets/Introduce/Calendar/bottom.svg';
 
 interface CTAButtonProps {
   description?: string;
@@ -15,7 +15,7 @@ const CTAButton: React.FC<CTAButtonProps> = ({
   description,
   onClick,
   className = '',
-  hoverColor = '#0F4CCC'
+  // hoverColor = '#0F4CCC'
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isButtonHovered, setIsButtonHovered] = useState(false);

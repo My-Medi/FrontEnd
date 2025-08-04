@@ -1,8 +1,8 @@
 import React from "react";
-import unactivePersonalIcon from "../../assets/SignUp/personal_unactive.png";
-import unactiveExpertIcon from "../../assets/SignUp/expert_unactive.png";
-import personalIcon from "../../assets/SignUp/personal.png";
-import expertIcon from "../../assets/SignUp/expert.png";
+import unactivePersonalIcon from "../../assets/SignUp/personal_unactive.svg";
+import unactiveExpertIcon from "../../assets/SignUp/expert_unactive.svg";
+import personalIcon from "../../assets/SignUp/personal.svg";
+import expertIcon from "../../assets/SignUp/expert.svg";
 
 interface StepSelectorProps {
   selected: "personal" | "expert" | null;

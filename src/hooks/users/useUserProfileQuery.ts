@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { getUserProfile } from '../../apis/userApi/user';
-import { UserProfile } from '../../types/common';
+import type { UserProfile } from '../../types/common';
 
 /**
  * 사용자 프로필 조회 훅

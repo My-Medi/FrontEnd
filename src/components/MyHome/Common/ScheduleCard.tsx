@@ -1,9 +1,8 @@
 import React from 'react';
-import locationIcon from '../../../assets/MyHome/location.png';
-import timeIcon from '../../../assets/MyHome/time.png';
+import locationIcon from '../../../assets/MyHome/location.svg';
+import timeIcon from '../../../assets/MyHome/time.svg';
 import { getEventColor, getTextColorClass } from '../../../constants/colors';
-
-export type ScheduleType = 'report' | 'birthday' | 'appointment' | 'consultation' | 'meeting';
+import type { ScheduleType } from '../../../data/scheduleData';
 
 interface ScheduleCardProps {
   type: ScheduleType;
@@ -23,7 +22,7 @@ interface ScheduleCardProps {
 }
 
 const ScheduleCard: React.FC<ScheduleCardProps> = ({
-  type,
+  // type,
   date,
   title,
   description,

@@ -26,7 +26,7 @@ const ServiceIntroPage: React.FC<ServiceIntroPageProps> = ({
   combinedImageSrc,
   combinedImageAlt,
   combinedImageWidth,
-  combinedImageHeight,
+  // combinedImageHeight,
   className = ''
 }) => {
   return (

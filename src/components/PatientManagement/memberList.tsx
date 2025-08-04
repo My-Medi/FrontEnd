@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { PatientManagementData } from '../../data/patientManagement';
 import MemberCard from './memberCard';
 import Pagination from '../Expert/Intro/Pagination';

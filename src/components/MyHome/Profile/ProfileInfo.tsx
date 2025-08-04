@@ -1,9 +1,9 @@
 import React from "react";
 import defaultProfileImage from "../../../assets/MyHome/profile.svg";
+import smileIcon from "../../../assets/MyHome/smile.svg";
 import ActionButton from "../Common/ActionButton";
 import { useUserProfileQuery } from "../../../hooks/users/useUserProfileQuery";
 import { calculateAge } from "../../../utils/dateUtils";
-import LoadingSpinner from "../../Common/LoadingSpinner";
 
 interface PatientInfoProps {
   nickname?: string;
@@ -46,7 +46,7 @@ const PatientInfoSection: React.FC<PatientInfoProps> = ({
   useApiData = false,
 }) => {
   // API 데이터 사용 시
-  const { data: userProfile, isLoading, error } = useUserProfileQuery();
+  const { data: userProfile } = useUserProfileQuery();
 
   // API 데이터 사용 시 실제 데이터 사용, 그렇지 않으면 props 사용
   // API 데이터가 없거나 에러가 있을 때는 기본값 사용
@@ -71,12 +71,12 @@ const PatientInfoSection: React.FC<PatientInfoProps> = ({
         {userType === 'expert' ? (
           <>
             안녕하세요! <span className="text-[#1D68FF]">{displayNickname}</span>전문가님! 오늘도 마이메디와 함께 행복한 하루 보내세요.
-            <img src="/src/assets/MyHome/smile.svg" alt="smile" className="inline-block pl-2 w-7 h-7" />
+            <img src={smileIcon} alt="smile" className="inline-block pl-2 w-7 h-7" />
           </>
         ) : (
           <>
             안녕하세요! <span className="text-[#1D68FF]">{displayNickname}</span>님! 오늘도 마이메디와 함께 행복한 하루 보내세요.
-            <img src="/src/assets/MyHome/smile.svg" alt="smile" className="inline-block pl-2 w-7 h-7" />
+            <img src={smileIcon} alt="smile" className="inline-block pl-2 w-7 h-7" />
           </>
         )}
       </div>
