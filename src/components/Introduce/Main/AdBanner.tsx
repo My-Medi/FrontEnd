@@ -46,7 +46,7 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
       { variant: '4' as const, isActive: variant === '4' }
     ];
 
-    return buttons.map((button, index) => (
+    return buttons.map((button) => (
       <button 
         key={button.variant}
         onClick={() => handlePaginationClick(button.variant)}
