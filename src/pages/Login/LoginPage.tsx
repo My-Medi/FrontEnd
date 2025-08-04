@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { cva } from "class-variance-authority";
 import logo from "../../assets/Login/mymedi.svg";
@@ -6,9 +6,14 @@ import backSvg from "../../assets/Expert/back.svg";
 import LoginInput from "../../components/Login/LoginInput";
 import { useAuth } from "../../contexts/AuthContext";
 import LoginConfirmModal from "../../components/Login/modal/LoginConfirmModal";
+import FindID from "../../components/Login/find/findID";
+import FindPW from "../../components/Login/find/findPW";
+import type { LoginRequest } from "../../types";
+import { useLoginMutation } from "../../hooks/tokens/useLoginMutation";
+import LoadingSpinner from "../../components/Common/LoadingSpinner";
 
 const button = cva(
-  "w-[385.2px] h-[60px] mt-6 text-[19.2px] font-semibold rounded-full flex justify-center items-center gap-2.5 leading-[1.193]",
+  "w-full max-w-[24rem] xl:w-[24rem] md:w-full sm:w-full h-15 xl:h-15 md:h-14 sm:h-12 mt-6 text-lg xl:text-lg md:text-base sm:text-sm font-semibold rounded-full flex justify-center items-center gap-2.5 leading-[1.193]",
   {
     variants: {
       intent: {
@@ -24,18 +29,33 @@ const button = cva(
 );
 
 const LoginPage = () => {
-  const [formData, setFormData] = useState({
-    id: "",
+  const [formData, setFormData] = useState<LoginRequest>({
+    loginId: "",
     password: "",
   });
   const [isKeepLogin, setIsKeepLogin] = useState(false);
+  const [showFindID, setShowFindID] = useState(false);
+  const [showFindPW, setShowFindPW] = useState(false);
   const { setUserType } = useAuth();
   const navigate = useNavigate();
   const [showFailModal, setShowFailModal] = useState(false);
   const idInputRef = useRef<HTMLInputElement>(null);
+  const loginMutation = useLoginMutation({
+    onSuccess: (data) => {
+      if (data.result) {
+        // 사용자 타입 설정 (role에서 추출)
+        const role = data.result.role;
+        const isExpert = role.includes('ROLE_EXPERT');
+        setUserType(isExpert ? 'expert' : 'patient');
+      }
+    },
+    onError: () => {
+      setShowFailModal(true);
+    },
+  });
 
   const isFormValid = useMemo(() => {
-    return formData.id.length > 0 && formData.password.length > 0;
+    return formData.loginId.length > 0 && formData.password.length > 0;
   }, [formData]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,15 +68,10 @@ const LoginPage = () => {
 
   const handleLogin = () => {
     if (isFormValid) {
-      // 아이디가 'user' 또는 'expert'일 때만 로그인 성공
-      const id = formData.id.toLowerCase();
-      if (id === 'user' || id === 'expert') {
-        const isExpert = id === 'expert';
-        setUserType(isExpert ? 'expert' : 'patient');
-        navigate('/');
-      } else {
-        setShowFailModal(true);
-      }
+      loginMutation.mutate({
+        ...formData,
+        isKeepLogin
+      });
     }
   };
 
@@ -72,18 +87,46 @@ const LoginPage = () => {
     }, 0);
   };
 
+  const handleFindID = () => {
+    console.log('아이디 찾기 클릭됨');
+    setShowFindID(true);
+  };
+
+  const handleBackFromFindID = () => {
+    setShowFindID(false);
+  };
+
+  const handleBackFromFindPW = () => {
+    setShowFindPW(false);
+  };
+
+  // 아이디 찾기 화면이 표시되면 FindID 컴포넌트를 렌더링
+  if (showFindID) {
+    return <FindID onBack={handleBackFromFindID} />;
+  }
+
+  // 비밀번호 찾기 화면이 표시되면 FindPW 컴포넌트를 렌더링
+  if (showFindPW) {
+    return <FindPW onBack={handleBackFromFindPW} />;
+  }
+
+  // 로딩 중일 때 스피너 표시
+  if (loginMutation.isPending) {
+    return <LoadingSpinner message="로그인 중..." />;
+  }
+
   return (
     <div className="relative flex flex-col items-center justify-center p-4">
       {/* 뒤로가기 버튼 */}
       <button
         onClick={handleBack}
-        className="absolute w-[17px] h-[35px] flex items-center justify-center top-[65px] left-[312px]"
+        className="absolute w-[17px] h-[35px] flex items-center justify-center top-[65px] left-[312px] lg:flex md:hidden sm:hidden"
         aria-label="뒤로가기"
       >
         <img src={backSvg} alt="뒤로가기" className="w-full h-full object-contain" />
       </button>
 
-      <div className="w-[385.2px] flex flex-col items-center">
+      <div className="w-full max-w-[24rem] xl:w-[24rem] md:w-full sm:w-full flex flex-col items-center">
         {/* 로고 */}
         <img src={logo} alt="로고" className="w-[111.6px] h-[20.4px] mt-[72px] mb-[15.6px]" />
 
@@ -104,10 +147,10 @@ const LoginPage = () => {
             ref={idInputRef}
             label="아이디"
             type="text"
-            id="id"
-            name="id"
+            id="loginId"
+            name="loginId"
             placeholder="아이디를 입력하세요."
-            value={formData.id}
+            value={formData.loginId}
             onChange={handleInputChange}
           />
           <LoginInput
@@ -138,21 +181,36 @@ const LoginPage = () => {
                 id="keepLogin"
                 checked={isKeepLogin}
                 onChange={(e) => setIsKeepLogin(e.target.checked)}
-                className="w-[18px] h-[18px] border border-[#9DA0A3] rounded-full appearance-none"
+                className="hidden"
               />
+              <div className="w-[18px] h-[18px] border border-[#9DA0A3] rounded-full flex items-center justify-center">
+                {isKeepLogin && (
+                  <svg width="10" height="7" viewBox="0 0 10 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1 3L4 6L9 1" stroke="#1D68FF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                )}
+              </div>
               <span className="ml-3 text-[14px] font-medium text-[#4D5053] leading-[1.714] tracking-[-3%]">
                 로그인 유지
               </span>
             </label>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-[14px] font-medium text-[#4D5053] leading-[1.714] tracking-[-3%]">
+            <button 
+              type="button"
+              className="text-[14px] font-medium text-[#4D5053] leading-[1.714] tracking-[-3%] cursor-pointer hover:text-[#1D68FF] bg-transparent border-none p-0"
+              onClick={handleFindID}
+            >
               아이디 찾기
-            </span>
+            </button>
             <div className="w-px h-4 bg-[#C5C8CB]"></div>
-            <span className="text-[14px] font-medium text-[#4D5053] leading-[1.714] tracking-[-3%]">
+            <button 
+              type="button"
+              className="text-[14px] font-medium text-[#4D5053] leading-[1.714] tracking-[-3%] cursor-pointer hover:text-[#1D68FF] bg-transparent border-none p-0"
+              onClick={() => setShowFindPW(true)}
+            >
               비밀번호 찾기
-            </span>
+            </button>
           </div>
         </div>
 

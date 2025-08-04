@@ -1,0 +1,9 @@
+/* 모든 버튼에 커서 포인터 강제 적용 */
+button {
+  cursor: pointer !important;
+}
+
+/* 모든 클릭 가능한 요소에 커서 포인터 적용 */
+[onClick], .cursor-pointer {
+  cursor: pointer !important;
+}

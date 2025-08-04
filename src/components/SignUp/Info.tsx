@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 const emailDomains = ["직접입력", "naver.com", "gmail.com", "daum.net", "hanmail.net"];
 
@@ -31,97 +31,273 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
   onPrev,
   onNext,
 }) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   return (
-    <form className="w-[1000px] bg-white flex flex-col space-y-8" onSubmit={e => { e.preventDefault(); onNext(); }}>
-      {/* 이름 */}
-      <div className="flex items-center mb-15">
-        <span className="w-5 h-5 rounded-[6px] bg-[#1D68FF] mr-4" />
-        <label className="w-48 text-[32px] font-medium">성명</label>
-        <input className="flex-1 h-[60px] border border-gray-200 rounded-[14px] px-6 text-[22px] ml-12" placeholder="성명을 입력하세요."
-          value={values.name} onChange={e => onChange("name", e.target.value)} />
-      </div>
-      {/* 생년월일 */}
-      <div className="flex items-center mb-15">
-        <span className="w-5 h-5 rounded-[6px] bg-[#1D68FF] mr-4" />
-        <label className="w-60 shrink-0 whitespace-nowrap text-[32px] font-medium">생년월일(6자리)</label>
-        <input className="flex-1 h-[60px] border border-gray-200 rounded-[14px] px-6 text-[22px]" placeholder="예) XXXXXX(숫자만 입력해주세요)"
-          value={values.birth} onChange={e => onChange("birth", e.target.value)} />
-      </div>
-      {/* 성별 */}
-      <div className="flex items-center mb-15">
-        <span className="w-5 h-5 rounded-[6px] bg-[#1D68FF] mr-4" />
-        <label className="w-48 text-[32px] font-medium">성별</label>
-        <div className="flex items-center ml-4 space-x-10 ml-14">
-          <label className="flex items-center cursor-pointer text-[22px]">
-            <input type="checkbox" checked={values.gender === "male"} onChange={() => onChange("gender", "male")}
-              className="accent-blue-600 w-8 h-8 mr-2" />남자
-          </label>
-          <label className="flex items-center cursor-pointer text-[22px]">
-            <input type="checkbox" checked={values.gender === "female"} onChange={() => onChange("gender", "female")}
-              className="accent-blue-600 w-8 h-8 mr-2" />여자
-          </label>
+    <form className='mt-[40px]' onSubmit={e => { e.preventDefault(); onNext(); }}>
+        {/* 성명 */}
+        <div className='flex items-center space-x-3 mb-[32px]'>
+          <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
+          <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>성명</label>
+          <input
+            placeholder='성명을 입력하세요.'
+            type='text'
+            value={values.name}
+            onChange={(e) => onChange('name', e.target.value)}
+            className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[180px]'
+          />
         </div>
-      </div>
-      {/* 닉네임 */}
-      <div className="flex items-center mb-15">
-        <span className="w-5 h-5 rounded-[6px] bg-[#1D68FF] mr-4" />
-        <label className="w-48 text-[32px] font-medium">닉네임</label>
-        <input className="flex-1 h-[60px] border border-gray-200 rounded-[14px] px-6 text-[22px] ml-12" placeholder="닉네임을 입력하세요."
-          value={values.nickname} onChange={e => onChange("nickname", e.target.value)} />
-        <button type="button" className="ml-4 px-8 py-3 bg-[#DBE6FF] text-black rounded-[14px] text-[22px] font-medium" onClick={onCheckNickname}>닉네임 확인</button>
-      </div>
-      {/* 아이디 */}
-      <div className="flex items-center mb-15">
-        <span className="w-5 h-5 rounded-[6px] bg-[#1D68FF] mr-4" />
-        <label className="w-48 text-[32px] font-medium">아이디</label>
-        <input className="flex-1 h-[60px] border border-gray-200 rounded-[14px] px-6 text-[22px] ml-12" placeholder="아이디를 입력하세요."
-          value={values.id} onChange={e => onChange("id", e.target.value)} />
-        <button type="button" className="ml-4 px-8 py-3 bg-[#DBE6FF] text-black rounded-[14px] text-[22px] font-medium" onClick={onCheckId}>아이디 확인</button>
-      </div>
-      {/* 비밀번호 */}
-      <div className="flex items-center mb-15">
-        <span className="w-5 h-5 rounded-[6px] bg-[#1D68FF] mr-4" />
-        <label className="w-48 text-[32px] font-medium">비밀번호</label>
-        <input type="password" className="flex-1 h-[60px] border border-gray-200 rounded-[14px] px-6 text-[22px] ml-12" placeholder="소문자, 대문자, 특수기호 포함 8글자 이상"
-          value={values.password} onChange={e => onChange("password", e.target.value)} />
-      </div>
-      {/* 비밀번호 확인 */}
-      <div className="flex items-center mb-15">
-        <span className="w-5 h-5 rounded-[6px] bg-[#1D68FF] mr-4" />
-        <label className="w-48 text-[32px] font-medium">비밀번호 확인</label>
-        <input type="password" className="flex-1 h-[60px] border border-gray-200 rounded-[14px] px-6 text-[22px] ml-12" placeholder="소문자, 대문자, 특수기호 포함 8글자 이상"
-          value={values.passwordCheck} onChange={e => onChange("passwordCheck", e.target.value)} />
-      </div>
-      {/* 이메일 */}
-      <div className="flex items-center mb-15">
-        <span className="w-5 h-5 rounded-[6px] bg-[#1D68FF] mr-4" />
-        <label className="w-48 text-[32px] font-medium">이메일</label>
-        <input className="flex-1 h-[60px] border border-gray-200 rounded-[14px] px-6 text-[22px] ml-12" placeholder="이메일을 입력하세요."
-          value={values.email} onChange={e => onChange("email", e.target.value)} />
-        <span className="mx-2 text-[32px]">@</span>
-        <select className="border border-gray-200 rounded-[14px] px-4 py-3 text-[22px]" value={values.emailDomain} onChange={e => onChange("emailDomain", e.target.value)}>
-          {emailDomains.map((domain) => (
-            <option key={domain} value={domain}>{domain}</option>
-          ))}
-        </select>
-      </div>
-      {/* 연락처 */}
-      <div className="flex items-center mb-15">
-        <span className="w-5 h-5 rounded-[6px] bg-[#1D68FF] mr-4" />
-        <label className="w-48 text-[32px] font-medium">연락처</label>
-        <input className="flex-1 h-[60px] border border-gray-200 rounded-[14px] px-6 text-[22px] ml-12" placeholder="연락처를 입력하세요."
-          value={values.phone} onChange={e => onChange("phone", e.target.value)} />
-      </div>
-      {/* 동의 */}
-      <div className="flex items-center mt-2">
-        <input type="checkbox" checked={values.agree} onChange={e => onChange("agree", e.target.checked)} className="w-6 h-6" />
-        <span className="text-gray-400 ml-4 text-[22px]"> -- 동의하십니까?</span>
-      </div>
-      {/* 버튼 */}
-      <div className="flex gap-[400px]">
-        <button onClick={onPrev} className="px-20 py-5 rounded-[60px] cursor-pointer bg-[#dbe6ff] text-[32px] text-[#121218] font-medium">이전</button>
-        <button className="w-[380px] px-20 py-5 rounded-[60px] cursor-pointer bg-[#1d68ff] text-[32px] text-white font-semibold">다음</button>
-      </div>
+
+        {/* 생년월일 */}
+        <div className='flex items-center space-x-3 mb-[32px]'>
+          <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
+          <label className='text-gray-700 font-medium min-w-[120px] flex items-center h-[36px]'>생년월일(6자리)</label>
+          <input
+            type='text'
+            value={values.birth}
+            onChange={(e) => onChange('birth', e.target.value)}
+            placeholder='예) XXXXXX(6자리를 입력하세요)'
+            maxLength={6}
+            className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[140px]'
+          />
+        </div>
+
+        {/* 성별 */}
+        <div className='flex items-center space-x-3 mb-[32px]'>
+          <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
+          <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>성별</label>
+          <div className='flex space-x-4 ml-[180px]'>
+            <label className="flex items-center cursor-pointer text-[14px]">
+              <input 
+                type="checkbox" 
+                checked={values.gender === "male"} 
+                onChange={() => onChange("gender", "male")}
+                className="hidden"
+              />
+              <div className="mr-2">
+                {values.gender === "male" ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18" fill="none">
+                    <rect x="0.203125" width="18" height="18" rx="4.8" fill="#1D68FF"/>
+                    <path d="M5.60156 8.72089L8.40577 11.4002L12.8016 7.2002" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18" fill="none">
+                    <rect x="0.203125" width="18" height="18" rx="4.8" fill="white" stroke="#9DA0A3" strokeWidth="0.6"/>
+                    <path d="M5.60156 8.72089L8.40577 11.4002L12.8016 7.2002" stroke="#9DA0A3" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                )}
+              </div>남자
+            </label>
+            <label className="flex items-center cursor-pointer text-[14px]">
+              <input 
+                type="checkbox" 
+                checked={values.gender === "female"} 
+                onChange={() => onChange("gender", "female")}
+                className="hidden"
+              />
+              <div className="mr-2">
+                {values.gender === "female" ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18" fill="none">
+                    <rect x="0.203125" width="18" height="18" rx="4.8" fill="#1D68FF"/>
+                    <path d="M5.60156 8.72089L8.40577 11.4002L12.8016 7.2002" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18" fill="none">
+                    <rect x="0.203125" width="18" height="18" rx="4.8" fill="white" stroke="#9DA0A3" strokeWidth="0.6"/>
+                    <path d="M5.60156 8.72089L8.40577 11.4002L12.8016 7.2002" stroke="#9DA0A3" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                )}
+              </div>여자
+            </label>
+          </div>
+        </div>
+
+        {/* 닉네임 */}
+        <div className='flex items-center space-x-3 mb-[32px]'>
+          <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
+          <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>닉네임</label>
+          <input
+            type='text'
+            value={values.nickname}
+            onChange={(e) => onChange('nickname', e.target.value)}
+            placeholder='닉네임을 입력하세요.'
+            className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[180px]'
+          />
+          <button
+            type='button'
+            onClick={onCheckNickname}
+            className='w-[101px] h-[36px] bg-gray-100 text-black rounded-[8.4px] ml-[24.4px]'
+          >
+            닉네임 확인
+          </button>
+        </div>
+        
+        {/* 닉네임 아래 점선 */}
+        <div className='flex justify-center mb-[32px]'>
+          <svg xmlns="http://www.w3.org/2000/svg" width="700" height="2" viewBox="0 0 700 2" fill="none">
+            <path d="M1 1L700 1.00005" stroke="#DBE6FF" strokeWidth="0.5" strokeLinecap="square" strokeLinejoin="round" strokeDasharray="1.8 1.8"/>
+          </svg>
+        </div>
+
+        {/* 아이디 */}
+        <div className='flex items-center space-x-3 mb-[32px]'>
+          <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
+          <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>아이디</label>
+          <input
+            type='text'
+            value={values.id}
+            onChange={(e) => onChange('id', e.target.value)}
+            placeholder='아이디를 입력하세요.'
+            className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[180px]'
+          />
+          <button
+            type='button'
+            onClick={onCheckId}
+            className='w-[101px] h-[36px] bg-gray-100 text-black rounded-[8.4px] ml-[24.4px]'
+          >
+            아이디 확인
+          </button>
+        </div>
+
+        {/* 비밀번호 */}
+        <div className='flex items-center space-x-3'>
+          <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
+          <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>비밀번호</label>
+          <div className='relative ml-[180px]'>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              value={values.password}
+              onChange={(e) => onChange('password', e.target.value)}
+              className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 pr-10'
+            />
+            <button
+              type='button'
+              onClick={() => setShowPassword(!showPassword)}
+              className='absolute right-3 top-1/2 transform -translate-y-1/2'
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="13" viewBox="0 0 12 13" fill="none">
+                <path d="M4.95 2.44273C5.29417 2.36055 5.64653 2.31948 6 2.32033C9.5 2.32033 11.5 6.40043 11.5 6.40043C11.1965 6.9796 10.8345 7.52487 10.42 8.02737M7.06 7.48166C6.92268 7.63198 6.75707 7.75255 6.57308 7.83618C6.38908 7.91981 6.19045 7.96477 5.98904 7.9684C5.78764 7.97202 5.58758 7.93423 5.4008 7.85728C5.21403 7.78032 5.04436 7.66579 4.90192 7.5205C4.75949 7.37521 4.6472 7.20214 4.57175 7.01162C4.49631 6.82111 4.45926 6.61704 4.46282 6.4116C4.46637 6.20616 4.51045 6.00356 4.59244 5.81588C4.67442 5.62819 4.79263 5.45928 4.94 5.3192M8.97 9.42991C8.11529 10.0945 7.07455 10.4626 6 10.4805C2.5 10.4805 0.5 6.40043 0.5 6.40043C1.12194 5.21817 1.98457 4.18524 3.03 3.37095L8.97 9.42991Z" stroke="#9DA0A3" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div className='ml-[300px] text-[10px] text-gray-400 mb-[32px] mt-[5px]'>
+          소문자, 대문자, 특수기호 포함 8글자 이상
+        </div>
+        
+
+        {/* 비밀번호 확인 */}
+        <div className='flex items-center space-x-3'>
+          <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
+          <label className='text-gray-700 font-medium min-w-[120px] flex items-center h-[36px]'>비밀번호 확인</label>
+          <div className='relative ml-[140px]'>
+            <input
+              type={showConfirmPassword ? 'text' : 'password'}
+              value={values.passwordCheck}
+              onChange={(e) => onChange('passwordCheck', e.target.value)}
+              className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 pr-10'
+            />
+            <button
+              type='button'
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className='absolute right-3 top-1/2 transform -translate-y-1/2'
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="13" viewBox="0 0 12 13" fill="none">
+                <path d="M4.95 2.44273C5.29417 2.36055 5.64653 2.31948 6 2.32033C9.5 2.32033 11.5 6.40043 11.5 6.40043C11.1965 6.9796 10.8345 7.52487 10.42 8.02737M7.06 7.48166C6.92268 7.63198 6.75707 7.75255 6.57308 7.83618C6.38908 7.91981 6.19045 7.96477 5.98904 7.9684C5.78764 7.97202 5.58758 7.93423 5.4008 7.85728C5.21403 7.78032 5.04436 7.66579 4.90192 7.5205C4.75949 7.37521 4.6472 7.20214 4.57175 7.01162C4.49631 6.82111 4.45926 6.61704 4.46282 6.4116C4.46637 6.20616 4.51045 6.00356 4.59244 5.81588C4.67442 5.62819 4.79263 5.45928 4.94 5.3192M8.97 9.42991C8.11529 10.0945 7.07455 10.4626 6 10.4805C2.5 10.4805 0.5 6.40043 0.5 6.40043C1.12194 5.21817 1.98457 4.18524 3.03 3.37095L8.97 9.42991Z" stroke="#9DA0A3" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div className='ml-[300px] text-[10px] text-gray-400 mb-[32px] mt-[5px]'>
+            소문자, 대문자, 특수기호 포함 8글자 이상
+        </div>
+
+        {/* 비밀번호 확인 아래 점선 */}
+        <div className='flex justify-center mb-[32px]'>
+          <svg xmlns="http://www.w3.org/2000/svg" width="700" height="2" viewBox="0 0 700 2" fill="none">
+            <path d="M1 1L700 1.00005" stroke="#DBE6FF" strokeWidth="0.5" strokeLinecap="square" strokeLinejoin="round" strokeDasharray="1.8 1.8"/>
+          </svg>
+        </div>
+
+        {/* 이메일 */}
+        <div className='flex items-center space-x-3 mb-[32px]'>
+          <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
+          <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>이메일</label>
+          <input
+            type='text'
+            value={values.email}
+            onChange={(e) => onChange('email', e.target.value)}
+            placeholder='이메일을 입력하세요.'
+            className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[180px]'
+          />
+          <span className='text-gray-500'>@</span>
+          <select
+            value={values.emailDomain}
+            onChange={(e) => onChange('emailDomain', e.target.value)}
+            className='w-[100px] h-[36px] text-[14px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-2'
+          >
+            {emailDomains.map((domain) => (
+              <option key={domain} value={domain}>
+                {domain}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* 연락처 */}
+        <div className='flex items-center space-x-3 mb-[32px]'>
+          <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
+          <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>연락처</label>
+          <input
+            type='text'
+            value={values.phone}
+            onChange={(e) => onChange('phone', e.target.value)}
+            placeholder='연락처를 입력하세요.'
+            className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[180px]'
+          />
+        </div>
+
+        {/* 연락처 아래 점선 */}
+        <div className='flex justify-center mb-[32px]'>
+          <svg xmlns="http://www.w3.org/2000/svg" width="700" height="2" viewBox="0 0 700 2" fill="none">
+            <path d="M1 1L700 1.00005" stroke="#DBE6FF" strokeWidth="0.5" strokeLinecap="square" strokeLinejoin="round" strokeDasharray="1.8 1.8"/>
+          </svg>
+        </div>
+
+        {/* 동의 */}
+        <div className=" font-medium  text-[#121212] mb-[80px]">
+          <label htmlFor="agree" className="flex items-center cursor-pointer ">
+            <input
+              id="agree"
+              type="checkbox"
+              checked={values.agree}
+              onChange={(e) => onChange('agree', e.target.checked)}
+              className="hidden"
+            />
+            <div className="mr-2">
+              {values.agree ? (
+                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+                  <rect x="1.09688" y="0.700391" width="17.4" height="17.4" rx="8.7" fill="#1D68FF"/>
+                  <rect x="1.09688" y="0.700391" width="17.4" height="17.4" rx="8.7" stroke="#1D68FF" strokeWidth="0.6"/>
+                  <path d="M6.19531 9.12128L8.99952 11.8006L13.3953 7.60059" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+                  <rect x="1.09688" y="0.700391" width="17.4" height="17.4" rx="8.7" fill="white"/>
+                  <rect x="1.09688" y="0.700391" width="17.4" height="17.4" rx="8.7" stroke="#9DA0A3" strokeWidth="0.6"/>
+                  <path d="M6.19531 9.12128L8.99952 11.8006L13.3953 7.60059" stroke="#9DA0A3" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              )}
+            </div>
+          <span className="font-size-[20px] text-#9DA0A3"> -- 동의하십니까?</span>
+        </label>
+        </div>
+        {/* 버튼 */}
+        <div className="flex gap-[200px]">
+          <button onClick={onPrev} className="px-10 py-3 ml-[20px] rounded-[30px] cursor-pointer bg-[#dbe6ff] text-[18px] text-[#121218] font-medium">이전</button>
+          <button className="w-[216px] px-10 py-3 rounded-[30px] cursor-pointer bg-[#1d68ff] text-[18px] text-white font-semibold">다음</button>
+        </div>
     </form>
   );
 };
