@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import CustomCheckboxButton from './CustomCheckboxButton';
+import CustomCheckboxButton from '../Common/CustomCheckboxButton';
 import ConfirmModal from './ConfirmModal';
 
 const healthFields = [

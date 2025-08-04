@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import CustomCheckboxButton from '../../HealthCareRequest/CustomCheckboxButton';
+import CustomCheckboxButton from '../../Common/CustomCheckboxButton';
 import { useAuth } from '../../../contexts/AuthContext';
 import SuccessModal from './SuccessModal';
 import ConfirmModal from './ConfirmModal';
