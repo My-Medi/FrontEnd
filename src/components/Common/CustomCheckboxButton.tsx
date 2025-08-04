@@ -25,7 +25,7 @@ const CustomCheckboxButton: React.FC<CustomCheckboxButtonProps> = ({ checked, on
         <path d="M6 9.69L9.12 12.67L14 8" stroke="#9DA0A3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     )}
-    <span>{label}</span>
+    <span className={checked ? "text-black" : "text-gray-400"}>{label}</span>
   </button>
 );
 

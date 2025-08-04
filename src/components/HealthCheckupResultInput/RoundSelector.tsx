@@ -25,6 +25,13 @@ const RoundSelector: React.FC<RoundSelectorProps> = ({ rounds, currentRound, onA
       {/* 3개 이상이면 이전회차/현재회차/햄버거, 2개 이하면 모든 회차 */}
       {rounds.length > 2 ? (
         <>
+        <button
+            type="button"
+            className={`px-4 py-1 rounded-full text-sm font-medium border transition-all duration-150 bg-[#82ABFD] text-white border-blue-500 shadow`}
+            disabled
+          >
+            {currentRound}회차
+          </button>
           {prevRound && (
             <button
               type="button"
@@ -34,13 +41,7 @@ const RoundSelector: React.FC<RoundSelectorProps> = ({ rounds, currentRound, onA
               {prevRound}회차
             </button>
           )}
-          <button
-            type="button"
-            className={`px-4 py-1 rounded-full text-sm font-medium border transition-all duration-150 bg-[#82ABFD] text-white border-blue-500 shadow`}
-            disabled
-          >
-            {currentRound}회차
-          </button>
+          
           <div className="relative inline-block">
             <button
               type="button"
