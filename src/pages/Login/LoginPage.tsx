@@ -120,7 +120,7 @@ const LoginPage = () => {
       {/* 뒤로가기 버튼 */}
       <button
         onClick={handleBack}
-        className="absolute w-[17px] h-[35px] flex items-center justify-center top-[65px] left-[312px] lg:flex md:hidden sm:hidden"
+        className="absolute w-[17px] h-[35px] hidden xl:flex items-center justify-center top-[65px] left-[312px]"
         aria-label="뒤로가기"
       >
         <img src={backSvg} alt="뒤로가기" className="w-full h-full object-contain" />

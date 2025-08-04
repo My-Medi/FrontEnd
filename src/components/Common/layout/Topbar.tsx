@@ -109,7 +109,7 @@ const Topbar = memo(() => {
                 </p>
               )}
               <p
-                onClick={() => navigate('/alarm')}
+                onClick={() => navigate('#')}
                 className='text-[#25282B] text-sm font-[300] leading-[1.4] tracking-[-0.42px] cursor-pointer whitespace-nowrap font-[Pretendard] hover:text-[#1D68FF] transition-colors duration-200'
               >
                 알림
@@ -205,7 +205,7 @@ const Topbar = memo(() => {
                 </a>
               )}
               <a
-                onClick={() => handleNavigate('/alarm')}
+                onClick={() => handleNavigate('#')}
                 className='px-4 py-2 text-lg text-gray-700 hover:text-[#1d68ff] cursor-pointer'
               >
                 알림

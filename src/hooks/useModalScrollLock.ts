@@ -16,10 +16,12 @@ export default function useModalScrollLock(isOpen: boolean) {
 
     return () => {
       if (isOpen) {
-        window.__openModalCount -= 1;
-        if (window.__openModalCount === 0) {
-          document.body.style.overflow = '';
-          document.body.style.paddingRight = '';
+        if (window.__openModalCount) {
+          window.__openModalCount -= 1;
+          if (window.__openModalCount === 0) {
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+          }
         }
       }
     };
