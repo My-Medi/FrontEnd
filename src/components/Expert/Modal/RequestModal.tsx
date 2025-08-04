@@ -3,6 +3,7 @@ import backSvg from '../../../assets/Expert/back.svg';
 import closeSvg from '../../../assets/Expert/close.svg';
 import ConfirmRequestModal from './ConfirmRequestModal';
 import SuccessModal from './SuccessModal';
+import useModalScrollLock from '../../../hooks/useModalScrollLock';
 
 interface RequestModalProps {
   isOpen: boolean;
@@ -18,6 +19,8 @@ const RequestModal: React.FC<RequestModalProps> = ({ isOpen, onClose, expertName
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const maxLength = 200;
+
+  useModalScrollLock(isOpen && !showConfirmModal && !showSuccessModal);
 
   useEffect(() => {
     if (isOpen) {
@@ -112,8 +115,7 @@ const RequestModal: React.FC<RequestModalProps> = ({ isOpen, onClose, expertName
               <button
                 onClick={handleSubmit}
                 disabled={!requestText.trim()}
-                className="w-[300px] h-14 rounded-full bg-[#1D68FF] text-white text-xl font-semibold transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ boxShadow: '0px 0px 2px 6px rgba(29, 104, 255, 0.06), 0px 0px 4px 6px rgba(29, 104, 255, 0.04), 0px 0px 6px 6px rgba(29, 104, 255, 0.02), 0px 0px 8px 0px rgba(29, 104, 255, 0)' }}
+                className="w-[300px] h-14 rounded-full bg-[#1D68FF] text-white text-xl font-semibold transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-[0px_0px_2px_4px_rgba(29,104,255,0.04),0px_0px_4px_4px_rgba(29,104,255,0.02),0px_0px_6px_0px_rgba(29,104,255,0)]"
               >
                 다음
               </button>

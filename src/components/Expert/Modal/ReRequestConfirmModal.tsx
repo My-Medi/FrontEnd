@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import SuccessModal from './SuccessModal';
+import useModalScrollLock from '../../../hooks/useModalScrollLock';
 
 interface ReRequestConfirmModalProps {
   isOpen: boolean;
@@ -20,6 +21,8 @@ const ReRequestConfirmModal: React.FC<ReRequestConfirmModalProps> = ({
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  useModalScrollLock(isOpen && !showSuccessModal);
 
   useEffect(() => {
     if (isOpen) {

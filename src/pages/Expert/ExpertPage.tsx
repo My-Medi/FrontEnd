@@ -43,6 +43,13 @@ const ExpertPage = () => {
   const [selectedExpert, setSelectedExpert] = useState<ExpertDetail | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
+  // 카테고리 선택 시 팝오버 필터 초기화
+  const handleCategorySelect = (category: string) => {
+    setSelectedCategory(category);
+    setSelectedCategories([]); // 팝오버 필터 초기화
+    setCurrentPage(1); // 페이지도 1페이지로 초기화
+  };
+
 
   // 중복 제거 함수 (nickname 기준)
   const getUniqueExperts = (list: Expert[]): Expert[] => {
@@ -84,14 +91,17 @@ const ExpertPage = () => {
       <div className="pb-6 xl:pb-[3.1rem]" />
       <div className="w-full flex flex-col items-center px-4 sm:px-6 xl:px-8 xl:px-12 max-w-[87.5rem] mx-auto">
         <div className="w-full">
-          <ExpertCategoryFilter selected={selectedCategory} onSelect={setSelectedCategory} />
+          <ExpertCategoryFilter selected={selectedCategory} onSelect={handleCategorySelect} />
           <div className="h-[0.1rem] bg-[#DBE6FF] w-full mx-auto mt-4 mb-4" />
-          <div className="pb-6 xl:pb-8">
-            <ExpertCategoryPopover 
-              selectedCategories={selectedCategories}
-              setSelectedCategories={setSelectedCategories}
-            />
-          </div>
+          {/* 필터링 버튼은 전체 카테고리에서만 표시 */}
+          {selectedCategory === "전체" && (
+            <div className="pb-6 xl:pb-8">
+              <ExpertCategoryPopover 
+                selectedCategories={selectedCategories}
+                setSelectedCategories={setSelectedCategories}
+              />
+            </div>
+          )}
           {/* 카드리스트: 더 안정적인 반응형 그리드 */}
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 xl:gap-6 xl:gap-8 w-full">
             {pagedList.map((expert: Expert, idx: number) => (
