@@ -112,7 +112,7 @@ const LoginPage = () => {
 
   // 로딩 중일 때 스피너 표시
   if (loginMutation.isPending) {
-    return <LoadingSpinner message="로그인 중..." />;
+    return <LoadingSpinner />;
   }
 
   return (

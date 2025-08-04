@@ -50,7 +50,7 @@ const IntroducePage: React.FC = () => {
   }, [isAutoPlaying, banners]);
 
   if (!imagesLoaded) {
-    return <LoadingSpinner message="로딩 중" size="lg" />;
+    return <LoadingSpinner size="lg" />;
   }
 
   return (

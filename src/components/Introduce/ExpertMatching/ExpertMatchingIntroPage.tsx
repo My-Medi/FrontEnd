@@ -52,7 +52,7 @@ const ExpertMatchingIntroPage: React.FC = () => {
   };
 
   if (!imagesLoaded) {
-    return <LoadingSpinner message="로딩중..." size="lg" />;
+    return <LoadingSpinner size="lg" />;
   }
 
   return (
