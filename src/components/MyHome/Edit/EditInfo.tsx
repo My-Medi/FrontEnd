@@ -53,7 +53,7 @@ const EditInfo: React.FC<EditInfoProps> = ({ onBack, onHasChanges, onProfileModa
         birthDate: userProfile.birthDate ? userProfile.birthDate.replace(/-/g, '').slice(0, 6) : '', // YYYY-MM-DD를 6자리로 변환
         gender: (userProfile.gender === 'MALE' ? 'male' : 'female') as 'male' | 'female',
         nickname: userProfile.name || '', // API에는 nickname이 없으므로 name 사용
-        userId: userProfile.username || '',
+        userId: '', // username 매핑 제거
         password: '',
         confirmPassword: '',
         email: emailParts[0] || '',

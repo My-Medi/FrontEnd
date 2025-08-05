@@ -52,4 +52,9 @@ export const getTokens = () => {
 export const clearTokens = () => {
   deleteCookie(TOKEN_COOKIES.ACCESS_TOKEN);
   deleteCookie(TOKEN_COOKIES.REFRESH_TOKEN);
+  
+  // 전역 clearTokens 함수가 있으면 호출하여 상태 업데이트
+  if ((window as any).clearTokens) {
+    (window as any).clearTokens();
+  }
 }; 
