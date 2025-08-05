@@ -21,7 +21,7 @@ const Calendar: React.FC<CalendarProps> = ({ selectedDate, onDateSelect }) => {
   const startDate = startOfMonth.startOf('week');
   const endDate = endOfMonth.endOf('week');
 
-  const calendarDays = [];
+  const calendarDays: dayjs.Dayjs[] = [];
   let day = startDate;
   while (day.isBefore(endDate) || day.isSame(endDate)) {
     calendarDays.push(day);
