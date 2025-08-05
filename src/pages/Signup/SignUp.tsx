@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import StepSelector from "../../components/SignUp/StepSelector";
-import TermsAgreement from "../../components/SignUp/TermsAgreement";
 import SignUpInfo from "../../components/SignUp/Info";
 import ExpertInputForm from "../../components/SignUp/ExpertInputForm";
 import SignUpComplete from "../../components/SignUp/SignUpComplete";
@@ -10,6 +9,7 @@ import LoadingSpinner from "../../components/Common/LoadingSpinner";
 import backSvg from "../../assets/back.svg";
 import { useSignUpMutation } from "../../hooks/users/useSignUpMutation";
 import type { PersonalSignUpRequest } from "../../types/user";
+import TermsAgreement from "../../components/SignUp/TermsAgreement";
 
 type SignUpStep = "select" | "terms" | "info" | "expert-info" | "complete";
 
@@ -18,16 +18,16 @@ const SignUp: React.FC = () => {
   const [userType, setUserType] = useState<"personal" | "expert" | null>(null);
   const [signUpData, setSignUpData] = useState({
     name: "",
-    birth: "",
-    gender: "male" as "male" | "female",
+    birthDate: "",
+    gender: "MALE" as "MALE" | "FEMALE",
     nickname: "",
-    id: "",
+    loginId: "",
     password: "",
     passwordCheck: "",
     email: "",
     emailDomain: "직접입력",
-    phone: "",
-    agree: false,
+    phoneNumber: "",
+    profileImgUrl: "",
   });
   const navigate = useNavigate();
 
@@ -48,24 +48,9 @@ const SignUp: React.FC = () => {
   // 회원가입 데이터를 API 형식으로 변환
   const transformSignUpData = (): PersonalSignUpRequest => {
     // 생년월일 유효성 검사
-    if (!signUpData.birth || signUpData.birth.length !== 6) {
-      throw new Error('생년월일은 6자리로 입력해주세요.');
+    if (!signUpData.birthDate) {
+      throw new Error('생년월일을 입력해주세요.');
     }
-
-    const birth = signUpData.birth;
-    const year = birth.substring(0, 2);
-    const month = birth.substring(2, 4);
-    const day = birth.substring(4, 6);
-    
-    // 월과 일 유효성 검사
-    const monthNum = parseInt(month);
-    const dayNum = parseInt(day);
-    if (monthNum < 1 || monthNum > 12 || dayNum < 1 || dayNum > 31) {
-      throw new Error('올바른 생년월일을 입력해주세요.');
-    }
-
-    const fullYear = parseInt(year) > 50 ? `19${year}` : `20${year}`;
-    const birthDate = `${fullYear}-${month}-${day}`;
 
     // 이메일 도메인 처리
     const email = signUpData.emailDomain === "직접입력" 
@@ -74,19 +59,23 @@ const SignUp: React.FC = () => {
 
     const apiData = {
       name: signUpData.name,
-      birthDate,
-      gender: signUpData.gender.toUpperCase() as 'MALE' | 'FEMALE',
+      birthDate: signUpData.birthDate, // 입력받은 그대로 사용
+      gender: signUpData.gender,
       nickname: signUpData.nickname,
       email,
-      phoneNumber: signUpData.phone,
-      loginId: signUpData.id,
+      phoneNumber: signUpData.phoneNumber,
+      loginId: signUpData.loginId,
       password: signUpData.password,
+      profileImgUrl: signUpData.profileImgUrl || "",
     };
 
     console.log('회원가입 데이터 변환:', {
       original: signUpData,
       transformed: apiData
     });
+    
+    // API 요청 전 최종 데이터 확인
+    console.log('최종 API 요청 데이터:', JSON.stringify(apiData, null, 2));
 
     return apiData;
   };
@@ -106,7 +95,7 @@ const SignUp: React.FC = () => {
           setCurrentStep("expert-info");
         } else {
           // 개인 회원가입인 경우 API 호출
-          if (signUpData.agree && signUpData.password === signUpData.passwordCheck) {
+          if (signUpData.password === signUpData.passwordCheck) {
             try {
               const apiData = transformSignUpData();
               signUpMutation.mutate(apiData);
@@ -115,7 +104,7 @@ const SignUp: React.FC = () => {
               alert(error instanceof Error ? error.message : '입력 데이터를 확인해주세요.');
             }
           } else {
-            alert('약관에 동의하고 비밀번호를 확인해주세요.');
+            alert('비밀번호를 확인해주세요.');
           }
         }
         break;
@@ -168,14 +157,8 @@ const SignUp: React.FC = () => {
 
   const handleCheckId = () => {
     // 아이디 중복 확인 로직
-    console.log("아이디 확인:", signUpData.id);
+    console.log("아이디 확인:", signUpData.loginId);
   };
-
-  // const handleComplete = () => {
-  //   // 회원가입 완료 처리
-  //   console.log("회원가입 완료:", signUpData);
-  //   navigate("/");
-  // };
 
   const renderCurrentStep = () => {
     // 로딩 중일 때 스피너 표시
@@ -293,7 +276,7 @@ const SignUp: React.FC = () => {
             </div>
 
             {/* 회원가입 완료 */}
-            <SignUpComplete />
+            <SignUpComplete userType={userType || undefined} />
           </div>
         );
       default:
