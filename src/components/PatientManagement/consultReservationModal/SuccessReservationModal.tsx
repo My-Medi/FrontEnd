@@ -7,6 +7,9 @@ interface SuccessReservationModalProps {
 
 const SuccessReservationModal: React.FC<SuccessReservationModalProps> = ({ onClose }) => {
   const navigate = useNavigate();
+  const handleClick = () => {
+    navigate('/myhome');
+  };
   return (
     <>
       <div className='fixed inset-0 bg-black/30 z-50' />
@@ -18,9 +21,7 @@ const SuccessReservationModal: React.FC<SuccessReservationModalProps> = ({ onClo
           <div className='flex gap-[32px] mt-[10px]'>
             <button
               className='flex text-[18px] font-[Pretendard] leading-[36px] tracking-[-0.54px] text-[#121218] justify-center items-center gap-[10px] w-[274px] h-[48px] px-[80px] py-[20px] rounded-[60px] bg-[#FFF] border border-[#E3E6EB] text-[#25282B] text-[18px] font-semibold font-[Pretendard] leading-[27px] tracking-[-0.54px] shadow-[0px_0px_5px_5px_rgba(29,104,255,0.05)] cursor-pointer'
-              onClick={() => {
-                navigate('/myhome');
-              }}
+              onClick={handleClick}
             >
               캘린더 보러가기
             </button>

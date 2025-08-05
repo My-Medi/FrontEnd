@@ -8,6 +8,7 @@ import MemberReauestMessage from './memberRequestMessage';
 import AdvicePart from './advicePart';
 import AdviceRegisterModal from './adviceRegisterModel';
 import ConsultReservationModal from '../consultReservationModal/CalendarModal';
+import { useNavigate } from 'react-router-dom';
 
 interface Member {
   nickname: string;
@@ -56,6 +57,10 @@ const MemberCardModal: React.FC<MemberCardModalProps> = ({
 }) => {
   const [showAdviceModal, setShowAdviceModal] = useState(false);
   const [showConsultModal, setShowConsultModal] = useState(false);
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate('/health-result-input');
+  };
   return (
     <>
       <div className='fixed inset-0 bg-black/30 z-40' />
@@ -131,9 +136,7 @@ const MemberCardModal: React.FC<MemberCardModalProps> = ({
             <div className='flex gap-[96px]'>
               {/* 페이지 이동 버튼 */}
               <button
-                onClick={() => {
-                  /* 페이지랑 연결 */
-                }}
+                onClick={handleClick}
                 className='flex justify-center items-center gap-[10px] w-[280px] h-[48px] px-[80px] py-[20px] rounded-[60px] bg-[#FFF] border border-[#E3E6EB] text-[#25282B] text-[18px] font-medium font-[Pretendard] leading-[36px] tracking-[-0.54px] shadow-[0px_0px_5px_5px_rgba(29,104,255,0.05)] cursor-pointer'
               >
                 리포트 전체 보기
