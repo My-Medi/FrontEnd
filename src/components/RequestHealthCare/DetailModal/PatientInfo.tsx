@@ -1,5 +1,5 @@
 import React from 'react';
-import defaultProfile from '@/assets/MyHome/profile.svg';
+import defaultProfile from '@/assets/MyHome/noProfile.svg';
 
 interface PatientInfoProps {
   profileImageUrl?: string;
