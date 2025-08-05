@@ -1,7 +1,5 @@
 import React, { useState, useRef } from "react";
 import fileboxIcon from '../../assets/MyHome/Resume/filebox.svg';
-
-import Info
 import { signUpExpert } from '../../apis/expertApi/expert';
 import type { PersonalSignUpRequest, ExpertSpecialty } from '../../types/expert';
 
