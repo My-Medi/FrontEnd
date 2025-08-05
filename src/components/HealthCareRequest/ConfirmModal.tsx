@@ -34,7 +34,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onConfirm, onCancel
         {/* 버튼들 */}
         <div className="flex justify-center gap-4">
           <button
-            onClick={onCancel}
+            onClick={onConfirm}
             className="w-[216px] h-[47px] bg-white text-gray-700 rounded-[36px] shadow-[0_0_6px_4px_rgba(29,104,255,0.10)] transition-colors font-medium"
           >
             확인

@@ -107,6 +107,25 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     validateTokens();
   }, []);
 
+  // 로그아웃 함수를 전역으로 노출하여 토큰 삭제 시 즉시 상태 업데이트
+  useEffect(() => {
+    const originalClearTokens = (window as any).clearTokens;
+    
+    // clearTokens 함수를 오버라이드하여 로그아웃 시 즉시 상태 업데이트
+    (window as any).clearTokens = () => {
+      if (originalClearTokens) {
+        originalClearTokens();
+      }
+      console.log('토큰 삭제로 인한 즉시 로그아웃 처리');
+      setUserType(null);
+      setUserInfo(null);
+    };
+    
+    return () => {
+      (window as any).clearTokens = originalClearTokens;
+    };
+  }, []);
+
   // 개발자 도구에서 테스트할 수 있도록 window 객체에 노출
   useEffect(() => {
     (window as any).setUserType = setUserType;
