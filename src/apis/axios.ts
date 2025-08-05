@@ -42,12 +42,15 @@ API.interceptors.response.use(
       try {
         const { refreshToken, accessToken } = getTokens();
         if (refreshToken) {
-          // 토큰 재발급 요청 (GET 방식, 쿼리 파라미터로 refreshToken 전달)
-          const response = await axios.get(`${BASE_URL}${AUTH_ENDPOINTS.REISSUE}?refresh=${refreshToken}`, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`
+          // 토큰 재발급 요청 (POST 방식, body로 refreshToken 전달)
+          const response = await axios.post(`${BASE_URL}${AUTH_ENDPOINTS.REISSUE}`, 
+            { refresh: refreshToken },
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`
+              }
             }
-          });
+          );
 
           const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data.result;
           
