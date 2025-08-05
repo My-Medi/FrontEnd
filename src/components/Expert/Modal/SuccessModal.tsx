@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import useModalScrollLock from '../../../hooks/useModalScrollLock';
 
 interface SuccessModalProps {
   isOpen: boolean;
@@ -7,6 +8,8 @@ interface SuccessModalProps {
 
 const SuccessModal: React.FC<SuccessModalProps> = ({ isOpen, onClose }) => {
   const [isVisible, setIsVisible] = useState(false);
+
+  useModalScrollLock(isOpen);
 
   useEffect(() => {
     if (isOpen) {
@@ -73,7 +76,7 @@ const ConfirmButton: React.FC<{ onClick: () => void }> = ({ onClick }) => (
     }}
     className="w-[300px] h-14 rounded-[36px] bg-[#1D68FF] text-white text-[20px] font-semibold leading-[1.8] tracking-[-3%] transition cursor-pointer flex justify-center items-center px-12 py-3"
     style={{ 
-      boxShadow: '0px 0px 6px 12px rgba(29, 104, 255, 0.06), 0px 0px 3px 6px rgba(29, 104, 255, 0.1)'
+      boxShadow: '0px 0px 4px 8px rgba(29, 104, 255, 0.04), 0px 0px 2px 4px rgba(29, 104, 255, 0.06)'
     }}
   >
     확인

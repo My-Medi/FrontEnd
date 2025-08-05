@@ -1,14 +1,16 @@
 import React, { useState, memo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../../assets/Login/logo.svg';
+import mainLogo from '../../../assets/mainlog.svg';
 import { useAuth } from '../../../contexts/AuthContext';
 import { clearTokens } from '../../../utils/tokenStorage';
+import TopBarNotification from '../TopBarNotification';
 
 const Topbar = memo(() => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-  const { userType, setUserType } = useAuth();
+  const { userType, setUserType, showNotification, setShowNotification } = useAuth();
 
   const handleNavigate = useCallback((path: string) => {
     navigate(path);
@@ -107,12 +109,25 @@ const Topbar = memo(() => {
                   Login
                 </p>
               )}
-              <p
-                onClick={() => navigate('/alarm')}
-                className='text-[#25282B] text-sm font-[300] leading-[1.4] tracking-[-0.42px] cursor-pointer whitespace-nowrap font-[Pretendard] hover:text-[#1D68FF] transition-colors duration-200'
-              >
-                알림
-              </p>
+              <div className="relative">
+                <p
+                  onClick={() => setShowNotification(!showNotification)}
+                  className='text-[#25282B] text-sm font-[300] leading-[1.4] tracking-[-0.42px] cursor-pointer whitespace-nowrap font-[Pretendard] hover:text-[#1D68FF] transition-colors duration-200'
+                >
+                  알림
+                </p>
+                <TopBarNotification
+                  isVisible={showNotification}
+                  onClose={() => setShowNotification(false)}
+                  onAction={() => {
+                    setShowNotification(false);
+                    // 여기에 실제 액션 처리 로직 추가
+                    console.log('매칭 전문가 페이지로 이동');
+                  }}
+                  message="준호 핏 운동 처방사님께서 매칭을 수락하셨어요!"
+                  actionText="매칭 전문가 보러가기"
+                />
+              </div>
 
               <form
                 onSubmit={handleSearchSubmit}
@@ -158,7 +173,7 @@ const Topbar = memo(() => {
             className='flex items-center gap-2.5 cursor-pointer'
             onClick={handleLogoClick}
           >
-            <img src='/MyMedi_logo.png' className='w-10 h-10 object-cover' alt='MyMedi Logo' />
+            <img src={mainLogo} className='w-10 h-10 object-contain' alt='MyMedi Logo' />
             <p className='text-3xl font-semibold text-[#1d68ff]'>MYMEDi</p>
           </div>
           <button onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label='메뉴 열기'>
@@ -204,7 +219,7 @@ const Topbar = memo(() => {
                 </a>
               )}
               <a
-                onClick={() => handleNavigate('/alarm')}
+                onClick={() => setShowNotification(true)}
                 className='px-4 py-2 text-lg text-gray-700 hover:text-[#1d68ff] cursor-pointer'
               >
                 알림

@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { cva } from "class-variance-authority";
 import logo from "../../assets/Login/mymedi.svg";
@@ -68,7 +68,10 @@ const LoginPage = () => {
 
   const handleLogin = () => {
     if (isFormValid) {
-      loginMutation.mutate(formData);
+      loginMutation.mutate({
+        ...formData,
+        isKeepLogin
+      });
     }
   };
 
@@ -109,7 +112,7 @@ const LoginPage = () => {
 
   // 로딩 중일 때 스피너 표시
   if (loginMutation.isPending) {
-    return <LoadingSpinner message="로그인 중..." />;
+    return <LoadingSpinner />;
   }
 
   return (
@@ -117,7 +120,7 @@ const LoginPage = () => {
       {/* 뒤로가기 버튼 */}
       <button
         onClick={handleBack}
-        className="absolute w-[17px] h-[35px] flex items-center justify-center top-[65px] left-[312px] lg:flex md:hidden sm:hidden"
+        className="absolute w-[17px] h-[35px] hidden xl:flex items-center justify-center top-[65px] left-[312px]"
         aria-label="뒤로가기"
       >
         <img src={backSvg} alt="뒤로가기" className="w-full h-full object-contain" />
@@ -178,8 +181,15 @@ const LoginPage = () => {
                 id="keepLogin"
                 checked={isKeepLogin}
                 onChange={(e) => setIsKeepLogin(e.target.checked)}
-                className="w-[18px] h-[18px] border border-[#9DA0A3] rounded-full appearance-none"
+                className="hidden"
               />
+              <div className="w-[18px] h-[18px] border border-[#9DA0A3] rounded-full flex items-center justify-center">
+                {isKeepLogin && (
+                  <svg width="10" height="7" viewBox="0 0 10 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1 3L4 6L9 1" stroke="#1D68FF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                )}
+              </div>
               <span className="ml-3 text-[14px] font-medium text-[#4D5053] leading-[1.714] tracking-[-3%]">
                 로그인 유지
               </span>

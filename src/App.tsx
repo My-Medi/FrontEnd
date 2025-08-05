@@ -1,40 +1,23 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import React from 'react';
+import { RouterProvider } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import './App.css';
-import HomeLayout from './layout/HomeLayout';
-import MyHome from './pages/Myhome/MyHome';
-import SignUp from './pages/Signup/SignUp';
-import LoginPage from './pages/Login/LoginPage';
-import IntroducePage from './pages/Introduce/IntroducePage';
-import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
-import HealthCheckupResultInput from './pages/HealthCheckupResultInput/HealthCheckupResultInput';
-import ExpertPage from './pages/Expert/ExpertPage';
-import CalendarIntroPage from './pages/Introduce/CalendarIntroPage';
-import ExpertMatchingIntroPage from './pages/Introduce/ExpertMatchingPage';
-import MedicalReportPage from './pages/Introduce/MedicalReportPage';
-import HealthTermsPage from './pages/HealthTerms/HealthTerm';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import LoadingSpinner from './components/Common/LoadingSpinner';
+import { router } from './router';
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <HomeLayout />,
-    errorElement: <NotFoundPage />,
-    children: [
-      { index: true, element: <IntroducePage /> },
-      { path: 'myhome', element: <MyHome /> },
-      { path: 'signup', element: <SignUp /> },
-      { path: 'login', element: <LoginPage /> },
-      { path: 'introduce', element: <IntroducePage /> },
-      { path: 'health-result-input', element: <HealthCheckupResultInput /> },
-      { path: 'expert', element: <ExpertPage /> },
-      { path: 'health-terms', element: <HealthTermsPage /> },
-      { path: 'calendar-intro', element: <CalendarIntroPage /> },
-      { path: 'expert-matching-intro', element: <ExpertMatchingIntroPage /> },
-      { path: 'medical-report-intro', element: <MedicalReportPage /> },
-    ],
-  },
-]);
+// 로딩 상태를 처리하는 컴포넌트
+const AppContent = () => {
+  const { isLoading } = useAuth();
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  return <RouterProvider router={router} />;
+};
+
+
 
 // QueryClient 인스턴스 생성
 const queryClient = new QueryClient({
@@ -53,7 +36,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <RouterProvider router={router} />
+        <AppContent />
       </AuthProvider>
     </QueryClientProvider>
   );

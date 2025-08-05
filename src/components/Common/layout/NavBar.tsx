@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from 'react';
+import { memo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useEffect } from 'react';
@@ -17,7 +17,7 @@ const NavBar = memo(() => {
   }, [navigate]);
 
   return (
-    <nav className="w-full hidden lg:block">
+    <nav className="w-full hidden xl:block">
       <div className='border-b border-[#1D68FF] bg-white'>
         {/*Topbar와 동일한 기준을 (max-w + mx-auto) 적용해서 -> 바로 아래에 위치 고정 */}
         <div className='flex justify-center px-[60px]'>

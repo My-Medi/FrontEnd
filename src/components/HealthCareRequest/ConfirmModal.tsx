@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface ConfirmModalProps {
   isOpen: boolean;
@@ -8,7 +9,13 @@ interface ConfirmModalProps {
   userName?: string; // 사용자 이름 prop 추가
 }
 
-const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onClose, onConfirm, onCancel, userName = '사용자' }) => {
+const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onConfirm, onCancel, userName = '사용자' }) => {
+  const navigate = useNavigate();
+
+  const handleExpertSearch = () => {
+    onConfirm();
+    navigate('/expert');
+  };
   if (!isOpen) return null;
 
   return (
@@ -33,7 +40,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onClose, onConfirm,
             확인
           </button>
           <button
-            onClick={onConfirm}
+            onClick={handleExpertSearch}
             className="w-[216px] h-[47px] bg-[#1D68FF] text-white rounded-[36px] hover:bg-blue-600 transition-colors font-medium"
           >
             전문가찾기

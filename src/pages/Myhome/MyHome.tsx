@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import SideBar from '../../components/MyHome/Layout/SideBar';
 import SimpleBox from '../../components/MyHome/Layout/SimpleBox';
@@ -6,6 +6,7 @@ import ConfirmModal from '../../components/MyHome/Edit/ConfirmModal';
 import EditInfo from '../../components/MyHome/Edit/EditInfo';
 import ExpertHome from '../../components/MyHome/Expert/ExpertHome';
 import PatientHome from '../../components/MyHome/Patient/PatientHome';
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
 import { initializeRandomSchedules } from '../../data/scheduleData';
 
 
@@ -16,8 +17,10 @@ const MyHome: React.FC = () => {
   const [showEditInfo, setShowEditInfo] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
   const [pendingMenuIndex, setPendingMenuIndex] = useState<number | null>(null);
   const [selectedDate, setSelectedDate] = useState<number | undefined>(undefined);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
   const { userType } = useAuth();
 
 
@@ -32,6 +35,61 @@ const MyHome: React.FC = () => {
   // 랜덤 일정 초기화 (컴포넌트 마운트 시 한 번만 실행)
   useMemo(() => {
     initializeRandomSchedules(15); // 15개의 랜덤 일정 생성
+  }, []);
+
+  // 사이드바 이미지 사전 로딩
+  useEffect(() => {
+    const preloadSidebarImages = async () => {
+      // 실제 SideBar에서 사용되는 이미지들 (import된 경로 사용)
+      const sidebarImages = [
+        '/assets/MyHome/SideBar/home.svg',
+        '/assets/MyHome/SideBar/write.svg',
+        '/assets/MyHome/SideBar/resume.svg',
+        '/assets/MyHome/SideBar/expert.svg',
+        '/assets/MyHome/SideBar/notification.svg',
+        '/assets/MyHome/SideBar/check.svg'
+      ];
+
+      try {
+        // 최대 2초 타임아웃 설정 (더 빠른 응답)
+        const timeoutPromise = new Promise<void>((_, reject) => {
+          setTimeout(() => reject(new Error('이미지 로딩 타임아웃')), 2000);
+        });
+
+        // 병렬 로딩으로 속도 향상, 하지만 제한된 동시 요청
+        const loadPromise = (async () => {
+          const batchSize = 3; // 한 번에 3개씩 로딩
+          for (let i = 0; i < sidebarImages.length; i += batchSize) {
+            const batch = sidebarImages.slice(i, i + batchSize);
+            await Promise.all(
+              batch.map((src) => {
+                return new Promise<void>((resolve) => {
+                  const img = new Image();
+                  img.onload = () => {
+                    console.log(`이미지 로딩 완료: ${src}`);
+                    resolve();
+                  };
+                  img.onerror = () => {
+                    console.warn(`이미지 로딩 실패: ${src}`);
+                    resolve(); // 개별 이미지 실패해도 계속 진행
+                  };
+                  img.src = src;
+                });
+              })
+            );
+          }
+        })();
+
+        await Promise.race([loadPromise, timeoutPromise]);
+        console.log('모든 사이드바 이미지 로딩 완료');
+        setImagesLoaded(true);
+      } catch (error) {
+        console.error('이미지 로딩 중 오류 발생:', error);
+        setImagesLoaded(true); // 에러가 있어도 페이지는 표시
+      }
+    };
+
+    preloadSidebarImages();
   }, []);
 
 
@@ -82,6 +140,7 @@ const MyHome: React.FC = () => {
           userType={currentUserType}
           onBack={() => setShowEditInfo(false)}
           onHasChanges={setHasChanges}
+          onProfileModalChange={setShowProfileModal}
         />
       );
     }
@@ -112,6 +171,16 @@ const MyHome: React.FC = () => {
     }
   };
 
+  // 이미지 로딩 중일 때 로딩 스피너 표시
+  if (!imagesLoaded) {
+    return (
+      <LoadingSpinner 
+        size="lg" 
+        className="bg-white"
+      />
+    );
+  }
+
   return (
     <div className='relative w-full'>
       {/* 모바일/태블릿 레이아웃 (1024px 미만) */}
@@ -127,7 +196,7 @@ const MyHome: React.FC = () => {
         
         {/* 메인 컨텐츠 */}
         <div className='mt-4'>
-          <SimpleBox>
+          <SimpleBox isBlurred={showProfileModal}>
             <div
               className={`${selectedMenu === 2 && currentUserType === 'expert' ? 'p-0' : 'p-4 sm:p-6'}`}
             >
@@ -145,7 +214,7 @@ const MyHome: React.FC = () => {
           onMenuSelect={handleMenuSelect}
         />
         <main className='xl:pt-5 xl:pl-6'>
-          <SimpleBox>
+          <SimpleBox isBlurred={showProfileModal}>
             <div>{renderContent()}</div>
           </SimpleBox>
         </main>

@@ -1,5 +1,5 @@
 import React from "react";
-import nextIcon from "../../../assets/Myhome/next.svg";
+import nextIcon from "../../../assets/MyHome/next.svg";
 
 interface ActionButtonProps {
   text: string;

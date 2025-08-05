@@ -5,27 +5,24 @@ import BackgroundBlur from '../Common/BackgroundBlur';
 import LoadingSpinner from '../../Common/LoadingSpinner';
 import backIcon from '../../../assets/back2.svg';
 import reportIcon from '../../../assets/Introduce/MedicalReport/mymedical.svg';
-import mdImage from '../../../assets/Introduce/MedicalReport/md.png';
+import mdImage from '../../../assets/Introduce/MedicalReport/md.svg';
 
 const MedicalReportIntroPage: React.FC = () => {
   const navigate = useNavigate();
   const [imagesLoaded, setImagesLoaded] = useState(false);
 
-  // 페이지 진입 시 스크롤을 최상단으로
-  React.useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+
 
   // 이미지 로딩 상태 관리
   useEffect(() => {
-    const images = [backIcon, reportIcon, mdImage];
+    const images = [backIcon, reportIcon, mdImage]; // mdImage는 지연 로딩
     let loadedCount = 0;
 
     const handleImageLoad = () => {
       loadedCount++;
       console.log(`이미지 로딩 완료: ${loadedCount}/${images.length}`);
       if (loadedCount === images.length) {
-        console.log('모든 이미지 로딩 완료!');
+        console.log('기본 이미지 로딩 완료!');
         setImagesLoaded(true);
       }
     };
@@ -66,7 +63,7 @@ const MedicalReportIntroPage: React.FC = () => {
   };
 
   if (!imagesLoaded) {
-    return <LoadingSpinner message="이미지를 불러오는 중..." size="lg" />;
+    return <LoadingSpinner size="lg" />;
   }
 
   return (
@@ -81,7 +78,7 @@ const MedicalReportIntroPage: React.FC = () => {
               {/* 이미지 - 왼쪽 */}
               <div className="mt-8 relative flex justify-center">
                 {/* Back 아이콘 */}
-                <div className="absolute -left-8 md:-left-10 lg:-left-14 top-2 md:top-3 lg:top-4 cursor-pointer hidden md:block" onClick={handleBackClick}>
+                <div className="absolute -left-8 md:-left-10 lg:-left-25 top-2 md:top-3 lg:top-4 cursor-pointer hidden md:block" onClick={handleBackClick}>
                   <img 
                     src={backIcon} 
                     alt="Back" 
@@ -115,8 +112,8 @@ const MedicalReportIntroPage: React.FC = () => {
                 </p>
                 <div>
                   <p className="text-[#4D5053] font-medium text-base md:text-lg leading-[1.4] md:leading-[1.5] lg:leading-[36px] tracking-[-0.03em]">
-                    용어도 어렵고 해석도 복잡한 건강검진결과지!<br />
-                    <span className="whitespace-normal md:whitespace-nowrap">MyMedi가 자동 분석하여 위험 수치와 주요 질환 가능성, 생활습관 개선 포인트까지 한눈에 제공합니다.</span>
+                  나 혼자만의 수치가 아닌, 같은 연령대 사람들과의 비교로<br />
+                  내 건강 상태를 더 객관적이고 정확하게 확인해보세요.
                   </p>
                 </div>
               </div>

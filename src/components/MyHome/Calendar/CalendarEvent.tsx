@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { getEventColor, getBgColorClass } from '../../../constants/colors';
 
 interface CalendarEventProps {

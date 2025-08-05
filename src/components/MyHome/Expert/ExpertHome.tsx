@@ -23,7 +23,7 @@ const ExpertHome: React.FC<ExpertHomeProps> = ({
   today,
   onDateSelect,
   onEditInfo,
-  onMenuSelect,
+  // onMenuSelect,
 }) => {
   switch (selectedMenu) {
     case 0: // 마이 홈
@@ -33,11 +33,9 @@ const ExpertHome: React.FC<ExpertHomeProps> = ({
             nickname='하나'
             name='김민지'
             age={23}
-            height={168}
-            weight={52}
-            checkupCount={2}
             onEditInfo={onEditInfo}
             userType='expert'
+            expertises={['가정의학과', '소아과']}
           />
           <ExpertSchedule />
           <HomeCalendar selectedDate={selectedDate} today={today} onDateSelect={onDateSelect} />

@@ -10,8 +10,8 @@ const ServiceSection: React.FC = () => {
     },
     {
       title: 'AI 추천 건강관리법 ',
-      subtitle: '건강검진 결과 자동 분석 서비스',
-      description: '용어도 어렵고 해석도 복잡한 건강검진결과지 !\nMyMedi가 자동 분석하여 위험 수치와 주요 질환 가능성, 생활습관 개선 포인트까지 한눈에 제공합니다.'
+      subtitle: '개인 맞춤형 AI 건강관리 서비스',
+      description: '나만의 건강 데이터를 AI가 분석하여\n맞춤형 운동, 식단, 생활습관 개선 방안을 제시합니다.'
     },
     {
       title: '마이메디 전문가 매칭',

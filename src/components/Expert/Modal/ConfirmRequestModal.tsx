@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import backSvg from '../../../assets/Expert/back.svg';
 import closeSvg from '../../../assets/Expert/close.svg';
 import SuccessModal from './SuccessModal';
+import useModalScrollLock from '../../../hooks/useModalScrollLock';
 
 interface ConfirmRequestModalProps {
   isOpen: boolean;
@@ -15,13 +16,15 @@ interface ConfirmRequestModalProps {
 const ConfirmRequestModal: React.FC<ConfirmRequestModalProps> = ({ 
   isOpen, 
   onClose, 
-  onConfirm, 
+  // onConfirm, 
   expertName, 
   expertPosition,
   expertRealName
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  useModalScrollLock(isOpen && !showSuccessModal);
 
   useEffect(() => {
     if (isOpen) {
@@ -90,15 +93,13 @@ const ConfirmRequestModal: React.FC<ConfirmRequestModalProps> = ({
             <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-4">
               <button
                 onClick={onClose}
-                className="w-full sm:w-[300px] h-14 rounded-full border border-[#FFFFFF] text-[#121218] hover:bg-[#EDF0F3] text-[20px] font-medium leading-[24px] tracking-[-0.03em] transition cursor-pointer"
-                style={{ boxShadow: '0px 0px 2px 4px rgba(29, 104, 255, 0.03), 0px 0px 4px 12px rgba(29, 104, 255, 0.02), 0px 0px 6px 8px rgba(29, 104, 255, 0.01), 0px 0px 8px 0px rgba(29, 104, 255, 0)' }}
+                className="w-full sm:w-[300px] h-14 rounded-full border border-[#FFFFFF] text-[#121218] hover:bg-[#EDF0F3] text-[20px] font-medium leading-[24px] tracking-[-0.03em] transition cursor-pointer bg-white shadow-[0px_0px_2px_3px_rgba(29,104,255,0.02),0px_0px_4px_6px_rgba(29,104,255,0.01),0px_0px_6px_0px_rgba(29,104,255,0)]"
               >
                 취소
               </button>
               <button
                 onClick={handleConfirm}
-                className="w-full sm:w-[300px] h-14 rounded-full bg-[#1D68FF] text-white text-[20px] font-semibold leading-[36px] tracking-[-0.03em] transition cursor-pointer"
-                style={{ boxShadow: '0px 0px 2px 6px rgba(29, 104, 255, 0.06), 0px 0px 4px 6px rgba(29, 104, 255, 0.04), 0px 0px 6px 6px rgba(29, 104, 255, 0.02), 0px 0px 8px 0px rgba(29, 104, 255, 0)' }}
+                className="w-full sm:w-[300px] h-14 rounded-full bg-[#1D68FF] text-white text-[20px] font-semibold leading-[36px] tracking-[-0.03em] transition cursor-pointer shadow-[0px_0px_2px_4px_rgba(29,104,255,0.04),0px_0px_4px_4px_rgba(29,104,255,0.02),0px_0px_6px_0px_rgba(29,104,255,0)]"
               >
                 요청서 보내기
               </button>

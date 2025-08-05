@@ -5,16 +5,13 @@ import BackgroundBlur from '../Common/BackgroundBlur';
 import LoadingSpinner from '../../Common/LoadingSpinner';
 import calendarImage from '../../../assets/Introduce/Calendar/calendar.svg';
 import backIcon from '../../../assets/back2.svg';
-import combinedImage from '../../../assets/Introduce/Calendar/c.png'; // 통합된 이미지
+import combinedImage from '../../../assets/Introduce/Calendar/c.svg'; // 통합된 이미지
 
 const CalendarIntroPage: React.FC = () => {
   const navigate = useNavigate();
   const [imagesLoaded, setImagesLoaded] = useState(false);
 
-  // 페이지 진입 시 스크롤을 최상단으로
-  React.useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+
 
   // 이미지 로딩 상태 관리
   useEffect(() => {
@@ -55,7 +52,7 @@ const CalendarIntroPage: React.FC = () => {
   };
 
   if (!imagesLoaded) {
-    return <LoadingSpinner message="이미지를 불러오는 중..." size="lg" />;
+    return <LoadingSpinner size="lg" />;
   }
 
   return (

@@ -1,9 +1,9 @@
 import React from "react";
 import defaultProfileImage from "../../../assets/MyHome/profile.svg";
+import smileIcon from "../../../assets/MyHome/smile.svg";
 import ActionButton from "../Common/ActionButton";
 import { useUserProfileQuery } from "../../../hooks/users/useUserProfileQuery";
 import { calculateAge } from "../../../utils/dateUtils";
-import LoadingSpinner from "../../Common/LoadingSpinner";
 
 interface PatientInfoProps {
   nickname?: string;
@@ -16,6 +16,7 @@ interface PatientInfoProps {
   onEditInfo?: () => void;
   userType?: 'patient' | 'expert';
   useApiData?: boolean; // API 데이터 사용 여부
+  expertises?: string[]; // 전문가 전문 분야
 }
 
 // 프로필 이미지 URL이 유효한지 확인하는 함수
@@ -44,9 +45,10 @@ const PatientInfoSection: React.FC<PatientInfoProps> = ({
   onEditInfo,
   userType = 'patient',
   useApiData = false,
+  expertises,
 }) => {
   // API 데이터 사용 시
-  const { data: userProfile, isLoading, error } = useUserProfileQuery();
+  const { data: userProfile } = useUserProfileQuery();
 
   // API 데이터 사용 시 실제 데이터 사용, 그렇지 않으면 props 사용
   // API 데이터가 없거나 에러가 있을 때는 기본값 사용
@@ -71,12 +73,12 @@ const PatientInfoSection: React.FC<PatientInfoProps> = ({
         {userType === 'expert' ? (
           <>
             안녕하세요! <span className="text-[#1D68FF]">{displayNickname}</span>전문가님! 오늘도 마이메디와 함께 행복한 하루 보내세요.
-            <img src="/src/assets/MyHome/smile.svg" alt="smile" className="inline-block pl-2 w-7 h-7" />
+            <img src={smileIcon} alt="smile" className="inline-block pl-2 w-7 h-7" />
           </>
         ) : (
           <>
             안녕하세요! <span className="text-[#1D68FF]">{displayNickname}</span>님! 오늘도 마이메디와 함께 행복한 하루 보내세요.
-            <img src="/src/assets/MyHome/smile.svg" alt="smile" className="inline-block pl-2 w-7 h-7" />
+            <img src={smileIcon} alt="smile" className="inline-block pl-2 w-7 h-7" />
           </>
         )}
       </div>
@@ -101,20 +103,27 @@ const PatientInfoSection: React.FC<PatientInfoProps> = ({
               <span className="text-[#1D68FF]">{displayNickname}</span>
               <span className="text-[#121218]"> / {displayName}</span>
             </div>
-            {displayAge && (
+            {displayAge > 0 && (
               <div className="text-[#121218] font-normal text-lg leading-[36px] tracking-[-0.54px] xl:text-lg md:text-base sm:text-sm">
                 만 {displayAge}세
               </div>
             )}
-            {(height && weight) && (
+            {userType === 'patient' && (height && weight) && (
               <div className="text-[#121218] font-normal text-lg leading-[36px] tracking-[-0.54px] xl:text-lg md:text-base sm:text-sm">
                 {height}cm / {weight}kg
               </div>
             )}
           </div>
-          {checkupCount && (
+          {userType === 'patient' && checkupCount !== undefined && (
             <div className="pt-2 text-[#121218] font-normal text-lg leading-[36px] tracking-[-0.54px] xl:text-lg md:text-base sm:text-sm">
-              국가건강검진 <span className="text-[#DBE6FF]">| </span>{checkupCount}회
+              국가건강검진 <span className="text-[#DBE6FF]">| </span>{checkupCount || 0}회
+            </div>
+          )}
+          {userType === 'expert' && (
+            <div className="pt-2 text-[#121218] font-normal text-lg leading-[36px] tracking-[-0.54px] xl:text-lg md:text-base sm:text-sm">
+                전문분야 <span className="text-[#DBE6FF]">| </span>
+                {/* To-Do: API 연동 후 수정 필요 */}
+                {(userProfile as any)?.expertises?.join(', ') || expertises?.join(', ') || '전문분야 미설정'}
             </div>
           )}
         </div>
@@ -132,4 +141,4 @@ const PatientInfoSection: React.FC<PatientInfoProps> = ({
   );
 };
 
-export default PatientInfoSection; 
+export default PatientInfoSection;

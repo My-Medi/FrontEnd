@@ -13,13 +13,17 @@ const decryptToken = (encryptedToken: string): string => {
 };
 
 // 토큰 저장 (보안 강화)
-export const saveTokens = (accessToken: string, refreshToken: string) => {
+export const saveTokens = (accessToken: string, refreshToken: string, isKeepLogin: boolean = false) => {
   // 토큰 암호화 후 저장
   const encryptedAccessToken = encryptToken(accessToken);
   const encryptedRefreshToken = encryptToken(refreshToken);
   
-  setSecureTokenCookie(TOKEN_COOKIES.ACCESS_TOKEN, encryptedAccessToken, 1); // 1일 (짧은 만료시간)
-  setSecureTokenCookie(TOKEN_COOKIES.REFRESH_TOKEN, encryptedRefreshToken, 7); // 7일
+  // 로그인 유지 여부에 따라 토큰 만료 기간 설정
+  const accessTokenDays = isKeepLogin ? 30 : 1; // 로그인 유지 시 30일, 아니면 1일
+  const refreshTokenDays = isKeepLogin ? 90 : 7; // 로그인 유지 시 90일, 아니면 7일
+  
+  setSecureTokenCookie(TOKEN_COOKIES.ACCESS_TOKEN, encryptedAccessToken, accessTokenDays);
+  setSecureTokenCookie(TOKEN_COOKIES.REFRESH_TOKEN, encryptedRefreshToken, refreshTokenDays);
 };
 
 // 토큰 가져오기 (복호화)

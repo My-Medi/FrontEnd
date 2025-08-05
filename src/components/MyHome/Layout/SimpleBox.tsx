@@ -4,9 +4,10 @@ interface SimpleBoxProps {
   children?: React.ReactNode;
   fullWidthContent?: React.ReactNode; 
   className?: string;
+  isBlurred?: boolean;
 }
 
-const SimpleBox: React.FC<SimpleBoxProps> = ({ children, fullWidthContent, className }) => {
+const SimpleBox: React.FC<SimpleBoxProps> = ({ children, fullWidthContent, className, isBlurred = false }) => {
   return (
     <>
       <div
@@ -21,6 +22,9 @@ const SimpleBox: React.FC<SimpleBoxProps> = ({ children, fullWidthContent, class
         style={{
           boxShadow:
             '0px 0px 3px 4px rgba(29, 104, 255, 0.03), 0px 0px 6px 10px rgba(29, 104, 255, 0.015), 0px 0px 8px 8px rgba(29, 104, 255, 0.008), 0px 0px 10px 8px rgba(29, 104, 255, 0.003), 0px 0px 12px 0px rgba(29, 104, 255, 0)',
+          ...(isBlurred && {
+            background: 'rgba(18, 18, 24, 0.2)'
+          })
         }}
       >
         {fullWidthContent}

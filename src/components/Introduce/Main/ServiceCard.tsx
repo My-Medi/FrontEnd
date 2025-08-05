@@ -31,6 +31,8 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       navigate('/expert-matching-intro');
     } else if (title === '마이메디컬리포트') {
       navigate('/medical-report-intro');
+    } else if (title === 'AI 추천 건강관리법 ') {
+      navigate('/ai-healthcare-intro');
     }
   };
 
