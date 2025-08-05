@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import checkIcon from "../../assets/SignUp/signupcheck.png";
+import checkIcon from "../../assets/SignUp/signupcheck.svg";
 
 const SignUpComplete: React.FC = () => {
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ const SignUpComplete: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full">
-      <img src={checkIcon} alt="check" className="w-200 mb-4" />
+      <img src={checkIcon} alt="check" className="w-200 mb-4 -mt-55" />
       <div className="text-center mb-8">
         <p className="text-[#4D5053] text-xl font-normal font-pretendard leading-[2.25] tracking-[-0.03em]">
           환자매칭 및 전문가 활동은 자격증 심사완료 후 이용가능합니다. 자격증 심사 기간은 회원가입 후 3일입니다.

@@ -266,7 +266,7 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
         </div>
 
         {/* 동의 */}
-        <div className=" font-medium  text-[#121212] mb-[80px]">
+        <div className=" font-medium  text-[#121212]">
           <label htmlFor="agree" className="flex items-center cursor-pointer ">
             <input
               id="agree"
@@ -275,22 +275,6 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
               onChange={(e) => onChange('agree', e.target.checked)}
               className="hidden"
             />
-            <div className="mr-2">
-              {values.agree ? (
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
-                  <rect x="1.09688" y="0.700391" width="17.4" height="17.4" rx="8.7" fill="#1D68FF"/>
-                  <rect x="1.09688" y="0.700391" width="17.4" height="17.4" rx="8.7" stroke="#1D68FF" strokeWidth="0.6"/>
-                  <path d="M6.19531 9.12128L8.99952 11.8006L13.3953 7.60059" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
-                  <rect x="1.09688" y="0.700391" width="17.4" height="17.4" rx="8.7" fill="white"/>
-                  <rect x="1.09688" y="0.700391" width="17.4" height="17.4" rx="8.7" stroke="#9DA0A3" strokeWidth="0.6"/>
-                  <path d="M6.19531 9.12128L8.99952 11.8006L13.3953 7.60059" stroke="#9DA0A3" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              )}
-            </div>
-          <span className="font-size-[20px] text-#9DA0A3"> -- 동의하십니까?</span>
         </label>
         </div>
         {/* 버튼 */}
