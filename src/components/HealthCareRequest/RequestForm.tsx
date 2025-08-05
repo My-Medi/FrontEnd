@@ -56,9 +56,9 @@ const RequestForm = () => {
 
   return (
     <>
-      <section className='pl-[155px] pr-[135px] pt-[50px] pb-[50px]'>
+      <section className='w-full max-w-[950px] mx-auto pl-[155px] pr-[135px] pt-[50px] pb-[50px]'>
         <h2 className='text-2xl font-bold text-center mb-2'>건강 관리 요청서</h2>
-        <p className='text-center text-gray-500 mb-6'>건강 고민들을 최대한 자세하게 작성해주세요!</p>
+        <p className='text-center text-gray-700 pb-10'>건강 고민들을 최대한 자세하게 작성해주세요!</p>
         <form className='space-y-8' onSubmit={handleSubmit}>
           {/* 1. 직업 및 생활패턴 */}
           <div>

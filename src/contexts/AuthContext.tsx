@@ -20,6 +20,8 @@ interface AuthContextType {
   setUserInfo: (info: UserInfo | null) => void;
   isAuthenticated: boolean;
   isLoading: boolean;
+  showNotification: boolean;
+  setShowNotification: (show: boolean) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -38,6 +40,7 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
+  const [showNotification, setShowNotification] = useState(false);
   
   // localStorage에서 초기값 가져오기
   const [userType, setUserTypeState] = useState<'patient' | 'expert' | null>(() => {
@@ -128,7 +131,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       userInfo, 
       setUserInfo, 
       isAuthenticated,
-      isLoading 
+      isLoading,
+      showNotification,
+      setShowNotification
     }}>
       {children}
     </AuthContext.Provider>

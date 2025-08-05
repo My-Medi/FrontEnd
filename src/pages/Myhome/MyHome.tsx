@@ -17,6 +17,7 @@ const MyHome: React.FC = () => {
   const [showEditInfo, setShowEditInfo] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
   const [pendingMenuIndex, setPendingMenuIndex] = useState<number | null>(null);
   const [selectedDate, setSelectedDate] = useState<number | undefined>(undefined);
   const [imagesLoaded, setImagesLoaded] = useState(false);
@@ -139,6 +140,7 @@ const MyHome: React.FC = () => {
           userType={currentUserType}
           onBack={() => setShowEditInfo(false)}
           onHasChanges={setHasChanges}
+          onProfileModalChange={setShowProfileModal}
         />
       );
     }
@@ -194,7 +196,7 @@ const MyHome: React.FC = () => {
         
         {/* 메인 컨텐츠 */}
         <div className='mt-4'>
-          <SimpleBox>
+          <SimpleBox isBlurred={showProfileModal}>
             <div
               className={`${selectedMenu === 2 && currentUserType === 'expert' ? 'p-0' : 'p-4 sm:p-6'}`}
             >
@@ -212,7 +214,7 @@ const MyHome: React.FC = () => {
           onMenuSelect={handleMenuSelect}
         />
         <main className='xl:pt-5 xl:pl-6'>
-          <SimpleBox>
+          <SimpleBox isBlurred={showProfileModal}>
             <div>{renderContent()}</div>
           </SimpleBox>
         </main>

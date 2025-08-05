@@ -3,6 +3,7 @@ import CustomCheckboxButton from '../../Common/CustomCheckboxButton';
 import { useAuth } from '../../../contexts/AuthContext';
 import SuccessModal from './SuccessModal';
 import ConfirmModal from './ConfirmModal';
+import ProfileSelectModal from './ProfileSelectModal';
 import { useUserProfileQuery } from '../../../hooks/users/useUserProfileQuery';
 
 interface EditInfoProps {
@@ -10,9 +11,10 @@ interface EditInfoProps {
   onBack?: () => void;
   onMenuSelect?: (menuIndex: number) => void;
   onHasChanges?: (hasChanges: boolean) => void;
+  onProfileModalChange?: (isOpen: boolean) => void;
 }
 
-const EditInfo: React.FC<EditInfoProps> = ({ onBack, onHasChanges }) => {
+const EditInfo: React.FC<EditInfoProps> = ({ onBack, onHasChanges, onProfileModalChange }) => {
   const { userInfo, setUserInfo } = useAuth();
   
   // 사용자 프로필 API 데이터 가져오기
@@ -35,6 +37,8 @@ const EditInfo: React.FC<EditInfoProps> = ({ onBack, onHasChanges }) => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [selectedProfile, setSelectedProfile] = useState(1);
   const [hasChanges, setHasChanges] = useState(false);
   const [initialData, setInitialData] = useState(formData);
 
@@ -104,6 +108,12 @@ const EditInfo: React.FC<EditInfoProps> = ({ onBack, onHasChanges }) => {
     onBack?.();
   };
 
+  const handleProfileSelect = (profileIndex: number) => {
+    setSelectedProfile(profileIndex);
+    setShowProfileModal(false);
+    onProfileModalChange?.(false);
+  };
+
   const handleSave = () => {
     console.log('저장된 데이터:', formData);
     
@@ -128,18 +138,39 @@ const EditInfo: React.FC<EditInfoProps> = ({ onBack, onHasChanges }) => {
 
   return (
     <div className='max-w-2xl mx-auto'>
-      <div className='flex items-center mb-8'>
+      <div className='relative mb-8'>
         {onBack && (
           <button
             onClick={handleBackClick}
-            className='text-blue-500 hover:text-blue-700 mr-4 mt-[50px]'
+            className='absolute left-0 top-[50px] text-blue-500 hover:text-blue-700 z-10'
           >
             ← 뒤로가기
           </button>
         )}
-        <h1 className='text-2xl font-bold text-gray-800 flex-1 text-center mt-[50px]'>회원정보 수정</h1>
+        <h1 className='text-2xl font-bold text-gray-800 text-center mt-[50px]'>회원정보 수정</h1>
       </div>
       <form className='mt-[40px]'>
+        {/* 사용자 프로필 섹션 */}
+        <div className='flex justify-center mb-8'>
+          <div className='relative'>
+            {/* 프로필 이미지 컨테이너 */}
+            <div 
+              className='w-[158px] h-[158px] bg-[#EDF0F3] border-[0.5px] border-[#1D68FF] rounded-[156px] flex items-center justify-center hover:border-[2px] hover:shadow-[0px_3px_6px_0px_rgba(29,104,255,0.07),0px_11px_11px_0px_rgba(29,104,255,0.06),0px_26px_15px_0px_rgba(29,104,255,0.03),0px_46px_18px_0px_rgba(29,104,255,0.01),0px_71px_20px_0px_rgba(29,104,255,0)] transition-all duration-200 cursor-pointer'
+              onClick={() => {
+                setShowProfileModal(true);
+                onProfileModalChange?.(true);
+              }}
+            >
+              {/* 프로필 이미지 또는 기본 아이콘 */}
+              <img 
+                src="/src/assets/Expert/Union.svg" 
+                alt="프로필 이미지" 
+                className='w-[97.58px] h-[99.6px] object-contain'
+              />
+            </div>
+          </div>
+        </div>
+
         {/* 성명 */}
         <div className='flex items-center space-x-3 mb-[32px]'>
           <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
@@ -352,6 +383,16 @@ const EditInfo: React.FC<EditInfoProps> = ({ onBack, onHasChanges }) => {
         onClose={() => setShowConfirmModal(false)}
         onConfirm={handleConfirmSave}
         onCancel={handleConfirmCancel}
+      />
+
+      {/* 프로필 선택 모달 */}
+      <ProfileSelectModal
+        isOpen={showProfileModal}
+        onClose={() => {
+          setShowProfileModal(false);
+          onProfileModalChange?.(false);
+        }}
+        onProfileSelect={handleProfileSelect}
       />
     </div>
   );

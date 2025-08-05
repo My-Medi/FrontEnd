@@ -16,6 +16,7 @@ interface PatientInfoProps {
   onEditInfo?: () => void;
   userType?: 'patient' | 'expert';
   useApiData?: boolean; // API 데이터 사용 여부
+  expertises?: string[]; // 전문가 전문 분야
 }
 
 // 프로필 이미지 URL이 유효한지 확인하는 함수
@@ -44,6 +45,7 @@ const PatientInfoSection: React.FC<PatientInfoProps> = ({
   onEditInfo,
   userType = 'patient',
   useApiData = false,
+  expertises,
 }) => {
   // API 데이터 사용 시
   const { data: userProfile } = useUserProfileQuery();
@@ -101,20 +103,27 @@ const PatientInfoSection: React.FC<PatientInfoProps> = ({
               <span className="text-[#1D68FF]">{displayNickname}</span>
               <span className="text-[#121218]"> / {displayName}</span>
             </div>
-            {displayAge && (
+            {displayAge > 0 && (
               <div className="text-[#121218] font-normal text-lg leading-[36px] tracking-[-0.54px] xl:text-lg md:text-base sm:text-sm">
                 만 {displayAge}세
               </div>
             )}
-            {(height && weight) && (
+            {userType === 'patient' && (height && weight) && (
               <div className="text-[#121218] font-normal text-lg leading-[36px] tracking-[-0.54px] xl:text-lg md:text-base sm:text-sm">
                 {height}cm / {weight}kg
               </div>
             )}
           </div>
-          {checkupCount !== undefined && (
+          {userType === 'patient' && checkupCount !== undefined && (
             <div className="pt-2 text-[#121218] font-normal text-lg leading-[36px] tracking-[-0.54px] xl:text-lg md:text-base sm:text-sm">
               국가건강검진 <span className="text-[#DBE6FF]">| </span>{checkupCount || 0}회
+            </div>
+          )}
+          {userType === 'expert' && (
+            <div className="pt-2 text-[#121218] font-normal text-lg leading-[36px] tracking-[-0.54px] xl:text-lg md:text-base sm:text-sm">
+                전문분야 <span className="text-[#DBE6FF]">| </span>
+                {/* To-Do: API 연동 후 수정 필요 */}
+                {(userProfile as any)?.expertises?.join(', ') || expertises?.join(', ') || '전문분야 미설정'}
             </div>
           )}
         </div>
@@ -132,4 +141,4 @@ const PatientInfoSection: React.FC<PatientInfoProps> = ({
   );
 };
 
-export default PatientInfoSection; 
+export default PatientInfoSection;

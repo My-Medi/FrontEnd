@@ -63,7 +63,7 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
       {/* ExpertDetailModal */}
       <div
         className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-300 ${
-          showRequestModal || showReRequestModal ? 'opacity-0 pointer-events-none' : 'opacity-100'
+          showRequestModal || showReRequestModal ? 'hidden' : 'opacity-100'
         }`}
       >
         {/* 모달 배경 */}
