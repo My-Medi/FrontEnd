@@ -256,20 +256,6 @@ const RequestForm = () => {
               className='w-full border border-gray-300 rounded-lg px-4 py-2 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-200'
             />
           </div>
-
-          {/* 6. 요청사항*/}
-          <div>
-            <label className='block font-semibold mb-2'>
-              6. 전문가에게 전달할 요청사항을 적어주세요.
-            </label>
-            <textarea
-              rows={3}
-              value={formData.requestMessage}
-              onChange={(e) => setFormData(prev => ({ ...prev, requestMessage: e.target.value }))}
-              placeholder='ex) 야근이 많은 직장인, 교대 근무, 하루 10시간 앉아 있음 등'
-              className='w-full border border-gray-300 rounded-lg px-4 py-2 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-200'
-            />
-          </div>
           {/* 제출 버튼 */}
           <div className='flex justify-center'>
             <button

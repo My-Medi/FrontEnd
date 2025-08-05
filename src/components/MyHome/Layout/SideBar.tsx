@@ -54,7 +54,7 @@ interface SideBarProps {
 
 const patientMenuItems: MenuItem[] = [
   { id: 0, title: ['마이 홈'], icon: myHomeIcon },
-  { id: 1, title: ['내 알림'], icon: notificationIcon },
+  { id: 1, title: ['알림'], icon: notificationIcon },
   { id: 2, title: ['매칭 전문가'], icon: expertIcon },
   {
     id: 3,
@@ -68,7 +68,7 @@ const expertMenuItems: MenuItem[] = [
   { id: 1, title: ['환자 관리'], icon: expertIcon },
   { id: 2, title: ['이력서 관리'], icon: resumeIcon },
   { id: 3, title: ['건강관리요청서', '확인하기'], icon: checkIcon },
-  { id: 4, title: ['내 알림'], icon: notificationIcon },
+  { id: 4, title: ['알림'], icon: notificationIcon },
 ];
 
 const SideBar: React.FC<SideBarProps> = ({

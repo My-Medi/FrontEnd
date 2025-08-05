@@ -4,7 +4,7 @@ import HomeCalendar from '../Common/HomeCalendar';
 import ResumeManagement from '../Resume/ResumeManagement';
 import RequestHealthCare from '../../RequestHealthCare/RequestHealthCare';
 import { NotificationList } from '../../Alarm/NotificationList';
-import { expertNotificationList } from '../../../data/expertNotificationList';
+
 import ExpertSchedule from './ExpertSchedule';
 import PatientManagementList from '../../PatientManagement/memberList';
 
