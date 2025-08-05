@@ -190,7 +190,7 @@ const HealthCheckupForm = () => {
           <input
             type="text"
             className="rounded-[14px] border border-gray-200 px-6 py-2 text-base text-gray-700 focus:outline-none focus:border-[#82ABFD] transition w-[200px]"
-            placeholder="-----병원"
+            placeholder="병원명을 입력하세요"
             value={hospital}
             onChange={e => setHospital(e.target.value)}
           />
@@ -206,20 +206,20 @@ const HealthCheckupForm = () => {
           {/* 키 */}
           <div className="flex items-center mb-[24px]">
             <label className="w-40 font-medium text-black font-size-[18px]">키 (cm)</label>
-            <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" value={height} onChange={e => setHeight(e.target.value)} />
+            <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="cm" value={height} onChange={e => setHeight(e.target.value)} />
           </div>
           {/* 몸무게 */}
           <div className="flex items-center border-b-2 border-[#DBE6FF]">
             <div className="flex items-center mb-[24px]">
             <label className="w-40 font-medium text-black font-size-[18px]">몸무게 (kg)</label>
-            <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" value={weight} onChange={e => setWeight(e.target.value)} />
+            <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="kg" value={weight} onChange={e => setWeight(e.target.value)} />
             </div>
           </div>
           {/* BMI */}
           <div className="border-b-2 border-[#DBE6FF] mb-[24px]">
             <div className="flex items-center mb-[24px]">
               <label className="w-40 font-medium text-black font-size-[18px]">BMI 체질량지수</label>
-              <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" value={bmi} onChange={e => setBmi(e.target.value)} />
+              <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="결과 자동 계산" value={bmi} onChange={e => setBmi(e.target.value)} />
             </div>
             <div className="flex gap-10 ml-50 mb-[24px]">
               {['저체중', '정상', '과체중', '비만'].map((v) => (
@@ -231,7 +231,7 @@ const HealthCheckupForm = () => {
           <div className="border-b-2 border-[#DBE6FF] ">
             <div className="flex items-center mb-[24px]">
               <label className="w-40 font-medium text-black font-size-[18px]">허리둘레 (cm)</label>
-              <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" value={waist} onChange={e => setWaist(e.target.value)} />
+              <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="cm" value={waist} onChange={e => setWaist(e.target.value)} />
             </div>
             <div className="flex gap-10 ml-50 mb-[24px]">
               {['정상', '복부비만'].map((v) => (
@@ -242,7 +242,7 @@ const HealthCheckupForm = () => {
           {/* 시각이상 */}
           <div className="flex items-center ">
             <label className="w-40 text-black font-size-[18px] font-medium">시각이상(좌/우)</label>
-              <input type="text" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="0.9/0.8" />
+              <input type="text" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="예) 0.9 / 0.8" />
           </div>
           {/* 청각이상 */}
           <div className="border-b-2 border-[#DBE6FF]">
@@ -293,11 +293,11 @@ const HealthCheckupForm = () => {
               <div className="flex gap-4 mb-[24px]">
                 <div className="flex items-center gap-2">
                   <span className="ml-10 font-size-[18px]">수축기 혈압</span>
-                  <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-10 w-[180px]" value={bpHigh} onChange={e => setBpHigh(e.target.value)} />
+                  <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-10 w-[180px]" placeholder="120" value={bpHigh} onChange={e => setBpHigh(e.target.value)} />
                 </div>
                 <div className="flex items-center gap-2">
                   <span className=" font-size-[18px]">이완기 혈압</span>
-                  <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-10 w-[200px]" value={bpLow} onChange={e => setBpLow(e.target.value)} />
+                  <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-10 w-[200px]" placeholder="80" value={bpLow} onChange={e => setBpLow(e.target.value)} />
                 </div>
               </div>
             </div>
@@ -338,7 +338,7 @@ const HealthCheckupForm = () => {
           <div className="border-b-2 border-[#DBE6FF]">
             <div className="flex items-center mb-[24px]">
               <label className="w-40 font-medium text-black font-size-[18px]">혈색소(g/dL)</label>
-              <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" />
+              <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="12.3" />
             </div>
             <div className="flex gap-10 ml-50 mb-[24px]">
               {['정상', '빈혈의심', '기타'].map((v) => (
@@ -350,7 +350,7 @@ const HealthCheckupForm = () => {
           <div className="border-b-2 border-[#DBE6FF]">
             <div className="flex items-center mb-[24px]">
               <label className="w-40 font-medium text-black font-size-[18px]">공복혈당(mg/dL)</label>
-              <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" />
+              <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="85" />
             </div>
             <div className="flex gap-10 ml-50 mb-[24px]">
               {['정상', '유질환자', '공복혈당장애 의심', '당뇨병 의심'].map((v) => (
@@ -365,22 +365,22 @@ const HealthCheckupForm = () => {
                 {/* 총 콜레스테롤 */}
                 <div className="flex items-center mb-[24px]">
                   <label className="w-40 font-medium text-black font-size-[18px]">총 콜레스테롤 (mg/dL)</label>
-                  <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" value={cholesterol} onChange={e => setCholesterol(e.target.value)} />
+                  <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="0" value={cholesterol} onChange={e => setCholesterol(e.target.value)} />
                 </div>
                 {/* HDL 콜레스테롤 */}
                 <div className="flex items-center mb-[24px]">
                   <label className="w-40 font-medium text-black font-size-[18px]">HDL-콜레스테롤(mg/dL)</label>
-                  <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" value={hdl} onChange={e => setHdl(e.target.value)} />
+                  <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="0" value={hdl} onChange={e => setHdl(e.target.value)} />
                 </div>
                 {/* 중성지방 */}
                 <div className="flex items-center mb-[24px]">
                   <label className="w-40 font-medium text-black font-size-[18px]">중성지방 (mg/dL)</label>
-                  <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" value={triglyceride} onChange={e => setTriglyceride(e.target.value)} />
+                  <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="0" value={triglyceride} onChange={e => setTriglyceride(e.target.value)} />
                 </div>
                 {/* LDL 콜레스테롤 */}
                 <div className="flex items-center">
                   <label className="w-40 font-medium text-black font-size-[18px]">LDL-콜레스테롤(mg/dL)</label>
-                  <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" value={ldl} onChange={e => setLdl(e.target.value)} />
+                  <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="0" value={ldl} onChange={e => setLdl(e.target.value)} />
                 </div>
               </div>
               {/* 세로 점선 */}
@@ -409,12 +409,12 @@ const HealthCheckupForm = () => {
                 {/* 혈청 크레아티닌 */}
                 <div className="flex items-center mb-[24px]">
                   <label className="w-40 font-medium text-black font-size-[18px]">혈청 크레아티닌</label>
-                  <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" value={protein} onChange={e => setProtein(e.target.value)} />
+                  <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="0/9" value={protein} onChange={e => setProtein(e.target.value)} />
                 </div>
                 {/* eGFR */}
                 <div className="flex items-center mb-[24px]">
                   <label className="w-40 font-medium text-black font-size-[18px]">eGFR(신사구체여과율)</label>
-                  <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" value={serumCreatinine} onChange={e => setSerumCreatinine(e.target.value)} />
+                  <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="72" value={serumCreatinine} onChange={e => setSerumCreatinine(e.target.value)} />
                 </div>
               </div>
               {/* 세로 점선 */}
@@ -443,17 +443,17 @@ const HealthCheckupForm = () => {
                 {/* AST(SGOT) */}
                 <div className="flex items-center mb-[24px]">
                   <label className="w-40 font-medium text-black font-size-[18px]">AST(SGOT)</label>
-                  <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" value={ast} onChange={e => setAst(e.target.value)} />
+                  <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="25" value={ast} onChange={e => setAst(e.target.value)} />
                 </div>
                 {/* ALT(SGPT) */}
                 <div className="flex items-center mb-[24px]">
                   <label className="w-40 font-medium text-black font-size-[18px]">ALT(SGPT)</label>
-                  <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" value={alt} onChange={e => setAlt(e.target.value)} />
+                  <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="25" value={alt} onChange={e => setAlt(e.target.value)} />
                 </div>
                 {/* 감마-GTP(Y-GTP) */}
                 <div className="flex items-center mb-[24px]">
                   <label className="w-40 font-medium text-black font-size-[18px]">감마-GTP(Y-GTP)</label>
-                  <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" value={gammaGtp} onChange={e => setGammaGtp(e.target.value)} />
+                  <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="30" value={gammaGtp} onChange={e => setGammaGtp(e.target.value)} />
                 </div>
               </div>
               {/* 세로 점선 */}
@@ -572,4 +572,4 @@ const HealthCheckupForm = () => {
   );
 };
 
-export default HealthCheckupForm; 
+export default HealthCheckupForm;
