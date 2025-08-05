@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiChevronRight, FiChevronLeft } from 'react-icons/fi';
 import { NotificationItem } from './NotificationItem';
 import DeleteModal from './DeleteModal';
@@ -6,11 +6,10 @@ import recentIcon from '/src/assets/Alarm/alarm-recent.svg';
 import pastIcon from '/src/assets/Alarm/alarm-past.svg';
 import pastTitleIcon from '/src/assets/Alarm/alarm-title.svg';
 import checkIcon from '/src/assets/Alarm/check.svg';
-import { useUserNotificationsQuery } from '../../hooks/notifications/useUserNotificationsQuery';
-import { useUserNotificationsInfiniteQuery } from '../../hooks/notifications/useUserNotificationsInfiniteQuery';
-import { useMarkNotificationAsReadMutation } from '../../hooks/notifications/useMarkNotificationAsReadMutation';
-import { useDeleteNotificationsMutation } from '../../hooks/notifications/useDeleteNotificationsMutation';
-import type { UserNotification } from '../../types/notification';
+import { useNotificationManager } from '../../hooks/notifications/useNotificationManager';
+import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
+import { useAutoRefresh } from '../../hooks/useAutoRefresh';
+import type { UserNotification, ExpertNotification } from '../../types/notification';
 
 interface NotificationListProps {
   userType?: 'patient' | 'expert';
@@ -19,169 +18,76 @@ interface NotificationListProps {
 export const NotificationList: React.FC<NotificationListProps> = ({ userType = 'patient' }) => {
   const [showAllOld, setShowAllOld] = useState(false);
   const [selectMode, setSelectMode] = useState(false);
-  const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const observerRef = useRef<HTMLDivElement>(null);
+
+  // 알림 관리 훅
+  const {
+    currentQuery,
+    currentInfiniteQuery,
+    newNotices,
+    oldNotices,
+    allNotifications,
+    selectedIds,
+    handleSelect,
+    toggleSelectAll,
+    clearSelection,
+    markAsRead,
+    deleteNotifications,
+    getNotificationId,
+  } = useNotificationManager({ userType, showAllOld });
+
+  // 무한스크롤 훅
+  const { observerRef } = useInfiniteScroll({
+    hasNextPage: currentInfiniteQuery.hasNextPage,
+    isFetchingNextPage: currentInfiniteQuery.isFetchingNextPage,
+    fetchNextPage: currentInfiniteQuery.fetchNextPage,
+    enabled: showAllOld,
+  });
+
+  // 자동 새로고침 훅
+  useAutoRefresh({
+    refetch: currentQuery.refetch,
+    refetchInfinite: currentInfiniteQuery.refetch,
+    enabled: !showAllOld,
+  });
 
   // 알림 이미지 사전 로딩
   useEffect(() => {
     const preloadImages = () => {
-      const images = [
-        recentIcon,
-        pastIcon,
-        pastTitleIcon,
-        checkIcon
-      ];
-      
+      const images = [recentIcon, pastIcon, pastTitleIcon, checkIcon];
       images.forEach(src => {
         const img = new Image();
         img.src = src;
       });
     };
-    
     preloadImages();
   }, []);
-
-  // 메인 화면용 알림 데이터 조회 (최신 3개 + 지난 8개)
-  const { data: notificationsData, isLoading, error, refetch } = useUserNotificationsQuery({
-    currentPage: 0,
-    pageSize: 20,
-    enabled: userType === 'patient' && !showAllOld,
-    refetchInterval: 10000, // 10초마다 자동 새로고침
-  });
-
-  // 전체보기용 무한스크롤 알림 데이터 조회
-  const {
-    data: infiniteNotificationsData,
-    isLoading: isLoadingInfinite,
-    error: errorInfinite,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    refetch: refetchInfinite,
-  } = useUserNotificationsInfiniteQuery({
-    pageSize: 10,
-    enabled: userType === 'patient' && showAllOld,
-  });
-
-  // 알림 읽음 처리 mutation
-  const markAsReadMutation = useMarkNotificationAsReadMutation({
-    onSuccess: () => {
-      // 성공 시 추가 처리 없음 (캐시가 자동으로 업데이트됨)
-    },
-    onError: (error) => {
-      console.error('알림 읽음 처리 실패:', error);
-    },
-  });
-
-  // 알림 삭제 mutation
-  const deleteNotificationsMutation = useDeleteNotificationsMutation({
-    onSuccess: () => {
-      // 성공 시 추가 처리 없음 (캐시가 자동으로 업데이트됨)
-    },
-    onError: (error) => {
-      console.error('알림 삭제 실패:', error);
-      alert('알림 삭제에 실패했습니다. 다시 시도해주세요.');
-    },
-  });
-
-  // 메인 화면용 데이터 변환
-  const notifications = notificationsData?.result?.content || [];
-  const newNotices = notifications.filter((n) => !n.isRead); 
-  const oldNotices = notifications.filter((n) => n.isRead).slice(0, 8);
-
-  // 전체보기용 데이터 변환 (모든 페이지의 알림을 하나의 배열로 합침)
-  const allNotifications = infiniteNotificationsData?.pages.flatMap((page: any) => page.result?.content || []) || [];
-
-  const toggleSelectAll = () => {
-    const currentNotices = showAllOld ? allNotifications : oldNotices;
-    if (selectedIds.length === currentNotices.length) {
-      setSelectedIds([]);
-    } else {
-      setSelectedIds(currentNotices.map((n) => n.userNotificationId));
-    }
-  };
 
   // 전체 삭제 핸들러
   const handleDeleteAll = () => {
     const currentNotices = showAllOld ? allNotifications : oldNotices;
     if (currentNotices.length > 0) {
-      const allIds = currentNotices.map((n) => n.userNotificationId);
-      deleteNotificationsMutation.mutate(allIds);
+      const allIds = currentNotices.map(getNotificationId);
+      deleteNotifications(allIds);
     }
-  };
-
-  const handleSelect = (id: number) => {
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
-    );
   };
 
   const handleDelete = () => {
     if (selectedIds.length > 0) {
-      deleteNotificationsMutation.mutate(selectedIds);
-      setSelectedIds([]);
+      deleteNotifications(selectedIds);
+      clearSelection();
       setIsModalOpen(false);
     }
   };
 
   // 알림 클릭 시 읽음 처리
-  const handleNotificationClick = (notification: UserNotification) => {
-    if (!notification.isRead) {
-      markAsReadMutation.mutate(notification.userNotificationId);
-    }
+  const handleNotificationClick = (notification: UserNotification | ExpertNotification) => {
+    markAsRead(notification);
   };
 
-  // Intersection Observer 콜백
-  const handleObserver = useCallback(
-    (entries: IntersectionObserverEntry[]) => {
-      const [target] = entries;
-      if (target.isIntersecting && hasNextPage && !isFetchingNextPage) {
-        fetchNextPage();
-      }
-    },
-    [hasNextPage, isFetchingNextPage, fetchNextPage]
-  );
-
-  // Intersection Observer 설정
-  useEffect(() => {
-    const observer = new IntersectionObserver(handleObserver, {
-      threshold: 0.1,
-    });
-
-    if (observerRef.current) {
-      observer.observe(observerRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, [handleObserver]);
-
-  // 포커스 시 자동 새로고침
-  useEffect(() => {
-    const handleFocus = () => {
-      refetch();
-      refetchInfinite();
-    };
-
-    window.addEventListener('focus', handleFocus);
-    return () => window.removeEventListener('focus', handleFocus);
-  }, [refetch, refetchInfinite]);
-
-  // 탭 변경 시 자동 새로고침
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (!document.hidden) {
-        refetch();
-        refetchInfinite();
-      }
-    };
-
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, [refetch, refetchInfinite]);
-
   // 로딩 상태 처리
-  if (isLoading || isLoadingInfinite) {
+  const isLoading = currentQuery.isLoading || currentInfiniteQuery.isLoading;
+  if (isLoading) {
     return (
       <div className='flex flex-col items-center justify-center gap-[40px] w-full max-w-[1183px] px-4 sm:px-[80px] py-[50px] rounded-[20px] border border-white bg-[#F6F9FF] shadow-[...]'>
         <div className='text-center'>
@@ -193,7 +99,8 @@ export const NotificationList: React.FC<NotificationListProps> = ({ userType = '
   }
 
   // 에러 상태 처리
-  if (error || errorInfinite) {
+  const error = currentQuery.error || currentInfiniteQuery.error;
+  if (error) {
     return (
       <div className='flex flex-col items-center justify-center gap-[40px] w-full max-w-[1183px] px-4 sm:px-[80px] py-[50px] rounded-[20px] border border-white bg-[#F6F9FF] shadow-[...]'>
         <div className='text-center'>
@@ -244,17 +151,17 @@ export const NotificationList: React.FC<NotificationListProps> = ({ userType = '
           {selectMode && (
             <div className='flex items-start gap-3 ml-[-8px] mb-[-40px]'>
               <button
-                onClick={toggleSelectAll}
+                onClick={() => toggleSelectAll(allNotifications)}
                 className={`
-    w-[22.5px] h-[22.5px] relative rounded-[6px] cursor-pointer
-    ${
-      selectedIds.length === (showAllOld ? allNotifications.length : oldNotices.length)
-        ? 'border-0 bg-transparent'
-        : 'border border-[#9DA0A3] bg-white'
-    }
-  `}
+                  w-[22.5px] h-[22.5px] relative rounded-[6px] cursor-pointer
+                  ${
+                    selectedIds.length === allNotifications.length
+                      ? 'border-0 bg-transparent'
+                      : 'border border-[#9DA0A3] bg-white'
+                  }
+                `}
               >
-                {selectedIds.length === (showAllOld ? allNotifications.length : oldNotices.length) && (
+                {selectedIds.length === allNotifications.length && (
                   <img
                     src={checkIcon}
                     alt='check'
@@ -266,7 +173,7 @@ export const NotificationList: React.FC<NotificationListProps> = ({ userType = '
               </button>
               <span
                 className='text-[#4D5053] cursor-pointer font-light text-[16px] leading-[22px] tracking-[-0.48px] font-[Pretendard]'
-                onClick={toggleSelectAll}
+                onClick={() => toggleSelectAll(allNotifications)}
               >
                 전체 선택
               </span>
@@ -291,14 +198,17 @@ export const NotificationList: React.FC<NotificationListProps> = ({ userType = '
             </span>
           </div>
           <div className='flex flex-col gap-[24px] w-full'>
-            {newNotices.map((n) => (
-              <NotificationItem 
-                key={n.userNotificationId} 
-                message={n.notificationContent} 
-                isNew 
-                onClick={() => handleNotificationClick(n)}
-              />
-            ))}
+            {newNotices.map((n) => {
+              const notificationId = getNotificationId(n);
+              return (
+                <NotificationItem 
+                  key={notificationId} 
+                  message={n.notificationContent} 
+                  isNew 
+                  onClick={() => handleNotificationClick(n)}
+                />
+              );
+            })}
           </div>
           <hr className='w-full h-px border-0 bg-[#C5C8CB] my-[24px] mt-[-5px]' />
           <div className='flex items-center gap-2 mt-[-30px]'>
@@ -308,14 +218,17 @@ export const NotificationList: React.FC<NotificationListProps> = ({ userType = '
             </span>
           </div>
           <div className='flex flex-col gap-[24px] mt-[-10px] w-full'>
-            {oldNotices.slice(0, 4).map((n) => (
-              <NotificationItem 
-                key={n.userNotificationId} 
-                message={n.notificationContent} 
-                isNew={false} 
-                onClick={() => handleNotificationClick(n)}
-              />
-            ))}
+            {oldNotices.slice(0, 4).map((n) => {
+              const notificationId = getNotificationId(n);
+              return (
+                <NotificationItem 
+                  key={notificationId} 
+                  message={n.notificationContent} 
+                  isNew={false} 
+                  onClick={() => handleNotificationClick(n)}
+                />
+              );
+            })}
           </div>
           <div className='flex justify-center w-full mt-[40px]'>
             <button
@@ -328,20 +241,23 @@ export const NotificationList: React.FC<NotificationListProps> = ({ userType = '
         </div>
       ) : (
         <div className='flex flex-col gap-[24px] w-full mt-[16px]'>
-          {allNotifications.map((n) => (
-            <NotificationItem
-              key={n.userNotificationId}
-              message={n.notificationContent}
-              isNew={!n.isRead}
-              selectable={selectMode}
-              isSelected={selectedIds.includes(n.userNotificationId)}
-              onSelectChange={() => handleSelect(n.userNotificationId)}
-              onClick={() => handleNotificationClick(n)}
-            />
-          ))}
+          {allNotifications.map((n) => {
+            const notificationId = getNotificationId(n);
+            return (
+              <NotificationItem
+                key={notificationId}
+                message={n.notificationContent}
+                isNew={!n.isRead}
+                selectable={selectMode}
+                isSelected={selectedIds.includes(notificationId)}
+                onSelectChange={() => handleSelect(notificationId)}
+                onClick={() => handleNotificationClick(n)}
+              />
+            );
+          })}
           
           {/* 무한스크롤 스켈레톤 UI */}
-          {isFetchingNextPage && (
+          {currentInfiniteQuery.isFetchingNextPage && (
             <div className='flex flex-col gap-[24px] w-full'>
               {[...Array(3)].map((_, index) => (
                 <div key={index} className='flex items-center w-full ml-[-10px] gap-[16px]'>
@@ -356,7 +272,7 @@ export const NotificationList: React.FC<NotificationListProps> = ({ userType = '
           )}
           
           {/* Intersection Observer 요소 */}
-          {hasNextPage && (
+          {currentInfiniteQuery.hasNextPage && (
             <div ref={observerRef} className='h-4 w-full' />
           )}
         </div>
