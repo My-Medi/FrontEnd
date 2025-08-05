@@ -26,9 +26,7 @@ export const getHealthProposal = async (): Promise<HealthProposalApiResponse> =>
  */
 export const createHealthProposal = async (data: HealthProposalRequest): Promise<HealthProposalCreateResponse> => {
   try {
-    console.log('건강관리요청서 작성 API 호출 데이터:', data);
     const response = await API.post<HealthProposalCreateResponse>('/users/proposals', data);
-    console.log('건강관리요청서 작성 API 응답:', response.data);
     return response.data;
   } catch (error) {
     console.error('건강관리요청서 작성 실패:', error);
@@ -43,9 +41,7 @@ export const createHealthProposal = async (data: HealthProposalRequest): Promise
  */
 export const updateHealthProposal = async (data: HealthProposalRequest): Promise<HealthProposalCreateResponse> => {
   try {
-    console.log('건강관리요청서 수정 API 호출 데이터:', data);
     const response = await API.patch<HealthProposalCreateResponse>('/users/proposals', data);
-    console.log('건강관리요청서 수정 API 응답:', response.data);
     return response.data;
   } catch (error) {
     console.error('건강관리요청서 수정 실패:', error);
