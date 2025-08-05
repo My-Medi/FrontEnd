@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import CustomCheckboxButton from '../Common/CustomCheckboxButton';
 import ConfirmModal from './ConfirmModal';
-import { useHealthProposalQuery } from '../../hooks/users/useHealthProposalQuery';
-import { useHealthProposalMutation } from '../../hooks/users/useHealthProposalMutation';
-import { useHealthProposalUpdateMutation } from '../../hooks/users/useHealthProposalUpdateMutation';
-import type { HealthProposalRequest } from '../../types/user';
+import { useHealthProposalQuery } from '../../hooks/healthProposal/useHealthProposalQuery';
+import { useHealthProposalMutation } from '../../hooks/healthProposal/useHealthProposalMutation';
+import { useHealthProposalUpdateMutation } from '../../hooks/healthProposal/useHealthProposalUpdateMutation';
+import type { HealthProposalRequest } from '../../types/healthProposal';
 
 const healthFields = [
   '체중감량 / 비만',
@@ -274,10 +274,15 @@ const RequestForm = () => {
           <div className='flex justify-center'>
             <button
               type='submit'
-              className='w-full max-w-[320px] h-14 text-lg font-semibold rounded-[60px] bg-[#1D68FF] text-white'
+              className={`w-full max-w-[320px] h-14 text-lg font-semibold rounded-[60px] ${
+                isEditMode 
+                  ? 'bg-white text-[#222]' 
+                  : 'bg-[#1D68FF] text-white'
+              }`}
               style={{
-                boxShadow:
-                  '0px 2px 8px 0px rgba(29,104,255,0.10), 0px 1px 4px 0px rgba(29,104,255,0.17)',
+                boxShadow: isEditMode
+                  ? '0px 2px 8px 0px rgba(29,104,255,0.06), 0px 1px 4px 0px rgba(29,104,255,0.10)'
+                  : '0px 2px 8px 0px rgba(29,104,255,0.10), 0px 1px 4px 0px rgba(29,104,255,0.17)',
               }}
             >
               {isEditMode ? '수정하기' : '등록하기'}
