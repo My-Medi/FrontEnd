@@ -149,8 +149,7 @@ const HealthCheckupForm = () => {
 
   return (
     <form
-      className="mx-auto px-4 bg-white min-h-screen"
-      style={{ maxWidth: 'calc(100vw - 320px)' }}
+      className="mx-auto px-4 bg-white min-h-screen max-w-[1300px]"
     >
       {/* 상단 타이틀/뒤로가기 */}
       <div className="flex items-center justify-center w-full py-8 my-8">
