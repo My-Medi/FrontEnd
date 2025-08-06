@@ -12,6 +12,7 @@ import ExpertMatchingIntroPage from '../pages/Introduce/ExpertMatchingPage';
 import MedicalReportPage from '../pages/Introduce/MedicalReportPage';
 import AIHealthCarePage from '../pages/Introduce/AIHealthCarePage';
 import HealthTermsPage from '../pages/HealthTerms/HealthTerm';
+import MedicalReportLLMPage from '../pages/MedicalReportLLM/MedicalReportLLMPage';
 import ProtectedRoute from '../components/Common/ProtectedRoute';
 
 export const router = createBrowserRouter([
@@ -60,6 +61,7 @@ export const router = createBrowserRouter([
       { path: 'expert-matching-intro', element: <ExpertMatchingIntroPage /> },
       { path: 'medical-report-intro', element: <MedicalReportPage /> },
       { path: 'ai-healthcare-intro', element: <AIHealthCarePage /> },
+      { path: 'medical-report-llm', element: <MedicalReportLLMPage /> },
     ],
   },
 ]); 
