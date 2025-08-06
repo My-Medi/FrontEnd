@@ -13,7 +13,13 @@ export const useTokenReissueMutation = ({
   onError,
 }: UseTokenReissueMutationProps = {}) => {
   return useMutation<TokenReissueResponse, Error, string>({
-    mutationFn: (refreshToken: string) => tokenAPI.reissue(refreshToken),
+    mutationFn: async (refreshToken: string) => {
+      const response = await tokenAPI.reissue(refreshToken);
+      if (!response.result) {
+        throw new Error('토큰 재발급에 실패했습니다.');
+      }
+      return response.result;
+    },
     onSuccess: (data) => {
       // 새로운 토큰 저장
       saveTokens(data.accessToken, data.refreshToken);

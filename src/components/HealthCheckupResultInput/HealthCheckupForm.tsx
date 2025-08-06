@@ -5,26 +5,7 @@ import CustomCheckboxButton from '../Common/CustomCheckboxButton';
 import backSvg from '../../assets/back.svg';
 import { useNavigate } from 'react-router-dom';
 
-// 커스텀 체크박스 컴포넌트
-const CustomCheckbox = ({ checked, onChange, label }: { checked: boolean; onChange: () => void; label: string }) => (
-  <label className="inline-flex items-center cursor-pointer select-none">
-    <input
-      type="checkbox"
-      checked={checked}
-      onChange={onChange}
-      className="hidden"
-    />
-    <span className="w-6 h-6 flex items-center justify-center rounded-[6px] border border-[#1D68FF] mr-2" style={{ background: checked ? '#1D68FF' : '#fff' }}>
-      {checked && (
-        <svg xmlns="http://www.w3.org/2000/svg" width="23" height="24" viewBox="0 0 23 24" fill="none">
-          <rect y="0.75" width="22.5" height="22.5" rx="6" fill="#1D68FF"/>
-          <path d="M6.75 11.6509L10.2553 15L15.75 9.75" stroke="white" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      )}
-    </span>
-    <span className="text-base text-gray-700">{label}</span>
-  </label>
-);
+
 
 const HealthCheckupForm = () => {
   // 회차 상태 관리

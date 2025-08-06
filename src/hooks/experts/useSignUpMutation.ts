@@ -35,7 +35,7 @@ export const useSignUpMutation = ({ onSuccess, onError }: UseSignUpMutationProps
 };
 
 // 새로운 2단계, 3단계 방식의 전문가 회원가입 훅
-export const useExpertSignUpMutation = ({ onSuccess, onError }: UseSignUpMutationProps = {}) => {
+export const useExpertSignUpMutation = ({ onSuccess }: UseSignUpMutationProps = {}) => {
   return useMutation<SignUpResponse, AxiosError, ExpertSignUpRequest>({
     mutationFn: async (data: ExpertSignUpRequest) => {
       return expertAPI.signUpExpertNew(data);

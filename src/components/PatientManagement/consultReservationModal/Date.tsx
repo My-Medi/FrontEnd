@@ -11,7 +11,7 @@ interface ConsultDateModalProps {
   selectedDate: dayjs.Dayjs;
 }
 
-const ConsultDateModal: React.FC<ConsultDateModalProps> = ({ onClose, selectedDate }) => {
+const ConsultDateModal: React.FC<ConsultDateModalProps> = ({ onClose }) => {
   const [hour, setHour] = useState('');
   const [minute, setMinute] = useState('');
   const [meridiem, setMeridiem] = useState<'오전' | '오후'>('오전');

@@ -5,8 +5,7 @@ import { useState } from 'react';
 import MemberCardModal from './memberCardModel/memberCardModal';
 import AdviceRegisterModal from './memberCardModel/adviceRegisterModel';
 import ConsultReservationModal from './consultReservationModal/CalendarModal';
-import ConsultDateModal from './consultReservationModal/Date';
-import type dayjs from 'dayjs';
+
 
 interface Member {
   profileImageUrl?: string;
@@ -26,8 +25,7 @@ const MemberCard: React.FC<{ member: Member }> = ({ member }) => {
   const [showMemberCardModal, setShowMemberCardModal] = useState(false);
   const [showAdviceRegisterModal, setShowAdviceRegisterModal] = useState(false);
   const [showConsultReservationModal, setShowConsultReservationModal] = useState(false);
-  const [showConsultDateModal, setShowConsultDateModal] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(null);
+
 
   const openAdviceRegisterModal = () => {
     setShowMemberCardModal(false);
@@ -41,12 +39,7 @@ const MemberCard: React.FC<{ member: Member }> = ({ member }) => {
   };
   const closeConsultReservationModal = () => setShowConsultReservationModal(false);
 
-  const openConsultDateModal = () => {
-    setShowMemberCardModal(false);
-    setShowConsultReservationModal(false);
-    setShowConsultDateModal(true);
-  };
-  const closeConsultDateModal = () => setShowConsultDateModal(false);
+
 
   return (
     <div
@@ -93,16 +86,9 @@ const MemberCard: React.FC<{ member: Member }> = ({ member }) => {
       {showConsultReservationModal && (
         <ConsultReservationModal
           onClose={closeConsultReservationModal}
-          onNext={(date) => {
-            setSelectedDate(date);
-            setShowConsultReservationModal(false);
-            setShowConsultDateModal(true);
-          }}
         />
       )}
-      {showConsultDateModal && selectedDate && (
-        <ConsultDateModal onClose={closeConsultDateModal} selectedDate={selectedDate} />
-      )}
+
     </div>
   );
 };

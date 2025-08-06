@@ -38,7 +38,7 @@ const EditInfo: React.FC<EditInfoProps> = ({ onBack, onHasChanges, onProfileModa
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
-  const [selectedProfile, setSelectedProfile] = useState(1);
+
   const [hasChanges, setHasChanges] = useState(false);
   const [initialData, setInitialData] = useState(formData);
 
@@ -108,8 +108,7 @@ const EditInfo: React.FC<EditInfoProps> = ({ onBack, onHasChanges, onProfileModa
     onBack?.();
   };
 
-  const handleProfileSelect = (profileIndex: number) => {
-    setSelectedProfile(profileIndex);
+  const handleProfileSelect = () => {
     setShowProfileModal(false);
     onProfileModalChange?.(false);
   };

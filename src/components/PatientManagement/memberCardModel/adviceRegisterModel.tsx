@@ -7,7 +7,7 @@ interface AdviceRegisterModalProps {
 
 const AdviceRegisterModal: React.FC<AdviceRegisterModalProps> = ({ onClose }) => {
   const [adviceText, setAdviceText] = useState('한줄 조언을 등록해 보세요!');
-  const [isEditing, setIsEditing] = useState(false);
+
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setAdviceText(e.target.value);
   };
@@ -16,7 +16,6 @@ const AdviceRegisterModal: React.FC<AdviceRegisterModalProps> = ({ onClose }) =>
     if (adviceText === '한줄 조언을 등록해 보세요!') {
       setAdviceText('');
     }
-    setIsEditing(true);
   };
 
   const handleRegister = () => {

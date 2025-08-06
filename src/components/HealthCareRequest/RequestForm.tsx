@@ -40,12 +40,10 @@ const RequestForm = () => {
   });
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   
-  const { data: healthProposal, isLoading, error } = useHealthProposalQuery();
+  const { data: healthProposal} = useHealthProposalQuery();
   const healthProposalMutation = useHealthProposalMutation();
   const healthProposalUpdateMutation = useHealthProposalUpdateMutation();
 
-  // 4300 에러는 제안서가 없는 경우이므로 빈 폼을 보여줌
-  const isNoProposalError = error && (error as any)?.response?.data?.code === 4300;
   
   // 기존 데이터가 있는지 확인 (수정 모드)
   const isEditMode = !!healthProposal?.result;
@@ -149,20 +147,20 @@ const RequestForm = () => {
     if (isEditMode) {
       // 수정 API 호출 (PATCH)
       healthProposalUpdateMutation.mutate(apiData, {
-        onSuccess: (data) => {
+        onSuccess: () => {
           setIsConfirmModalOpen(false);
         },
-        onError: (error) => {
+        onError: () => {
           alert('요청서 수정에 실패했습니다. 다시 시도해주세요.');
         },
       });
     } else {
       // 등록 API 호출 (POST)
       healthProposalMutation.mutate(apiData, {
-        onSuccess: (data) => {
+        onSuccess: () => {
           setIsConfirmModalOpen(false);
         },
-        onError: (error) => {
+        onError: () => {
           alert('요청서 등록에 실패했습니다. 다시 시도해주세요.');
         },
       });
