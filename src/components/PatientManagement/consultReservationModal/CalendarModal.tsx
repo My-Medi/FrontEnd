@@ -5,7 +5,7 @@ import type dayjs from 'dayjs';
 import ConsultDateModal from './Date';
 
 interface ConsultReservationModalProps {
-  onClose: () => void;
+  onClose: (isFromSuccess?: boolean) => void;
 }
 
 const ConsultReservationModal: React.FC<ConsultReservationModalProps> = ({ onClose }) => {
@@ -20,16 +20,24 @@ const ConsultReservationModal: React.FC<ConsultReservationModalProps> = ({ onClo
 
   return (
     <>
-      <div className='fixed inset-0 bg-black/30 z-40' />
-      <div className='absolute left-1/2 -translate-x-1/2 z-50 top-[20px]'>
+      {!isDateModalOpen && (
+        <>
+          <div className='fixed inset-0 bg-black/30 z-60' />
+          <div className='absolute left-1/2 -translate-x-1/2 z-70 top-[20px]'>
         <div className='hidden lg:flex flex-col items-center gap-[40px] relative w-[889px] pt-[50px] pl-[50px] pr-[80px] pb-[50px] rounded-[40px] bg-white shadow-md'>
           {/* 상단 헤더 */}
-          <div className='flex mt-[-10px] items-center gap-6 self-start'>
+          <div className='flex mt-[-10px] items-center gap-6 w-full justify-center'>
             <button
-              onClick={onClose}
-              className='cursor-pointer shrink-0 flex items-center justify-center'
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('ConsultReservationModal 뒤로가기 버튼 클릭됨');
+                onClose(false); // isFromSuccess = false
+              }}
+              className='cursor-pointer shrink-0 flex items-center justify-center hover:opacity-80 transition-opacity'
+              style={{ position: 'relative', zIndex: 100, minWidth: '40px', minHeight: '40px' }}
             >
-              <img src={BackIcon} alt='뒤로가기' className='w-[17px] h-[35px]' />
+              <img src={BackIcon} alt='뒤로가기' className='w-[17px] h-[35px] pointer-events-none' />
             </button>
 
             <div className='flex flex-col ml-[-80px] w-[837px] items-center justify-between h-[60px]'>
@@ -52,10 +60,23 @@ const ConsultReservationModal: React.FC<ConsultReservationModalProps> = ({ onClo
           </div>
         </div>
       </div>
+        </>
+      )}
 
       {/* 날짜 상세 입력 모달 */}
       {isDateModalOpen && selectedDate && (
-        <ConsultDateModal onClose={() => setIsDateModalOpen(false)} selectedDate={selectedDate} />
+        <ConsultDateModal 
+          onClose={(isFromSuccess = false) => {
+            console.log('CalendarModal - Date 모달 onClose 호출됨, isFromSuccess:', isFromSuccess);
+            setIsDateModalOpen(false);
+            // 성공 모달에서 확인 버튼을 누르면 모든 모달을 닫기
+            if (isFromSuccess) {
+              onClose(true); // isFromSuccess = true
+            }
+            // 뒤로가기 버튼을 누르면 Calendar 모달은 유지하고 memberCardModal로 돌아감
+          }} 
+          selectedDate={selectedDate} 
+        />
       )}
     </>
   );

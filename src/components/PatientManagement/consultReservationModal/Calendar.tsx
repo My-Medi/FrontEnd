@@ -140,8 +140,8 @@ const Calendar: React.FC<CalendarProps> = ({ selectedDate, onDateSelect }) => {
                   <div
                     key={i}
                     className={`flex w-[40px] h-[40px] p-[10px] justify-center items-center text-[16px] font-light tracking-[-0.48px] cursor-pointer
-                      ${isSelected(date) ? 'bg-black text-white rounded-full' : ''}
-                      ${isTodayDate ? 'border border-[#1D68FF] bg-white rounded-[60px]' : ''}
+                      ${isSelected(date) ? 'bg-[#1D68FF] text-white rounded-full' : ''}
+                      ${isTodayDate && !isSelected(date) ? 'border border-[#1D68FF] bg-white rounded-[60px]' : ''}
                       ${!isCurrentMonth(date) ? 'text-[#C5C8CB]' : 'text-[#121218]'}
                     `}
                     onClick={() => handleDateClick(date)}

@@ -28,16 +28,24 @@ const MemberCard: React.FC<{ member: Member }> = ({ member }) => {
 
 
   const openAdviceRegisterModal = () => {
-    setShowMemberCardModal(false);
     setShowAdviceRegisterModal(true);
   };
 
-  const closeAdviceRegisterModal = () => setShowAdviceRegisterModal(false);
+  const closeAdviceRegisterModal = () => {
+    setShowAdviceRegisterModal(false);
+    // 첫 번째 모달이 닫혀있으면 다시 열기
+    if (!showMemberCardModal) {
+      setShowMemberCardModal(true);
+    }
+  };
   const openConsultReservationModal = () => {
-    setShowMemberCardModal(false);
     setShowConsultReservationModal(true);
   };
-  const closeConsultReservationModal = () => setShowConsultReservationModal(false);
+  const closeConsultReservationModal = () => {
+    setShowConsultReservationModal(false);
+    // 성공 모달에서 확인 버튼을 누르면 모든 모달이 닫히므로
+    // 첫 번째 모달을 다시 열지 않음
+  };
 
 
 
@@ -74,7 +82,7 @@ const MemberCard: React.FC<{ member: Member }> = ({ member }) => {
         />
       </div>
 
-      {showMemberCardModal && (
+      {showMemberCardModal && !showAdviceRegisterModal && !showConsultReservationModal && (
         <MemberCardModal
           member={member}
           onClose={() => setShowMemberCardModal(false)}
@@ -82,10 +90,28 @@ const MemberCard: React.FC<{ member: Member }> = ({ member }) => {
           openConsultReservation={openConsultReservationModal}
         />
       )}
-      {showAdviceRegisterModal && <AdviceRegisterModal onClose={closeAdviceRegisterModal} />}
+      {showAdviceRegisterModal && (
+        <AdviceRegisterModal 
+          onClose={(isFromRegister = false) => {
+            setShowAdviceRegisterModal(false);
+            // 등록 버튼을 누르면 모든 모달을 닫기
+            if (isFromRegister) {
+              setShowMemberCardModal(false);
+            }
+            // 뒤로가기 버튼을 누르면 memberCardModal로 돌아감
+          }} 
+        />
+      )}
       {showConsultReservationModal && (
         <ConsultReservationModal
-          onClose={closeConsultReservationModal}
+          onClose={(isFromSuccess = false) => {
+            setShowConsultReservationModal(false);
+            // 성공 모달에서 확인 버튼을 누르면 모든 모달을 닫기
+            if (isFromSuccess) {
+              setShowMemberCardModal(false);
+            }
+            // 뒤로가기 버튼을 누르면 memberCardModal로 돌아감
+          }}
         />
       )}
 

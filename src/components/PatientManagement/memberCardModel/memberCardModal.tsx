@@ -63,17 +63,25 @@ const MemberCardModal: React.FC<MemberCardModalProps> = ({
   };
   return (
     <>
-      <div className='fixed inset-0 bg-black/30 z-40' />
-      <div className='absolute left-1/2 -translate-x-1/2 z-50 top-[20px]'>
+      {!showAdviceModal && !showConsultModal && (
+        <>
+          <div className='fixed inset-0 bg-black/30 z-40' />
+          <div className='absolute left-1/2 -translate-x-1/2 z-50 top-[20px]'>
         <div className='hidden lg:flex flex-col items-center gap-6 relative w-[984px] pt-[50px] pl-[50px] pr-[80px] pb-[50px] rounded-[40px] bg-white shadow-md'>
           {/* 상단 헤더 */}
-          <div className='flex items-center gap-6  self-start'>
+          <div className='flex items-center gap-6 w-full justify-center'>
             {/* 뒤로가기 버튼 */}
             <button
-              onClick={onClose}
-              className='cursor-pointer shrink-0 flex items-center justify-center'
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('memberCardModal 뒤로가기 버튼 클릭됨');
+                onClose();
+              }}
+              className='cursor-pointer shrink-0 flex items-center justify-center hover:opacity-80 transition-opacity z-10'
+              style={{ position: 'relative', zIndex: 10 }}
             >
-              <img src={BackIcon} alt='뒤로가기' className='w-[17px] h-[35px]' />
+              <img src={BackIcon} alt='뒤로가기' className='w-[17px] h-[35px] pointer-events-none' />
             </button>
 
             {/* 텍스트 블럭 */}
@@ -145,6 +153,8 @@ const MemberCardModal: React.FC<MemberCardModalProps> = ({
           </div>
         </div>
       </div>
+        </>
+      )}
       {/* AdviceRegisterModal 열기 */}
 
       {showAdviceModal && <AdviceRegisterModal onClose={() => setShowAdviceModal(false)} />}

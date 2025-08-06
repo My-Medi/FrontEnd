@@ -80,11 +80,14 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
           {/* 상단: 닫기버튼 + 타이틀/이름/직함 한 줄 배치 */}
           <div className='w-full flex flex-row items-center pl-[46px] pr-6 pt-10 pb-6 flex-shrink-0'>
             <button
-              className='w-5 h-9 flex rounded-full transition'
-              onClick={onClose}
+              className='w-5 h-9 flex rounded-full transition hover:opacity-80'
+              onClick={(e) => {
+                e.stopPropagation();
+                onClose();
+              }}
               aria-label='닫기'
             >
-              <img src={backSvg} alt='닫기' className='w-full h-full object-contain' />
+              <img src={backSvg} alt='닫기' className='w-full h-full object-contain pointer-events-none' />
             </button>
             <div className='flex-1 flex flex-col items-center'>
               <div className='text-[#4D5053] text-sm font-medium leading-[1.71] mb-1'>
