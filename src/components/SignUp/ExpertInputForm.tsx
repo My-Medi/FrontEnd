@@ -1,11 +1,12 @@
 import React, { useState, useRef } from "react";
 import fileboxIcon from '../../assets/MyHome/Resume/filebox.svg';
-import { signUpExpert } from '../../apis/expertApi/expert';
-import type { PersonalSignUpRequest, ExpertSpecialty } from '../../types/expert';
+import { MultipleImageUpload } from '../Common/MultipleImageUpload';
+import type { CareerRequest, LicenseRequest, LicenseImageRequest, ExpertSpecialty } from '../../types/expert';
 
 interface ExpertInputFormProps {
-  onNext: () => void;
+  onNext: (data: any) => void;
   onPrev: () => void;
+  initialData?: any;
 }
 
 interface CareerRow {
@@ -30,71 +31,60 @@ const SPECIALTY_MAP: { [key: string]: ExpertSpecialty } = {
   '기타': 'ETC',
 };
 
-const ExpertInputForm: React.FC<ExpertInputFormProps> = ({ onNext, onPrev }) => {
+const ExpertInputForm: React.FC<ExpertInputFormProps> = ({ 
+  onNext, 
+  onPrev, 
+  initialData = {} 
+}) => {
   const [selectedFields, setSelectedFields] = useState<string[]>(['영양사']);
   const [companyName, setCompanyName] = useState("");
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-  const [isDragOver, setIsDragOver] = useState(false);
   const [selfIntroduction, setSelfIntroduction] = useState("");
   const [representativeSentence, setRepresentativeSentence] = useState("");
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>([]);
   const [careerRows, setCareerRows] = useState<CareerRow[]>([
     {
       id: 1,
-      company: "건강관리센터",
-      start: "2020.01",
-      end: "2023.12",
-      role: "영양 상담"
+      company: "",
+      start: "",
+      end: "",
+      role: ""
     }
   ]);
   const [certificateRows, setCertificateRows] = useState<CertificateRow[]>([
     {
-      certificateName: "영양사 자격증",
-      issueDate: "2022.05.24",
-      issuingOrganization: "대한영양사협회",
+      certificateName: "",
+      issueDate: "",
+      issuingOrganization: "",
     }
   ]);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFieldToggle = (field: string) => {
-    // 중복 체크 방지: 항상 단일 선택만 가능
     setSelectedFields(prev => 
       prev.includes(field) 
-        ? [] // 이미 선택된 필드라면 선택 해제
-        : [field] // 새로운 필드 선택 시 기존 선택을 모두 해제하고 새로 선택
+        ? [] 
+        : [field]
     );
   };
 
-  const handleFileUpload = (files: FileList | null) => {
-    if (files) {
-      const newFiles = Array.from(files).filter(file => 
-        file.type.startsWith('image/') || file.type === 'application/pdf'
-      );
-      setUploadedFiles(prev => [...prev, ...newFiles]);
-    }
-  };
 
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragOver(true);
-  };
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragOver(false);
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragOver(false);
-    handleFileUpload(e.dataTransfer.files);
-  };
-
-  const handleFileInputClick = () => {
-    fileInputRef.current?.click();
-  };
 
   const removeFile = (index: number) => {
-    setUploadedFiles(prev => prev.filter((_, i) => i !== index));
+    console.log('파일 삭제 호출됨 - 인덱스:', index);
+    console.log('삭제 전 uploadedFiles:', uploadedFiles);
+    console.log('삭제 전 uploadedImageUrls:', uploadedImageUrls);
+    
+    setUploadedFiles(prev => {
+      const newFiles = prev.filter((_, i) => i !== index);
+      console.log('삭제 후 uploadedFiles:', newFiles);
+      return newFiles;
+    });
+    
+    setUploadedImageUrls(prev => {
+      const newUrls = prev.filter((_, i) => i !== index);
+      console.log('삭제 후 uploadedImageUrls:', newUrls);
+      return newUrls;
+    });
   };
 
   const handleCareerChange = (id: number, field: keyof CareerRow, value: string) => {
@@ -116,12 +106,6 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({ onNext, onPrev }) => 
     }]);
   };
 
-  // const removeCareerRow = (id: number) => {
-  //   if (careerRows.length > 1) {
-  //     setCareerRows(prev => prev.filter(row => row.id !== id));
-  //   }
-  // };
-
   const addCertificateRow = () => {
     setCertificateRows(prev => [
       ...prev,
@@ -139,71 +123,153 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({ onNext, onPrev }) => 
     setCertificateRows(newRows);
   };
 
+  const handleImageUploadSuccess = (imageUrls: string[], files: File[]) => {
+    console.log('이미지 업로드 성공 - 받은 URLs:', imageUrls);
+    console.log('업로드된 파일들:', files);
+    setUploadedImageUrls(prev => {
+      const newUrls = [...prev, ...imageUrls];
+      console.log('업데이트된 uploadedImageUrls:', newUrls);
+      return newUrls;
+    });
+    setUploadedFiles(prev => {
+      const newFiles = [...prev, ...files];
+      console.log('업데이트된 uploadedFiles:', newFiles);
+      return newFiles;
+    });
+  };
+
+
+
+  const handleNext = () => {
+    console.log('ExpertInputForm handleNext 호출됨');
+    console.log('현재 uploadedFiles:', uploadedFiles);
+    console.log('현재 uploadedImageUrls:', uploadedImageUrls);
+    console.log('현재 입력값들:', {
+      companyName,
+      selfIntroduction,
+      representativeSentence
+    });
+    
+    // 데이터 변환 및 검증 - 모든 필드가 입력되어야 포함
+    const careers: CareerRequest[] = careerRows
+      .filter(row => 
+        row.company.trim() !== '' && 
+        row.role.trim() !== '' && 
+        row.start.trim() !== '' && 
+        row.end.trim() !== ''
+      )
+      .map(row => ({
+        companyName: row.company,
+        jobTitle: row.role,
+        startDate: row.start,
+        endDate: row.end,
+      }));
+
+    const licenses: LicenseRequest[] = certificateRows
+      .filter(row => 
+        row.certificateName.trim() !== '' && 
+        row.issueDate.trim() !== '' && 
+        row.issuingOrganization.trim() !== ''
+      )
+      .map(row => ({
+        licenseName: row.certificateName,
+        licenseDate: row.issueDate,
+        licenseDescription: row.issuingOrganization,
+      }));
+
+    // 이미지 URL 매핑 개선 - 파일과 URL 개수가 일치하지 않을 수 있으므로 안전장치 추가
+    const licenseImages: LicenseImageRequest[] = [];
+    for (let i = 0; i < uploadedFiles.length; i++) {
+      const file = uploadedFiles[i];
+      const imageUrl = uploadedImageUrls[i] || '';
+      console.log(`파일 ${i}: ${file.name} -> URL: ${imageUrl}`);
+      if (imageUrl) {
+        licenseImages.push({
+          imageUrl,
+          imageTitle: file.name,
+        });
+      }
+    }
+
+    console.log('생성된 licenseImages:', licenseImages);
+
+    const step3Data = {
+      specialty: SPECIALTY_MAP[selectedFields[0] || '영양사'],
+      organizationName: companyName || '기본 기관명', // 빈 문자열 대신 기본값
+      introduction: selfIntroduction || '기본 자기소개', // 빈 문자열 대신 기본값
+      introSentence: representativeSentence || '기본 대표 문장', // 빈 문자열 대신 기본값
+      careers,
+      licenses,
+      licenseImages,
+    };
+
+    console.log('ExpertInputForm onNext 호출 전:', step3Data);
+    onNext(step3Data);
+    console.log('ExpertInputForm onNext 호출 완료');
+  };
+
   return (
     <div className="w-full bg-white flex flex-col items-center py-[30px]">
-             {/* 전문분야 */}
-       <div className="w-[716px] mb-8">
-         <div className="flex flex-col xl:flex-row xl:items-center gap-4 xl:gap-0">
-           <div className="flex items-center gap-4 xl:gap-[0.9rem]">
-             <div className="w-3 h-3 xl:w-[0.7rem] xl:h-[0.7rem] bg-[#1D68FF] rounded-[0.225rem] xl:rounded-[0.225rem]"></div>
-             <span className="text-base xl:text-[1.05rem] font-medium text-[#121218] font-pretendard">전문분야</span>
-           </div>
-           
-           {/* 점선 구분선 */}
-           <div className="hidden xl:block w-0 h-[3.3rem] border border-dashed border-[#DBE6FF] mx-5 xl:mx-[5.5rem] xl:mr-[2.4rem]"></div>
-           
-           <div className="flex flex-wrap xl:flex-nowrap items-center gap-4 xl:gap-[1.2rem] flex-shrink-0">
-          {["영양사", "건강관리사", "웰니스 코치", "운동처방사", "기타"].map((field) => (
-            <div key={field} className="flex items-center gap-3 xl:gap-[0.7rem]">
-              <button
-                onClick={() => handleFieldToggle(field)}
-                className={`w-[1.1rem] h-[1.1rem] xl:w-[1.1rem] xl:h-[1.1rem] rounded-[0.3rem] xl:rounded-[0.3rem] border flex items-center justify-center ${
-                  selectedFields.includes(field)
-                    ? 'bg-[#1D68FF] border-[#1D68FF]'
-                    : 'bg-white border-[#9DA0A3]'
-                }`}
-              >
-                {selectedFields.includes(field) && (
-                  <svg width="8" height="5" viewBox="0 0 7.2 4.2" fill="none">
-                    <path d="M1 2L3 4L6.2 1" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                )}
-              </button>
-              <span className={`text-sm xl:text-base font-medium font-pretendard leading-[2.25] tracking-[-0.03em] ${
-                selectedFields.includes(field) ? 'text-[#121218]' : 'text-[#4D5053]'
-              }`}>
-                {field}
-              </span>
-            </div>
-          ))}
+      {/* 전문분야 */}
+      <div className="w-[716px] mb-8">
+        <div className="flex flex-col xl:flex-row xl:items-center gap-4 xl:gap-0">
+          <div className="flex items-center gap-4 xl:gap-[0.9rem]">
+            <div className="w-3 h-3 xl:w-[0.7rem] xl:h-[0.7rem] bg-[#1D68FF] rounded-[0.225rem] xl:rounded-[0.225rem]"></div>
+            <span className="text-base xl:text-[1.05rem] font-medium text-[#121218] font-pretendard">전문분야</span>
+          </div>
+          
+          {/* 점선 구분선 */}
+          <div className="hidden xl:block w-0 h-[3.3rem] border border-dashed border-[#DBE6FF] mx-5 xl:mx-[5.5rem] xl:mr-[2.4rem]"></div>
+          
+          <div className="flex flex-wrap xl:flex-nowrap items-center gap-4 xl:gap-[1.2rem] flex-shrink-0">
+            {["영양사", "건강관리사", "웰니스 코치", "운동처방사", "기타"].map((field) => (
+              <div key={field} className="flex items-center gap-3 xl:gap-[0.7rem]">
+                <button
+                  onClick={() => handleFieldToggle(field)}
+                  className={`w-[1.1rem] h-[1.1rem] xl:w-[1.1rem] xl:h-[1.1rem] rounded-[0.3rem] xl:rounded-[0.3rem] border flex items-center justify-center ${
+                    selectedFields.includes(field)
+                      ? 'bg-[#1D68FF] border-[#1D68FF]'
+                      : 'bg-white border-[#9DA0A3]'
+                  }`}
+                >
+                  {selectedFields.includes(field) && (
+                    <svg width="8" height="5" viewBox="0 0 7.2 4.2" fill="none">
+                      <path d="M1 2L3 4L6.2 1" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  )}
+                </button>
+                <span className={`text-sm xl:text-base font-medium font-pretendard leading-[2.25] tracking-[-0.03em] ${
+                  selectedFields.includes(field) ? 'text-[#121218]' : 'text-[#4D5053]'
+                }`}>
+                  {field}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
-        </div>
-        
-        
       </div>
 
-             {/* 소속 회사/기관명 */}
-       <div className="w-[716px] mb-8">
-         <div className="flex flex-col xl:flex-row xl:items-center gap-4 xl:gap-0">
-           <div className="flex items-center gap-4 xl:gap-[0.875rem]">
-             <div className="w-3 h-3 xl:w-[0.7rem] xl:h-[0.7rem] bg-[#1D68FF] rounded-[0.2rem] xl:rounded-[0.2rem]"></div>
-             <span className="text-base xl:text-[1.1rem] font-medium text-[#121218]">소속 회사/기관명</span>
-           </div>
-           
-           {/* 점선 구분선 */}
-           <div className="hidden xl:block w-[3.3rem] h-0 border border-dashed border-[#DBE6FF] transform rotate-90 mx-5 xl:mx-[0.3rem]"></div>
-           
-           <div className="flex items-center gap-6 xl:gap-[1.5rem]">
-          <input
-            type="text"
-            value={companyName}
-            onChange={(e) => setCompanyName(e.target.value)}
-            placeholder="소속 회사/ 기관명을 입력하세요."
-            className="w-full xl:w-[23.4rem] h-9 xl:h-[2.25rem] px-3 xl:px-[0.8rem] border border-[#9DA0A3] rounded-lg xl:rounded-lg text-sm xl:text-sm font-medium placeholder-[#9DA0A3]"
-          />
+      {/* 소속 회사/기관명 */}
+      <div className="w-[716px] mb-8">
+        <div className="flex flex-col xl:flex-row xl:items-center gap-4 xl:gap-0">
+          <div className="flex items-center gap-4 xl:gap-[0.875rem]">
+            <div className="w-3 h-3 xl:w-[0.7rem] xl:h-[0.7rem] bg-[#1D68FF] rounded-[0.2rem] xl:rounded-[0.2rem]"></div>
+            <span className="text-base xl:text-[1.1rem] font-medium text-[#121218]">소속 회사/기관명</span>
+          </div>
+          
+          {/* 점선 구분선 */}
+          <div className="hidden xl:block w-[3.3rem] h-0 border border-dashed border-[#DBE6FF] transform rotate-90 mx-5 xl:mx-[0.3rem]"></div>
+          
+          <div className="flex items-center gap-6 xl:gap-[1.5rem]">
+            <input
+              type="text"
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
+              placeholder="소속 회사/ 기관명을 입력하세요."
+              className="w-full xl:w-[23.4rem] h-9 xl:h-[2.25rem] px-3 xl:px-[0.8rem] border border-[#9DA0A3] rounded-lg xl:rounded-lg text-sm xl:text-sm font-medium placeholder-[#9DA0A3]"
+            />
+          </div>
         </div>
-        </div>
-        
       </div>
 
       {/* 자격증 업로드 */}
@@ -213,25 +279,28 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({ onNext, onPrev }) => 
           <span className="text-base xl:text-[1.05rem] font-medium text-[#121218] font-pretendard">자격증</span>
         </div>
         
-        {/* 파일 업로드 영역 */}
-        <div 
-          className={`w-full h-auto min-h-[5.9rem] xl:h-[5.9rem] border border-[#DBE6FF] rounded-[0.525rem] xl:rounded-[0.525rem] flex items-center justify-center cursor-pointer transition-colors p-3 xl:p-3 mb-4 ${
-            isDragOver ? 'bg-[#F0F4FF] border-[#1D68FF]' : 'bg-white'
-          }`}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-          onClick={handleFileInputClick}
+        {/* MultipleImageUpload 컴포넌트 사용 */}
+        <MultipleImageUpload
+          onUploadSuccess={handleImageUploadSuccess}
+          onUploadError={(error) => console.error('자격증 파일 업로드 실패:', error)}
+          maxSize={5}
+          maxFiles={10}
+          accept="image/*,.pdf,.hwp,.doc,.docx"
+          className="mb-4"
         >
-          <div className="flex items-center gap-2 xl:gap-[0.375rem]">
-            <svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M9 7.2V2.88L14.4 7.2M2 0.4C1.068 0.4 0 1.468 0 2.8V18C0 18.6364 0.252857 19.247 0.702944 19.6971C1.15303 20.1471 1.76364 20.4 2.4 20.4H13.6C14.2364 20.4 14.847 20.1471 15.2971 19.6971C15.7471 19.247 16 18.6364 16 18V6L10 0.4H2Z" fill="#9DA0A3"/>
-            </svg>
-            <p className="text-sm xl:text-sm font-medium text-[#9DA0A3] font-pretendard leading-[1.714] tracking-[-0.03em] text-center">
-              {isDragOver ? '파일을 여기에 놓으세요' : '여기에 파일을 마우스로 끌어오세요.'}
-            </p>
+          <div 
+            className="w-full h-auto min-h-[5.9rem] xl:h-[5.9rem] border border-[#DBE6FF] rounded-[0.525rem] xl:rounded-[0.525rem] flex items-center justify-center cursor-pointer transition-colors p-3 xl:p-3 mb-4"
+          >
+            <div className="flex items-center gap-2 xl:gap-[0.375rem]">
+              <svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 7.2V2.88L14.4 7.2M2 0.4C1.068 0.4 0 1.468 0 2.8V18C0 18.6364 0.252857 19.247 0.702944 19.6971C1.15303 20.1471 1.76364 20.4 2.4 20.4H13.6C14.2364 20.4 14.847 20.1471 15.2971 19.6971C15.7471 19.247 16 18.6364 16 18V6L10 0.4H2Z" fill="#9DA0A3"/>
+              </svg>
+              <p className="text-sm xl:text-sm font-medium text-[#9DA0A3] font-pretendard leading-[1.714] tracking-[-0.03em] text-center">
+                여기에 파일을 마우스로 끌어오세요.
+              </p>
+            </div>
           </div>
-        </div>
+        </MultipleImageUpload>
         
         {/* 업로드된 파일들 */}
         {uploadedFiles.length > 0 && (
@@ -239,18 +308,20 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({ onNext, onPrev }) => 
             {uploadedFiles.map((file, index) => (
               <div key={index} className="flex justify-center">
                 <div className="w-full max-w-[24.7rem] xl:w-[24.7rem] h-auto min-h-[2.6rem] xl:h-[2.6rem] bg-[#DBE6FF] rounded-[0.525rem] xl:rounded-[0.525rem] flex items-center justify-between px-4 xl:px-[0.9rem]">
-                  <div className="flex items-center gap-4 xl:gap-[0.9rem]">
-                    <svg width="32" height="24" viewBox="0 0 32 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M8 4H24C26.2091 4 28 5.79086 28 8V16C28 18.2091 26.2091 20 24 20H8C5.79086 20 4 18.2091 4 16V8C4 5.79086 5.79086 4 8 4Z" fill="#9DA0A3"/>
-                      <path d="M12 8H20M12 12H20M12 16H16" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    <span className="text-sm xl:text-sm font-medium text-[#25282B] font-pretendard leading-[1.714] tracking-[-0.03em]">
-                      {file.name}
-                    </span>
+                  <div className="flex items-center gap-4 xl:gap-[0.9rem] flex-1 min-w-0">
+                    <img src={fileboxIcon} alt="업로드된 파일" className="w-8 h-6 xl:w-[2.2rem] xl:h-[1.6rem] flex-shrink-0" />
+                    <div className="flex flex-col min-w-0 flex-1">
+                      <span className="text-sm xl:text-sm font-medium text-[#25282B] font-pretendard leading-[1.714] tracking-[-0.03em] truncate">
+                        {file.name}
+                      </span>
+                      {uploadedImageUrls[index] && (
+                        <span className="text-xs text-green-600">✓ 업로드됨</span>
+                      )}
+                    </div>
                   </div>
                   <button
                     onClick={() => removeFile(index)}
-                    className="text-[#9DA0A3] hover:text-[#1D68FF] transition-colors"
+                    className="text-[#9DA0A3] hover:text-[#1D68FF] transition-colors flex-shrink-0 ml-2"
                   >
                     ✕
                   </button>
@@ -260,7 +331,7 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({ onNext, onPrev }) => 
           </div>
         )}
 
-        {/* 이미지 파일 업로드 안내 박스 */}
+        {/* 파일 업로드 안내 박스 */}
         <div className="flex justify-center mb-4">
           <div className="w-full max-w-[24.7rem] xl:w-[24.7rem] h-auto min-h-[2.6rem] xl:h-[2.6rem] bg-[#DBE6FF] rounded-[0.525rem] xl:rounded-[0.525rem] flex items-center justify-center gap-4 xl:gap-[0.9rem]">
             <img src={fileboxIcon} alt="업로드된 파일" className="w-8 h-6 xl:w-[2.2rem] xl:h-[1.6rem]" />
@@ -455,20 +526,12 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({ onNext, onPrev }) => 
         </div>
       </div>
 
-      {/* 숨겨진 파일 입력 */}
-      <input
-        ref={fileInputRef}
-        type="file"
-        multiple
-        accept="image/*,.pdf"
-        onChange={(e) => handleFileUpload(e.target.files)}
-        className="hidden"
-      />
+
 
       {/* 버튼 */}
       <div className="flex gap-[200px]">
         <button onClick={onPrev} className="px-10 py-3 ml-[20px] rounded-[30px] cursor-pointer bg-[#dbe6ff] text-[18px] text-[#121218] font-medium">이전</button>
-        <button onClick={onNext} className="w-[216px] px-10 py-3 rounded-[30px] cursor-pointer bg-[#1d68ff] text-[18px] text-white font-semibold">완료</button>
+        <button onClick={handleNext} className="w-[216px] px-10 py-3 rounded-[30px] cursor-pointer bg-[#1d68ff] text-[18px] text-white font-semibold">완료</button>
       </div>
     </div>
   );

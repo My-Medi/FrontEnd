@@ -190,7 +190,7 @@ export const NotificationList: React.FC<NotificationListProps> = ({ userType = '
       )}
 
       {!showAllOld ? (
-        <div className='flex flex-col items-start gap-[32px] w-full'>
+        <div className='flex flex-col items-start gap-[32px] w-full min-h-[300px]'>
           <div className='flex items-center gap-2'>
             <img src={recentIcon} alt='recent' />
             <span className='text-[#1D68FF] text-[18px] font-medium leading-[36px] tracking-[-0.54px] font-[Pretendard]'>
@@ -198,17 +198,25 @@ export const NotificationList: React.FC<NotificationListProps> = ({ userType = '
             </span>
           </div>
           <div className='flex flex-col gap-[24px] w-full'>
-            {newNotices.map((n) => {
-              const notificationId = getNotificationId(n);
-              return (
-                <NotificationItem 
-                  key={notificationId} 
-                  message={n.notificationContent} 
-                  isNew 
-                  onClick={() => handleNotificationClick(n)}
-                />
-              );
-            })}
+            {newNotices.length > 0 ? (
+              newNotices.map((n) => {
+                const notificationId = getNotificationId(n);
+                return (
+                  <NotificationItem 
+                    key={notificationId} 
+                    message={n.notificationContent} 
+                    isNew 
+                    onClick={() => handleNotificationClick(n)}
+                  />
+                );
+              })
+            ) : (
+              <div className='flex flex-col items-center justify-center py-[40px]'>
+                <p className='text-[#75787B] text-[16px] font-medium leading-[24px] tracking-[-0.48px] font-[Pretendard]'>
+                  신규 알림이 없습니다.
+                </p>
+              </div>
+            )}
           </div>
           <hr className='w-full h-px border-0 bg-[#C5C8CB] my-[24px] mt-[-5px]' />
           <div className='flex items-center gap-2 mt-[-30px]'>
@@ -218,17 +226,25 @@ export const NotificationList: React.FC<NotificationListProps> = ({ userType = '
             </span>
           </div>
           <div className='flex flex-col gap-[24px] mt-[-10px] w-full'>
-            {oldNotices.slice(0, 4).map((n) => {
-              const notificationId = getNotificationId(n);
-              return (
-                <NotificationItem 
-                  key={notificationId} 
-                  message={n.notificationContent} 
-                  isNew={false} 
-                  onClick={() => handleNotificationClick(n)}
-                />
-              );
-            })}
+            {oldNotices.length > 0 ? (
+              oldNotices.slice(0, 4).map((n) => {
+                const notificationId = getNotificationId(n);
+                return (
+                  <NotificationItem 
+                    key={notificationId} 
+                    message={n.notificationContent} 
+                    isNew={false} 
+                    onClick={() => handleNotificationClick(n)}
+                  />
+                );
+              })
+            ) : (
+              <div className='flex flex-col items-center justify-center py-[40px]'>
+                <p className='text-[#75787B] text-[16px] font-medium leading-[24px] tracking-[-0.48px] font-[Pretendard]'>
+                  지난 알림이 없습니다.
+                </p>
+              </div>
+            )}
           </div>
           <div className='flex justify-center w-full mt-[40px]'>
             <button
@@ -279,7 +295,7 @@ export const NotificationList: React.FC<NotificationListProps> = ({ userType = '
               )}
             </>
           ) : (
-            <div className='flex flex-col items-center justify-center py-[50px]'>
+            <div className='flex flex-col items-center justify-center py-[100px] min-h-[300px]'>
               <p className='text-[#75787B] text-[18px] font-medium leading-[36px] tracking-[-0.54px] font-[Pretendard]'>
                 지난 알림이 없습니다.
               </p>
