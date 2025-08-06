@@ -8,12 +8,13 @@ import useModalScrollLock from '../../../hooks/useModalScrollLock';
 interface RequestModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onBack?: () => void;
   expertName: string;
   expertPosition: string;
   expertRealName: string;
 }
 
-const RequestModal: React.FC<RequestModalProps> = ({ isOpen, onClose, expertName, expertPosition, expertRealName }) => {
+const RequestModal: React.FC<RequestModalProps> = ({ isOpen, onClose, onBack, expertName, expertPosition, expertRealName }) => {
   const [requestText, setRequestText] = useState('');
   const [isVisible, setIsVisible] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -37,7 +38,6 @@ const RequestModal: React.FC<RequestModalProps> = ({ isOpen, onClose, expertName
   };
 
   const handleSuccessClose = () => {
-    console.log('RequestModal handleSuccessClose 호출됨');
     setShowSuccessModal(false);
     onClose(); // 모든 상위 모달들 닫기 (ExpertDetailModal)
   };
@@ -122,7 +122,14 @@ const RequestModal: React.FC<RequestModalProps> = ({ isOpen, onClose, expertName
             </div>
           </div>
           <button
-            onClick={onClose}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              // RequestModal만 닫고 ExpertDetailModal은 유지
+              if (onBack) {
+                onBack();
+              }
+            }}
             className="absolute top-12 left-12 w-[17px] h-[35px] flex items-center justify-center"
           >
             <img src={backSvg} alt="뒤로가기" className="w-full h-full object-contain" />
@@ -141,12 +148,16 @@ const RequestModal: React.FC<RequestModalProps> = ({ isOpen, onClose, expertName
       <ConfirmRequestModal
         isOpen={showConfirmModal}
         onClose={() => {
-          console.log('RequestModal ConfirmRequestModal onClose 호출됨');
           setShowConfirmModal(false);
-          onClose(); // RequestModal도 함께 닫기
+          // 모든 모달 닫기 (RequestModal, ExpertDetailModal)
+          // ExpertDetailModal의 onClose를 직접 호출
+          onClose();
+        }}
+        onBack={() => {
+          setShowConfirmModal(false);
+          // ConfirmRequestModal만 닫고 RequestModal은 유지
         }}
         onConfirm={() => {
-          console.log('요청사항:', requestText);
           // 여기에 실제 요청사항 제출 로직을 추가할 수 있습니다
           // 예: API 호출, 상태 업데이트 등
           

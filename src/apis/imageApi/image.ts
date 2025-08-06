@@ -1,5 +1,4 @@
 import API from '../axios';
-import type { ApiResponse } from '../../types/common';
 
 /**
  * 이미지 업로드 응답 타입
@@ -20,7 +19,7 @@ export const uploadImages = async (files: File[]): Promise<ImageUploadResponse> 
   try {
     const formData = new FormData();
     
-    files.forEach((file, index) => {
+    files.forEach((file) => {
       formData.append('uploadImgFileList', file);
     });
 

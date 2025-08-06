@@ -4,7 +4,7 @@ import MyConstantMedical from './MyConstantMedical';
 import ExpertAdvice from './ExpertAdvice';
 import HomeCalendar from '../Common/HomeCalendar';
 import { NotificationList } from '../../Alarm/NotificationList';
-import { patientNotificationList } from '../../../data/patientNotificationList';
+
 import MatchedExperts from '../Matching/MatchedExperts';
 import RequestForm from '../../HealthCareRequest/RequestForm';
 
@@ -53,7 +53,7 @@ const PatientHome: React.FC<PatientHomeProps> = ({
         </>
       );
     case 1: // 내 알림
-      return <NotificationList notifications={patientNotificationList} />;
+      return <NotificationList />;
     case 2: // 매칭된 전문가
       return <MatchedExperts />;
     case 3: // 건강관리요청서

@@ -3,17 +3,22 @@ import { useNavigate } from 'react-router-dom';
 
 interface SuccessReservationModalProps {
   onClose: () => void;
+  onShowMyHome?: () => void;
 }
 
-const SuccessReservationModal: React.FC<SuccessReservationModalProps> = ({ onClose }) => {
+const SuccessReservationModal: React.FC<SuccessReservationModalProps> = ({ onClose, onShowMyHome }) => {
   const navigate = useNavigate();
   const handleClick = () => {
-    navigate('/myhome');
+    if (onShowMyHome) {
+      onShowMyHome();
+    } else {
+      navigate('/myhome');
+    }
   };
   return (
     <>
-      <div className='fixed inset-0 bg-black/30 z-50' />
-      <div className='fixed inset-0 flex items-center justify-center z-50'>
+      <div className='fixed inset-0 bg-black/30 z-100' />
+      <div className='fixed inset-0 flex items-center justify-center z-110'>
         <div className='bg-white rounded-[30px] shadow-lg w-[889px] h-[224px] pl-[80px] pt-[50px] pr-[80px] pb-[50px] flex flex-col items-center justify-center gap-6'>
           <p className=' w-full justify-center text-[#4D5053] items-center flex flex-col font-[Pretendard] text-[24px] leading-[36px] tracking-[-0.72px] font-semibold'>
             상담 예약일이 등록되었습니다!

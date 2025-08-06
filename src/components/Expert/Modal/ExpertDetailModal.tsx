@@ -42,21 +42,8 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
     onClose(); // 모든 모달 종료
   };
 
-  // const handleRequestSubmit = (request: string) => {
-  //   console.log('요청사항:', request);
-  //   // 여기에 실제 요청사항 제출 로직을 추가할 수 있습니다
-  //   // 예: API 호출, 상태 업데이트 등
 
-  //   // 성공 처리 후 모달들 닫기
-  //   setShowRequestModal(false);
-  //   onClose();
-  // };
 
-  const handleRequestClose = () => {
-    console.log('ExpertDetailModal handleRequestClose 호출됨');
-    setShowRequestModal(false);
-    onClose(); // ExpertDetailModal도 함께 닫기
-  };
 
   return (
     <>
@@ -80,11 +67,14 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
           {/* 상단: 닫기버튼 + 타이틀/이름/직함 한 줄 배치 */}
           <div className='w-full flex flex-row items-center pl-[46px] pr-6 pt-10 pb-6 flex-shrink-0'>
             <button
-              className='w-5 h-9 flex rounded-full transition'
-              onClick={onClose}
+              className='w-5 h-9 flex rounded-full transition hover:opacity-80'
+              onClick={(e) => {
+                e.stopPropagation();
+                onClose();
+              }}
               aria-label='닫기'
             >
-              <img src={backSvg} alt='닫기' className='w-full h-full object-contain' />
+              <img src={backSvg} alt='닫기' className='w-full h-full object-contain pointer-events-none' />
             </button>
             <div className='flex-1 flex flex-col items-center'>
               <div className='text-[#4D5053] text-sm font-medium leading-[1.71] mb-1'>
@@ -195,7 +185,10 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
       {showReRequestModal && (
         <ReRequestConfirmModal
           isOpen={showReRequestModal}
-          onClose={() => setShowReRequestModal(false)}
+          onClose={() => {
+            setShowReRequestModal(false);
+            onClose(); // 모든 모달 닫기 (ExpertDetailModal도 함께 닫기)
+          }}
           onConfirm={handleReRequestConfirm}
           expertName={expert.name}
           expertPosition={expert.position}
@@ -207,7 +200,14 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
       {showRequestModal && (
         <RequestModal
           isOpen={showRequestModal}
-          onClose={handleRequestClose}
+          onClose={() => {
+            setShowRequestModal(false);
+            onClose(); // 모든 모달 닫기 (ExpertDetailModal도 함께 닫기)
+          }}
+          onBack={() => {
+            setShowRequestModal(false);
+            // RequestModal만 닫고 ExpertDetailModal은 유지
+          }}
           expertName={expert.name}
           expertPosition={expert.position}
           expertRealName={expert.realName}

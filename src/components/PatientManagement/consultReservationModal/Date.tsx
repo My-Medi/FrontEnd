@@ -7,11 +7,11 @@ import type dayjs from 'dayjs';
 import SuccessReservationModal from './SuccessReservationModal';
 
 interface ConsultDateModalProps {
-  onClose: () => void;
+  onClose: (isFromSuccess?: boolean) => void;
   selectedDate: dayjs.Dayjs;
 }
 
-const ConsultDateModal: React.FC<ConsultDateModalProps> = ({ onClose, selectedDate }) => {
+const ConsultDateModal: React.FC<ConsultDateModalProps> = ({ onClose }) => {
   const [hour, setHour] = useState('');
   const [minute, setMinute] = useState('');
   const [meridiem, setMeridiem] = useState<'오전' | '오후'>('오전');
@@ -23,22 +23,60 @@ const ConsultDateModal: React.FC<ConsultDateModalProps> = ({ onClose, selectedDa
     setIsSuccessModalOpen(true);
   };
 
+
   const toggleMeridiem = () => {
     setMeridiem((prev) => (prev === '오전' ? '오후' : '오전'));
   };
 
+  const handleHourChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // 숫자만 입력 가능
+    if (!/^\d*$/.test(value)) return;
+    
+    const numValue = parseInt(value);
+    // 0-23 범위만 허용
+    if (numValue >= 0 && numValue <= 23) {
+      setHour(value);
+    } else if (value === '') {
+      setHour('');
+    }
+  };
+
+  const handleMinuteChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // 숫자만 입력 가능
+    if (!/^\d*$/.test(value)) return;
+    
+    const numValue = parseInt(value);
+    // 0-59 범위만 허용
+    if (numValue >= 0 && numValue <= 59) {
+      setMinute(value);
+    } else if (value === '') {
+      setMinute('');
+    }
+  };
+
   return (
     <>
-      <div className='fixed inset-0 bg-black/30 z-40' />
-      <div className='absolute left-1/2 -translate-x-1/2 z-50 top-[20px]'>
+      {!isSuccessModalOpen && (
+        <>
+          <div className='fixed inset-0 bg-black/30 z-80' />
+          <div className='absolute left-1/2 -translate-x-1/2 z-90 top-[20px]'>
         <div className='hidden lg:flex flex-col items-center gap-[40px] relative w-[889px] pt-[50px] pl-[50px] pr-[80px] pb-[50px] rounded-[40px] bg-white shadow-md'>
           {/* 상단 헤더 */}
-          <div className='flex mt-[-10px] items-center gap-6 self-start'>
+          <div className='flex mt-[-10px] items-center gap-6 w-full justify-center'>
             <button
-              onClick={onClose}
-              className='cursor-pointer shrink-0 flex items-center justify-center'
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                // 뒤로가기 버튼을 누르면 Date 모달만 닫고 Calendar 모달로 돌아감
+                setIsSuccessModalOpen(false); // 성공 모달이 열려있다면 닫기
+                onClose(false); // Date 모달 닫기 (isFromSuccess = false)
+              }}
+              className='cursor-pointer shrink-0 flex items-center justify-center hover:opacity-80 transition-opacity'
+              style={{ position: 'relative', zIndex: 100, minWidth: '40px', minHeight: '40px' }}
             >
-              <img src={BackIcon} alt='뒤로가기' className='w-[17px] h-[35px]' />
+              <img src={BackIcon} alt='뒤로가기' className='w-[17px] h-[35px] pointer-events-none' />
             </button>
             <div className='flex flex-col ml-[-80px] w-[837px] items-center justify-between h-[60px]'>
               <p className='text-[#121218] mt-[15px] text-[24px] font-semibold font-[Pretendard] leading-[36px] tracking-[-0.72px]'>
@@ -60,17 +98,17 @@ const ConsultDateModal: React.FC<ConsultDateModalProps> = ({ onClose, selectedDa
                 <input
                   type='text'
                   value={hour}
-                  onChange={(e) => setHour(e.target.value)}
+                  onChange={handleHourChange}
                   placeholder='00'
-                  className='w-[24px] ml-[30px] text-center text-[#C5C8CB] text-[16px] font-light outline-none'
+                  className='w-[24px] ml-[30px] text-center text-[#121218] text-[16px] font-light outline-none'
                 />
                 <span className='text-[#4D5053] text-[16px] font-light'>:</span>
                 <input
                   type='text'
                   value={minute}
-                  onChange={(e) => setMinute(e.target.value)}
+                  onChange={handleMinuteChange}
                   placeholder='00'
-                  className='w-[24px] text-center text-[#C5C8CB] text-[16px] font-light outline-none'
+                  className='w-[24px] text-center text-[#121218] text-[16px] font-light outline-none'
                 />
               </div>
 
@@ -93,7 +131,7 @@ const ConsultDateModal: React.FC<ConsultDateModalProps> = ({ onClose, selectedDa
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 placeholder='장소'
-                className='w-[300px] px-[16px] py-[10px] rounded-[8px] border border-[#EDF0F3] bg-white text-[#9DA0A3] text-[16px] font-light outline-none'
+                className='w-[300px] px-[16px] py-[10px] rounded-[8px] border border-[#EDF0F3] bg-white text-[#121218] text-[16px] font-light outline-none'
               />
             </div>
 
@@ -108,7 +146,7 @@ const ConsultDateModal: React.FC<ConsultDateModalProps> = ({ onClose, selectedDa
                 value={memo}
                 onChange={(e) => setMemo(e.target.value)}
                 placeholder='메모'
-                className='w-[300px] px-[16px] py-[10px] rounded-[8px] border border-[#EDF0F3] bg-white text-[#9DA0A3] text-[16px] font-light outline-none'
+                className='w-[300px] px-[16px] py-[10px] rounded-[8px] border border-[#EDF0F3] bg-white text-[#121218] text-[16px] font-light outline-none'
               />
             </div>
           </div>
@@ -123,8 +161,15 @@ const ConsultDateModal: React.FC<ConsultDateModalProps> = ({ onClose, selectedDa
           </div>
         </div>
       </div>
+        </>
+      )}
       {isSuccessModalOpen && (
-        <SuccessReservationModal onClose={() => setIsSuccessModalOpen(false)} />
+        <SuccessReservationModal onClose={() => {
+          setIsSuccessModalOpen(false);
+          // 성공 모달에서 확인 버튼을 누르면 모든 모달을 완전히 닫기
+          // Calendar 모달까지 닫기 위해 onClose 호출
+          onClose(true); // isFromSuccess = true
+        }} />
       )}
     </>
   );

@@ -5,8 +5,7 @@ import { useState } from 'react';
 import MemberCardModal from './memberCardModel/memberCardModal';
 import AdviceRegisterModal from './memberCardModel/adviceRegisterModel';
 import ConsultReservationModal from './consultReservationModal/CalendarModal';
-import ConsultDateModal from './consultReservationModal/Date';
-import type dayjs from 'dayjs';
+
 
 interface Member {
   profileImageUrl?: string;
@@ -26,27 +25,17 @@ const MemberCard: React.FC<{ member: Member }> = ({ member }) => {
   const [showMemberCardModal, setShowMemberCardModal] = useState(false);
   const [showAdviceRegisterModal, setShowAdviceRegisterModal] = useState(false);
   const [showConsultReservationModal, setShowConsultReservationModal] = useState(false);
-  const [showConsultDateModal, setShowConsultDateModal] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(null);
+
 
   const openAdviceRegisterModal = () => {
-    setShowMemberCardModal(false);
     setShowAdviceRegisterModal(true);
   };
 
-  const closeAdviceRegisterModal = () => setShowAdviceRegisterModal(false);
   const openConsultReservationModal = () => {
-    setShowMemberCardModal(false);
     setShowConsultReservationModal(true);
   };
-  const closeConsultReservationModal = () => setShowConsultReservationModal(false);
 
-  const openConsultDateModal = () => {
-    setShowMemberCardModal(false);
-    setShowConsultReservationModal(false);
-    setShowConsultDateModal(true);
-  };
-  const closeConsultDateModal = () => setShowConsultDateModal(false);
+
 
   return (
     <div
@@ -81,7 +70,7 @@ const MemberCard: React.FC<{ member: Member }> = ({ member }) => {
         />
       </div>
 
-      {showMemberCardModal && (
+      {showMemberCardModal && !showAdviceRegisterModal && !showConsultReservationModal && (
         <MemberCardModal
           member={member}
           onClose={() => setShowMemberCardModal(false)}
@@ -89,20 +78,31 @@ const MemberCard: React.FC<{ member: Member }> = ({ member }) => {
           openConsultReservation={openConsultReservationModal}
         />
       )}
-      {showAdviceRegisterModal && <AdviceRegisterModal onClose={closeAdviceRegisterModal} />}
+      {showAdviceRegisterModal && (
+        <AdviceRegisterModal 
+          onClose={(isFromRegister = false) => {
+            setShowAdviceRegisterModal(false);
+            // 등록 버튼을 누르면 모든 모달을 닫기
+            if (isFromRegister) {
+              setShowMemberCardModal(false);
+            }
+            // 뒤로가기 버튼을 누르면 memberCardModal로 돌아감
+          }} 
+        />
+      )}
       {showConsultReservationModal && (
         <ConsultReservationModal
-          onClose={closeConsultReservationModal}
-          onNext={(date) => {
-            setSelectedDate(date);
+          onClose={(isFromSuccess = false) => {
             setShowConsultReservationModal(false);
-            setShowConsultDateModal(true);
+            // 성공 모달에서 확인 버튼을 누르면 모든 모달을 닫기
+            if (isFromSuccess) {
+              setShowMemberCardModal(false);
+            }
+            // 뒤로가기 버튼을 누르면 memberCardModal로 돌아감
           }}
         />
       )}
-      {showConsultDateModal && selectedDate && (
-        <ConsultDateModal onClose={closeConsultDateModal} selectedDate={selectedDate} />
-      )}
+
     </div>
   );
 };
