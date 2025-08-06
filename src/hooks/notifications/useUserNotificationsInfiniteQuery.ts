@@ -12,7 +12,7 @@ export const useUserNotificationsInfiniteQuery = ({
   enabled = true,
 }: UseUserNotificationsInfiniteQueryProps = {}) => {
   return useInfiniteQuery<NotificationListResponse>({
-    queryKey: ['userNotificationsInfinite', pageSize],
+    queryKey: ['userNotificationsInfinite', pageSize, 'all'],
     queryFn: ({ pageParam = 0 }) => getUserNotifications(pageParam as number, pageSize),
     getNextPageParam: (lastPage) => {
       const { page, totalPages } = lastPage.result || {};

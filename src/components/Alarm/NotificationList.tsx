@@ -41,14 +41,14 @@ export const NotificationList: React.FC<NotificationListProps> = ({ userType = '
     hasNextPage: currentInfiniteQuery.hasNextPage,
     isFetchingNextPage: currentInfiniteQuery.isFetchingNextPage,
     fetchNextPage: currentInfiniteQuery.fetchNextPage,
-    enabled: showAllOld,
+    enabled: showAllOld && currentInfiniteQuery.isEnabled,
   });
 
   // 자동 새로고침 훅
   useAutoRefresh({
     refetch: currentQuery.refetch,
     refetchInfinite: currentInfiniteQuery.refetch,
-    enabled: !showAllOld,
+    enabled: !showAllOld && currentQuery.isEnabled,
   });
 
   // 알림 이미지 사전 로딩
@@ -86,7 +86,7 @@ export const NotificationList: React.FC<NotificationListProps> = ({ userType = '
   };
 
   // 로딩 상태 처리
-  const isLoading = currentQuery.isLoading || currentInfiniteQuery.isLoading;
+  const isLoading = currentQuery.isLoading || (showAllOld && currentInfiniteQuery.isLoading);
   if (isLoading) {
     return (
       <div className='flex flex-col items-center justify-center gap-[40px] w-full max-w-[1183px] px-4 sm:px-[80px] py-[50px] rounded-[20px] border border-white bg-[#F6F9FF] shadow-[...]'>
@@ -99,7 +99,7 @@ export const NotificationList: React.FC<NotificationListProps> = ({ userType = '
   }
 
   // 에러 상태 처리
-  const error = currentQuery.error || currentInfiniteQuery.error;
+  const error = currentQuery.error || (showAllOld && currentInfiniteQuery.error);
   if (error) {
     return (
       <div className='flex flex-col items-center justify-center gap-[40px] w-full max-w-[1183px] px-4 sm:px-[80px] py-[50px] rounded-[20px] border border-white bg-[#F6F9FF] shadow-[...]'>
@@ -241,39 +241,49 @@ export const NotificationList: React.FC<NotificationListProps> = ({ userType = '
         </div>
       ) : (
         <div className='flex flex-col gap-[24px] w-full mt-[16px]'>
-          {allNotifications.map((n) => {
-            const notificationId = getNotificationId(n);
-            return (
-              <NotificationItem
-                key={notificationId}
-                message={n.notificationContent}
-                isNew={!n.isRead}
-                selectable={selectMode}
-                isSelected={selectedIds.includes(notificationId)}
-                onSelectChange={() => handleSelect(notificationId)}
-                onClick={() => handleNotificationClick(n)}
-              />
-            );
-          })}
-          
-          {/* 무한스크롤 스켈레톤 UI */}
-          {currentInfiniteQuery.isFetchingNextPage && (
-            <div className='flex flex-col gap-[24px] w-full'>
-              {[...Array(3)].map((_, index) => (
-                <div key={index} className='flex items-center w-full ml-[-10px] gap-[16px]'>
-                  <div className='flex items-center h-[97px] w-full rounded-[20px] bg-gray-200 animate-pulse'>
-                    <div className='flex items-center h-full w-full px-[32px] py-[10px] gap-[10px] rounded-[50px_20px_20px_20px] border-2 border-gray-200 bg-gray-100'>
-                      <div className='w-full h-6 bg-gray-300 rounded animate-pulse'></div>
+          {allNotifications.length > 0 ? (
+            <>
+              {allNotifications.map((n) => {
+                const notificationId = getNotificationId(n);
+                return (
+                  <NotificationItem
+                    key={notificationId}
+                    message={n.notificationContent}
+                    isNew={!n.isRead}
+                    selectable={selectMode}
+                    isSelected={selectedIds.includes(notificationId)}
+                    onSelectChange={() => handleSelect(notificationId)}
+                    onClick={() => handleNotificationClick(n)}
+                  />
+                );
+              })}
+              
+              {/* 무한스크롤 스켈레톤 UI */}
+              {currentInfiniteQuery.isFetchingNextPage && (
+                <div className='flex flex-col gap-[24px] w-full'>
+                  {[...Array(3)].map((_, index) => (
+                    <div key={index} className='flex items-center w-full ml-[-10px] gap-[16px]'>
+                      <div className='flex items-center h-[97px] w-full rounded-[20px] bg-gray-200 animate-pulse'>
+                        <div className='flex items-center h-full w-full px-[32px] py-[10px] gap-[10px] rounded-[50px_20px_20px_20px] border-2 border-gray-200 bg-gray-100'>
+                          <div className='w-full h-6 bg-gray-300 rounded animate-pulse'></div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
-              ))}
+              )}
+              
+              {/* Intersection Observer 요소 */}
+              {currentInfiniteQuery.hasNextPage && (
+                <div ref={observerRef} className='h-4 w-full' />
+              )}
+            </>
+          ) : (
+            <div className='flex flex-col items-center justify-center py-[50px]'>
+              <p className='text-[#75787B] text-[18px] font-medium leading-[36px] tracking-[-0.54px] font-[Pretendard]'>
+                지난 알림이 없습니다.
+              </p>
             </div>
-          )}
-          
-          {/* Intersection Observer 요소 */}
-          {currentInfiniteQuery.hasNextPage && (
-            <div ref={observerRef} className='h-4 w-full' />
           )}
         </div>
       )}
