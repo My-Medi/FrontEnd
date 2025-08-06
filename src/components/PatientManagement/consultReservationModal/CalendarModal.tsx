@@ -27,13 +27,12 @@ const ConsultReservationModal: React.FC<ConsultReservationModalProps> = ({ onClo
         <div className='hidden lg:flex flex-col items-center gap-[40px] relative w-[889px] pt-[50px] pl-[50px] pr-[80px] pb-[50px] rounded-[40px] bg-white shadow-md'>
           {/* 상단 헤더 */}
           <div className='flex mt-[-10px] items-center gap-6 w-full justify-center'>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('ConsultReservationModal 뒤로가기 버튼 클릭됨');
-                onClose(false); // isFromSuccess = false
-              }}
+                                        <button
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                onClose(false); // isFromSuccess = false
+                              }}
               className='cursor-pointer shrink-0 flex items-center justify-center hover:opacity-80 transition-opacity'
               style={{ position: 'relative', zIndex: 100, minWidth: '40px', minHeight: '40px' }}
             >
@@ -67,7 +66,6 @@ const ConsultReservationModal: React.FC<ConsultReservationModalProps> = ({ onClo
       {isDateModalOpen && selectedDate && (
         <ConsultDateModal 
           onClose={(isFromSuccess = false) => {
-            console.log('CalendarModal - Date 모달 onClose 호출됨, isFromSuccess:', isFromSuccess);
             setIsDateModalOpen(false);
             // 성공 모달에서 확인 버튼을 누르면 모든 모달을 닫기
             if (isFromSuccess) {

@@ -39,7 +39,6 @@ const ReRequestConfirmModal: React.FC<ReRequestConfirmModalProps> = ({
   };
 
   const handleSuccessClose = () => {
-    console.log('ReRequestConfirmModal handleSuccessClose 호출됨');
     setShowSuccessModal(false);
   };
 

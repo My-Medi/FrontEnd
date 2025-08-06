@@ -7,6 +7,7 @@ import useModalScrollLock from '../../../hooks/useModalScrollLock';
 interface ConfirmRequestModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onBack?: () => void;
   onConfirm: () => void;
   expertName: string;
   expertPosition: string;
@@ -16,6 +17,7 @@ interface ConfirmRequestModalProps {
 const ConfirmRequestModal: React.FC<ConfirmRequestModalProps> = ({ 
   isOpen, 
   onClose, 
+  onBack,
   // onConfirm, 
   expertName, 
   expertPosition,
@@ -40,7 +42,6 @@ const ConfirmRequestModal: React.FC<ConfirmRequestModalProps> = ({
   };
 
   const handleSuccessClose = () => {
-    console.log('ConfirmRequestModal handleSuccessClose 호출됨');
     setShowSuccessModal(false);
     onClose(); // 모든 상위 모달들 닫기 (RequestModal, ExpertDetailModal)
   };
@@ -92,7 +93,11 @@ const ConfirmRequestModal: React.FC<ConfirmRequestModalProps> = ({
             {/* Buttons */}
             <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-4">
               <button
-                onClick={onClose}
+                onClick={() => {
+                  // 모든 모달 닫기 (RequestModal, ExpertDetailModal)
+                  // RequestModal의 onClose를 호출하여 모든 모달 닫기
+                  onClose();
+                }}
                 className="w-full sm:w-[300px] h-14 rounded-full border border-[#FFFFFF] text-[#121218] hover:bg-[#EDF0F3] text-[20px] font-medium leading-[24px] tracking-[-0.03em] transition cursor-pointer bg-white shadow-[0px_0px_2px_3px_rgba(29,104,255,0.02),0px_0px_4px_6px_rgba(29,104,255,0.01),0px_0px_6px_0px_rgba(29,104,255,0)]"
               >
                 취소
@@ -108,7 +113,14 @@ const ConfirmRequestModal: React.FC<ConfirmRequestModalProps> = ({
 
           {/* Back button */}
           <button
-            onClick={onClose}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              // ConfirmRequestModal만 닫고 RequestModal은 유지
+              if (onBack) {
+                onBack();
+              }
+            }}
             className="absolute top-12 left-12 w-[17px] h-[35px] flex items-center justify-center"
           >
             <img src={backSvg} alt="뒤로가기" className="w-full h-full object-contain" />

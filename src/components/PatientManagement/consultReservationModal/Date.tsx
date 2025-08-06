@@ -28,6 +28,34 @@ const ConsultDateModal: React.FC<ConsultDateModalProps> = ({ onClose }) => {
     setMeridiem((prev) => (prev === '오전' ? '오후' : '오전'));
   };
 
+  const handleHourChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // 숫자만 입력 가능
+    if (!/^\d*$/.test(value)) return;
+    
+    const numValue = parseInt(value);
+    // 0-23 범위만 허용
+    if (numValue >= 0 && numValue <= 23) {
+      setHour(value);
+    } else if (value === '') {
+      setHour('');
+    }
+  };
+
+  const handleMinuteChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // 숫자만 입력 가능
+    if (!/^\d*$/.test(value)) return;
+    
+    const numValue = parseInt(value);
+    // 0-59 범위만 허용
+    if (numValue >= 0 && numValue <= 59) {
+      setMinute(value);
+    } else if (value === '') {
+      setMinute('');
+    }
+  };
+
   return (
     <>
       {!isSuccessModalOpen && (
@@ -41,7 +69,6 @@ const ConsultDateModal: React.FC<ConsultDateModalProps> = ({ onClose }) => {
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                console.log('Date 모달 뒤로가기 버튼 클릭됨 - Calendar 모달로 돌아감');
                 // 뒤로가기 버튼을 누르면 Date 모달만 닫고 Calendar 모달로 돌아감
                 setIsSuccessModalOpen(false); // 성공 모달이 열려있다면 닫기
                 onClose(false); // Date 모달 닫기 (isFromSuccess = false)
@@ -71,7 +98,7 @@ const ConsultDateModal: React.FC<ConsultDateModalProps> = ({ onClose }) => {
                 <input
                   type='text'
                   value={hour}
-                  onChange={(e) => setHour(e.target.value)}
+                  onChange={handleHourChange}
                   placeholder='00'
                   className='w-[24px] ml-[30px] text-center text-[#121218] text-[16px] font-light outline-none'
                 />
@@ -79,7 +106,7 @@ const ConsultDateModal: React.FC<ConsultDateModalProps> = ({ onClose }) => {
                 <input
                   type='text'
                   value={minute}
-                  onChange={(e) => setMinute(e.target.value)}
+                  onChange={handleMinuteChange}
                   placeholder='00'
                   className='w-[24px] text-center text-[#121218] text-[16px] font-light outline-none'
                 />
@@ -138,7 +165,6 @@ const ConsultDateModal: React.FC<ConsultDateModalProps> = ({ onClose }) => {
       )}
       {isSuccessModalOpen && (
         <SuccessReservationModal onClose={() => {
-          console.log('SuccessReservationModal onClose 호출됨');
           setIsSuccessModalOpen(false);
           // 성공 모달에서 확인 버튼을 누르면 모든 모달을 완전히 닫기
           // Calendar 모달까지 닫기 위해 onClose 호출

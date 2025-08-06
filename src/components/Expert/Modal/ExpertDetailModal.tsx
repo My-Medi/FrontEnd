@@ -53,9 +53,8 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
   // };
 
   const handleRequestClose = () => {
-    console.log('ExpertDetailModal handleRequestClose 호출됨');
     setShowRequestModal(false);
-    onClose(); // ExpertDetailModal도 함께 닫기
+    onClose(); // 모든 모달 닫기 (ExpertDetailModal도 함께 닫기)
   };
 
   return (
@@ -198,7 +197,10 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
       {showReRequestModal && (
         <ReRequestConfirmModal
           isOpen={showReRequestModal}
-          onClose={() => setShowReRequestModal(false)}
+          onClose={() => {
+            setShowReRequestModal(false);
+            onClose(); // 모든 모달 닫기 (ExpertDetailModal도 함께 닫기)
+          }}
           onConfirm={handleReRequestConfirm}
           expertName={expert.name}
           expertPosition={expert.position}
@@ -210,7 +212,14 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
       {showRequestModal && (
         <RequestModal
           isOpen={showRequestModal}
-          onClose={handleRequestClose}
+          onClose={() => {
+            setShowRequestModal(false);
+            onClose(); // 모든 모달 닫기 (ExpertDetailModal도 함께 닫기)
+          }}
+          onBack={() => {
+            setShowRequestModal(false);
+            // RequestModal만 닫고 ExpertDetailModal은 유지
+          }}
           expertName={expert.name}
           expertPosition={expert.position}
           expertRealName={expert.realName}

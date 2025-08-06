@@ -25,13 +25,12 @@ const AdviceRegisterModal: React.FC<AdviceRegisterModalProps> = ({ onClose }) =>
           {/* 상단 헤더 */}
           <div className='flex items-center gap-6 w-full justify-center'>
             {/* 뒤로가기 버튼 */}
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('adviceRegisterModel 뒤로가기 버튼 클릭됨');
-                onClose(false); // isFromRegister = false
-              }}
+                                        <button
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                onClose(false); // isFromRegister = false
+                              }}
               className='cursor-pointer shrink-0 flex items-center justify-center hover:opacity-80 transition-opacity'
               style={{ position: 'relative', zIndex: 100, minWidth: '40px', minHeight: '40px' }}
             >

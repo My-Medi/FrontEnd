@@ -3,12 +3,17 @@ import { useNavigate } from 'react-router-dom';
 
 interface SuccessReservationModalProps {
   onClose: () => void;
+  onShowMyHome?: () => void;
 }
 
-const SuccessReservationModal: React.FC<SuccessReservationModalProps> = ({ onClose }) => {
+const SuccessReservationModal: React.FC<SuccessReservationModalProps> = ({ onClose, onShowMyHome }) => {
   const navigate = useNavigate();
   const handleClick = () => {
-    navigate('/myhome');
+    if (onShowMyHome) {
+      onShowMyHome();
+    } else {
+      navigate('/myhome');
+    }
   };
   return (
     <>

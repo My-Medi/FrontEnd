@@ -71,13 +71,12 @@ const MemberCardModal: React.FC<MemberCardModalProps> = ({
           {/* 상단 헤더 */}
           <div className='flex items-center gap-6 w-full justify-center'>
             {/* 뒤로가기 버튼 */}
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('memberCardModal 뒤로가기 버튼 클릭됨');
-                onClose();
-              }}
+                                        <button
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                onClose();
+                              }}
               className='cursor-pointer shrink-0 flex items-center justify-center hover:opacity-80 transition-opacity z-10'
               style={{ position: 'relative', zIndex: 10 }}
             >
