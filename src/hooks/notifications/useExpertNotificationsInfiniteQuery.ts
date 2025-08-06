@@ -12,7 +12,7 @@ export const useExpertNotificationsInfiniteQuery = ({
   enabled = true,
 }: UseExpertNotificationsInfiniteQueryProps = {}) => {
   return useInfiniteQuery<ExpertNotificationListResponse>({
-    queryKey: ['expertNotificationsInfinite', pageSize],
+    queryKey: ['expertNotificationsInfinite', pageSize, 'all'],
     queryFn: ({ pageParam = 0 }) => getExpertNotifications(pageParam as number, pageSize),
     getNextPageParam: (lastPage) => {
       const { page, totalPages } = lastPage.result || {};

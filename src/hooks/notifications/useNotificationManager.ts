@@ -23,25 +23,25 @@ export const useNotificationManager = ({ userType, showAllOld }: UseNotification
   const userQuery = useUserNotificationsQuery({
     currentPage: 0,
     pageSize: 20,
-    enabled: userType === 'patient' && !showAllOld,
+    enabled: userType === 'patient',
     refetchInterval: 10000,
   });
 
   const expertQuery = useExpertNotificationsQuery({
     currentPage: 0,
     pageSize: 20,
-    enabled: userType === 'expert' && !showAllOld,
+    enabled: userType === 'expert',
     refetchInterval: 10000,
   });
 
   // 무한스크롤 쿼리
   const userInfiniteQuery = useUserNotificationsInfiniteQuery({
-    pageSize: 10,
+    pageSize: 20,
     enabled: userType === 'patient' && showAllOld,
   });
 
   const expertInfiniteQuery = useExpertNotificationsInfiniteQuery({
-    pageSize: 10,
+    pageSize: 20,
     enabled: userType === 'expert' && showAllOld,
   });
 
@@ -95,9 +95,33 @@ export const useNotificationManager = ({ userType, showAllOld }: UseNotification
   }, [notifications]);
 
   const allNotifications = useMemo(() => {
-    const pages = currentInfiniteQuery.data?.pages || [];
-    return pages.flatMap((page: any) => page.result?.content || []);
-  }, [currentInfiniteQuery.data]);
+    // 무한스크롤 쿼리에서 데이터 가져오기
+    const infinitePages = currentInfiniteQuery.data?.pages || [];
+    const infiniteData = infinitePages.flatMap((page: any) => page.result?.content || []);
+    
+    // 디버깅을 위한 로그
+    console.log('NotificationManager Debug:', {
+      showAllOld,
+      userType,
+      infiniteDataLength: infiniteData.length,
+      notificationsLength: notifications.length,
+      infiniteQueryEnabled: currentInfiniteQuery.isEnabled,
+      infiniteQueryLoading: currentInfiniteQuery.isLoading,
+      infiniteQueryError: currentInfiniteQuery.error,
+    });
+    
+    // 무한스크롤 데이터가 있으면 사용, 없으면 메인 쿼리 데이터 사용
+    if (infiniteData.length > 0) {
+      return infiniteData;
+    }
+    
+    // 무한스크롤 데이터가 없고 showAllOld가 true인 경우, 메인 쿼리 데이터 사용
+    if (showAllOld && notifications.length > 0) {
+      return notifications;
+    }
+    
+    return [];
+  }, [currentInfiniteQuery.data, showAllOld, notifications, currentInfiniteQuery.isEnabled, currentInfiniteQuery.isLoading, currentInfiniteQuery.error]);
 
   // 선택 관련 함수들
   const handleSelect = useCallback((id: number) => {

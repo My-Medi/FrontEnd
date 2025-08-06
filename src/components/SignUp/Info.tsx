@@ -34,8 +34,46 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const handleNext = () => {
+    // 기본 정보 검증
+    if (!values.name.trim()) {
+      alert('성명을 입력해주세요.');
+      return;
+    }
+    if (!values.birthDate.trim()) {
+      alert('생년월일을 입력해주세요.');
+      return;
+    }
+    if (!values.nickname.trim()) {
+      alert('닉네임을 입력해주세요.');
+      return;
+    }
+    if (!values.loginId.trim()) {
+      alert('아이디를 입력해주세요.');
+      return;
+    }
+    if (!values.password.trim()) {
+      alert('비밀번호를 입력해주세요.');
+      return;
+    }
+    if (values.password !== values.passwordCheck) {
+      alert('비밀번호가 일치하지 않습니다.');
+      return;
+    }
+    if (!values.email.trim()) {
+      alert('이메일을 입력해주세요.');
+      return;
+    }
+    if (!values.phoneNumber.trim()) {
+      alert('연락처를 입력해주세요.');
+      return;
+    }
+
+    onNext();
+  };
+
   return (
-    <form className='mt-[40px]' onSubmit={e => { e.preventDefault(); onNext(); }}>
+    <form className='mt-[40px]' onSubmit={e => { e.preventDefault(); handleNext(); }}>
         {/* 성명 */}
         <div className='flex items-center space-x-3 mb-[32px]'>
           <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
@@ -265,11 +303,10 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
           </svg>
         </div>
 
-
         {/* 버튼 */}
         <div className="flex gap-[200px]">
           <button onClick={onPrev} className="px-10 py-3 ml-[20px] rounded-[30px] cursor-pointer bg-[#dbe6ff] text-[18px] text-[#121218] font-medium">이전</button>
-          <button className="w-[216px] px-10 py-3 rounded-[30px] cursor-pointer bg-[#1d68ff] text-[18px] text-white font-semibold">다음</button>
+          <button type="submit" className="w-[216px] px-10 py-3 rounded-[30px] cursor-pointer bg-[#1d68ff] text-[18px] text-white font-semibold">다음</button>
         </div>
     </form>
   );
