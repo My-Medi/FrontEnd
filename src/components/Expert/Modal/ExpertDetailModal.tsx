@@ -16,6 +16,8 @@ interface ExpertDetailModalProps {
     affiliation: string;
     specialty: string;
     career: string;
+    phone?: string;
+    startDate?: string;
   };
   expertStatus?: 'matched' | 'request' | 'rejected';
   onClose: () => void;
@@ -77,9 +79,20 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
               <img src={backSvg} alt='닫기' className='w-full h-full object-contain pointer-events-none' />
             </button>
             <div className='flex-1 flex flex-col items-center'>
-              <div className='text-[#4D5053] text-sm font-medium leading-[1.71] mb-1'>
-                전문가 상세
-              </div>
+              {/* 매칭된 전문가일 때는 날짜 표시, 요청중인 경우는 첫번째 요청 표시, 그 외에는 전문가 상세 표시 */}
+              {expertStatus === 'matched' && expert.startDate ? (
+                <div className='text-[14px] font-medium text-[#9DA0A3] leading-[24px] tracking-[-3%] text-center mb-1'>
+                  {expert.startDate} 부터 함께하고 있어요!
+                </div>
+              ) : expertStatus === 'request' ? (
+                <div className='text-[14px] font-medium text-[#1D68FF] leading-[24px] tracking-[-3%] text-center mb-1 font-[Pretendard]'>
+                  첫번째 요청
+                </div>
+              ) : (
+                <div className='text-[#4D5053] text-sm font-medium leading-[1.71] mb-1'>
+                  전문가 상세
+                </div>
+              )}
               <div className='text-[#121218] text-2xl font-semibold leading-[1.5]'>
                 {expert.name} / {expert.position}
               </div>
@@ -108,6 +121,22 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
                   {expert.slogan}
                 </div>
               </div>
+              {/* 전화번호 - 매칭된 전문가일 때만 표시 */}
+              {expertStatus === 'matched' && expert.phone && (
+                <div className='w-full flex mb-6'>
+                  <div className='text-center text-[20px] font-medium text-[#121218] leading-[100%] tracking-[-3%]'>
+                    {expert.phone}
+                  </div>
+                </div>
+              )}
+              {/* 요청중인 경우 요청서 전송 문구 표시 */}
+              {expertStatus === 'request' && (
+                <div className='w-full flex mb-6'>
+                  <div className='text-center text-[20px] font-medium text-[#9DA0A3] leading-[100%] tracking-[-3%] font-[Pretendard]'>
+                    2025. 1. 20. 건강관리요청서 전송
+                  </div>
+                </div>
+              )}
               {/* 전문가 소개 */}
               <div className='w-full flex flex-col mb-6'>
                 <div className='flex items-center gap-6'>

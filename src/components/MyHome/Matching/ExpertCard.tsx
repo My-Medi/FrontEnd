@@ -107,7 +107,7 @@ const ExpertCard: React.FC<ExpertCardProps> = ({ expert, onUnmatch, onCancelRequ
         {/* 상단 정보 */}
         <div className="flex flex-col items-center gap-2 mb-2">
           <div className="text-[14px] font-medium text-[#9DA0A3] leading-[24px] tracking-[-3%] text-center">
-            {expert.startDate} 부터 함께하고 있어요!
+            &nbsp;
           </div>
           <div className="text-[18px] font-medium text-[#25282B] leading-[36px] tracking-[-3%] text-center">
             {expert.position}

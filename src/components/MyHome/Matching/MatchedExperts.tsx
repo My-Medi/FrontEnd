@@ -150,7 +150,9 @@ const MatchedExperts: React.FC = () => {
             introduction: selectedExpert.description,
             affiliation: selectedExpert.position,
             specialty: selectedExpert.position,
-            career: selectedExpert.description
+            career: selectedExpert.career || "경력사항 정보가 없습니다.",
+            phone: selectedExpert.phone,
+            startDate: selectedExpert.startDate
           }}
           expertStatus={selectedExpert.status}
           onClose={handleCloseDetailModal}
