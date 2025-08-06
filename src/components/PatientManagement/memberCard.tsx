@@ -31,20 +31,8 @@ const MemberCard: React.FC<{ member: Member }> = ({ member }) => {
     setShowAdviceRegisterModal(true);
   };
 
-  const closeAdviceRegisterModal = () => {
-    setShowAdviceRegisterModal(false);
-    // 첫 번째 모달이 닫혀있으면 다시 열기
-    if (!showMemberCardModal) {
-      setShowMemberCardModal(true);
-    }
-  };
   const openConsultReservationModal = () => {
     setShowConsultReservationModal(true);
-  };
-  const closeConsultReservationModal = () => {
-    setShowConsultReservationModal(false);
-    // 성공 모달에서 확인 버튼을 누르면 모든 모달이 닫히므로
-    // 첫 번째 모달을 다시 열지 않음
   };
 
 

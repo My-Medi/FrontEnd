@@ -42,20 +42,8 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
     onClose(); // 모든 모달 종료
   };
 
-  // const handleRequestSubmit = (request: string) => {
-  //   console.log('요청사항:', request);
-  //   // 여기에 실제 요청사항 제출 로직을 추가할 수 있습니다
-  //   // 예: API 호출, 상태 업데이트 등
 
-  //   // 성공 처리 후 모달들 닫기
-  //   setShowRequestModal(false);
-  //   onClose();
-  // };
 
-  const handleRequestClose = () => {
-    setShowRequestModal(false);
-    onClose(); // 모든 모달 닫기 (ExpertDetailModal도 함께 닫기)
-  };
 
   return (
     <>
