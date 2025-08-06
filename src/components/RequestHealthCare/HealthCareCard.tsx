@@ -23,11 +23,9 @@ const RequestHealthCareCard: React.FC<RequestHealthCareProps> = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleAccept = () => {
-    console.log(`${nickname} 수락됨`);
     setIsModalOpen(false);
   };
   const handleReject = () => {
-    console.log(`${nickname} 거절됨`);
     setIsModalOpen(false);
   };
   return (

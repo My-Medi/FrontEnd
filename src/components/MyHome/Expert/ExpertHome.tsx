@@ -4,7 +4,7 @@ import HomeCalendar from '../Common/HomeCalendar';
 import ResumeManagement from '../Resume/ResumeManagement';
 import RequestHealthCare from '../../RequestHealthCare/RequestHealthCare';
 import { NotificationList } from '../../Alarm/NotificationList';
-import { expertNotificationList } from '../../../data/expertNotificationList';
+
 import ExpertSchedule from './ExpertSchedule';
 import PatientManagementList from '../../PatientManagement/memberList';
 
@@ -30,8 +30,8 @@ const ExpertHome: React.FC<ExpertHomeProps> = ({
       return (
         <>
           <PatientInfoSection
-            nickname='하나'
-            name='김민지'
+            nickname='메디핏'
+            name='이진서'
             age={23}
             onEditInfo={onEditInfo}
             userType='expert'
@@ -48,7 +48,7 @@ const ExpertHome: React.FC<ExpertHomeProps> = ({
     case 3: // 건강관리요청서 확인하기
       return <RequestHealthCare />;
     case 4: // 내 알림
-      return <NotificationList notifications={expertNotificationList} />;
+      return <NotificationList userType="expert" />;
     default:
       return null;
   }

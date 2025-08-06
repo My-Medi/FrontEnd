@@ -40,6 +40,8 @@ export const signUpUser = async (data: PersonalSignUpRequest): Promise<SignUpRes
   return response.data;
 };
 
+
+
 export const userAPI = {
   signUpUser,
   getUserProfile,

@@ -13,6 +13,7 @@ import MedicalReportPage from '../pages/Introduce/MedicalReportPage';
 import AIHealthCarePage from '../pages/Introduce/AIHealthCarePage';
 import HealthTermsPage from '../pages/HealthTerms/HealthTerm';
 import MedicalReportLLMPage from '../pages/MedicalReportLLM/MedicalReportLLMPage';
+import ProtectedRoute from '../components/Common/ProtectedRoute';
 
 export const router = createBrowserRouter([
   {
@@ -21,13 +22,41 @@ export const router = createBrowserRouter([
     errorElement: <NotFoundPage />,
     children: [
       { index: true, element: <IntroducePage /> },
-      { path: 'myhome', element: <MyHome /> },
+      { 
+        path: 'myhome', 
+        element: (
+          <ProtectedRoute>
+            <MyHome />
+          </ProtectedRoute>
+        ) 
+      },
       { path: 'signup', element: <SignUp /> },
       { path: 'login', element: <LoginPage /> },
       { path: 'introduce', element: <IntroducePage /> },
-      { path: 'health-result-input', element: <HealthCheckupResultInput /> },
-      { path: 'expert', element: <ExpertPage /> },
-      { path: 'health-terms', element: <HealthTermsPage /> },
+      { 
+        path: 'health-result-input', 
+        element: (
+          <ProtectedRoute>
+            <HealthCheckupResultInput />
+          </ProtectedRoute>
+        ) 
+      },
+      { 
+        path: 'expert', 
+        element: (
+          <ProtectedRoute>
+            <ExpertPage />
+          </ProtectedRoute>
+        ) 
+      },
+      { 
+        path: 'health-terms', 
+        element: (
+          <ProtectedRoute>
+            <HealthTermsPage />
+          </ProtectedRoute>
+        ) 
+      },
       { path: 'calendar-intro', element: <CalendarIntroPage /> },
       { path: 'expert-matching-intro', element: <ExpertMatchingIntroPage /> },
       { path: 'medical-report-intro', element: <MedicalReportPage /> },

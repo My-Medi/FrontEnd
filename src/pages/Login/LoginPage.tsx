@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { cva } from "class-variance-authority";
 import logo from "../../assets/Login/mymedi.svg";
 import backSvg from "../../assets/Expert/back.svg";
@@ -38,8 +38,13 @@ const LoginPage = () => {
   const [showFindPW, setShowFindPW] = useState(false);
   const { setUserType } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [showFailModal, setShowFailModal] = useState(false);
   const idInputRef = useRef<HTMLInputElement>(null);
+  
+  // 리다이렉트 경로 가져오기
+  const redirectTo = searchParams.get('redirect') || '/myhome';
+  
   const loginMutation = useLoginMutation({
     onSuccess: (data) => {
       if (data.result) {
@@ -47,6 +52,9 @@ const LoginPage = () => {
         const role = data.result.role;
         const isExpert = role.includes('ROLE_EXPERT');
         setUserType(isExpert ? 'expert' : 'patient');
+        
+        // 로그인 성공 후 원래 접근하려던 페이지로 리다이렉트
+        navigate(redirectTo);
       }
     },
     onError: () => {

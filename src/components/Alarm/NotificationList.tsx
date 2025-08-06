@@ -6,65 +6,115 @@ import recentIcon from '/src/assets/Alarm/alarm-recent.svg';
 import pastIcon from '/src/assets/Alarm/alarm-past.svg';
 import pastTitleIcon from '/src/assets/Alarm/alarm-title.svg';
 import checkIcon from '/src/assets/Alarm/check.svg';
-
-interface Notification {
-  id: string;
-  message: string;
-  isNew: boolean;
-}
+import { useNotificationManager } from '../../hooks/notifications/useNotificationManager';
+import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
+import { useAutoRefresh } from '../../hooks/useAutoRefresh';
+import type { UserNotification, ExpertNotification } from '../../types/notification';
 
 interface NotificationListProps {
-  notifications: Notification[];
   userType?: 'patient' | 'expert';
 }
 
-export const NotificationList: React.FC<NotificationListProps> = ({ notifications }) => {
+export const NotificationList: React.FC<NotificationListProps> = ({ userType = 'patient' }) => {
   const [showAllOld, setShowAllOld] = useState(false);
   const [selectMode, setSelectMode] = useState(false);
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // 알림 관리 훅
+  const {
+    currentQuery,
+    currentInfiniteQuery,
+    newNotices,
+    oldNotices,
+    allNotifications,
+    selectedIds,
+    handleSelect,
+    toggleSelectAll,
+    clearSelection,
+    markAsRead,
+    deleteNotifications,
+    getNotificationId,
+  } = useNotificationManager({ userType, showAllOld });
+
+  // 무한스크롤 훅
+  const { observerRef } = useInfiniteScroll({
+    hasNextPage: currentInfiniteQuery.hasNextPage,
+    isFetchingNextPage: currentInfiniteQuery.isFetchingNextPage,
+    fetchNextPage: currentInfiniteQuery.fetchNextPage,
+    enabled: showAllOld,
+  });
+
+  // 자동 새로고침 훅
+  useAutoRefresh({
+    refetch: currentQuery.refetch,
+    refetchInfinite: currentInfiniteQuery.refetch,
+    enabled: !showAllOld,
+  });
 
   // 알림 이미지 사전 로딩
   useEffect(() => {
     const preloadImages = () => {
-      const images = [
-        recentIcon,
-        pastIcon,
-        pastTitleIcon,
-        checkIcon
-      ];
-      
+      const images = [recentIcon, pastIcon, pastTitleIcon, checkIcon];
       images.forEach(src => {
         const img = new Image();
         img.src = src;
       });
     };
-    
     preloadImages();
   }, []);
 
-  const newNotices = notifications.filter((n) => n.isNew).slice(0, 3);
-  const oldNotices = notifications.filter((n) => !n.isNew).slice(0, 8);
-
-  const toggleSelectAll = () => {
-    if (selectedIds.length === oldNotices.length) {
-      setSelectedIds([]);
-    } else {
-      setSelectedIds(oldNotices.map((n) => n.id));
+  // 전체 삭제 핸들러
+  const handleDeleteAll = () => {
+    const currentNotices = showAllOld ? allNotifications : oldNotices;
+    if (currentNotices.length > 0) {
+      const allIds = currentNotices.map(getNotificationId);
+      deleteNotifications(allIds);
     }
   };
 
-  const handleSelect = (id: string) => {
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
-    );
+  const handleDelete = () => {
+    if (selectedIds.length > 0) {
+      deleteNotifications(selectedIds);
+      clearSelection();
+      setIsModalOpen(false);
+    }
   };
 
-  const handleDelete = () => {
-    console.log('삭제할 알림 ID 목록:', selectedIds);
-    setSelectedIds([]);
-    setIsModalOpen(false);
+  // 알림 클릭 시 읽음 처리
+  const handleNotificationClick = (notification: UserNotification | ExpertNotification) => {
+    markAsRead(notification);
   };
+
+  // 로딩 상태 처리
+  const isLoading = currentQuery.isLoading || currentInfiniteQuery.isLoading;
+  if (isLoading) {
+    return (
+      <div className='flex flex-col items-center justify-center gap-[40px] w-full max-w-[1183px] px-4 sm:px-[80px] py-[50px] rounded-[20px] border border-white bg-[#F6F9FF] shadow-[...]'>
+        <div className='text-center'>
+          <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto'></div>
+          <p className='mt-4 text-gray-600'>알림을 불러오는 중...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // 에러 상태 처리
+  const error = currentQuery.error || currentInfiniteQuery.error;
+  if (error) {
+    return (
+      <div className='flex flex-col items-center justify-center gap-[40px] w-full max-w-[1183px] px-4 sm:px-[80px] py-[50px] rounded-[20px] border border-white bg-[#F6F9FF] shadow-[...]'>
+        <div className='text-center'>
+          <p className='text-red-600'>알림을 불러오는데 실패했습니다.</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className='mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
+          >
+            다시 시도
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className='flex flex-col items-center justify-center gap-[40px] w-full max-w-[1183px] px-4 sm:px-[80px] py-[50px] rounded-[20px] border border-white bg-[#F6F9FF] shadow-[...]'>
@@ -101,17 +151,17 @@ export const NotificationList: React.FC<NotificationListProps> = ({ notification
           {selectMode && (
             <div className='flex items-start gap-3 ml-[-8px] mb-[-40px]'>
               <button
-                onClick={toggleSelectAll}
+                onClick={() => toggleSelectAll(allNotifications)}
                 className={`
-    w-[22.5px] h-[22.5px] relative rounded-[6px] cursor-pointer
-    ${
-      selectedIds.length === oldNotices.length
-        ? 'border-0 bg-transparent'
-        : 'border border-[#9DA0A3] bg-white'
-    }
-  `}
+                  w-[22.5px] h-[22.5px] relative rounded-[6px] cursor-pointer
+                  ${
+                    selectedIds.length === allNotifications.length
+                      ? 'border-0 bg-transparent'
+                      : 'border border-[#9DA0A3] bg-white'
+                  }
+                `}
               >
-                {selectedIds.length === oldNotices.length && (
+                {selectedIds.length === allNotifications.length && (
                   <img
                     src={checkIcon}
                     alt='check'
@@ -123,7 +173,7 @@ export const NotificationList: React.FC<NotificationListProps> = ({ notification
               </button>
               <span
                 className='text-[#4D5053] cursor-pointer font-light text-[16px] leading-[22px] tracking-[-0.48px] font-[Pretendard]'
-                onClick={toggleSelectAll}
+                onClick={() => toggleSelectAll(allNotifications)}
               >
                 전체 선택
               </span>
@@ -144,13 +194,21 @@ export const NotificationList: React.FC<NotificationListProps> = ({ notification
           <div className='flex items-center gap-2'>
             <img src={recentIcon} alt='recent' />
             <span className='text-[#1D68FF] text-[18px] font-medium leading-[36px] tracking-[-0.54px] font-[Pretendard]'>
-              신규 알림 {newNotices.length}개
+              신규 알림 {newNotices.length}건
             </span>
           </div>
           <div className='flex flex-col gap-[24px] w-full'>
-            {newNotices.map((n) => (
-              <NotificationItem key={n.id} message={n.message} isNew />
-            ))}
+            {newNotices.map((n) => {
+              const notificationId = getNotificationId(n);
+              return (
+                <NotificationItem 
+                  key={notificationId} 
+                  message={n.notificationContent} 
+                  isNew 
+                  onClick={() => handleNotificationClick(n)}
+                />
+              );
+            })}
           </div>
           <hr className='w-full h-px border-0 bg-[#C5C8CB] my-[24px] mt-[-5px]' />
           <div className='flex items-center gap-2 mt-[-30px]'>
@@ -160,33 +218,63 @@ export const NotificationList: React.FC<NotificationListProps> = ({ notification
             </span>
           </div>
           <div className='flex flex-col gap-[24px] mt-[-10px] w-full'>
-            {oldNotices.slice(0, 4).map((n) => (
-              <NotificationItem key={n.id} message={n.message} isNew={false} />
-            ))}
+            {oldNotices.slice(0, 4).map((n) => {
+              const notificationId = getNotificationId(n);
+              return (
+                <NotificationItem 
+                  key={notificationId} 
+                  message={n.notificationContent} 
+                  isNew={false} 
+                  onClick={() => handleNotificationClick(n)}
+                />
+              );
+            })}
           </div>
-          {oldNotices.length > 4 && (
-            <div className='flex justify-center w-full mt-[40px]'>
-              <button
-                onClick={() => setShowAllOld(true)}
-                className='flex items-center gap-1 cursor-pointer text-[#75787B] text-[18px] font-medium leading-[36px] tracking-[-0.54px] font-[Pretendard]'
-              >
-                전체보기 <FiChevronRight size={20} />
-              </button>
-            </div>
-          )}
+          <div className='flex justify-center w-full mt-[40px]'>
+            <button
+              onClick={() => setShowAllOld(true)}
+              className='flex items-center gap-1 cursor-pointer text-[#75787B] text-[18px] font-medium leading-[36px] tracking-[-0.54px] font-[Pretendard]'
+            >
+              전체보기 <FiChevronRight size={20} />
+            </button>
+          </div>
         </div>
       ) : (
         <div className='flex flex-col gap-[24px] w-full mt-[16px]'>
-          {oldNotices.map((n) => (
-            <NotificationItem
-              key={n.id}
-              message={n.message}
-              isNew={false}
-              selectable={selectMode}
-              isSelected={selectedIds.includes(n.id)}
-              onSelectChange={() => handleSelect(n.id)}
-            />
-          ))}
+          {allNotifications.map((n) => {
+            const notificationId = getNotificationId(n);
+            return (
+              <NotificationItem
+                key={notificationId}
+                message={n.notificationContent}
+                isNew={!n.isRead}
+                selectable={selectMode}
+                isSelected={selectedIds.includes(notificationId)}
+                onSelectChange={() => handleSelect(notificationId)}
+                onClick={() => handleNotificationClick(n)}
+              />
+            );
+          })}
+          
+          {/* 무한스크롤 스켈레톤 UI */}
+          {currentInfiniteQuery.isFetchingNextPage && (
+            <div className='flex flex-col gap-[24px] w-full'>
+              {[...Array(3)].map((_, index) => (
+                <div key={index} className='flex items-center w-full ml-[-10px] gap-[16px]'>
+                  <div className='flex items-center h-[97px] w-full rounded-[20px] bg-gray-200 animate-pulse'>
+                    <div className='flex items-center h-full w-full px-[32px] py-[10px] gap-[10px] rounded-[50px_20px_20px_20px] border-2 border-gray-200 bg-gray-100'>
+                      <div className='w-full h-6 bg-gray-300 rounded animate-pulse'></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+          
+          {/* Intersection Observer 요소 */}
+          {currentInfiniteQuery.hasNextPage && (
+            <div ref={observerRef} className='h-4 w-full' />
+          )}
         </div>
       )}
 

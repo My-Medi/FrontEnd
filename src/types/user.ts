@@ -26,4 +26,6 @@ export interface UserInfo {
   phoneNumber: string;
   profileImgUrl?: string;
   loginId: string;
-} 
+}
+
+ 

@@ -1,5 +1,7 @@
 import React, { useState, useRef } from "react";
 import fileboxIcon from '../../assets/MyHome/Resume/filebox.svg';
+import { signUpExpert } from '../../apis/expertApi/expert';
+import type { PersonalSignUpRequest, ExpertSpecialty } from '../../types/expert';
 
 interface ExpertInputFormProps {
   onNext: () => void;
@@ -19,6 +21,14 @@ interface CertificateRow {
   issueDate: string;
   issuingOrganization: string;
 }
+
+const SPECIALTY_MAP: { [key: string]: ExpertSpecialty } = {
+  '영양사': 'NUTRITIONIST',
+  '건강관리사': 'HEALTH_MANAGER',
+  '웰니스 코치': 'WELLNESS_COACH',
+  '운동처방사': 'EXERCISE_THERAPIST',
+  '기타': 'ETC',
+};
 
 const ExpertInputForm: React.FC<ExpertInputFormProps> = ({ onNext, onPrev }) => {
   const [selectedFields, setSelectedFields] = useState<string[]>(['영양사']);

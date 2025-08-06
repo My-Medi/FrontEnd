@@ -5,16 +5,16 @@ const emailDomains = ["직접입력", "naver.com", "gmail.com", "daum.net", "han
 interface SignUpInfoProps {
   values: {
     name: string;
-    birth: string;
-    gender: "male" | "female";
+    birthDate: string;
+    gender: "MALE" | "FEMALE";
     nickname: string;
-    id: string;
+    loginId: string;
     password: string;
     passwordCheck: string;
     email: string;
     emailDomain: string;
-    phone: string;
-    agree: boolean;
+    phoneNumber: string;
+    profileImgUrl?: string;
   };
   onChange: (field: string, value: string | boolean) => void;
   onCheckNickname: () => void;
@@ -55,9 +55,9 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
           <label className='text-gray-700 font-medium min-w-[120px] flex items-center h-[36px]'>생년월일(6자리)</label>
           <input
             type='text'
-            value={values.birth}
-            onChange={(e) => onChange('birth', e.target.value)}
-            placeholder='예) XXXXXX(6자리를 입력하세요)'
+            value={values.birthDate}
+            onChange={(e) => onChange('birthDate', e.target.value)}
+            placeholder='예) 000926'
             maxLength={6}
             className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[140px]'
           />
@@ -71,12 +71,12 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
             <label className="flex items-center cursor-pointer text-[14px]">
               <input 
                 type="checkbox" 
-                checked={values.gender === "male"} 
-                onChange={() => onChange("gender", "male")}
+                checked={values.gender === "MALE"} 
+                onChange={() => onChange("gender", "MALE")}
                 className="hidden"
               />
               <div className="mr-2">
-                {values.gender === "male" ? (
+                {values.gender === "MALE" ? (
                   <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18" fill="none">
                     <rect x="0.203125" width="18" height="18" rx="4.8" fill="#1D68FF"/>
                     <path d="M5.60156 8.72089L8.40577 11.4002L12.8016 7.2002" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
@@ -92,12 +92,12 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
             <label className="flex items-center cursor-pointer text-[14px]">
               <input 
                 type="checkbox" 
-                checked={values.gender === "female"} 
-                onChange={() => onChange("gender", "female")}
+                checked={values.gender === "FEMALE"} 
+                onChange={() => onChange("gender", "FEMALE")}
                 className="hidden"
               />
               <div className="mr-2">
-                {values.gender === "female" ? (
+                {values.gender === "FEMALE" ? (
                   <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18" fill="none">
                     <rect x="0.203125" width="18" height="18" rx="4.8" fill="#1D68FF"/>
                     <path d="M5.60156 8.72089L8.40577 11.4002L12.8016 7.2002" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
@@ -146,8 +146,8 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
           <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>아이디</label>
           <input
             type='text'
-            value={values.id}
-            onChange={(e) => onChange('id', e.target.value)}
+            value={values.loginId}
+            onChange={(e) => onChange('loginId', e.target.value)}
             placeholder='아이디를 입력하세요.'
             className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[180px]'
           />
@@ -251,8 +251,8 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
           <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>연락처</label>
           <input
             type='text'
-            value={values.phone}
-            onChange={(e) => onChange('phone', e.target.value)}
+            value={values.phoneNumber}
+            onChange={(e) => onChange('phoneNumber', e.target.value)}
             placeholder='연락처를 입력하세요.'
             className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[180px]'
           />
@@ -265,18 +265,7 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
           </svg>
         </div>
 
-        {/* 동의 */}
-        <div className=" font-medium  text-[#121212]">
-          <label htmlFor="agree" className="flex items-center cursor-pointer ">
-            <input
-              id="agree"
-              type="checkbox"
-              checked={values.agree}
-              onChange={(e) => onChange('agree', e.target.checked)}
-              className="hidden"
-            />
-        </label>
-        </div>
+
         {/* 버튼 */}
         <div className="flex gap-[200px]">
           <button onClick={onPrev} className="px-10 py-3 ml-[20px] rounded-[30px] cursor-pointer bg-[#dbe6ff] text-[18px] text-[#121218] font-medium">이전</button>
