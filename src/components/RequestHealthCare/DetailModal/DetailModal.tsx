@@ -43,10 +43,13 @@ const HealthDataModal: React.FC<DetailModalProps> = ({ nickname, onClose, onAcce
           <div className='flex items-center gap-6  self-start'>
             {/* 뒤로가기 버튼 */}
             <button
-              onClick={onClose}
-              className='cursor-pointer shrink-0 flex items-center justify-center'
+              onClick={(e) => {
+                e.stopPropagation();
+                onClose();
+              }}
+              className='cursor-pointer shrink-0 flex items-center justify-center hover:opacity-80 transition-opacity'
             >
-              <img src={BackIcon} alt='뒤로가기' className='w-[17px] h-[35px]' />
+              <img src={BackIcon} alt='뒤로가기' className='w-[17px] h-[35px] pointer-events-none' />
             </button>
 
             {/* 텍스트 블럭 */}

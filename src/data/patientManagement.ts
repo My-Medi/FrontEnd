@@ -8,6 +8,7 @@ interface patientData {
   testDate: string;
   healthInterest: string[];
   healthStatus: '위험' | '주의' | '관심' | '안심' | '정상';
+  signupDate: string;
 }
 
 export const PatientManagementData: patientData[] = [
@@ -20,6 +21,7 @@ export const PatientManagementData: patientData[] = [
     testDate: '2023.06.15',
     healthInterest: ['영양관리', '체중조절', '혈압관리'],
     healthStatus: '안심',
+    signupDate: '2023.06.15',
   },
   {
     nickname: '제다이',
@@ -30,6 +32,7 @@ export const PatientManagementData: patientData[] = [
     testDate: '2024.04.24',
     healthInterest: ['영양관리', '혈당관리'],
     healthStatus: '안심',
+    signupDate: '2024.04.24',
   },
   {
     nickname: '병아리콩',
@@ -40,6 +43,7 @@ export const PatientManagementData: patientData[] = [
     testDate: '2025.02.23',
     healthInterest: ['체중조절', '혈당관리'],
     healthStatus: '관심',
+    signupDate: '2025.02.23',
   },
   {
     nickname: '애니',
@@ -50,6 +54,7 @@ export const PatientManagementData: patientData[] = [
     testDate: '2025.10.07',
     healthInterest: ['영양관리', '체중조절'],
     healthStatus: '주의',
+    signupDate: '2025.10.07',
   },
   {
     nickname: '밈미',
@@ -60,6 +65,7 @@ export const PatientManagementData: patientData[] = [
     testDate: '2024.09.30',
     healthInterest: ['체중조절', '혈당관리'],
     healthStatus: '정상',
+    signupDate: '2024.09.30',
   },
   {
     nickname: '카레남',
@@ -70,6 +76,7 @@ export const PatientManagementData: patientData[] = [
     testDate: '2023.12.14',
     healthInterest: ['혈당관리'],
     healthStatus: '위험',
+    signupDate: '2023.12.14',
   },
   {
     nickname: '하나',
@@ -80,6 +87,7 @@ export const PatientManagementData: patientData[] = [
     testDate: '2023.06.15',
     healthInterest: ['영양관리', '체중조절', '혈압관리'],
     healthStatus: '안심',
+    signupDate: '2023.06.15',
   },
   {
     nickname: '제다이',
@@ -90,6 +98,7 @@ export const PatientManagementData: patientData[] = [
     testDate: '2024.04.24',
     healthInterest: ['영양관리', '혈당관리'],
     healthStatus: '안심',
+    signupDate: '2024.04.24',
   },
   {
     nickname: '병아리콩',
@@ -100,6 +109,7 @@ export const PatientManagementData: patientData[] = [
     testDate: '2025.02.23',
     healthInterest: ['체중조절', '혈당관리'],
     healthStatus: '관심',
+    signupDate: '2025.02.23',
   },
   {
     nickname: '애니',
@@ -110,6 +120,7 @@ export const PatientManagementData: patientData[] = [
     testDate: '2025.10.07',
     healthInterest: ['영양관리', '체중조절'],
     healthStatus: '주의',
+    signupDate: '2025.10.07',
   },
   {
     nickname: '밈미',
@@ -120,6 +131,7 @@ export const PatientManagementData: patientData[] = [
     testDate: '2024.09.30',
     healthInterest: ['체중조절', '혈당관리'],
     healthStatus: '정상',
+    signupDate: '2024.09.30',
   },
   {
     nickname: '카레남',
@@ -130,6 +142,7 @@ export const PatientManagementData: patientData[] = [
     testDate: '2023.12.14',
     healthInterest: ['혈당관리'],
     healthStatus: '위험',
+    signupDate: '2023.12.14',
   },
   {
     nickname: '하나',
@@ -140,6 +153,7 @@ export const PatientManagementData: patientData[] = [
     testDate: '2023.06.15',
     healthInterest: ['영양관리', '체중조절', '혈압관리'],
     healthStatus: '안심',
+    signupDate: '2023.06.15',
   },
   {
     nickname: '제다이',
@@ -150,6 +164,7 @@ export const PatientManagementData: patientData[] = [
     testDate: '2024.04.24',
     healthInterest: ['영양관리', '혈당관리'],
     healthStatus: '안심',
+    signupDate: '2024.04.24',
   },
   {
     nickname: '병아리콩',
@@ -160,6 +175,7 @@ export const PatientManagementData: patientData[] = [
     testDate: '2025.02.23',
     healthInterest: ['체중조절', '혈당관리'],
     healthStatus: '관심',
+    signupDate: '2025.02.23',
   },
   {
     nickname: '애니',
@@ -170,6 +186,7 @@ export const PatientManagementData: patientData[] = [
     testDate: '2025.10.07',
     healthInterest: ['영양관리', '체중조절'],
     healthStatus: '주의',
+    signupDate: '2025.10.07',
   },
   {
     nickname: '밈미',
@@ -180,6 +197,7 @@ export const PatientManagementData: patientData[] = [
     testDate: '2024.09.30',
     healthInterest: ['체중조절', '혈당관리'],
     healthStatus: '정상',
+    signupDate: '2024.09.30',
   },
   {
     nickname: '카레남',
@@ -190,65 +208,6 @@ export const PatientManagementData: patientData[] = [
     testDate: '2023.12.14',
     healthInterest: ['혈당관리'],
     healthStatus: '위험',
-  },
-  {
-    nickname: '하나',
-    age: 27,
-    gender: '여자',
-    height: 160,
-    weight: 52,
-    testDate: '2023.06.15',
-    healthInterest: ['영양관리', '체중조절', '혈압관리'],
-    healthStatus: '안심',
-  },
-  {
-    nickname: '제다이',
-    age: 33,
-    gender: '남자',
-    height: 177,
-    weight: 78,
-    testDate: '2024.04.24',
-    healthInterest: ['영양관리', '혈당관리'],
-    healthStatus: '안심',
-  },
-  {
-    nickname: '병아리콩',
-    age: 27,
-    gender: '남자',
-    height: 180,
-    weight: 80,
-    testDate: '2025.02.23',
-    healthInterest: ['체중조절', '혈당관리'],
-    healthStatus: '관심',
-  },
-  {
-    nickname: '애니',
-    age: 32,
-    gender: '여자',
-    height: 163,
-    weight: 59,
-    testDate: '2025.10.07',
-    healthInterest: ['영양관리', '체중조절'],
-    healthStatus: '주의',
-  },
-  {
-    nickname: '밈미',
-    age: 20,
-    gender: '여자',
-    height: 156,
-    weight: 57,
-    testDate: '2024.09.30',
-    healthInterest: ['체중조절', '혈당관리'],
-    healthStatus: '정상',
-  },
-  {
-    nickname: '카레남',
-    age: 29,
-    gender: '남자',
-    height: 168,
-    weight: 62,
-    testDate: '2023.12.14',
-    healthInterest: ['혈당관리'],
-    healthStatus: '위험',
+    signupDate: '2023.12.14',
   },
 ];

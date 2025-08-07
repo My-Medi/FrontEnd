@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { notificationAPI } from '../../apis/notificationApi/notification';
+import { notificationAPI } from '../../../../apis/notificationApi/notification';
 
 interface UseDeleteExpertNotificationsMutationProps {
   onSuccess?: () => void;

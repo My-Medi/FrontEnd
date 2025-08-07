@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import fileboxIcon from '../../assets/MyHome/Resume/filebox.svg';
 import { MultipleImageUpload } from '../Common/MultipleImageUpload';
 import type { CareerRequest, LicenseRequest, LicenseImageRequest, ExpertSpecialty } from '../../types/expert';
@@ -34,7 +34,7 @@ const SPECIALTY_MAP: { [key: string]: ExpertSpecialty } = {
 const ExpertInputForm: React.FC<ExpertInputFormProps> = ({ 
   onNext, 
   onPrev, 
-  initialData = {} 
+ 
 }) => {
   const [selectedFields, setSelectedFields] = useState<string[]>(['영양사']);
   const [companyName, setCompanyName] = useState("");

@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { getExpertNotifications } from '../../apis/notificationApi/notification';
-import type { ExpertNotificationListResponse } from '../../types/notification';
+import { getExpertNotifications } from '../../../../apis/notificationApi/notification';
+import type { ExpertNotificationListResponse } from '../../../../types/notification';
 
 interface UseExpertNotificationsInfiniteQueryProps {
   pageSize?: number;

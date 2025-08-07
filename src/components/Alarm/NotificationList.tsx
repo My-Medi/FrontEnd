@@ -63,14 +63,6 @@ export const NotificationList: React.FC<NotificationListProps> = ({ userType = '
     preloadImages();
   }, []);
 
-  // 전체 삭제 핸들러
-  const handleDeleteAll = () => {
-    const currentNotices = showAllOld ? allNotifications : oldNotices;
-    if (currentNotices.length > 0) {
-      const allIds = currentNotices.map(getNotificationId);
-      deleteNotifications(allIds);
-    }
-  };
 
   const handleDelete = () => {
     if (selectedIds.length > 0) {

@@ -9,6 +9,7 @@ interface ExpertCardProps {
   description: string;
   profile?: React.ReactNode | string;
   careers: string[];
+  organizationName?: string;
   onClick?: () => void;
 }
 
@@ -19,7 +20,7 @@ const ExpertCard: React.FC<ExpertCardProps> = ({
   slogan,
   description,
   profile,
-  careers,
+  organizationName,
   onClick,
 }) => (
   <div
@@ -44,16 +45,17 @@ const ExpertCard: React.FC<ExpertCardProps> = ({
     </div>
     <div className="flex flex-col items-start gap-1 pt-2 w-full">
       <div className="w-full truncate">
-        <span className="text-[20px] font-medium text-[#1D68FF] pr-2 leading-[1.19em]">{nickname}</span>
-        <span className="text-[20px] font-medium text-[#1D68FF] leading-[1.19em]">/</span>
-        <span className="text-[20px] font-medium text-[#121218] pl-2 leading-[1.19em]">{realname}</span>
+            <span className="text-[20px] font-medium text-[#1D68FF] pr-2 leading-[1.19em]">{nickname}</span>
+            <span className="text-[20px] font-medium text-[#1D68FF] leading-[1.19em]">/</span>
+            <span className="text-[20px] font-medium text-[#121218] pl-2 leading-[1.19em]">{realname}</span>
+         
       </div>
       <div className="text-[18px] font-medium text-[#25282B] text-left leading-[1.71em] w-full truncate whitespace-nowrap overflow-hidden">{description.split('.')[0]}</div>
-      <ul className="pt-1 text-[14px] font-medium text-[#75787B] list-none whitespace-pre-line w-full break-words gap-1 leading-[1.71em]">
-        {careers.map((career, idx) => (
-          <li key={idx}>{career}</li>
-        ))}
-      </ul>
+      {organizationName && (
+        <div className="pt-1 text-[14px] font-medium text-[#75787B] leading-[1.71em]">
+          - {organizationName}
+        </div>
+      )}
     </div>
   </div>
 );

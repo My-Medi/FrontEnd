@@ -40,12 +40,10 @@ const RequestForm = () => {
   });
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   
-  const { data: healthProposal, isLoading, error } = useHealthProposalQuery();
+  const { data: healthProposal} = useHealthProposalQuery();
   const healthProposalMutation = useHealthProposalMutation();
   const healthProposalUpdateMutation = useHealthProposalUpdateMutation();
 
-  // 4300 에러는 제안서가 없는 경우이므로 빈 폼을 보여줌
-  const isNoProposalError = error && (error as any)?.response?.data?.code === 4300;
   
   // 기존 데이터가 있는지 확인 (수정 모드)
   const isEditMode = !!healthProposal?.result;
@@ -149,20 +147,20 @@ const RequestForm = () => {
     if (isEditMode) {
       // 수정 API 호출 (PATCH)
       healthProposalUpdateMutation.mutate(apiData, {
-        onSuccess: (data) => {
+        onSuccess: () => {
           setIsConfirmModalOpen(false);
         },
-        onError: (error) => {
+        onError: () => {
           alert('요청서 수정에 실패했습니다. 다시 시도해주세요.');
         },
       });
     } else {
       // 등록 API 호출 (POST)
       healthProposalMutation.mutate(apiData, {
-        onSuccess: (data) => {
+        onSuccess: () => {
           setIsConfirmModalOpen(false);
         },
-        onError: (error) => {
+        onError: () => {
           alert('요청서 등록에 실패했습니다. 다시 시도해주세요.');
         },
       });
@@ -253,6 +251,17 @@ const RequestForm = () => {
               value={formData.healthGoals}
               onChange={(e) => setFormData(prev => ({ ...prev, healthGoals: e.target.value }))}
               placeholder='ex) 혈당 수치를 정상화하고 싶어요. / 건강하게 체중을 감량하고 싶어요.'
+              className='w-full border border-gray-300 rounded-lg px-4 py-2 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-200'
+            />
+          </div>
+          {/* 6. 요청사항*/}
+          <div>
+            <label className='block font-semibold mb-2'>
+              6. 전문가에게 전달할 요청사항을 적어주세요.
+            </label>
+            <textarea
+              rows={3}
+              placeholder='ex) 야근이 많은 직장인, 교대 근무, 하루 10시간 앉아 있음 등'
               className='w-full border border-gray-300 rounded-lg px-4 py-2 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-200'
             />
           </div>

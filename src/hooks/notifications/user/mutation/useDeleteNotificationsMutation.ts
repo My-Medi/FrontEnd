@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteNotifications } from '../../apis/notificationApi/notification';
-import type { ApiResponse } from '../../types/common';
+import { deleteNotifications } from '../../../../apis/notificationApi/notification';
+import type { ApiResponse } from '../../../../types/common';
 
 interface UseDeleteNotificationsMutationProps {
   onSuccess?: (data: ApiResponse<void>) => void;

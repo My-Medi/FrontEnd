@@ -5,26 +5,7 @@ import CustomCheckboxButton from '../Common/CustomCheckboxButton';
 import backSvg from '../../assets/back.svg';
 import { useNavigate } from 'react-router-dom';
 
-// 커스텀 체크박스 컴포넌트
-const CustomCheckbox = ({ checked, onChange, label }: { checked: boolean; onChange: () => void; label: string }) => (
-  <label className="inline-flex items-center cursor-pointer select-none">
-    <input
-      type="checkbox"
-      checked={checked}
-      onChange={onChange}
-      className="hidden"
-    />
-    <span className="w-6 h-6 flex items-center justify-center rounded-[6px] border border-[#1D68FF] mr-2" style={{ background: checked ? '#1D68FF' : '#fff' }}>
-      {checked && (
-        <svg xmlns="http://www.w3.org/2000/svg" width="23" height="24" viewBox="0 0 23 24" fill="none">
-          <rect y="0.75" width="22.5" height="22.5" rx="6" fill="#1D68FF"/>
-          <path d="M6.75 11.6509L10.2553 15L15.75 9.75" stroke="white" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      )}
-    </span>
-    <span className="text-base text-gray-700">{label}</span>
-  </label>
-);
+
 
 const HealthCheckupForm = () => {
   // 회차 상태 관리
@@ -47,6 +28,7 @@ const HealthCheckupForm = () => {
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
   const [bmi, setBmi] = useState('');
+  const [bmiType, setBmiType] = useState<string>('정상');
   const [waist, setWaist] = useState('');
   const [waistType, setWaistType] = useState('정상');
   const [bpHigh, setBpHigh] = useState('');
@@ -127,6 +109,52 @@ const HealthCheckupForm = () => {
     },
   });
 
+  // BMI 계산 함수
+  const calculateBMI = (height: string, weight: string) => {
+    if (!height || !weight) {
+      setBmi('');
+      setBmiType('정상');
+      return;
+    }
+    
+    const heightInMeters = parseFloat(height) / 100;
+    const weightInKg = parseFloat(weight);
+    
+    if (heightInMeters <= 0 || weightInKg <= 0) {
+      setBmi('');
+      setBmiType('정상');
+      return;
+    }
+    
+    const bmiValue = weightInKg / (heightInMeters * heightInMeters);
+    setBmi(bmiValue.toFixed(1));
+    
+    // BMI 분류
+    if (bmiValue < 18.5) {
+      setBmiType('저체중');
+    } else if (bmiValue < 23) {
+      setBmiType('정상');
+    } else if (bmiValue < 25) {
+      setBmiType('과체중');
+    } else {
+      setBmiType('비만');
+    }
+  };
+
+  // 키 변경 핸들러
+  const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setHeight(value);
+    calculateBMI(value, weight);
+  };
+
+  // 몸무게 변경 핸들러
+  const handleWeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setWeight(value);
+    calculateBMI(height, value);
+  };
+
   // 저장 버튼 클릭 핸들러
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
@@ -206,24 +234,24 @@ const HealthCheckupForm = () => {
           {/* 키 */}
           <div className="flex items-center mb-[24px]">
             <label className="w-40 font-medium text-black font-size-[18px]">키 (cm)</label>
-            <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="cm" value={height} onChange={e => setHeight(e.target.value)} />
+            <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="cm" value={height} onChange={handleHeightChange} />
           </div>
           {/* 몸무게 */}
           <div className="flex items-center border-b-2 border-[#DBE6FF]">
             <div className="flex items-center mb-[24px]">
             <label className="w-40 font-medium text-black font-size-[18px]">몸무게 (kg)</label>
-            <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="kg" value={weight} onChange={e => setWeight(e.target.value)} />
+            <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="kg" value={weight} onChange={handleWeightChange} />
             </div>
           </div>
           {/* BMI */}
           <div className="border-b-2 border-[#DBE6FF] mb-[24px]">
             <div className="flex items-center mb-[24px]">
               <label className="w-40 font-medium text-black font-size-[18px]">BMI 체질량지수</label>
-              <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="결과 자동 계산" value={bmi} onChange={e => setBmi(e.target.value)} />
+              <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="결과 자동 계산" value={bmi} onChange={e => setBmi(e.target.value)} readOnly />
             </div>
             <div className="flex gap-10 ml-50 mb-[24px]">
               {['저체중', '정상', '과체중', '비만'].map((v) => (
-                <CustomCheckboxButton key={v} checked={false} onClick={() => {}} label={v} />
+                <CustomCheckboxButton key={v} checked={bmiType === v} onClick={() => setBmiType(v)} label={v} />
               ))}
             </div>
           </div>

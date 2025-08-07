@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { expertAPI } from '../../apis/expertApi/expert';
-import type { PersonalSignUpRequest, SignUpResponse, ExpertSignUpRequest } from '../../types/expert';
+import { expertAPI } from '../../../apis/expertApi/expert';
+import type { PersonalSignUpRequest, SignUpResponse, ExpertSignUpRequest } from '../../../types/expert';
 
 interface UseSignUpMutationProps {
   onSuccess?: (data: SignUpResponse) => void;
@@ -35,7 +35,7 @@ export const useSignUpMutation = ({ onSuccess, onError }: UseSignUpMutationProps
 };
 
 // 새로운 2단계, 3단계 방식의 전문가 회원가입 훅
-export const useExpertSignUpMutation = ({ onSuccess, onError }: UseSignUpMutationProps = {}) => {
+export const useExpertSignUpMutation = ({ onSuccess }: UseSignUpMutationProps = {}) => {
   return useMutation<SignUpResponse, AxiosError, ExpertSignUpRequest>({
     mutationFn: async (data: ExpertSignUpRequest) => {
       return expertAPI.signUpExpertNew(data);
@@ -75,4 +75,4 @@ export const useExpertSignUpMutation = ({ onSuccess, onError }: UseSignUpMutatio
       console.log('서버 에러 응답:', error.response?.data);
     },
   });
-}; 
+};

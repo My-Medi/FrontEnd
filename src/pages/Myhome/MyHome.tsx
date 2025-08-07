@@ -2,7 +2,6 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import SideBar from '../../components/MyHome/Layout/SideBar';
 import SimpleBox from '../../components/MyHome/Layout/SimpleBox';
-import ConfirmModal from '../../components/MyHome/Edit/ConfirmModal';
 import EditInfo from '../../components/MyHome/Edit/EditInfo';
 import ExpertHome from '../../components/MyHome/Expert/ExpertHome';
 import PatientHome from '../../components/MyHome/Patient/PatientHome';
@@ -15,10 +14,7 @@ import { initializeRandomSchedules } from '../../data/scheduleData';
 const MyHome: React.FC = () => {
   const [selectedMenu, setSelectedMenu] = useState(0);
   const [showEditInfo, setShowEditInfo] = useState(false);
-  const [hasChanges, setHasChanges] = useState(false);
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
-  const [pendingMenuIndex, setPendingMenuIndex] = useState<number | null>(null);
   const [selectedDate, setSelectedDate] = useState<number | undefined>(undefined);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const { userType } = useAuth();
@@ -101,32 +97,11 @@ const MyHome: React.FC = () => {
 
   // 메뉴 선택 핸들러
   const handleMenuSelect = (menuIndex: number) => {
-    // EditInfo 페이지가 열려있고 변경사항이 있다면 확인 모달 표시
-    if (showEditInfo && hasChanges) {
-      setPendingMenuIndex(menuIndex);
-      setShowConfirmModal(true);
-    } else {
-      setSelectedMenu(menuIndex);
-      if (showEditInfo) {
-        setShowEditInfo(false);
-      }
-    }
-  };
-
-  // 확인 모달에서 저장 선택 시
-  const handleConfirmSave = () => {
-    setShowConfirmModal(false);
-    if (pendingMenuIndex !== null) {
-      setSelectedMenu(pendingMenuIndex);
+    // EditInfo 페이지가 열려있으면 닫고 메뉴 변경
+    if (showEditInfo) {
       setShowEditInfo(false);
-      setPendingMenuIndex(null);
     }
-  };
-
-  // 확인 모달에서 취소 선택 시
-  const handleConfirmCancel = () => {
-    setShowConfirmModal(false);
-    setPendingMenuIndex(null);
+    setSelectedMenu(menuIndex);
   };
 
   // 사용자 타입이 없으면 기본값으로 patient 사용
@@ -139,7 +114,7 @@ const MyHome: React.FC = () => {
         <EditInfo
           userType={currentUserType}
           onBack={() => setShowEditInfo(false)}
-          onHasChanges={setHasChanges}
+          // onHasChanges={setHasChanges} // This state was removed
           onProfileModalChange={setShowProfileModal}
         />
       );
@@ -221,12 +196,7 @@ const MyHome: React.FC = () => {
       </div>
 
       {/* 확인 모달 */}
-      <ConfirmModal
-        isOpen={showConfirmModal}
-        onClose={() => setShowConfirmModal(false)}
-        onConfirm={handleConfirmSave}
-        onCancel={handleConfirmCancel}
-      />
+      {/* ConfirmModal 제거됨 - EditInfo 내부에서만 처리 */}
     </div>
   );
 };

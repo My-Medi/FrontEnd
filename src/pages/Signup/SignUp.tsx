@@ -7,8 +7,8 @@ import SignUpComplete from "../../components/SignUp/SignUpComplete";
 import Stepper from "../../components/SignUp/Stepper";
 import LoadingSpinner from "../../components/Common/LoadingSpinner";
 import backSvg from "../../assets/back.svg";
-import { useSignUpMutation } from "../../hooks/users/useSignUpMutation";
-import { useExpertSignUpMutation } from "../../hooks/experts/useSignUpMutation";
+import { useSignUpMutation } from "../../hooks/users/mutations/useSignUpMutation";
+import { useExpertSignUpMutation } from "../../hooks/experts/mutations/useSignUpMutation";
 import type { PersonalSignUpRequest } from "../../types/user";
 import type { ExpertSignUpRequest, ExpertSignUpStep3Request, ExpertSpecialty } from "../../types/expert";
 import TermsAgreement from "../../components/SignUp/TermsAgreement";
@@ -28,6 +28,8 @@ interface SignUpFormData {
   emailDomain: string;
   phoneNumber: string;
   profileImgUrl: string;
+  height: string;
+  weight: string;
 }
 
 interface ExpertBasicData {
@@ -49,6 +51,8 @@ const initialSignUpData: SignUpFormData = {
   emailDomain: "직접입력",
   phoneNumber: "",
   profileImgUrl: "",
+  height: "",
+  weight: "",
 };
 
 const SignUp: React.FC = () => {
@@ -106,6 +110,8 @@ const SignUp: React.FC = () => {
       loginId: signUpData.loginId,
       password: signUpData.password,
       profileImgUrl: signUpData.profileImgUrl || "",
+      height: signUpData.height ? parseInt(signUpData.height) : undefined,
+      weight: signUpData.weight ? parseInt(signUpData.weight) : undefined,
     };
 
     console.log('개인 회원가입 데이터 변환:', {

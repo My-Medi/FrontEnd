@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { getExpertList } from '../../apis/expertApi/expert';
-import type { ExpertListRequestParams, ExpertListResult } from '../../types/expert';
+import { getExpertList } from '../../../apis/expertApi/list';
+import type { ExpertListRequestParams, ExpertListResponse } from '../../../types/expert/list';
 
 /**
  * 전문가 목록 조회 훅
@@ -8,8 +8,8 @@ import type { ExpertListRequestParams, ExpertListResult } from '../../types/expe
  * @returns useQuery 결과
  */
 export const useExpertListQuery = (params: ExpertListRequestParams) => {
-  return useQuery<ExpertListResult>({
-    queryKey: ['expertList', params.currentPage, params.pageSize],
+  return useQuery<ExpertListResponse['result']>({
+    queryKey: ['expertList', params.currentPage, params.pageSize, params.specialty],
     queryFn: async () => {
       const response = await getExpertList(params);
       console.log('전문가 목록 API 응답:', response);
@@ -24,4 +24,4 @@ export const useExpertListQuery = (params: ExpertListRequestParams) => {
     gcTime: 10 * 60 * 1000, // 10분
     retry: 2,
   });
-}; 
+};

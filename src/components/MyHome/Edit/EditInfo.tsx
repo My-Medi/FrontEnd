@@ -4,21 +4,31 @@ import { useAuth } from '../../../contexts/AuthContext';
 import SuccessModal from './SuccessModal';
 import ConfirmModal from './ConfirmModal';
 import ProfileSelectModal from './ProfileSelectModal';
-import { useUserProfileQuery } from '../../../hooks/users/useUserProfileQuery';
+import { useUserProfileQuery } from '../../../hooks/users/queries/useUserProfileQuery';
+import { useUserProfileUpdateMutation } from '../../../hooks/users/mutations/useUserProfileMutation';
+import { useExpertProfileQuery } from '../../../hooks/experts/queries/useExpertProfileQuery';
+import { useExpertProfileUpdateMutation } from '../../../hooks/experts/mutations/useExpertProfileMutation';
 
 interface EditInfoProps {
   userType: 'patient' | 'expert';
   onBack?: () => void;
   onMenuSelect?: (menuIndex: number) => void;
-  onHasChanges?: (hasChanges: boolean) => void;
   onProfileModalChange?: (isOpen: boolean) => void;
 }
 
-const EditInfo: React.FC<EditInfoProps> = ({ onBack, onHasChanges, onProfileModalChange }) => {
+const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onProfileModalChange }) => {
   const { userInfo, setUserInfo } = useAuth();
   
-  // 사용자 프로필 API 데이터 가져오기
-  const { data: userProfile } = useUserProfileQuery();
+  // 사용자 타입에 따라 적절한 프로필 훅만 사용
+  const userProfileQuery = userType !== 'expert' ? useUserProfileQuery() : { data: undefined };
+  const expertProfileQuery = userType === 'expert' ? useExpertProfileQuery() : { data: undefined };
+  
+  // 사용자 타입에 따라 적절한 프로필 데이터 선택
+  const userProfile = userType === 'expert' ? expertProfileQuery.data : userProfileQuery.data;
+
+  // 사용자 타입에 따라 적절한 업데이트 뮤테이션 사용
+  const userProfileUpdateMutation = userType !== 'expert' ? useUserProfileUpdateMutation() : null;
+  const expertProfileUpdateMutation = userType === 'expert' ? useExpertProfileUpdateMutation() : null;
   
   const [formData, setFormData] = useState({
     name: userInfo?.name || '',
@@ -38,21 +48,21 @@ const EditInfo: React.FC<EditInfoProps> = ({ onBack, onHasChanges, onProfileModa
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
-  const [selectedProfile, setSelectedProfile] = useState(1);
+
   const [hasChanges, setHasChanges] = useState(false);
   const [initialData, setInitialData] = useState(formData);
 
   // API 데이터로 폼 초기화 (기존 userInfo가 없을 때만)
   useEffect(() => {
     if (userProfile && !userInfo) {
-      const emailParts = userProfile.email.split('@');
+      const emailParts = userProfile.email ? userProfile.email.split('@') : ['', ''];
       const emailDomain = emailParts.length > 1 ? emailParts[1] : '직접입력';
       
       const newFormData = {
         name: userProfile.name || '',
         birthDate: userProfile.birthDate ? userProfile.birthDate.replace(/-/g, '').slice(0, 6) : '', // YYYY-MM-DD를 6자리로 변환
         gender: (userProfile.gender === 'MALE' ? 'male' : 'female') as 'male' | 'female',
-        nickname: userProfile.name || '', // API에는 nickname이 없으므로 name 사용
+        nickname: (userProfile as any)?.nickname || userProfile.name || '', // API에는 nickname이 없으므로 name 사용
         userId: '', // username 매핑 제거
         password: '',
         confirmPassword: '',
@@ -78,10 +88,10 @@ const EditInfo: React.FC<EditInfoProps> = ({ onBack, onHasChanges, onProfileModa
     const hasFormChanges = JSON.stringify(formData) !== JSON.stringify(initialData);
     setHasChanges(hasFormChanges);
     // 부모 컴포넌트에 변경사항 상태 전달
-    if (onHasChanges) {
-      onHasChanges(hasFormChanges);
-    }
-  }, [formData, initialData, onHasChanges]);
+    // if (onHasChanges) { // Removed as per edit hint
+    //   onHasChanges(hasFormChanges);
+    // }
+  }, [formData, initialData]); // Removed onHasChanges from dependency array
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({
@@ -101,6 +111,8 @@ const EditInfo: React.FC<EditInfoProps> = ({ onBack, onHasChanges, onProfileModa
   const handleConfirmSave = () => {
     handleSave();
     setShowConfirmModal(false);
+    // 저장 후 마이홈 화면으로 이동
+    onBack?.();
   };
 
   const handleConfirmCancel = () => {
@@ -108,8 +120,7 @@ const EditInfo: React.FC<EditInfoProps> = ({ onBack, onHasChanges, onProfileModa
     onBack?.();
   };
 
-  const handleProfileSelect = (profileIndex: number) => {
-    setSelectedProfile(profileIndex);
+  const handleProfileSelect = () => {
     setShowProfileModal(false);
     onProfileModalChange?.(false);
   };
@@ -117,7 +128,58 @@ const EditInfo: React.FC<EditInfoProps> = ({ onBack, onHasChanges, onProfileModa
   const handleSave = () => {
     console.log('저장된 데이터:', formData);
     
-    // 비밀번호가 입력된 경우에만 업데이트
+    if (userType === 'expert') {
+      // 전문가 프로필 업데이트
+      const expertUpdateData = {
+        name: formData.name,
+        birthDate: formData.birthDate,
+        gender: formData.gender === 'male' ? 'MALE' : 'FEMALE' as 'MALE' | 'FEMALE',
+        nickname: formData.nickname,
+        phoneNumber: formData.contact,
+        profileImgUrl: '' // 프로필 이미지 URL은 별도 처리 필요
+      };
+      
+      if (expertProfileUpdateMutation) {
+        expertProfileUpdateMutation.mutate(expertUpdateData, {
+          onSuccess: () => {
+            // 저장 성공 후 변경사항 상태 초기화
+            setHasChanges(false);
+            setInitialData(formData);
+            setShowSuccessModal(true);
+          },
+          onError: (error) => {
+            console.error('전문가 프로필 업데이트 실패:', error);
+            alert('프로필 업데이트에 실패했습니다.');
+          }
+        });
+      }
+    } else {
+      // 일반 사용자 프로필 업데이트
+      const userUpdateData = {
+        name: formData.name,
+        birthDate: formData.birthDate,
+        gender: formData.gender === 'male' ? 'MALE' : 'FEMALE' as 'MALE' | 'FEMALE',
+        email: `${formData.email}@${formData.emailDomain === '직접입력' ? '' : formData.emailDomain}`,
+        phoneNumber: formData.contact
+      };
+      
+      if (userProfileUpdateMutation) {
+        userProfileUpdateMutation.mutate(userUpdateData, {
+          onSuccess: () => {
+            // 저장 성공 후 변경사항 상태 초기화
+            setHasChanges(false);
+            setInitialData(formData);
+            setShowSuccessModal(true);
+          },
+          onError: (error) => {
+            console.error('사용자 프로필 업데이트 실패:', error);
+            alert('프로필 업데이트에 실패했습니다.');
+          }
+        });
+      }
+    }
+    
+    // 기존 로컬 상태 업데이트 (백업용)
     const updatedUserInfo = {
       name: formData.name,
       birthDate: formData.birthDate,
@@ -130,7 +192,6 @@ const EditInfo: React.FC<EditInfoProps> = ({ onBack, onHasChanges, onProfileModa
     };
     
     setUserInfo(updatedUserInfo);
-    setShowSuccessModal(true);
   };
 
   const emailDomains = ['직접입력', 'gmail.com', 'naver.com', 'daum.net', 'hanmail.net'];

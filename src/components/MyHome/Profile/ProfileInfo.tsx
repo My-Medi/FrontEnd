@@ -2,7 +2,8 @@ import React from "react";
 import defaultProfileImage from "../../../assets/MyHome/profile.svg";
 import smileIcon from "../../../assets/MyHome/smile.svg";
 import ActionButton from "../Common/ActionButton";
-import { useUserProfileQuery } from "../../../hooks/users/useUserProfileQuery";
+import { useUserProfileQuery } from "../../../hooks/users/queries/useUserProfileQuery";
+import { useExpertProfileQuery } from "../../../hooks/experts/queries/useExpertProfileQuery";
 import { calculateAge } from "../../../utils/dateUtils";
 
 interface PatientInfoProps {
@@ -47,25 +48,45 @@ const PatientInfoSection: React.FC<PatientInfoProps> = ({
   useApiData = false,
   expertises,
 }) => {
-  // API 데이터 사용 시
-  const { data: userProfile } = useUserProfileQuery();
+  // API 데이터 사용 시 - 사용자 타입에 따라 적절한 훅만 사용
+  const userProfileQuery = userType !== 'expert' ? useUserProfileQuery() : { data: undefined };
+  const expertProfileQuery = userType === 'expert' ? useExpertProfileQuery() : { data: undefined };
+
+  // 사용자 타입에 따라 적절한 프로필 데이터 선택
+  const profileData = userType === 'expert' ? expertProfileQuery.data : userProfileQuery.data;
 
   // API 데이터 사용 시 실제 데이터 사용, 그렇지 않으면 props 사용
   // API 데이터가 없거나 에러가 있을 때는 기본값 사용
-  const displayName = useApiData && userProfile?.name ? userProfile.name : (name || '사용자');
-  const displayNickname = useApiData && userProfile?.name ? userProfile.name : (nickname || '사용자');
-  const displayAge = useApiData && userProfile?.birthDate ? calculateAge(userProfile.birthDate) : (age || 0);
+  const displayName = useApiData && profileData?.name ? profileData.name : (name || '사용자');
+  const displayNickname = useApiData && (profileData as any)?.nickname ? (profileData as any).nickname : (nickname || '사용자');
+  const displayAge = useApiData && profileData?.birthDate ? calculateAge(profileData.birthDate) : (age || 0);
   
   // 프로필 이미지 처리: API 데이터 사용 시 유효성 검사 후 기본 이미지 사용
   const getProfileImageUrl = () => {
-    if (useApiData && userProfile?.profileImgUrl) {
-      const apiImageUrl = userProfile.profileImgUrl;
+    if (useApiData && profileData?.profileImgUrl) {
+      const apiImageUrl = profileData.profileImgUrl;
       return isValidProfileImageUrl(apiImageUrl) ? apiImageUrl : defaultProfileImage;
     }
     return isValidProfileImageUrl(profileImageUrl) ? profileImageUrl : defaultProfileImage;
   };
 
   const displayProfileImage = getProfileImageUrl();
+
+  // 전문가 전문분야 처리
+  const getExpertSpecialty = () => {
+    if (useApiData && (profileData as any)?.specialty) {
+      // specialty를 한국어로 변환하는 로직 필요
+      const specialtyMap: Record<string, string> = {
+        'NUTRITIONIST': '영양사',
+        'HEALTH_MANAGER': '건강관리사',
+        'WELLNESS_COACH': '웰니스 코치',
+        'EXERCISE_THERAPIST': '운동처방사',
+        'ETC': '기타'
+      };
+      return specialtyMap[(profileData as any).specialty] || (profileData as any).specialty;
+    }
+    return expertises?.join(', ') || '전문분야 미설정';
+  };
 
   return (
     <div className="w-full pt-12 pl-10 xl:pt-12 xl:pl-10 md:pt-8 md:pl-6 sm:pt-6 sm:pl-4">
@@ -123,7 +144,7 @@ const PatientInfoSection: React.FC<PatientInfoProps> = ({
             <div className="pt-2 text-[#121218] font-normal text-lg leading-[36px] tracking-[-0.54px] xl:text-lg md:text-base sm:text-sm">
                 전문분야 <span className="text-[#DBE6FF]">| </span>
                 {/* To-Do: API 연동 후 수정 필요 */}
-                {(userProfile as any)?.expertises?.join(', ') || expertises?.join(', ') || '전문분야 미설정'}
+                {getExpertSpecialty()}
             </div>
           )}
         </div>
