@@ -16,7 +16,7 @@ const PatientCardList = () => {
   const averageData = categoryMap[currentCategory] || [];
 
   return (
-    <div className='flex flex-col justify-center items-center'>
+    <div className='flex flex-col justify-center items-center mt-[-40px]'>
       <CategorySelector selected={currentCategory} onSelect={setCurrentCategory} />
       <div className='flex mt-[40px]'>
         <SummaryTextArea selectedCategory={currentCategory} />
@@ -25,7 +25,7 @@ const PatientCardList = () => {
         {patientData.map((patient) => {
           const average = averageData.find((avg) => avg.id === patient.id);
           return (
-            <div key={patient.id} className='mb-12 mt-[70px]'>
+            <div key={patient.id} className='mb-[10px] mt-[60px]'>
               {/* 설명 문구 */}
               {average && (
                 <IndicationDescription

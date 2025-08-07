@@ -1,9 +1,9 @@
 import React from 'react';
-import safeGage from 'src/assets/total/safe.svg';
-import normalGage from 'src/assets/total/normal.svg';
-import interestGage from 'src/assets/total/interest.svg';
-import warnGage from 'src/assets/total/warn.svg';
-import dangerGage from 'src/assets/total/danger.svg';
+import safeGage from '@/assets/MyMedicalReport/total/safe.svg';
+import normalGage from '@/assets/MyMedicalReport/total/normal.svg';
+import interestGage from '@/assets/MyMedicalReport/total/interest.svg';
+import warnGage from '@/assets/MyMedicalReport/total/warn.svg';
+import dangerGage from '@/assets/MyMedicalReport/total/danger.svg';
 
 interface Indicator {
   id: string;
@@ -66,7 +66,7 @@ const Gage: React.FC<GageProps> = ({ nickname, indicators }) => {
       <div
         style={{
           position: 'absolute',
-          top: '143px',
+          top: '200px',
           left: '50%',
           transform: 'translateX(-50%)',
           width: '238px',
@@ -86,7 +86,7 @@ const Gage: React.FC<GageProps> = ({ nickname, indicators }) => {
       <div
         style={{
           position: 'absolute',
-          bottom: '60px',
+          bottom: '180px',
           left: '50%',
           transform: 'translateX(-50%)',
           textAlign: 'center',
