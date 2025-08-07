@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import ExpertCard from './ExpertCard';
 import ExpertDetailModal from '../../Expert/Modal/ExpertDetailModal';
 import { addExpertCard, type MatchedExpert } from '../../../data/matchedExperts';
-import { useMatchedExpertsQuery } from '../../../hooks/experts/useMatchedExpertsQuery';
-import { useCancelConsultationMutation } from '../../../hooks/experts/useCancelConsultationMutation';
+import { useMatchedExpertsQuery } from '../../../hooks/experts/queries/useMatchedExpertsQuery';
+import { useCancelConsultationMutation } from '../../../hooks/experts/mutations/useCancelConsultationMutation';
 
 import LoadingSpinner from '../../Common/LoadingSpinner';
 

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { getUserProfile } from '../../apis/userApi/user';
-import type { UserProfile } from '../../types/common';
+import { getUserProfile } from '../../../apis/userApi/user';
+import type { UserProfile } from '../../../types/common';
 
 /**
  * 사용자 프로필 조회 훅
@@ -19,4 +19,4 @@ export const useUserProfileQuery = () => {
     gcTime: 10 * 60 * 1000, // 10분
     retry: 2,
   });
-}; 
+};

@@ -30,12 +30,9 @@ const ExpertHome: React.FC<ExpertHomeProps> = ({
       return (
         <>
           <PatientInfoSection
-            nickname='메디핏'
-            name='이진서'
-            age={23}
             onEditInfo={onEditInfo}
             userType='expert'
-            expertises={['가정의학과', '소아과']}
+            useApiData={true}
           />
           <ExpertSchedule />
           <HomeCalendar selectedDate={selectedDate} today={today} onDateSelect={onDateSelect} />

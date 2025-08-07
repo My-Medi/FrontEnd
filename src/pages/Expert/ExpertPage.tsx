@@ -5,7 +5,7 @@ import ExpertCard from '../../components/Expert/Card/ExpertCard';
 import ExpertCategoryPopover from '../../components/Expert/Filter/ExpertCategoryPopover';
 import ExpertDetailModal from '../../components/Expert/Modal/ExpertDetailModal';
 import Pagination from '../../components/Expert/Intro/Pagination';
-import { useExpertListQuery } from '../../hooks/experts/useExpertListQuery';
+import { useExpertListQuery } from '../../hooks/experts/queries/useExpertListQuery';
 import type { Expert } from "../../types/expert/list";
 import { getSpecialtyKoreanName } from "../../types/expert/common";
 

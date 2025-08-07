@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getMatchedExperts } from '../../apis/expertApi/matching';
+import { getMatchedExperts } from '../../../apis/expertApi/matching';
 
 export const useMatchedExpertsQuery = () => {
   return useQuery({
