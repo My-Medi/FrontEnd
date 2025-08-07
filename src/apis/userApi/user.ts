@@ -9,7 +9,9 @@ import type { PersonalSignUpRequest, SignUpResponse } from '../../types/user';
  */
 export const getUserProfile = async (): Promise<ApiResponse<UserProfile>> => {
   try {
+    console.log('사용자 프로필 API 호출:', USER_ENDPOINTS.PROFILE);
     const response = await API.get<ApiResponse<UserProfile>>(USER_ENDPOINTS.PROFILE);
+    console.log('사용자 프로필 API 응답:', response.data);
     return response.data;
   } catch (error) {
     console.error('사용자 프로필 조회 실패:', error);

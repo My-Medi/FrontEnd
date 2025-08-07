@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { type MatchedExpert } from '../../../data/matchedExperts';
 import { getSpecialtyKoreanName } from '../../../types/expert/common';
+import { formatPhoneNumber } from '../../../utils/phoneUtils';
 import plusIcon from '../../../assets/MyHome/plus.svg';
 import unionSvg from '../../../assets/Expert/Union.svg';
 
@@ -145,7 +146,7 @@ const ExpertCard: React.FC<ExpertCardProps> = ({ expert, onUnmatch, onCancelRequ
           {/* 매칭된 전문가일 때만 전화번호 표시 */}
           {expert.status === 'ACCEPTED' && expert.phoneNumber && (
             <div className="text-[16px] font-light text-[#25282B] leading-[22px] tracking-[-3%]">
-              {expert.phoneNumber}
+              {formatPhoneNumber(expert.phoneNumber)}
             </div>
           )}
 

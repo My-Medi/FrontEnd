@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FiChevronRight, FiChevronLeft } from 'react-icons/fi';
 import { NotificationItem } from './NotificationItem';
+import { NotificationItemSkeleton } from './NotificationItemSkeleton';
 import DeleteModal from './DeleteModal';
 import recentIcon from '/src/assets/Alarm/alarm-recent.svg';
 import pastIcon from '/src/assets/Alarm/alarm-past.svg';
@@ -82,9 +83,29 @@ export const NotificationList: React.FC<NotificationListProps> = ({ userType = '
   if (isLoading) {
     return (
       <div className='flex flex-col items-center justify-center gap-[40px] w-full max-w-[1183px] px-4 sm:px-[80px] py-[50px] rounded-[20px] border border-white bg-[#F6F9FF] shadow-[...]'>
-        <div className='text-center'>
-          <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto'></div>
-          <p className='mt-4 text-gray-600'>알림을 불러오는 중...</p>
+        <h2 className='text-[24px] font-semibold leading-[36px] tracking-[-0.72px] text-[#121218] font-[Pretendard] text-center'>
+          알림
+        </h2>
+        <div className='flex flex-col items-start gap-[32px] w-full min-h-[300px]'>
+          <div className='flex items-center gap-2'>
+            <div className='w-6 h-6 bg-gray-200 rounded animate-pulse' />
+            <div className='w-32 h-[36px] bg-gray-200 rounded animate-pulse' />
+          </div>
+          <div className='flex flex-col gap-[24px] w-full'>
+            {Array.from({ length: 3 }, (_, index) => (
+              <NotificationItemSkeleton key={index} />
+            ))}
+          </div>
+          <hr className='w-full h-px border-0 bg-[#C5C8CB] my-[24px] mt-[-5px]' />
+          <div className='flex items-center gap-2 mt-[-30px]'>
+            <div className='w-6 h-6 bg-gray-200 rounded animate-pulse' />
+            <div className='w-24 h-[36px] bg-gray-200 rounded animate-pulse' />
+          </div>
+          <div className='flex flex-col gap-[24px] mt-[-10px] w-full'>
+            {Array.from({ length: 2 }, (_, index) => (
+              <NotificationItemSkeleton key={index} />
+            ))}
+          </div>
         </div>
       </div>
     );
@@ -249,7 +270,12 @@ export const NotificationList: React.FC<NotificationListProps> = ({ userType = '
         </div>
       ) : (
         <div className='flex flex-col gap-[24px] w-full mt-[16px]'>
-          {allNotifications.length > 0 ? (
+          {currentInfiniteQuery.isLoading ? (
+            // 지난 알림 초기 로딩 시 스켈레톤 UI
+            Array.from({ length: 5 }, (_, index) => (
+              <NotificationItemSkeleton key={index} showCheckbox={selectMode} />
+            ))
+          ) : allNotifications.length > 0 ? (
             <>
               {allNotifications.map((n) => {
                 const notificationId = getNotificationId(n);
@@ -269,14 +295,8 @@ export const NotificationList: React.FC<NotificationListProps> = ({ userType = '
               {/* 무한스크롤 스켈레톤 UI */}
               {currentInfiniteQuery.isFetchingNextPage && (
                 <div className='flex flex-col gap-[24px] w-full'>
-                  {[...Array(3)].map((_, index) => (
-                    <div key={index} className='flex items-center w-full ml-[-10px] gap-[16px]'>
-                      <div className='flex items-center h-[97px] w-full rounded-[20px] bg-gray-200 animate-pulse'>
-                        <div className='flex items-center h-full w-full px-[32px] py-[10px] gap-[10px] rounded-[50px_20px_20px_20px] border-2 border-gray-200 bg-gray-100'>
-                          <div className='w-full h-6 bg-gray-300 rounded animate-pulse'></div>
-                        </div>
-                      </div>
-                    </div>
+                  {Array.from({ length: 3 }, (_, index) => (
+                    <NotificationItemSkeleton key={index} showCheckbox={selectMode} />
                   ))}
                 </div>
               )}

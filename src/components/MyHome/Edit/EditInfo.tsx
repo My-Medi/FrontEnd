@@ -55,20 +55,17 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onProfileModalCha
   // API 데이터로 폼 초기화 (기존 userInfo가 없을 때만)
   useEffect(() => {
     if (userProfile && !userInfo) {
-      const emailParts = userProfile.email ? userProfile.email.split('@') : ['', ''];
-      const emailDomain = emailParts.length > 1 ? emailParts[1] : '직접입력';
-      
       const newFormData = {
         name: userProfile.name || '',
-        birthDate: userProfile.birthDate ? userProfile.birthDate.replace(/-/g, '').slice(0, 6) : '', // YYYY-MM-DD를 6자리로 변환
-        gender: (userProfile.gender === 'MALE' ? 'male' : 'female') as 'male' | 'female',
-        nickname: (userProfile as any)?.nickname || userProfile.name || '', // API에는 nickname이 없으므로 name 사용
-        userId: '', // username 매핑 제거
+        birthDate: '', // 새로운 API에는 birthDate가 없으므로 빈 문자열
+        gender: 'male' as 'male' | 'female', // 새로운 API에는 gender가 없으므로 기본값
+        nickname: userProfile.nickname || '',
+        userId: '', // 새로운 API에는 username이 없으므로 빈 문자열
         password: '',
         confirmPassword: '',
-        email: emailParts[0] || '',
-        emailDomain: emailDomain,
-        contact: userProfile.phoneNumber || ''
+        email: '', // 새로운 API에는 email이 없으므로 빈 문자열
+        emailDomain: '직접입력',
+        contact: '' // 새로운 API에는 phoneNumber가 없으므로 빈 문자열
       };
       
       setFormData(newFormData);
@@ -158,9 +155,9 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onProfileModalCha
       const userUpdateData = {
         name: formData.name,
         birthDate: formData.birthDate,
-        gender: formData.gender === 'male' ? 'MALE' : 'FEMALE' as 'MALE' | 'FEMALE',
-        email: `${formData.email}@${formData.emailDomain === '직접입력' ? '' : formData.emailDomain}`,
-        phoneNumber: formData.contact
+        nickname: formData.nickname,
+        phoneNumber: formData.contact,
+        profileImgUrl: '' // 프로필 이미지 URL은 별도 처리 필요
       };
       
       if (userProfileUpdateMutation) {

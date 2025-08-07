@@ -32,3 +32,22 @@ export const getSpecialtyFromKorean = (koreanName: string): ExpertSpecialty | un
   
   return koreanToEnglishMap[koreanName];
 };
+
+// 전문분야를 API key로 변환하는 함수
+export const getSpecialtyKey = (specialty: ExpertSpecialty): string => {
+  const specialtyKeyMap: Record<ExpertSpecialty, string> = {
+    'NUTRITIONIST': 'nutritionist',
+    'HEALTH_MANAGER': 'manager',
+    'WELLNESS_COACH': 'coach',
+    'EXERCISE_THERAPIST': 'therapist',
+    'ETC': 'etc'
+  };
+  
+  return specialtyKeyMap[specialty];
+};
+
+// 한국어를 API key로 변환하는 함수
+export const getSpecialtyKeyFromKorean = (koreanName: string): string | undefined => {
+  const specialty = getSpecialtyFromKorean(koreanName);
+  return specialty ? getSpecialtyKey(specialty) : undefined;
+};

@@ -10,6 +10,13 @@ interface ExpertCardProps {
   profile?: React.ReactNode | string;
   careers: string[];
   organizationName?: string;
+  careerResponseDtoList?: Array<{
+    id: number;
+    companyName: string;
+    jobTitle: string;
+    startDate: string;
+    endDate: string;
+  }>;
   onClick?: () => void;
 }
 
@@ -21,10 +28,11 @@ const ExpertCard: React.FC<ExpertCardProps> = ({
   description,
   profile,
   organizationName,
+  careerResponseDtoList,
   onClick,
 }) => (
   <div
-    className="w-full max-w-[25rem] h-[31.25rem] bg-[rgba(255,255,255,0.8)] rounded-[15px] border border-[#DBE6FF] border-[0.5px] flex flex-col items-center justify-center gap-4 px-6 py-10 cursor-pointer transition pl-[31px]"
+    className="w-full max-w-[25rem] h-[31.25rem] bg-[rgba(255,255,255,0.8)] rounded-[15px] border border-[#DBE6FF] border-[0.5px] flex flex-col items-center justify-center gap-4 px-6 pt-9 pb-10 cursor-pointer transition pl-[31px]"
     style={{ boxShadow: 'none' }}
     onClick={onClick}
   >
@@ -51,7 +59,11 @@ const ExpertCard: React.FC<ExpertCardProps> = ({
          
       </div>
       <div className="text-[18px] font-medium text-[#25282B] text-left leading-[1.71em] w-full truncate whitespace-nowrap overflow-hidden">{description.split('.')[0]}</div>
-      {organizationName && (
+      {careerResponseDtoList && careerResponseDtoList.length > 0 ? (
+        <div className="pt-1 text-[14px] font-medium text-[#75787B] leading-[1.71em]">
+          - {careerResponseDtoList[0].companyName}
+        </div>
+      ) : organizationName && (
         <div className="pt-1 text-[14px] font-medium text-[#75787B] leading-[1.71em]">
           - {organizationName}
         </div>

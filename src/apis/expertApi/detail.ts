@@ -9,7 +9,7 @@ import { USER_ENDPOINTS } from '../../types/common';
  */
 export const getExpertDetail = async (expertId: number): Promise<ExpertDetailResponse> => {
   try {
-    const response = await API.get<ExpertDetailResponse>(`${USER_ENDPOINTS.EXPERTS}/${expertId}`);
+    const response = await API.get<ExpertDetailResponse>(`${USER_ENDPOINTS.EXPERTS}/${expertId}/profiles/details`);
     return response.data;
   } catch (error) {
     console.error('전문가 상세 조회 실패:', error);

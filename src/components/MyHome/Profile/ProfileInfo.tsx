@@ -57,9 +57,10 @@ const PatientInfoSection: React.FC<PatientInfoProps> = ({
 
   // API 데이터 사용 시 실제 데이터 사용, 그렇지 않으면 props 사용
   // API 데이터가 없거나 에러가 있을 때는 기본값 사용
+  
   const displayName = useApiData && profileData?.name ? profileData.name : (name || '사용자');
-  const displayNickname = useApiData && (profileData as any)?.nickname ? (profileData as any).nickname : (nickname || '사용자');
-  const displayAge = useApiData && profileData?.birthDate ? calculateAge(profileData.birthDate) : (age || 0);
+  const displayNickname = useApiData && profileData?.nickname ? profileData.nickname : (nickname || '사용자');
+  const displayAge = useApiData && profileData?.age ? profileData.age : (age || 0);
   
   // 프로필 이미지 처리: API 데이터 사용 시 유효성 검사 후 기본 이미지 사용
   const getProfileImageUrl = () => {
@@ -129,15 +130,22 @@ const PatientInfoSection: React.FC<PatientInfoProps> = ({
                 만 {displayAge}세
               </div>
             )}
-            {userType === 'patient' && (height && weight) && (
+            {userType === 'patient' && (
               <div className="text-[#121218] font-normal text-lg leading-[36px] tracking-[-0.54px] xl:text-lg md:text-base sm:text-sm">
-                {height}cm / {weight}kg
+                {useApiData && profileData?.height && profileData?.weight 
+                  ? `${profileData.height}cm / ${profileData.weight}kg`
+                  : (height && weight ? `${height}cm / ${weight}kg` : '174cm / 70kg')
+                }
               </div>
             )}
           </div>
-          {userType === 'patient' && checkupCount !== undefined && (
+          {userType === 'patient' && (
             <div className="pt-2 text-[#121218] font-normal text-lg leading-[36px] tracking-[-0.54px] xl:text-lg md:text-base sm:text-sm">
-              국가건강검진 <span className="text-[#DBE6FF]">| </span>{checkupCount || 0}회
+              국가건강검진 <span className="text-[#DBE6FF]">| </span>
+              {useApiData && profileData?.reportCount !== undefined 
+                ? profileData.reportCount 
+                : checkupCount
+              }회
             </div>
           )}
           {userType === 'expert' && (

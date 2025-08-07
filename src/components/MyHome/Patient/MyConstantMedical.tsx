@@ -1,13 +1,16 @@
 import React from "react";
 import ActionButton from "../Common/ActionButton";
 import { healthStatusMap, type HealthStatus } from "../../../constants/healthStatus";
+import { useUserProfileQuery } from "../../../hooks/users/queries/useUserProfileQuery";
 
 interface Props {
   status: HealthStatus;
-  nickname: string;
 }
 
-const MyConstantMedical: React.FC<Props> = ({ status, nickname }) => {
+const MyConstantMedical: React.FC<Props> = ({ status }) => {
+  // API에서 사용자 프로필 데이터 가져오기
+  const { data: profileData } = useUserProfileQuery();
+  const nickname = profileData?.nickname || '사용자';
   const current = healthStatusMap[status];
 
   return (

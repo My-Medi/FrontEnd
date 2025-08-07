@@ -5,7 +5,7 @@ import type { ExpertSpecialty } from './common';
 export interface ExpertListRequestParams {
   currentPage: number;
   pageSize: number;
-  specialty?: ExpertSpecialty; // 카테고리 필터링을 위한 전문분야 파라미터 추가
+  specialty?: string | string[]; // API key 문자열 또는 배열 (nutritionist, coach, manager, therapist, etc)
 }
 
 // 전문가 목록 응답 타입
@@ -24,4 +24,14 @@ export interface Expert {
   organizationName: string;
   introduction: string;
   profile: string | null;
+  careerResponseDtoList?: CareerResponse[];
+}
+
+// 경력 정보 타입
+export interface CareerResponse {
+  id: number;
+  companyName: string;
+  jobTitle: string;
+  startDate: string;
+  endDate: string;
 }
