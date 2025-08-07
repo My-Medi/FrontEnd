@@ -15,6 +15,7 @@ import HealthTermsPage from '../pages/HealthTerms/HealthTerm';
 import MedicalReportLLMPage from '../pages/MedicalReportLLM/MedicalReportLLMPage';
 import ProtectedRoute from '../components/Common/ProtectedRoute';
 import MyMedicalReportPage from '../pages/MedicalReportPage';
+import EmptyReportPage from '../pages/EmptyReportPage';
 
 export const router = createBrowserRouter([
   {
@@ -72,6 +73,7 @@ export const router = createBrowserRouter([
       { path: 'medical-report-intro', element: <MedicalReportPage /> },
       { path: 'ai-healthcare-intro', element: <AIHealthCarePage /> },
       { path: 'medical-report-llm', element: <MedicalReportLLMPage /> },
+      { path: 'empty-report', element: <EmptyReportPage /> },
     ],
   },
 ]);
