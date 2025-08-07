@@ -9,12 +9,13 @@ interface RequestModalProps {
   isOpen: boolean;
   onClose: () => void;
   onBack?: () => void;
+  expertId: number;
   expertName: string;
   expertPosition: string;
   expertRealName: string;
 }
 
-const RequestModal: React.FC<RequestModalProps> = ({ isOpen, onClose, onBack, expertName, expertPosition, expertRealName }) => {
+const RequestModal: React.FC<RequestModalProps> = ({ isOpen, onClose, onBack, expertId, expertName, expertPosition, expertRealName }) => {
   const [requestText, setRequestText] = useState('');
   const [isVisible, setIsVisible] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -64,7 +65,7 @@ const RequestModal: React.FC<RequestModalProps> = ({ isOpen, onClose, onBack, ex
         
         {/* Modal */}
         <div 
-          className={`relative w-[744px] h-[568px] bg-white/96 rounded-[40px] transition-all duration-300 ${
+          className={`relative w-[744px] h-[632px] bg-white/96 rounded-[40px] transition-all duration-300 ${
             isVisible && !showConfirmModal && !showSuccessModal ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
           }`}
           onClick={(e) => e.stopPropagation()}
@@ -108,6 +109,13 @@ const RequestModal: React.FC<RequestModalProps> = ({ isOpen, onClose, onBack, ex
                   maxLength={maxLength}
                 />
               </div>
+              
+              {/* 요청사항 미리보기 */}
+                <div className="mt-10 text-center">
+                  <div className="text-[20px] font-medium text-[#121218] leading-[100%] tracking-[-3%] font-medium text-center hover:underline cursor-pointer">
+                    작성해 둔 요청사항 그대로 불러오기
+                  </div>
+                </div>
             </div>
 
             {/* Submit button */}
@@ -166,9 +174,11 @@ const RequestModal: React.FC<RequestModalProps> = ({ isOpen, onClose, onBack, ex
           setShowSuccessModal(true);
           // onClose() 제거 - 성공 모달에서 확인 버튼 클릭 시에만 닫기
         }}
+        expertId={expertId}
         expertName={expertName}
         expertPosition={expertPosition}
         expertRealName={expertRealName}
+        comment={requestText}
       />
 
       {/* Success Modal */}

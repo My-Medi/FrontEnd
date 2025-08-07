@@ -7,6 +7,7 @@ import Pagination from '../Expert/Intro/Pagination';
 const RequestHealthCare: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 10; //예시
+
   const RequestHealthCareCards = () => {
     return (
       <div className='p-10 max-w-[900px] mx-auto'>

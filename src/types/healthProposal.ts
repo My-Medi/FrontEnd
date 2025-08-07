@@ -30,6 +30,7 @@ export interface HealthProposalRequest {
   };
   goal: string;
   lifeDescription: string;
+  requestNote: string;
 }
 
 // 건강관리요청서 조회 응답 타입
@@ -64,6 +65,7 @@ export interface HealthProposalResponse {
   };
   goal: string;
   lifeDescription: string;
+  requestNote: string;
 }
 
 export type HealthProposalApiResponse = ApiResponse<HealthProposalResponse>;

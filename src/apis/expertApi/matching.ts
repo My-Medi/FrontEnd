@@ -19,3 +19,15 @@ export const getMatchedExperts = async (): Promise<MatchedExpertApiResponse> => 
 export const cancelConsultation = async (consultationId: number): Promise<void> => {
   await axiosInstance.delete(`/users/consultations/${consultationId}`);
 };
+
+// 전문가에게 상담 요청
+export const requestConsultation = async (expertId: number, comment: string): Promise<any> => {
+  try {
+    const response = await axiosInstance.post(`/users/consultations/experts/${expertId}?comment=${encodeURIComponent(comment)}`);
+    console.log('상담 요청 API 응답:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('상담 요청 실패:', error);
+    throw error;
+  }
+};

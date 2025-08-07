@@ -37,6 +37,7 @@ const RequestForm = () => {
     expertTypes: [] as string[],
     healthGoals: '',
     requestMessage: '',
+    requestNote: '',
   });
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   
@@ -88,6 +89,7 @@ const RequestForm = () => {
         expertTypes,
         healthGoals: proposal.goal || '',
         requestMessage: '',
+        requestNote: proposal.requestNote || '',
       });
     }
   }, [healthProposal]);
@@ -141,6 +143,7 @@ const RequestForm = () => {
       },
       goal: formData.healthGoals,
       lifeDescription: formData.jobAndLifestyle,
+      requestNote: formData.requestNote,
     };
     
     // 수정 모드인지 확인하여 적절한 API 호출
@@ -261,6 +264,8 @@ const RequestForm = () => {
             </label>
             <textarea
               rows={3}
+              value={formData.requestNote}
+              onChange={(e) => setFormData(prev => ({ ...prev, requestNote: e.target.value }))}
               placeholder='ex) 야근이 많은 직장인, 교대 근무, 하루 10시간 앉아 있음 등'
               className='w-full border border-gray-300 rounded-lg px-4 py-2 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-200'
             />

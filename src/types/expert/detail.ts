@@ -5,13 +5,37 @@ import type { ExpertSpecialty } from './common';
 export interface ExpertDetail {
   expertId: number;
   name: string;
+  email: string;
+  birthDate: string;
+  gender: string;
   nickname: string | null;
+  phoneNumber: string;
+  profileImgUrl: string | null;
+  role: string;
   specialty: ExpertSpecialty;
   organizationName: string;
   introduction: string;
-  profile: string | null;
-  phone?: string;
-  startDate?: string;
+  introSentence: string | null;
+  careers: Career[];
+  licenseImages: string[];
+  licenses: License[];
+}
+
+// 경력 정보 타입
+export interface Career {
+  careerId: number;
+  companyName: string;
+  jobTitle: string;
+  startDate: string;
+  endDate: string;
+}
+
+// 자격증 정보 타입
+export interface License {
+  id: number;
+  licenseName: string;
+  licenseDate: string;
+  licenseDescription: string;
 }
 
 // 전문가 상세 조회 응답 타입
