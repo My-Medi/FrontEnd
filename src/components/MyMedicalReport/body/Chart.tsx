@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ChartClip from '/src/assets/MyMedicalReport/chart-clip.svg';
 import ChartSideClip from '/src/assets/MyMedicalReport/chart-2-clip.svg';
 import SafeFace from '/src/assets/health-icons/safe-face.svg';

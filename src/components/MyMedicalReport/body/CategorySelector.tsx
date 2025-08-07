@@ -1,9 +1,10 @@
 import React from 'react';
 import clsx from 'clsx';
 import { CATEGORY_LIST } from '../../../constants/medicalCategory';
+import type { Category } from '../../../constants/medicalCategory';
 interface CategorySelectorProps {
   selected: string;
-  onSelect: (category: string) => void;
+  onSelect: (category: Category) => void;
 }
 
 const CategorySelector: React.FC<CategorySelectorProps> = ({ selected, onSelect }) => {
