@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { getExpertDetail } from '../../apis/expertApi/detail';
-import type { ExpertDetailResponse } from '../../types/expert/detail';
+import { getExpertDetail } from '../../../apis/expertApi/detail';
+import type { ExpertDetailResponse } from '../../../types/expert/detail';
 
 /**
  * 전문가 상세 조회 훅

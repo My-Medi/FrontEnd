@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { userAPI } from '../../apis/userApi/user';
-import type { PersonalSignUpRequest, SignUpResponse } from '../../types/user';
+import { userAPI } from '../../../apis/userApi/user';
+import type { PersonalSignUpRequest, SignUpResponse } from '../../../types/user';
 
 interface UseSignUpMutationProps {
   onSuccess?: (data: SignUpResponse) => void;
@@ -32,4 +32,4 @@ export const useSignUpMutation = ({ onSuccess, onError }: UseSignUpMutationProps
       onError?.(error);
     },
   });
-}; 
+};

@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { expertAPI } from '../../apis/expertApi/expert';
-import type { PersonalSignUpRequest, SignUpResponse, ExpertSignUpRequest } from '../../types/expert';
+import { expertAPI } from '../../../apis/expertApi/expert';
+import type { PersonalSignUpRequest, SignUpResponse, ExpertSignUpRequest } from '../../../types/expert';
 
 interface UseSignUpMutationProps {
   onSuccess?: (data: SignUpResponse) => void;
@@ -75,4 +75,4 @@ export const useExpertSignUpMutation = ({ onSuccess }: UseSignUpMutationProps = 
       console.log('서버 에러 응답:', error.response?.data);
     },
   });
-}; 
+};

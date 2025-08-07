@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { markNotificationAsRead } from '../../apis/notificationApi/notification';
-import type { ApiResponse } from '../../types/common';
+import { markNotificationAsRead } from '../../../../apis/notificationApi/notification';
+import type { ApiResponse } from '../../../../types/common';
 
 interface UseMarkNotificationAsReadMutationProps {
   onSuccess?: (data: ApiResponse<void>) => void;

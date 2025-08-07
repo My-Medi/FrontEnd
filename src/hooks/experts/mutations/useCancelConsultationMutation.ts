@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { cancelConsultation } from '../../apis/expertApi/matching';
+import { cancelConsultation } from '../../../apis/expertApi/matching';
 
 interface UseCancelConsultationMutationProps {
   onSuccess?: () => void;

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { notificationAPI } from '../../apis/notificationApi/notification';
+import { notificationAPI } from '../../../../apis/notificationApi/notification';
 
 interface UseExpertNotificationsQueryProps {
   currentPage?: number;

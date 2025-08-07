@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { getExpertList } from '../../apis/expertApi/list';
-import type { ExpertListRequestParams, ExpertListResponse } from '../../types/expert/list';
+import { getExpertList } from '../../../apis/expertApi/list';
+import type { ExpertListRequestParams, ExpertListResponse } from '../../../types/expert/list';
 
 /**
  * 전문가 목록 조회 훅
@@ -24,4 +24,4 @@ export const useExpertListQuery = (params: ExpertListRequestParams) => {
     gcTime: 10 * 60 * 1000, // 10분
     retry: 2,
   });
-}; 
+};

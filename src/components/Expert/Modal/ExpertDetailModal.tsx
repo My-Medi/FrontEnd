@@ -4,7 +4,7 @@ import backSvg from '../../../assets/Expert/back.svg';
 import RequestModal from './RequestModal';
 import ReRequestConfirmModal from './ReRequestConfirmModal';
 import useModalScrollLock from '../../../hooks/useModalScrollLock';
-import { useExpertDetailQuery } from '../../../hooks/experts/useExpertDetailQuery';
+import { useExpertDetailQuery } from '../../../hooks/experts/queries/useExpertDetailQuery';
 import { getSpecialtyKoreanName } from '../../../types/expert/common';
 
 interface ExpertDetailModalProps {

@@ -1,12 +1,12 @@
 import { useState, useCallback, useMemo } from 'react';
-import { useUserNotificationsQuery } from './useUserNotificationsQuery';
-import { useExpertNotificationsQuery } from './useExpertNotificationsQuery';
-import { useUserNotificationsInfiniteQuery } from './useUserNotificationsInfiniteQuery';
-import { useExpertNotificationsInfiniteQuery } from './useExpertNotificationsInfiniteQuery';
-import { useMarkNotificationAsReadMutation } from './useMarkNotificationAsReadMutation';
-import { useDeleteNotificationsMutation } from './useDeleteNotificationsMutation';
-import { useMarkExpertNotificationAsReadMutation } from './useMarkExpertNotificationAsReadMutation';
-import { useDeleteExpertNotificationsMutation } from './useDeleteExpertNotificationsMutation';
+import { useUserNotificationsQuery } from './user/query/useUserNotificationsQuery';
+import { useExpertNotificationsQuery } from './expert/query/useExpertNotificationsQuery';
+import { useUserNotificationsInfiniteQuery } from './user/query/useUserNotificationsInfiniteQuery';
+import { useExpertNotificationsInfiniteQuery } from './expert/query/useExpertNotificationsInfiniteQuery';
+import { useMarkNotificationAsReadMutation } from './user/mutation/useMarkNotificationAsReadMutation';
+import { useDeleteNotificationsMutation } from './user/mutation/useDeleteNotificationsMutation';
+import { useMarkExpertNotificationAsReadMutation } from './expert/mutation/useMarkExpertNotificationAsReadMutation';
+import { useDeleteExpertNotificationsMutation } from './expert/mutation/useDeleteExpertNotificationsMutation';
 import type { UserNotification, ExpertNotification } from '../../types/notification';
 
 type UserType = 'patient' | 'expert';
