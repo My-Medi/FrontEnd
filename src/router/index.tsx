@@ -14,6 +14,7 @@ import AIHealthCarePage from '../pages/Introduce/AIHealthCarePage';
 import HealthTermsPage from '../pages/HealthTerms/HealthTerm';
 import MedicalReportLLMPage from '../pages/MedicalReportLLM/MedicalReportLLMPage';
 import ProtectedRoute from '../components/Common/ProtectedRoute';
+import MyMedicalReportPage from '../pages/MedicalReportPage';
 
 export const router = createBrowserRouter([
   {
@@ -22,40 +23,49 @@ export const router = createBrowserRouter([
     errorElement: <NotFoundPage />,
     children: [
       { index: true, element: <IntroducePage /> },
-      { 
-        path: 'myhome', 
+      {
+        path: 'myhome',
         element: (
           <ProtectedRoute>
             <MyHome />
           </ProtectedRoute>
-        ) 
+        ),
       },
       { path: 'signup', element: <SignUp /> },
       { path: 'login', element: <LoginPage /> },
       { path: 'introduce', element: <IntroducePage /> },
-      { 
-        path: 'health-result-input', 
+      {
+        path: 'health-result-input',
         element: (
           <ProtectedRoute>
             <HealthCheckupResultInput />
           </ProtectedRoute>
-        ) 
+        ),
       },
-      { 
-        path: 'expert', 
+      {
+        path: 'expert',
         element: (
           <ProtectedRoute>
             <ExpertPage />
           </ProtectedRoute>
-        ) 
+        ),
       },
-      { 
-        path: 'health-terms', 
+      /* 임의로 생성한 페이지 - 마이메디컬 리포트 */
+      {
+        path: 'my-medical-report',
+        element: (
+          <ProtectedRoute>
+            <MyMedicalReportPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'health-terms',
         element: (
           <ProtectedRoute>
             <HealthTermsPage />
           </ProtectedRoute>
-        ) 
+        ),
       },
       { path: 'calendar-intro', element: <CalendarIntroPage /> },
       { path: 'expert-matching-intro', element: <ExpertMatchingIntroPage /> },
@@ -64,4 +74,4 @@ export const router = createBrowserRouter([
       { path: 'medical-report-llm', element: <MedicalReportLLMPage /> },
     ],
   },
-]); 
+]);
