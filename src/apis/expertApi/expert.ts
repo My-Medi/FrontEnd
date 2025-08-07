@@ -1,53 +1,21 @@
-import API from '../axios';
-import type { ExpertListResponse, ExpertListRequestParams, PersonalSignUpRequest, SignUpResponse, ExpertSignUpRequest } from '../../types/expert';
-import { USER_ENDPOINTS, EXPERT_ENDPOINTS } from '../../types/common';
+// 기존 파일과의 호환성을 위한 re-export
+export { getExpertList } from './list';
+export { signUpExpert, signUpExpertNew } from './signup';
+export { getMatchedExperts, cancelConsultation } from './matching';
+export { getExpertDetail } from './detail';
 
-/**
- * 전문가 목록 조회 API
- * @param params - 조회 파라미터 (페이지, 페이지 크기)
- * @returns Promise<ExpertListResponse>
- */
-export const getExpertList = async (params: ExpertListRequestParams): Promise<ExpertListResponse> => {
-  try {
-    const response = await API.get<ExpertListResponse>(USER_ENDPOINTS.EXPERTS, {
-      params: {
-        currentPage: params.currentPage,
-        pageSize: params.pageSize
-      }
-    });
-    return response.data;
-  } catch (error) {
-    console.error('전문가 목록 조회 실패:', error);
-    throw error;
-  }
-}; 
-
-/**
- * 전문가 회원가입 API (기존 방식 - 하위 호환성)
- * @param data - 전문가 회원가입 데이터
- * @returns Promise<SignUpResponse>
- */
-export const signUpExpert = async (data: PersonalSignUpRequest): Promise<SignUpResponse> => {
-  console.log('전문가 회원가입 API 호출 데이터:', data);
-  const response = await API.post<SignUpResponse>(EXPERT_ENDPOINTS.SIGN_UP, data);
-  console.log('전문가 회원가입 API 응답:', response.data);
-  return response.data;
-};
-
-/**
- * 전문가 회원가입 API (새로운 방식 - 2단계 + 3단계)
- * @param data - 전문가 회원가입 데이터
- * @returns Promise<SignUpResponse>
- */
-export const signUpExpertNew = async (data: ExpertSignUpRequest): Promise<SignUpResponse> => {
-  console.log('전문가 회원가입 API 호출 데이터 (새로운 방식):', data);
-  const response = await API.post<SignUpResponse>(EXPERT_ENDPOINTS.SIGN_UP, data);
-  console.log('전문가 회원가입 API 응답:', response.data);
-  return response.data;
-};
-
+// 기존 API 객체 (하위 호환성)
 export const expertAPI = {
-  signUpExpert,
-  signUpExpertNew,
-  getExpertList
+  signUpExpert: async (data: any) => {
+    const { signUpExpert } = await import('./signup');
+    return signUpExpert(data);
+  },
+  signUpExpertNew: async (data: any) => {
+    const { signUpExpertNew } = await import('./signup');
+    return signUpExpertNew(data);
+  },
+  getExpertList: async (params: any) => {
+    const { getExpertList } = await import('./list');
+    return getExpertList(params);
+  }
 }; 

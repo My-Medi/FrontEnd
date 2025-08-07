@@ -1,4 +1,5 @@
 import React from "react";
+import { getSpecialtyKoreanName } from '../../../types/expert/common';
 
 interface ExpertCategoryFilterProps {
   selected: string;
@@ -7,10 +8,10 @@ interface ExpertCategoryFilterProps {
 
 const categories = [
   { label: "전체", value: "전체" },
-  { label: "웰니스 코치(정신건강)", value: "웰니스 코치" },
-  { label: "건강관리사", value: "건강관리사" },
-  { label: "영양사", value: "영양사" },
-  { label: "운동처방사", value: "운동처방사" },
+  { label: getSpecialtyKoreanName('WELLNESS_COACH'), value: getSpecialtyKoreanName('WELLNESS_COACH') },
+  { label: getSpecialtyKoreanName('HEALTH_MANAGER'), value: getSpecialtyKoreanName('HEALTH_MANAGER') },
+  { label: getSpecialtyKoreanName('NUTRITIONIST'), value: getSpecialtyKoreanName('NUTRITIONIST') },
+  { label: getSpecialtyKoreanName('EXERCISE_THERAPIST'), value: getSpecialtyKoreanName('EXERCISE_THERAPIST') },
 ];
 
 const ExpertCategoryFilter: React.FC<ExpertCategoryFilterProps> = ({ selected, onSelect }) => (

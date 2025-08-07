@@ -4,30 +4,40 @@ import backSvg from '../../../assets/Expert/back.svg';
 import RequestModal from './RequestModal';
 import ReRequestConfirmModal from './ReRequestConfirmModal';
 import useModalScrollLock from '../../../hooks/useModalScrollLock';
+import { useExpertDetailQuery } from '../../../hooks/experts/useExpertDetailQuery';
+import { getSpecialtyKoreanName } from '../../../types/expert/common';
 
 interface ExpertDetailModalProps {
-  expert: {
-    name: string;
-    position: string;
-    realName: string;
-    profileImage?: string;
-    slogan: string;
-    introduction: string;
-    affiliation: string;
-    specialty: string;
-    career: string;
-    phone?: string;
-    startDate?: string;
-  };
+  expertId: number;
   expertStatus?: 'matched' | 'request' | 'rejected';
+  requestDate?: string;
   onClose: () => void;
 }
 
-const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertStatus, onClose }) => {
+const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertStatus, requestDate, onClose }) => {
   const [showRequestModal, setShowRequestModal] = useState(false);
   const [showReRequestModal, setShowReRequestModal] = useState(false);
 
+  // 전문가 상세 정보 조회
+  const { data: expert, isLoading, error } = useExpertDetailQuery(expertId);
+
   useModalScrollLock(!showRequestModal && !showReRequestModal);
+
+  // 요청 날짜 포맷팅 함수
+  const formatRequestDate = (dateString: string) => {
+    if (!dateString) return '';
+    
+    try {
+      const date = new Date(dateString);
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      
+      return `${year}. ${month}. ${day}.`;
+    } catch (error) {
+      return dateString;
+    }
+  };
 
   const handleRequestClick = () => {
     if (expertStatus === 'request') {
@@ -46,6 +56,34 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
 
 
 
+
+  // 로딩 상태
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#121218]/40">
+        <div className="bg-white rounded-[40px] p-8">
+          <div className="text-lg text-gray-600">전문가 정보를 불러오는 중...</div>
+        </div>
+      </div>
+    );
+  }
+
+  // 에러 상태
+  if (error || !expert) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#121218]/40">
+        <div className="bg-white rounded-[40px] p-8">
+          <div className="text-lg text-red-600">전문가 정보를 불러오는데 실패했습니다.</div>
+          <button 
+            onClick={onClose}
+            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg"
+          >
+            닫기
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -94,7 +132,7 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
                 </div>
               )}
               <div className='text-[#121218] text-2xl font-semibold leading-[1.5]'>
-                {expert.name} / {expert.position}
+                {expert.nickname} / {expert.name} {getSpecialtyKoreanName(expert.specialty)}
               </div>
             </div>
             <div className='w-9 h-9' />
@@ -103,9 +141,9 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
             {/* 프로필 */}
             <div className='flex justify-center mb-6'>
               <div className='w-[203px] h-[203px] rounded-full border-[6px] border-[#1D68FF] flex items-center justify-center bg-[#EDF0F3] overflow-hidden shadow-lg'>
-                {expert.profileImage && expert.profileImage.trim() !== '' ? (
+                {expert.profile && expert.profile.trim() !== '' ? (
                   <img
-                    src={expert.profileImage}
+                    src={expert.profile}
                     alt={expert.name}
                     className='w-[190px] h-[190px] rounded-full object-cover'
                   />
@@ -118,7 +156,7 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
               {/* 슬로건 */}
               <div className='w-full flex mb-6'>
                 <div className='text-center text-xl font-medium text-[#121218] leading-[1.19]'>
-                  {expert.slogan}
+                  {expert.introduction}
                 </div>
               </div>
               {/* 전화번호 - 매칭된 전문가일 때만 표시 */}
@@ -130,10 +168,10 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
                 </div>
               )}
               {/* 요청중인 경우 요청서 전송 문구 표시 */}
-              {expertStatus === 'request' && (
+              {expertStatus === 'request' && requestDate && (
                 <div className='w-full flex mb-6'>
                   <div className='text-center text-[20px] font-medium text-[#9DA0A3] leading-[100%] tracking-[-3%] font-[Pretendard]'>
-                    2025. 1. 20. 건강관리요청서 전송
+                    {formatRequestDate(requestDate)} 건강관리요청서 전송
                   </div>
                 </div>
               )}
@@ -155,7 +193,7 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
                     <div className='text-xl font-medium text-[#121218]'>소속</div>
                   </div>
                   <div className='text-base text-[#121218] whitespace-pre-line leading-[1.375] pl-11 font-normal'>
-                    {expert.affiliation}
+                    {expert.organizationName}
                   </div>
                 </div>
                 <div className='flex-1'>
@@ -164,7 +202,7 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
                     <div className='text-xl font-medium text-[#121218]'>전문분야</div>
                   </div>
                   <div className='text-base text-[#121218] whitespace-pre-line leading-[1.375] pl-11 font-normal'>
-                    {expert.specialty}
+                    {getSpecialtyKoreanName(expert.specialty)}
                   </div>
                 </div>
               </div>
@@ -175,7 +213,7 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
                   <div className='text-xl font-medium text-[#121218]'>경력사항</div>
                 </div>
                 <div className='text-base text-[#121218] whitespace-pre-line leading-[1.375] pl-11 font-normal'>
-                  {expert.career}
+                  경력사항 정보가 없습니다.
                 </div>
               </div>
             </div>
@@ -220,8 +258,8 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
           }}
           onConfirm={handleReRequestConfirm}
           expertName={expert.name}
-          expertPosition={expert.position}
-          expertRealName={expert.realName}
+          expertPosition={getSpecialtyKoreanName(expert.specialty)}
+          expertRealName={expert.nickname || expert.name}
         />
       )}
 
@@ -238,8 +276,8 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expert, expertSta
             // RequestModal만 닫고 ExpertDetailModal은 유지
           }}
           expertName={expert.name}
-          expertPosition={expert.position}
-          expertRealName={expert.realName}
+          expertPosition={getSpecialtyKoreanName(expert.specialty)}
+          expertRealName={expert.nickname || expert.name}
         />
       )}
     </>

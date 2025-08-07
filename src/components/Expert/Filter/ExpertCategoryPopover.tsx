@@ -1,8 +1,14 @@
 import React from "react";
 import categoryIcon from '../../../assets/Expert/category.svg';
 import closeIcon from '../../../assets/Expert/close.svg';
+import { getSpecialtyKoreanName } from '../../../types/expert/common';
 
-const allCategories = ["웰니스 코치", "건강관리사", "영양사", "운동처방사"];
+const allCategories = [
+  getSpecialtyKoreanName('WELLNESS_COACH'),
+  getSpecialtyKoreanName('HEALTH_MANAGER'),
+  getSpecialtyKoreanName('NUTRITIONIST'),
+  getSpecialtyKoreanName('EXERCISE_THERAPIST')
+];
 
 const CategoryChip = ({ label, onRemove, isOutside = false }: { label: string; onRemove: () => void; isOutside?: boolean }) => (
   <div

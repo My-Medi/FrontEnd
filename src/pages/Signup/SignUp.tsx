@@ -28,6 +28,8 @@ interface SignUpFormData {
   emailDomain: string;
   phoneNumber: string;
   profileImgUrl: string;
+  height: string;
+  weight: string;
 }
 
 interface ExpertBasicData {
@@ -49,6 +51,8 @@ const initialSignUpData: SignUpFormData = {
   emailDomain: "직접입력",
   phoneNumber: "",
   profileImgUrl: "",
+  height: "",
+  weight: "",
 };
 
 const SignUp: React.FC = () => {
@@ -106,6 +110,8 @@ const SignUp: React.FC = () => {
       loginId: signUpData.loginId,
       password: signUpData.password,
       profileImgUrl: signUpData.profileImgUrl || "",
+      height: signUpData.height ? parseInt(signUpData.height) : undefined,
+      weight: signUpData.weight ? parseInt(signUpData.weight) : undefined,
     };
 
     console.log('개인 회원가입 데이터 변환:', {
