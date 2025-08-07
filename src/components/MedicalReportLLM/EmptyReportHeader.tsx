@@ -1,20 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 interface ReportHeaderProps {
   currentTab: string;
-  onTabChange: (tab: string) => void;
-  onAddNewRound: () => void;
-  rounds: string[];
 }
 
-const ReportHeader: React.FC<ReportHeaderProps> = ({ currentTab, onTabChange, onAddNewRound, rounds }) => {
-  const [showList, setShowList] = useState(false);
-  const currentRoundIndex = rounds.indexOf(currentTab);
-  const prevRound = currentRoundIndex > 0 ? rounds[currentRoundIndex - 1] : null;
-
-  const handleAddRound = () => {
-    onAddNewRound();
-  };
+const ReportHeader: React.FC<ReportHeaderProps> = ({ currentTab }) => {
 
   return (
     <div className="bg-white mt-[60px] px-16">
