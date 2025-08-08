@@ -1,5 +1,6 @@
 import React from 'react';
 import stageStyleMap from '../../../../constants/stageStyle';
+import TooltipForTerm from './TooltipForTerm';
 
 interface LeftPatientCardProps {
   nickname: string;
@@ -43,7 +44,10 @@ const LeftPatientCard: React.FC<LeftPatientCardProps> = ({
           marginBottom: '6px',
         }}
       >
-        {`${nickname}님의 ${title}`}
+        {nickname}님의{' '}
+        <TooltipForTerm title={title}>
+          <span>{title}</span>
+        </TooltipForTerm>
       </p>
 
       {/* 수치 + 단위 */}
