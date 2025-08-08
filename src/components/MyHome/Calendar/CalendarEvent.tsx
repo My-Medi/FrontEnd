@@ -1,13 +1,16 @@
 import React from 'react';
-import { getEventColor, getBgColorClass } from '../../../constants/colors';
+import { getDeterministicColor, getBgColorClass, getCycledColor } from '../../../constants/colors';
 
 interface CalendarEventProps {
   eventText: string;
+  colorKey?: string; // 색상 계산을 위한 키 (표시 텍스트와 분리)
+  colorIndex?: number; // 순환 색상용 인덱스 (우선순위 높음)
 }
 
-const CalendarEvent: React.FC<CalendarEventProps> = ({ eventText }) => {
-  // 공통 색상 팔레트에서 색상 가져오기
-  const eventColor = getEventColor(eventText);
+const CalendarEvent: React.FC<CalendarEventProps> = ({ eventText, colorKey, colorIndex }) => {
+  // colorIndex가 제공되면 순환 팔레트 사용, 아니면 결정적 매핑
+  const eventColor =
+    typeof colorIndex === 'number' ? getCycledColor(colorIndex) : getDeterministicColor(colorKey ?? eventText);
 
   return (
     <div 

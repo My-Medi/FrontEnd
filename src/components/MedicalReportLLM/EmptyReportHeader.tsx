@@ -38,17 +38,17 @@ const ReportHeader: React.FC<ReportHeaderProps> = ({ currentTab }) => {
         </div>
         
         {/* 오른쪽 섹션 - 리포트 제목 및 건강 상태 범례 */}
-        <div className="flex-1 text-right">
+        <div className="flex-1">
           
           
           {/* 건강 상태 설명 */}
-          <p className="font-[Pretendard] font-light text-[16px] leading-[22px] tracking-[-3%] text-[#4D5053] mb-4">
-            마이메디컬리포트에서는 건강 상태를 5단계의 색으로 표현합니다.
-          </p>
-          
-          {/* 건강 상태 범례 - SVG */}
-          <div className="flex justify-end">
-            <svg xmlns="http://www.w3.org/2000/svg" width="241" height="40" viewBox="0 0 241 40" fill="none" className="w-full max-w-xs">
+          <div className="ml-auto w-[241px]">
+            <p className="font-[Pretendard] font-light text-[16px] leading-[22px] tracking-[-3%] text-[#4D5053] mb-4 text-right whitespace-nowrap">
+              마이메디컬리포트에서는 건강 상태를 5단계의 색으로 표현합니다.
+            </p>
+            
+            {/* 건강 상태 범례 - SVG */}
+            <svg xmlns="http://www.w3.org/2000/svg" width="241" height="40" viewBox="0 0 241 40" fill="none" className="w-[241px]">
               <path d="M10.793 8L232.793 8.00002" stroke="url(#paint0_linear_2347_15078)" strokeWidth="2" strokeLinecap="round" strokeDasharray="4 4"/>
               <circle cx="8.79297" cy="8" r="8" fill="#ED5151"/>
               <circle cx="64.793" cy="8" r="8" fill="#FF732D"/>
