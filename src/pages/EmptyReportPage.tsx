@@ -5,7 +5,7 @@ import EmptyReportHeader from '../components/MedicalReportLLM/EmptyReportHeader'
 const EmptyReportPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-white">
-      <div className="container mx-auto max-w-[1300px]">
+      <div className="w-full mx-auto">
         {/* 헤더 섹션 */}
         <EmptyReportHeader 
           currentTab="2회차"

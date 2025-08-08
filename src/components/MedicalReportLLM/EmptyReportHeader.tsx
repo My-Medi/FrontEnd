@@ -7,10 +7,10 @@ interface ReportHeaderProps {
 const ReportHeader: React.FC<ReportHeaderProps> = ({ currentTab }) => {
 
   return (
-    <div className="bg-white mt-[60px] px-16">
+    <div className="mt-[60px] px-16 max-w-[1427px] mx-auto">
       {/* 상단 구분선 */}
       {/* 파란선 사이의 마이메디컬리포트 */}
-      <div className="flex items-center justify-center mb-4">
+      <div className="max-w-[1301px] flex items-center justify-center mb-4">
             <div className="flex-1 h-[2px] bg-[#DBE6FF]"></div>
             <h1 className='px-4 text-[#25282B] text-[24px] font-semibold  text-center'>
           마이메디컬리포트
@@ -18,20 +18,20 @@ const ReportHeader: React.FC<ReportHeaderProps> = ({ currentTab }) => {
             <div className="flex-1 h-[2px] bg-[#DBE6FF]"></div>
           </div>
       
-      <div className="flex justify-between items-start">
+      <div className="max-w-[1214px] w-full mx-auto flex justify-between items-start">
         {/* 왼쪽 섹션 - 사용자 정보 및 네비게이션 */}
         <div className="flex-1">
           {/* 사용자 정보 */}
           <div className="mb-4">
-            <div className="flex gap-6">
-              <span className="text-blue-600 font-medium">하나</span>
-              <span className="text-black">만 23세</span>
-              <span className="text-black">168cm/52kg</span>
-              <span className="text-black">국가건강검진</span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="2" height="23" viewBox="0 0 2 23" fill="none">
-                <path d="M1 0.75V22.25" stroke="#DBE6FF" stroke-width="2"/>
-              </svg>
-              <span className="text-black">{currentTab}</span>
+            <div className="flex gap-6 font-[Pretendard] font-medium text-[18px] leading-[36px] tracking-[-3%]">
+              <span className="text-[#1D68FF] font-medium">하나</span>
+              <span className="text-[#121218]">만 23세</span>
+              <span className="text-[#121218]">168cm/52kg</span>
+              <div className="flex items-center">
+                <span className="text-[#121218]">국가건강검진</span>
+                <span aria-hidden className="h-[23px] border-l-2 border-[#DBE6FF] mx-2"></span>
+                <span className="text-[#121218]">{currentTab}</span>
+              </div>
             </div>
           </div>
           
@@ -42,7 +42,7 @@ const ReportHeader: React.FC<ReportHeaderProps> = ({ currentTab }) => {
           
           
           {/* 건강 상태 설명 */}
-          <p className="text-[#4D5053] text-[14px] font-normal mb-4">
+          <p className="font-[Pretendard] font-light text-[16px] leading-[22px] tracking-[-3%] text-[#4D5053] mb-4">
             마이메디컬리포트에서는 건강 상태를 5단계의 색으로 표현합니다.
           </p>
           
