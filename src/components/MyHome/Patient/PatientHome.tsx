@@ -43,6 +43,7 @@ const PatientHome: React.FC<PatientHomeProps> = ({
             selectedDate={selectedDate}
             today={today}
             onDateSelect={onDateSelect}
+            userType='patient'
           />
         </>
       );

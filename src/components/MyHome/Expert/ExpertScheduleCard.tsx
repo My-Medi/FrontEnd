@@ -1,8 +1,8 @@
 import React from 'react';
 import locationIcon from '../../../assets/MyHome/location.svg';
 import timeIcon from '../../../assets/MyHome/time.svg';
-import { getEventColor, getTextColorClass } from '../../../constants/colors';
-import type { ScheduleType } from '../../../data/scheduleData';
+import { eventColors, getDeterministicColor, getTextColorClass } from '../../../constants/colors';
+export type ScheduleType = 'consultation' | 'examination' | 'treatment' | 'appointment' | 'report' | 'birthday';
 
 export interface ExpertScheduleCardProps {
   type: ScheduleType;
@@ -19,6 +19,7 @@ export interface ExpertScheduleCardProps {
   time: {
     text: string;
   };
+  colorIndex?: number;
 }
 
 const ExpertScheduleCard: React.FC<ExpertScheduleCardProps> = ({
@@ -28,9 +29,11 @@ const ExpertScheduleCard: React.FC<ExpertScheduleCardProps> = ({
   description,
   source,
   time,
+  colorIndex,
 }) => {
-  // 공통 색상 팔레트에서 색상 가져오기
-  const eventColor = getEventColor(title);
+  // 공통 색상 팔레트에서 색상 가져오기 (캘린더 이벤트 색과 일치)
+  const baseColor = typeof colorIndex === 'number' ? eventColors[colorIndex % eventColors.length] : getDeterministicColor(title);
+  const eventColor = baseColor === '#E3FDDE' ? '#A1F68E' : baseColor;
 
   return (
     <div className="flex items-center gap-[30px] p-[10px_40px] bg-white border-2 border-[#DBE6FF] rounded-[20px] w-[876px] lg:w-[876px] md:w-full sm:w-full lg:gap-[30px] md:gap-6 sm:gap-4 lg:p-[10px_40px] md:p-4 sm:p-3">

@@ -1,5 +1,6 @@
 import API from '../axios';
 import type { ApiResponse, UserProfile } from '../../types/common';
+import type { UserScheduleSummaryResponse, UserSchedulesByDateResponse } from '../../types/schedule';
 import { USER_ENDPOINTS } from '../../types/common';
 import type { PersonalSignUpRequest, SignUpResponse } from '../../types/user';
 
@@ -47,3 +48,26 @@ export const userAPI = {
   getUserProfile,
   updateUserProfile,
 }; 
+
+// 스케줄 요약(월별) 조회
+export const getUserSchedulesMonthly = async (
+  year: number,
+  month: number
+): Promise<UserScheduleSummaryResponse> => {
+  const response = await API.get<UserScheduleSummaryResponse>(
+    `/users/schedules`,
+    { params: { year, month } }
+  );
+  return response.data;
+};
+
+// 특정 날짜 스케줄 상세 조회
+export const getUserSchedulesByDate = async (
+  date: string
+): Promise<UserSchedulesByDateResponse> => {
+  const response = await API.get<UserSchedulesByDateResponse>(
+    `/users/schedules/date`,
+    { params: { date } }
+  );
+  return response.data;
+};
