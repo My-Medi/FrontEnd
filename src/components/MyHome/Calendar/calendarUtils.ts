@@ -52,8 +52,7 @@ export const generateCalendarData = (
         month === today.getMonth() &&
         date === today.getDate();
       
-      // 해당 날짜의 스케줄이 있는지 확인 (기존 + 랜덤 스케줄 포함)
-      const selectedDate = new Date(year, month, date);
+      // 해당 날짜의 스케줄이 있는지 확인
       const iso = `${year}-${String(month + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
       const dayTitles = monthlyApi?.result?.scheduleSummaryDto
         ?.filter((s) => s.meetingDate === iso)
