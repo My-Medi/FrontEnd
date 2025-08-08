@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import bg1 from '../../../assets/Introduce/1.svg';
+import bg1 from '../../../assets/Introduce/1.png';
 import bg2 from '../../../assets/Introduce/2.png';
 import bg3 from '../../../assets/Introduce/3.png';
 import bg4 from '../../../assets/Introduce/4.png';

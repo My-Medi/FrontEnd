@@ -35,7 +35,7 @@ const ExpertHome: React.FC<ExpertHomeProps> = ({
             useApiData={true}
           />
           <ExpertSchedule />
-          <HomeCalendar selectedDate={selectedDate} today={today} onDateSelect={onDateSelect} />
+          <HomeCalendar selectedDate={selectedDate} today={today} onDateSelect={onDateSelect} userType='expert' />
         </>
       );
     case 1: // 환자 관리

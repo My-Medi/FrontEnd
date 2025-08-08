@@ -22,7 +22,9 @@ const ReportHeader: React.FC<ReportHeaderProps> = ({ currentTab, onTabChange, on
       {/* 파란선 사이의 마이메디컬리포트 */}
       <div className="flex items-center justify-center mb-4">
             <div className="flex-1 h-[2px] bg-[#DBE6FF]"></div>
-            <span className="px-4 text-black text-[24px] font-medium">마이메디컬리포트</span>
+            <h1 className='px-4 text-[#25282B] text-[24px] font-semibold  text-center'>
+          마이메디컬리포트
+        </h1>
             <div className="flex-1 h-[2px] bg-[#DBE6FF]"></div>
           </div>
       

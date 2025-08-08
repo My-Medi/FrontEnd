@@ -196,24 +196,46 @@ const MatchedExperts: React.FC = () => {
 
       {/* 전문가 목록 */}
       <div className="flex flex-wrap justify-start gap-8 max-w-[1021px] w-full">
-        {filteredExperts.map((expert) => (
-          <ExpertCard 
-            key={expert.expertId} 
-            expert={expert} 
-            onUnmatch={handleUnmatch}
-            onCancelRequest={handleCancelRequest}
-            onClick={() => handleExpertCardClick(expert)}
-          />
-        ))}
-        {/* 마지막 카드 (플러스 아이콘) - 연결된 전문가 필터에서만 표시 */}
-        {selectedFilter === 'connected' && (
-          <ExpertCard 
-            key={addExpertCard.expertId} 
-            expert={addExpertCard} 
-            onUnmatch={handleUnmatch}
-            onCancelRequest={handleCancelRequest}
-            onClick={() => handleExpertCardClick(addExpertCard)}
-          />
+        {filteredExperts.length > 0 ? (
+          <>
+            {filteredExperts.map((expert) => (
+              <ExpertCard 
+                key={expert.expertId} 
+                expert={expert} 
+                onUnmatch={handleUnmatch}
+                onCancelRequest={handleCancelRequest}
+                onClick={() => handleExpertCardClick(expert)}
+              />
+            ))}
+            {/* 마지막 카드 (플러스 아이콘) - 연결된 전문가 필터에서만 표시 */}
+            {selectedFilter === 'connected' && (
+              <ExpertCard 
+                key={addExpertCard.expertId} 
+                expert={addExpertCard} 
+                onUnmatch={handleUnmatch}
+                onCancelRequest={handleCancelRequest}
+                onClick={() => handleExpertCardClick(addExpertCard)}
+              />
+            )}
+          </>
+        ) : (
+          // 연결된 전문가가 없을 때 + 카드 표시
+          selectedFilter === 'connected' ? (
+            <ExpertCard 
+              key={addExpertCard.expertId} 
+              expert={addExpertCard} 
+              onUnmatch={handleUnmatch}
+              onCancelRequest={handleCancelRequest}
+              onClick={() => handleExpertCardClick(addExpertCard)}
+            />
+          ) : (
+            <div className="flex flex-col items-center justify-center py-[100px] min-h-[300px] w-full">
+              <p className="text-[#75787B] text-[18px] font-medium leading-[36px] tracking-[-0.54px] font-[Pretendard]">
+                {selectedFilter === 'requested' && '요청한 전문가가 없습니다.'}
+                {selectedFilter === 'rejected' && '거절한 전문가가 없습니다.'}
+              </p>
+            </div>
+          )
         )}
       </div>
 

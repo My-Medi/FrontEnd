@@ -1,5 +1,6 @@
 import API from '../axios';
 import type { ApiResponse, UserProfile } from '../../types/common';
+import type { UserScheduleSummaryResponse, UserSchedulesByDateResponse } from '../../types/schedule';
 import { USER_ENDPOINTS } from '../../types/common';
 import type { PersonalSignUpRequest, SignUpResponse } from '../../types/user';
 
@@ -9,7 +10,9 @@ import type { PersonalSignUpRequest, SignUpResponse } from '../../types/user';
  */
 export const getUserProfile = async (): Promise<ApiResponse<UserProfile>> => {
   try {
+    console.log('사용자 프로필 API 호출:', USER_ENDPOINTS.PROFILE);
     const response = await API.get<ApiResponse<UserProfile>>(USER_ENDPOINTS.PROFILE);
+    console.log('사용자 프로필 API 응답:', response.data);
     return response.data;
   } catch (error) {
     console.error('사용자 프로필 조회 실패:', error);
@@ -45,3 +48,26 @@ export const userAPI = {
   getUserProfile,
   updateUserProfile,
 }; 
+
+// 스케줄 요약(월별) 조회
+export const getUserSchedulesMonthly = async (
+  year: number,
+  month: number
+): Promise<UserScheduleSummaryResponse> => {
+  const response = await API.get<UserScheduleSummaryResponse>(
+    `/users/schedules`,
+    { params: { year, month } }
+  );
+  return response.data;
+};
+
+// 특정 날짜 스케줄 상세 조회
+export const getUserSchedulesByDate = async (
+  date: string
+): Promise<UserSchedulesByDateResponse> => {
+  const response = await API.get<UserSchedulesByDateResponse>(
+    `/users/schedules/date`,
+    { params: { date } }
+  );
+  return response.data;
+};

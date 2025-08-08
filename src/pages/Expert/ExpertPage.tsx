@@ -2,12 +2,14 @@ import { useState } from 'react';
 import ExpertIntroSection from '../../components/Expert/Intro/ExpertIntroSection';
 import ExpertCategoryFilter from '../../components/Expert/Filter/ExpertCategoryFilter';
 import ExpertCard from '../../components/Expert/Card/ExpertCard';
+import ExpertCardSkeleton from '../../components/Expert/Card/ExpertCardSkeleton';
 import ExpertCategoryPopover from '../../components/Expert/Filter/ExpertCategoryPopover';
 import ExpertDetailModal from '../../components/Expert/Modal/ExpertDetailModal';
 import Pagination from '../../components/Expert/Intro/Pagination';
 import { useExpertListQuery } from '../../hooks/experts/queries/useExpertListQuery';
+import { useMatchedExpertsQuery } from '../../hooks/experts/queries/useMatchedExpertsQuery';
 import type { Expert } from "../../types/expert/list";
-import { getSpecialtyKoreanName } from "../../types/expert/common";
+import { getSpecialtyKoreanName, getSpecialtyKeyFromKorean } from "../../types/expert/common";
 
 // ExpertDetailModal에 넘길 타입
 interface ExpertDetail {
@@ -45,11 +47,54 @@ const ExpertPage = () => {
   const [selectedExpert, setSelectedExpert] = useState<ExpertDetail | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
+  // API 요청용 파라미터 생성
+  const getApiParams = () => {
+    const params: any = {
+      currentPage,
+      pageSize: CARDS_PER_PAGE,
+    };
+
+    // 팝오버에서 선택된 카테고리들이 있으면 우선 적용
+    if (selectedCategories.length > 0) {
+      const specialtyKeys = selectedCategories
+        .map(category => getSpecialtyKeyFromKorean(category))
+        .filter(key => key !== undefined);
+      
+      if (specialtyKeys.length > 0) {
+        params.specialty = specialtyKeys;
+        console.log('팝오버 필터 파라미터 추가:', {
+          selectedCategories,
+          specialtyKeys,
+          params
+        });
+      }
+    }
+    // 팝오버 필터가 없고 메인 카테고리가 전체가 아닌 경우
+    else if (selectedCategory !== "전체") {
+      const specialtyKey = getSpecialtyKeyFromKorean(selectedCategory);
+      if (specialtyKey) {
+        params.specialty = specialtyKey;
+        console.log('메인 필터 파라미터 추가:', {
+          selectedCategory,
+          specialtyKey,
+          params
+        });
+      } else {
+        console.log('specialtyKey 변환 실패:', selectedCategory);
+      }
+    } else {
+      console.log('전체 카테고리 선택 - 필터 없음');
+    }
+
+    console.log('최종 API 파라미터:', params);
+    return params;
+  };
+
   // API 호출 - 전체 데이터 가져오기
-  const { data: expertListData, isLoading, error } = useExpertListQuery({
-    currentPage,
-    pageSize: CARDS_PER_PAGE,
-  });
+  const { data: expertListData, isLoading, error } = useExpertListQuery(getApiParams());
+  
+  // 매칭된 전문가 목록 가져오기 (연결 상태 확인용)
+  const { data: matchedExpertsData } = useMatchedExpertsQuery();
 
   // 카테고리 선택 시 필터 및 페이지 초기화
   const handleCategorySelect = (category: string) => {
@@ -59,64 +104,52 @@ const ExpertPage = () => {
     setCurrentPage(1); // 페이지도 1페이지로 초기화
   };
 
-  // 프론트엔드에서 필터링
-  const filteredList = expertListData?.expertSummaryProfileDtoList?.filter(expert => {
-    if (selectedCategory === "전체") return true;
+  // API에서 받은 데이터를 그대로 사용 (서버 사이드 필터링)
+  const displayList: Expert[] = expertListData?.expertSummaryProfileDtoList || [];
+  
+  // 전문가의 연결 상태 확인
+  const getExpertStatus = (expertId: number): 'matched' | 'request' | 'rejected' => {
+    if (!matchedExpertsData?.result) return 'rejected';
     
-    // specialty가 undefined이거나 null인 경우 처리
-    if (!expert.specialty) {
-      console.log('전문분야가 없는 전문가:', {
-        expertId: expert.expertId,
-        name: expert.name,
-        specialty: expert.specialty
-      });
-      return false; // 전문분야가 없는 전문가는 필터링에서 제외
+    const matchedExpert = matchedExpertsData.result.find(
+      (expert) => expert.expertId === expertId
+    );
+    
+    if (!matchedExpert) return 'rejected';
+    
+    // API 응답 상태를 ExpertDetailModal 상태로 매핑
+    switch (matchedExpert.status) {
+      case 'ACCEPTED':
+        return 'matched';
+      case 'REQUESTED':
+        return 'request';
+      case 'REJECTED':
+      default:
+        return 'rejected';
     }
-    
-    // 디버깅을 위한 로그 추가
-    console.log('필터링 중인 전문가:', {
-      expertId: expert.expertId,
-      name: expert.name,
-      specialty: expert.specialty,
-      specialtyKorean: getSpecialtyKoreanName(expert.specialty),
-      selectedCategory: selectedCategory
-    });
-    
-    const expertSpecialtyKorean = getSpecialtyKoreanName(expert.specialty);
-    const isMatch = expertSpecialtyKorean === selectedCategory;
-    
-    console.log('매칭 결과:', {
-      expertName: expert.name,
-      expertSpecialtyKorean,
-      selectedCategory,
-      isMatch
-    });
-    
-    return isMatch;
-  }) || [];
-
-  console.log('필터링 결과:', {
-    totalExperts: expertListData?.expertSummaryProfileDtoList?.length || 0,
-    filteredCount: filteredList.length,
+  };
+  
+  // 디버깅을 위한 로그
+  console.log('현재 표시할 전문가 목록:', {
     selectedCategory,
-    filteredList: filteredList.map(expert => ({
+    totalCount: displayList.length,
+    experts: displayList.map(expert => ({
       id: expert.expertId,
       name: expert.name,
       specialty: expert.specialty
     }))
   });
 
-  const displayList: Expert[] = filteredList;
-
   // 페이지네이션 로직
   const totalPages = expertListData?.totalPages || 1;
   const pagedList = displayList;
-  // const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+  
+  // 실제 데이터가 있는 페이지 수 계산
+  // 현재 페이지에 데이터가 없으면 이전 페이지까지만 표시
+  const actualTotalPages = pagedList.length === 0 && currentPage > 1 
+    ? currentPage - 1 
+    : totalPages;
 
-  // 페이지 변경 시 스크롤 상단 이동(선택사항)
-  // React.useEffect(() => {
-  //   window.scrollTo({ top: 0, behavior: 'smooth' });
-  // }, [currentPage]);
 
   return (
     <div className="flex flex-col items-center py-8 xl:py-12">
@@ -136,10 +169,12 @@ const ExpertPage = () => {
             </div>
           )}
           
-          {/* 로딩 상태 */}
+          {/* 로딩 상태 - 스켈레톤 UI */}
           {isLoading && (
-            <div className="flex justify-center items-center py-12">
-              <div className="text-lg text-gray-600">전문가 목록을 불러오는 중...</div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 xl:gap-6 xl:gap-8 w-full">
+              {Array.from({ length: 9 }, (_, index) => (
+                <ExpertCardSkeleton key={index} />
+              ))}
             </div>
           )}
           
@@ -151,32 +186,40 @@ const ExpertPage = () => {
           )}
           
           {/* 카드리스트: 더 안정적인 반응형 그리드 */}
-          {!isLoading && !error && (
+          {!isLoading && !error && pagedList.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 xl:gap-6 xl:gap-8 w-full">
-                          {pagedList.map((expert: Expert) => {
-              return (
-                <ExpertCard 
-                  key={expert.expertId} 
-                  nickname={expert.nickname || ""}
-                  realname={expert.name}
-                  role={getSpecialtyKoreanName(expert.specialty)}
-                  slogan={expert.introduction}
-                  description={expert.introduction}
-                  profile={expert.profile || ""}
-                  careers={[]}
-                  organizationName={expert.organizationName}
-                  onClick={() => setSelectedExpert(mapExpertToDetail(expert))} 
-                />
-              );
-            })}
+              {pagedList.map((expert: Expert) => {
+                return (
+                  <ExpertCard 
+                    key={expert.expertId} 
+                    nickname={expert.nickname || ""}
+                    realname={expert.name}
+                    role={getSpecialtyKoreanName(expert.specialty)}
+                    slogan={expert.introduction}
+                    description={expert.introduction}
+                    profile={expert.profile || ""}
+                    careers={[]}
+                    organizationName={expert.organizationName}
+                    careerResponseDtoList={expert.careerResponseDtoList}
+                    onClick={() => setSelectedExpert(mapExpertToDetail(expert))} 
+                  />
+                );
+              })}
+            </div>
+          )}
+          
+          {/* 데이터가 없을 때 */}
+          {!isLoading && !error && pagedList.length === 0 && (
+            <div className="flex justify-center items-center py-12">
+              <div className="text-lg text-gray-600">해당하는 전문가가 없습니다.</div>
             </div>
           )}
           {/* 페이지네이션 */}
-          {totalPages > 1 && (
+          {!isLoading && !error && actualTotalPages > 1 && (
             <div className="mt-8 xl:mt-12">
               <Pagination
                 currentPage={currentPage}
-                totalPages={totalPages}
+                totalPages={actualTotalPages}
                 onPageChange={(page) => {
                   setCurrentPage(page);
                   // 페이지 변경 시 스크롤 상단으로 이동
@@ -190,7 +233,7 @@ const ExpertPage = () => {
       {selectedExpert && (
         <ExpertDetailModal
           expertId={selectedExpert.expertId}
-          expertStatus="rejected" // 기본값으로 rejected 설정 (요청 가능한 상태)
+          expertStatus={getExpertStatus(selectedExpert.expertId)}
           onClose={() => setSelectedExpert(null)}
         />
       )}

@@ -5,7 +5,7 @@ interface CalendarDayProps {
   date: number;
   isCurrentMonth: boolean;
   isToday: boolean;
-  hasEvent?: string | string[];
+  hasEvent?: { text: string; colorIndex: number }[];
   isSelected?: boolean;
   isDefaultSelected?: boolean; // 기본 선택된 날짜 (오늘)
   onDateSelect?: (date: number) => void;
@@ -59,13 +59,9 @@ const CalendarDay: React.FC<CalendarDayProps> = ({
 
       {hasEvent && isCurrentMonth && (
         <div className="mt-1 w-full space-y-1">
-          {Array.isArray(hasEvent) ? (
-            hasEvent.slice(0, 3).map((event, index) => (
-              <CalendarEvent key={index} eventText={event} />
-            ))
-          ) : (
-            <CalendarEvent eventText={hasEvent} />
-          )}
+          {hasEvent.slice(0, 3).map((ev, index) => (
+            <CalendarEvent key={index} eventText={ev.text} colorIndex={ev.colorIndex} />
+          ))}
           {Array.isArray(hasEvent) && hasEvent.length > 3 && (
             <div className="text-xs text-gray-500 px-1">
               +{hasEvent.length - 3}개 더

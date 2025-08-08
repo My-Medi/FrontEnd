@@ -10,6 +10,11 @@ interface PaginationProps {
 }
 
 const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
+  // totalPages가 1 이하면 페이지네이션을 표시하지 않음
+  if (totalPages <= 1) {
+    return null;
+  }
+
   // 현재 페이지에 따라 최대 5개 표시
   const getVisiblePages = () => {
     if (totalPages <= 5) {

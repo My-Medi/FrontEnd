@@ -6,7 +6,6 @@ import EditInfo from '../../components/MyHome/Edit/EditInfo';
 import ExpertHome from '../../components/MyHome/Expert/ExpertHome';
 import PatientHome from '../../components/MyHome/Patient/PatientHome';
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
-import { initializeRandomSchedules } from '../../data/scheduleData';
 
 
 // 기존 scheduleData는 제거하고 동적으로 생성하도록 변경
@@ -28,10 +27,7 @@ const MyHome: React.FC = () => {
     return koreaTime;
   }, []);
 
-  // 랜덤 일정 초기화 (컴포넌트 마운트 시 한 번만 실행)
-  useMemo(() => {
-    initializeRandomSchedules(15); // 15개의 랜덤 일정 생성
-  }, []);
+  // 더미 스케줄 초기화 제거
 
   // 사이드바 이미지 사전 로딩
   useEffect(() => {
