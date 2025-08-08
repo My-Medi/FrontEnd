@@ -1,6 +1,5 @@
 import React from 'react';
 import CalendarEvent from './CalendarEvent';
-import { eventColors } from '../../../constants/colors';
 
 interface CalendarDayProps {
   date: number;
