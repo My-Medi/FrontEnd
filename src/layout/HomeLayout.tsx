@@ -25,7 +25,7 @@ const HomeLayout: React.FC = () => {
         <Topbar />
         <NavBar />
       </header>
-      <div className={shouldUseFullWidth ? "mx-auto" : "max-w-[1920px] mx-auto"}> 
+      <div className={shouldUseFullWidth ? "w-full mx-auto" : "w-full mx-auto"}> 
         <main className="flex-grow pb-[320px]">
           <Outlet />
         </main>
