@@ -10,8 +10,9 @@ export const useUserProfileUpdateMutation = () => {
   return useMutation({
     mutationFn: updateUserProfile,
     onSuccess: () => {
-      // 프로필 업데이트 후 캐시 무효화
+      // 프로필 업데이트 후 관련 캐시 무효화 및 즉시 재요청
       queryClient.invalidateQueries({ queryKey: ['userProfile'] });
+      queryClient.invalidateQueries({ queryKey: ['userProfileOverview'] });
     },
     onError: (error) => {
       console.error('사용자 프로필 업데이트 실패:', error);

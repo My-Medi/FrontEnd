@@ -40,7 +40,9 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onProfileModalCha
     confirmPassword: '',
     email: userInfo?.email || '',
     emailDomain: userInfo?.emailDomain || '직접입력',
-    contact: userInfo?.contact || ''
+    contact: userInfo?.contact || '',
+    height: '',
+    weight: ''
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -55,23 +57,52 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onProfileModalCha
   // API 데이터로 폼 초기화 (기존 userInfo가 없을 때만)
   useEffect(() => {
     if (userProfile && !userInfo) {
+      const emailStr = userProfile.email || '';
+      const [emailLocal, emailDomain] = emailStr.includes('@') ? emailStr.split('@') : [emailStr, '직접입력'];
       const newFormData = {
         name: userProfile.name || '',
-        birthDate: '', // 새로운 API에는 birthDate가 없으므로 빈 문자열
-        gender: 'male' as 'male' | 'female', // 새로운 API에는 gender가 없으므로 기본값
+        birthDate: userProfile.birthDate || '',
+        gender: (userProfile.gender === 'MALE' ? 'male' : 'female') as 'male' | 'female',
         nickname: userProfile.nickname || '',
-        userId: '', // 새로운 API에는 username이 없으므로 빈 문자열
+        userId: '', // API 응답에 로그인 아이디가 없으므로 빈 값 유지
         password: '',
         confirmPassword: '',
-        email: '', // 새로운 API에는 email이 없으므로 빈 문자열
-        emailDomain: '직접입력',
-        contact: '' // 새로운 API에는 phoneNumber가 없으므로 빈 문자열
+        email: emailLocal,
+        emailDomain: emailDomain || '직접입력',
+        contact: userProfile.phoneNumber || '',
+        height: userProfile.height?.toString() || '',
+        weight: userProfile.weight?.toString() || ''
       };
       
       setFormData(newFormData);
       setInitialData(newFormData);
     }
   }, [userProfile, userInfo]);
+
+  // 전문가 프로필 데이터로 초기화 (전문가 모드)
+  useEffect(() => {
+    if (expertProfileQuery.data && userType === 'expert' && !userInfo) {
+      const expert = expertProfileQuery.data as any;
+      const emailStr = expert.email || '';
+      const [emailLocal, emailDomain] = emailStr.includes('@') ? emailStr.split('@') : [emailStr, '직접입력'];
+      const newFormData = {
+        name: expert.name || '',
+        birthDate: expert.birthDate || '',
+        gender: (expert.gender === 'MALE' ? 'male' : 'female') as 'male' | 'female',
+        nickname: expert.nickname || '',
+        userId: '',
+        password: '',
+        confirmPassword: '',
+        email: emailLocal,
+        emailDomain: emailDomain || '직접입력',
+        contact: expert.phoneNumber || '',
+        height: '',
+        weight: ''
+      };
+      setFormData(newFormData);
+      setInitialData(newFormData);
+    }
+  }, [expertProfileQuery.data, userType, userInfo]);
 
   // 초기 데이터 설정
   useEffect(() => {
@@ -94,6 +125,14 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onProfileModalCha
     setFormData(prev => ({
       ...prev,
       [field]: value
+    }));
+  };
+
+  const handleNumericInputChange = (field: 'height' | 'weight') => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onlyDigits = e.target.value.replace(/[^0-9]/g, '');
+    setFormData(prev => ({
+      ...prev,
+      [field]: onlyDigits
     }));
   };
 
@@ -152,12 +191,18 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onProfileModalCha
       }
     } else {
       // 일반 사용자 프로필 업데이트
+      const toNumberOrUndefined = (v: string) => {
+        const n = Number(v);
+        return Number.isFinite(n) ? n : undefined;
+      };
       const userUpdateData = {
         name: formData.name,
         birthDate: formData.birthDate,
         nickname: formData.nickname,
         phoneNumber: formData.contact,
-        profileImgUrl: '' // 프로필 이미지 URL은 별도 처리 필요
+        profileImgUrl: '', // 프로필 이미지 URL은 별도 처리 필요
+        height: toNumberOrUndefined(formData.height),
+        weight: toNumberOrUndefined(formData.weight)
       };
       
       if (userProfileUpdateMutation) {
@@ -415,6 +460,40 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onProfileModalCha
             className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[180px]'
           />
         </div>
+
+        {userType !== 'expert' && (
+          <>
+            {/* 키(cm) */}
+            <div className='flex items-center space-x-3 mb-[32px]'>
+              <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
+              <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>키(cm)</label>
+              <input
+                type='text'
+                inputMode='numeric'
+                pattern='[0-9]*'
+                value={formData.height}
+                onChange={handleNumericInputChange('height')}
+                placeholder='키를 입력하세요.'
+                className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[180px]'
+              />
+            </div>
+
+            {/* 몸무게(kg) */}
+            <div className='flex items-center space-x-3 mb-[32px]'>
+              <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
+              <label className='text-gray-700 font-medium min-w-[120px] flex items-center h-[36px]'>몸무게(kg)</label>
+              <input
+                type='text'
+                inputMode='numeric'
+                pattern='[0-9]*'
+                value={formData.weight}
+                onChange={handleNumericInputChange('weight')}
+                placeholder='몸무게를 입력하세요.'
+                className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[140px]'
+              />
+            </div>
+          </>
+        )}
 
         {/* 저장하기 버튼 */}
         <div className='flex justify-center mt-[50px]'>

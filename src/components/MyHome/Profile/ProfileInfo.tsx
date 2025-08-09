@@ -2,8 +2,8 @@ import React from "react";
 import defaultProfileImage from "../../../assets/MyHome/profile.svg";
 import smileIcon from "../../../assets/MyHome/smile.svg";
 import ActionButton from "../Common/ActionButton";
-import { useUserProfileQuery } from "../../../hooks/users/queries/useUserProfileQuery";
-import { useExpertProfileQuery } from "../../../hooks/experts/queries/useExpertProfileQuery";
+import { useUserProfileOverviewQuery } from "../../../hooks/users/queries/useUserProfileQuery";
+import { useExpertProfileOverviewQuery } from "../../../hooks/experts/queries/useExpertProfileQuery";
 
 interface PatientInfoProps {
   nickname?: string;
@@ -48,8 +48,8 @@ const PatientInfoSection: React.FC<PatientInfoProps> = ({
   expertises,
 }) => {
   // API 데이터 사용 시 - 사용자 타입에 따라 적절한 훅만 사용
-  const userProfileQuery = userType !== 'expert' ? useUserProfileQuery() : { data: undefined };
-  const expertProfileQuery = userType === 'expert' ? useExpertProfileQuery() : { data: undefined };
+  const userProfileQuery = userType !== 'expert' ? useUserProfileOverviewQuery() : { data: undefined } as any;
+  const expertProfileQuery = userType === 'expert' ? useExpertProfileOverviewQuery() : { data: undefined } as any;
 
   // 사용자 타입에 따라 적절한 프로필 데이터 선택
   const profileData = userType === 'expert' ? expertProfileQuery.data : userProfileQuery.data;
@@ -57,20 +57,32 @@ const PatientInfoSection: React.FC<PatientInfoProps> = ({
   // API 데이터 사용 시 실제 데이터 사용, 그렇지 않으면 props 사용
   // API 데이터가 없거나 에러가 있을 때는 기본값 사용
   
-  const displayName = useApiData && profileData?.name ? profileData.name : (name || '사용자');
-  const displayNickname = useApiData && profileData?.nickname ? profileData.nickname : (nickname || '사용자');
-  const displayAge = useApiData && profileData?.age ? profileData.age : (age || 0);
+  const displayName = useApiData && (profileData as any)?.name ? (profileData as any).name : (name || '사용자');
+  const displayNickname = useApiData && (profileData as any)?.nickname ? (profileData as any).nickname : (nickname || '사용자');
+  const displayAge = useApiData && (profileData as any)?.age ? (profileData as any).age : (age || 0);
   
   // 프로필 이미지 처리: API 데이터 사용 시 유효성 검사 후 기본 이미지 사용
   const getProfileImageUrl = () => {
-    if (useApiData && profileData?.profileImgUrl) {
-      const apiImageUrl = profileData.profileImgUrl;
-      return isValidProfileImageUrl(apiImageUrl) ? apiImageUrl : defaultProfileImage;
+    if (useApiData && profileData) {
+      const apiImageUrl = (profileData as any).profileImgUrl || (profileData as any).profileImageUrl;
+      if (apiImageUrl && isValidProfileImageUrl(apiImageUrl)) return apiImageUrl;
     }
     return isValidProfileImageUrl(profileImageUrl) ? profileImageUrl : defaultProfileImage;
   };
 
   const displayProfileImage = getProfileImageUrl();
+
+  // 키/몸무게 표시 로직 (부분 표시 허용: 하나만 있어도 표시)
+  const apiProfile: any = profileData as any;
+  const hasApiHeight = useApiData && typeof apiProfile?.height === 'number' && apiProfile.height > 0;
+  const hasApiWeight = useApiData && typeof apiProfile?.weight === 'number' && apiProfile.weight > 0;
+  const hasPropHeight = !useApiData && typeof height === 'number' && (height as number) > 0;
+  const hasPropWeight = !useApiData && typeof weight === 'number' && (weight as number) > 0;
+
+  const shouldShowHW = userType === 'patient' && ((hasApiHeight || hasApiWeight) || (hasPropHeight || hasPropWeight));
+  const heightWeightText = useApiData
+    ? [hasApiHeight ? `${apiProfile.height}cm` : '', hasApiWeight ? `${apiProfile.weight}kg` : ''].filter(Boolean).join(' / ')
+    : [hasPropHeight ? `${height}cm` : '', hasPropWeight ? `${weight}kg` : ''].filter(Boolean).join(' / ');
 
   // 전문가 전문분야 처리
   const getExpertSpecialty = () => {
@@ -129,20 +141,17 @@ const PatientInfoSection: React.FC<PatientInfoProps> = ({
                 만 {displayAge}세
               </div>
             )}
-            {userType === 'patient' && (
+            {shouldShowHW && (
               <div className="text-[#121218] font-normal text-lg leading-[36px] tracking-[-0.54px] xl:text-lg md:text-base sm:text-sm">
-                {useApiData && profileData?.height && profileData?.weight 
-                  ? `${profileData.height}cm / ${profileData.weight}kg`
-                  : (height && weight ? `${height}cm / ${weight}kg` : '174cm / 70kg')
-                }
+                {heightWeightText}
               </div>
             )}
           </div>
           {userType === 'patient' && (
             <div className="pt-2 text-[#121218] font-normal text-lg leading-[36px] tracking-[-0.54px] xl:text-lg md:text-base sm:text-sm">
               국가건강검진 <span className="text-[#DBE6FF]">| </span>
-              {useApiData && profileData?.reportCount !== undefined 
-                ? profileData.reportCount 
+              {useApiData && (profileData as any)?.reportCount !== undefined 
+                ? (profileData as any).reportCount 
                 : checkupCount
               }회
             </div>

@@ -41,9 +41,12 @@ const Topbar = memo(() => {
     clearTokens();
     // 사용자 타입 초기화
     setUserType(null);
-    // 로그인 페이지로 이동
-    navigate('/login');
-  }, [setUserType, navigate]);
+    // 메뉴/알림 닫기
+    setIsMenuOpen(false);
+    setShowNotification(false);
+    // 전체 새로고침으로 쿠키/상태 완전 반영 + 로그인 페이지 이동
+    window.location.replace('/login');
+  }, [setUserType, setShowNotification]);
 
   return (
     <>

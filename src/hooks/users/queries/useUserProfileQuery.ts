@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { getUserProfile } from '../../../apis/userApi/user';
-import type { UserProfile } from '../../../types/common';
+import { getUserProfile, getUserProfileOverview } from '../../../apis/userApi/user';
+import type { UserProfile, UserProfileOverview } from '../../../types/common';
 
 /**
  * 사용자 프로필 조회 훅
@@ -17,6 +17,23 @@ export const useUserProfileQuery = () => {
     },
     staleTime: 5 * 60 * 1000, // 5분
     gcTime: 10 * 60 * 1000, // 10분
+    retry: 2,
+  });
+};
+
+// 요약 사용자 프로필 조회 훅 (/users/profile)
+export const useUserProfileOverviewQuery = () => {
+  return useQuery<UserProfileOverview>({
+    queryKey: ['userProfileOverview'],
+    queryFn: async () => {
+      const response = await getUserProfileOverview();
+      if (!response.isSuccess) {
+        throw new Error(response.message || '요약 사용자 프로필 조회에 실패했습니다.');
+      }
+      return response.result!;
+    },
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
     retry: 2,
   });
 };

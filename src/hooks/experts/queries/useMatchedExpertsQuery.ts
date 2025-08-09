@@ -5,7 +5,9 @@ export const useMatchedExpertsQuery = () => {
   return useQuery({
     queryKey: ['matchedExperts'],
     queryFn: getMatchedExperts,
-    staleTime: 5 * 60 * 1000, // 5분
+    staleTime: 0,
     gcTime: 10 * 60 * 1000, // 10분
+    refetchOnMount: 'always',
+    refetchOnWindowFocus: true,
   });
 };
