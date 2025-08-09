@@ -245,6 +245,7 @@ const MatchedExperts: React.FC = () => {
           expertId={selectedExpert.expertId}
           expertStatus={getStatusForModal(selectedExpert.status)}
           requestDate={selectedExpert.status === 'REQUESTED' ? selectedExpert.requestDate : undefined}
+          matchedAt={selectedExpert.status === 'ACCEPTED' ? (selectedExpert as any).matchedAt : undefined}
           onClose={handleCloseDetailModal}
         />
       )}

@@ -19,6 +19,8 @@ export interface ExpertDetail {
   careers: Career[];
   licenseImages: string[];
   licenses: License[];
+  matchedAt?: string; // 매칭된 날짜 (매칭 상세에서 제공될 경우)
+  requestCount?: number; // 요청 횟수 (요청중 상세에서 제공될 경우)
 }
 
 // 경력 정보 타입
