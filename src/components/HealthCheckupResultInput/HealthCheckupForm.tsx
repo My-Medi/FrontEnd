@@ -576,7 +576,7 @@ const HealthCheckupForm = () => {
                 {/* 혈청 크레아티닌 */}
                 <div className="flex items-center mb-[24px]">
                   <label className="w-40 font-medium text-black text-[18px]">혈청 크레아티닌</label>
-                  <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="0/9" value={protein} onChange={e => setProtein(e.target.value)} />
+                  <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="1.2" value={protein} onChange={e => setProtein(e.target.value)} />
                 </div>
                 {/* eGFR */}
                 <div className="flex items-center mb-[24px]">
