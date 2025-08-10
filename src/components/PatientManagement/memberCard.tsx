@@ -6,18 +6,19 @@ import MemberCardModal from './memberCardModel/memberCardModal';
 import AdviceRegisterModal from './memberCardModel/adviceRegisterModel';
 import ConsultReservationModal from './consultReservationModal/CalendarModal';
 
-
 interface Member {
+  userId: number;
   profileImageUrl?: string;
   nickname: string;
   gender: string;
-  age: number;
+  age: string;
   height: number;
   weight: number;
   testDate: string;
   healthInterest: string[];
   healthStatus: '위험' | '주의' | '관심' | '안심' | '정상';
-  signupDate: string;
+  signupDate: '-';
+  consultationId: number;
 }
 
 const MemberCard: React.FC<{ member: Member }> = ({ member }) => {
@@ -26,7 +27,6 @@ const MemberCard: React.FC<{ member: Member }> = ({ member }) => {
   const [showAdviceRegisterModal, setShowAdviceRegisterModal] = useState(false);
   const [showConsultReservationModal, setShowConsultReservationModal] = useState(false);
 
-
   const openAdviceRegisterModal = () => {
     setShowAdviceRegisterModal(true);
   };
@@ -34,8 +34,6 @@ const MemberCard: React.FC<{ member: Member }> = ({ member }) => {
   const openConsultReservationModal = () => {
     setShowConsultReservationModal(true);
   };
-
-
 
   return (
     <div
@@ -53,7 +51,7 @@ const MemberCard: React.FC<{ member: Member }> = ({ member }) => {
       <div className='flex flex-col justify-center w-[540px] text-[14px] font-medium leading-[24px] tracking-[-0.42px] text-[#121218] font-[Pretendard]'>
         <span className='text-[#1D68FF]'>{member.nickname}</span>
         <span>
-          만 {member.age}세 / {member.gender}
+          {member.age} / {member.gender}
         </span>
         <span>
           {member.height}cm / {member.weight}kg
@@ -79,7 +77,7 @@ const MemberCard: React.FC<{ member: Member }> = ({ member }) => {
         />
       )}
       {showAdviceRegisterModal && (
-        <AdviceRegisterModal 
+        <AdviceRegisterModal
           onClose={(isFromRegister = false) => {
             setShowAdviceRegisterModal(false);
             // 등록 버튼을 누르면 모든 모달을 닫기
@@ -87,7 +85,7 @@ const MemberCard: React.FC<{ member: Member }> = ({ member }) => {
               setShowMemberCardModal(false);
             }
             // 뒤로가기 버튼을 누르면 memberCardModal로 돌아감
-          }} 
+          }}
         />
       )}
       {showConsultReservationModal && (
@@ -102,7 +100,6 @@ const MemberCard: React.FC<{ member: Member }> = ({ member }) => {
           }}
         />
       )}
-
     </div>
   );
 };
