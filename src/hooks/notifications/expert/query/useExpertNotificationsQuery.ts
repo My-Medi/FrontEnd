@@ -18,6 +18,7 @@ export const useExpertNotificationsQuery = ({
     queryKey: ['expertNotifications', currentPage, pageSize],
     queryFn: () => notificationAPI.getExpertNotifications(currentPage, pageSize),
     enabled,
+    // 폴링은 옵션으로만 동작
     refetchInterval,
   });
 }; 

@@ -9,7 +9,7 @@ const NavBar = memo(() => {
 
   // 디버깅용: userType 변경 시 콘솔에 출력
   useEffect(() => {
-    console.log('NavBar - Current userType:', userType);
+  
   }, [userType]);
 
   const handleNavigate = useCallback((path: string) => {

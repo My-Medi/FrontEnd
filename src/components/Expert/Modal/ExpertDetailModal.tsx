@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import unionSvg from '../../../assets/Expert/Union.svg';
 import backSvg from '../../../assets/Expert/back.svg';
 import RequestModal from './RequestModal';
+import ExpertDetailSkeleton from './ExpertDetailSkeleton';
 import ReRequestConfirmModal from './ReRequestConfirmModal';
 import useModalScrollLock from '../../../hooks/useModalScrollLock';
 import { useRequestConsultationMutation } from '../../../hooks/experts/mutations/useRequestConsultationMutation';
@@ -93,15 +94,9 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
 
 
 
-  // 로딩 상태
+  // 로딩 상태: 스켈레톤 UI 표시
   if (isLoading) {
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#121218]/40">
-        <div className="bg-white rounded-[40px] p-8">
-          <div className="text-lg text-gray-600">전문가 정보를 불러오는 중...</div>
-        </div>
-      </div>
-    );
+    return <ExpertDetailSkeleton onClose={onClose} />;
   }
 
   // 에러 상태
@@ -311,9 +306,10 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
       {showRequestModal && (
         <RequestModal
           isOpen={showRequestModal}
-            onClose={() => {
+          onClose={() => {
+            // 요청 플로우 종료 시(성공 모달 확인 포함) 모든 모달 닫기
             setShowRequestModal(false);
-            // Detail 모달은 SuccessModal에서 닫음
+            onClose();
           }}
           onBack={() => {
             setShowRequestModal(false);

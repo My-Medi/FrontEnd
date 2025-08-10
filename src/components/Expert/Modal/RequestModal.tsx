@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import backSvg from '../../../assets/Expert/back.svg';
 import closeSvg from '../../../assets/Expert/close.svg';
 import ConfirmRequestModal from './ConfirmRequestModal';
+import { useQueryClient } from '@tanstack/react-query';
 import SuccessModal from './SuccessModal';
 import useModalScrollLock from '../../../hooks/useModalScrollLock';
 
@@ -20,6 +21,7 @@ const RequestModal: React.FC<RequestModalProps> = ({ isOpen, onClose, onBack, ex
   const [isVisible, setIsVisible] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const queryClient = useQueryClient();
   const maxLength = 200;
 
   useModalScrollLock(isOpen && !showConfirmModal && !showSuccessModal);
@@ -40,7 +42,10 @@ const RequestModal: React.FC<RequestModalProps> = ({ isOpen, onClose, onBack, ex
 
   const handleSuccessClose = () => {
     setShowSuccessModal(false);
-    onClose(); // 모든 상위 모달들 닫기 (ExpertDetailModal)
+    // 모든 상위 모달들 닫기 (ExpertDetailModal 포함)
+    onClose();
+    // 성공 모달이 닫힐 때 쿼리 무효화 실행 (지연 반영)
+    queryClient.invalidateQueries({ queryKey: ['matchedExperts'] });
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {

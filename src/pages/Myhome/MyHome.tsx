@@ -58,11 +58,9 @@ const MyHome: React.FC = () => {
                 return new Promise<void>((resolve) => {
                   const img = new Image();
                   img.onload = () => {
-                    console.log(`이미지 로딩 완료: ${src}`);
                     resolve();
                   };
                   img.onerror = () => {
-                    console.warn(`이미지 로딩 실패: ${src}`);
                     resolve(); // 개별 이미지 실패해도 계속 진행
                   };
                   img.src = src;
@@ -73,10 +71,8 @@ const MyHome: React.FC = () => {
         })();
 
         await Promise.race([loadPromise, timeoutPromise]);
-        console.log('모든 사이드바 이미지 로딩 완료');
         setImagesLoaded(true);
       } catch (error) {
-        console.error('이미지 로딩 중 오류 발생:', error);
         setImagesLoaded(true); // 에러가 있어도 페이지는 표시
       }
     };
