@@ -13,7 +13,7 @@ export const useUserNotificationsQuery = ({
   currentPage = 0,
   pageSize = 10,
   enabled = true,
-  refetchInterval = 10000, // 10초마다 자동 새로고침
+  refetchInterval,
 }: UseUserNotificationsQueryProps = {}) => {
   return useQuery<NotificationListResponse>({
     queryKey: ['userNotifications', currentPage, pageSize],
@@ -21,7 +21,8 @@ export const useUserNotificationsQuery = ({
     enabled,
     staleTime: 5 * 60 * 1000, // 5분
     gcTime: 10 * 60 * 1000, // 10분
-    refetchInterval, // 주기적 폴링
-    refetchIntervalInBackground: true, // 백그라운드에서도 폴링
+    // 폴링은 옵션으로만 동작
+    refetchInterval,
+    refetchIntervalInBackground: !!refetchInterval,
   });
 }; 

@@ -62,11 +62,6 @@ const ExpertPage = () => {
       
       if (specialtyKeys.length > 0) {
         params.specialty = specialtyKeys;
-        console.log('팝오버 필터 파라미터 추가:', {
-          selectedCategories,
-          specialtyKeys,
-          params
-        });
       }
     }
     // 팝오버 필터가 없고 메인 카테고리가 전체가 아닌 경우
@@ -74,19 +69,9 @@ const ExpertPage = () => {
       const specialtyKey = getSpecialtyKeyFromKorean(selectedCategory);
       if (specialtyKey) {
         params.specialty = specialtyKey;
-        console.log('메인 필터 파라미터 추가:', {
-          selectedCategory,
-          specialtyKey,
-          params
-        });
-      } else {
-        console.log('specialtyKey 변환 실패:', selectedCategory);
       }
-    } else {
-      console.log('전체 카테고리 선택 - 필터 없음');
     }
 
-    console.log('최종 API 파라미터:', params);
     return params;
   };
 
@@ -98,7 +83,6 @@ const ExpertPage = () => {
 
   // 카테고리 선택 시 필터 및 페이지 초기화
   const handleCategorySelect = (category: string) => {
-    console.log('카테고리 선택:', category);
     setSelectedCategory(category);
     setSelectedCategories([]); // 팝오버 필터 초기화
     setCurrentPage(1); // 페이지도 1페이지로 초기화
@@ -129,16 +113,7 @@ const ExpertPage = () => {
     }
   };
   
-  // 디버깅을 위한 로그
-  console.log('현재 표시할 전문가 목록:', {
-    selectedCategory,
-    totalCount: displayList.length,
-    experts: displayList.map(expert => ({
-      id: expert.expertId,
-      name: expert.name,
-      specialty: expert.specialty
-    }))
-  });
+  // 디버깅 로그 제거
 
   // 페이지네이션 로직
   const totalPages = expertListData?.totalPages || 1;

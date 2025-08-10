@@ -9,7 +9,7 @@ import { USER_ENDPOINTS } from '../../types/common';
  */
 export const getExpertList = async (params: ExpertListRequestParams): Promise<ExpertListResponse> => {
   try {
-    console.log('전문가 목록 API 호출 파라미터:', params);
+    
     
     // API 요청 파라미터 구성
     const requestParams: any = {
@@ -54,13 +54,6 @@ export const getExpertList = async (params: ExpertListRequestParams): Promise<Ex
     }
     
     const response = await API.get<ExpertListResponse>(`${USER_ENDPOINTS.EXPERTS}?${searchParams.toString()}`);
-    console.log('전문가 목록 API 응답:', response.data);
-    console.log('필터링된 전문가 수:', response.data.result?.expertSummaryProfileDtoList?.length || 0);
-    console.log('필터링된 전문가 목록:', response.data.result?.expertSummaryProfileDtoList?.map(expert => ({
-      id: expert.expertId,
-      name: expert.name,
-      specialty: expert.specialty
-    })));
     return response.data;
   } catch (error) {
     console.error('전문가 목록 조회 실패:', error);

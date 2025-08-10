@@ -306,9 +306,10 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
       {showRequestModal && (
         <RequestModal
           isOpen={showRequestModal}
-            onClose={() => {
+          onClose={() => {
+            // 요청 플로우 종료 시(성공 모달 확인 포함) 모든 모달 닫기
             setShowRequestModal(false);
-            // Detail 모달은 SuccessModal에서 닫음
+            onClose();
           }}
           onBack={() => {
             setShowRequestModal(false);

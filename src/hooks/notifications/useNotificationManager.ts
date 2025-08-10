@@ -24,14 +24,12 @@ export const useNotificationManager = ({ userType, showAllOld }: UseNotification
     currentPage: 0,
     pageSize: 20,
     enabled: userType === 'patient',
-    refetchInterval: 10000,
   });
 
   const expertQuery = useExpertNotificationsQuery({
     currentPage: 0,
     pageSize: 20,
     enabled: userType === 'expert',
-    refetchInterval: 10000,
   });
 
   // 무한스크롤 쿼리
@@ -98,17 +96,6 @@ export const useNotificationManager = ({ userType, showAllOld }: UseNotification
     // 무한스크롤 쿼리에서 데이터 가져오기
     const infinitePages = currentInfiniteQuery.data?.pages || [];
     const infiniteData = infinitePages.flatMap((page: any) => page.result?.content || []);
-    
-    // 디버깅을 위한 로그
-    console.log('NotificationManager Debug:', {
-      showAllOld,
-      userType,
-      infiniteDataLength: infiniteData.length,
-      notificationsLength: notifications.length,
-      infiniteQueryEnabled: currentInfiniteQuery.isEnabled,
-      infiniteQueryLoading: currentInfiniteQuery.isLoading,
-      infiniteQueryError: currentInfiniteQuery.error,
-    });
     
     // 무한스크롤 데이터가 있으면 사용, 없으면 메인 쿼리 데이터 사용
     if (infiniteData.length > 0) {

@@ -31,7 +31,8 @@ const ConfirmRequestModal: React.FC<ConfirmRequestModalProps> = ({
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   
   // 상담 요청 mutation
-  const requestConsultationMutation = useRequestConsultationMutation();
+  // 모달이 떠있는 동안에는 쿼리 무효화 지연
+  const requestConsultationMutation = useRequestConsultationMutation({ skipQueryInvalidation: true });
 
   useModalScrollLock(isOpen && !showSuccessModal);
 
@@ -62,7 +63,7 @@ const ConfirmRequestModal: React.FC<ConfirmRequestModalProps> = ({
 
   const handleSuccessClose = () => {
     setShowSuccessModal(false);
-    onClose(); // 모든 상위 모달들 닫기 (RequestModal, ExpertDetailModal)
+    onClose();
   };
 
   if (!isOpen) return null;
