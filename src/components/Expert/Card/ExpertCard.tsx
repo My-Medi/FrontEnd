@@ -38,7 +38,10 @@ const ExpertCard: React.FC<ExpertCardProps> = ({
   >
     <div className="flex flex-col items-center gap-4 w-full">
       <div className="text-[18px] font-medium text-[#25282B] text-center leading-[2em]">{role}</div>
-      <div className="text-[20px] font-medium text-[#121218] text-left leading-[1.19em]">{slogan}</div>
+      {/* introSentence 를 프로필 위에 구성 */}
+      <div className="text-[20px] font-medium text-[#121218] text-center leading-[1.3] px-2 whitespace-nowrap overflow-hidden text-ellipsis max-w-full">
+        {slogan}
+      </div>
       <div className="w-[171px] h-[171px] bg-[#EDF0F3] rounded-full border-[4.5px] border-[#1D68FF] flex items-center justify-center overflow-hidden">
         {(!profile || profile === "") ? (
           <img src={unionSvg} alt="기본 프로필" className="w-[92px] h-[92px]" />
@@ -58,7 +61,10 @@ const ExpertCard: React.FC<ExpertCardProps> = ({
             <span className="text-[20px] font-medium text-[#121218] pl-2 leading-[1.19em]">{realname}</span>
          
       </div>
-      <div className="text-[18px] font-medium text-[#25282B] text-left leading-[1.71em] w-full truncate whitespace-nowrap overflow-hidden">{description.split('.')[0]}</div>
+      {/* introduction 을 닉네임/이름 아래에 한 줄 말줄임표 처리 */}
+      <div className="text-[18px] font-medium text-[#25282B] text-left leading-[1.71em] w-full whitespace-nowrap overflow-hidden text-ellipsis">
+        {description}
+      </div>
       {careerResponseDtoList && careerResponseDtoList.length > 0 ? (
         <div className="pt-1 text-[14px] font-medium text-[#75787B] leading-[1.71em]">
           - {careerResponseDtoList[0].companyName}
