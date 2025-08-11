@@ -19,7 +19,7 @@ interface Member {
   testDate: string;
   healthInterest: string[];
   healthStatus: '위험' | '주의' | '관심' | '안심' | '정상';
-  signupDate: string;
+  signupDate?: string;
 }
 
 interface MemberCardModalProps {

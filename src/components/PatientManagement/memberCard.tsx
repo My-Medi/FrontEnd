@@ -17,7 +17,7 @@ interface Member {
   testDate: string;
   healthInterest: string[];
   healthStatus: '위험' | '주의' | '관심' | '안심' | '정상';
-  signupDate: '-';
+  signupDate?: string; //optional로 변경하기 -> memberCardModal에서만 사용하니까.
   consultationId: number;
 }
 
