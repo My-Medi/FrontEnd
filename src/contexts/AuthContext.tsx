@@ -45,7 +45,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // localStorage에서 초기값 가져오기
   const [userType, setUserTypeState] = useState<'patient' | 'expert' | null>(() => {
     const saved = localStorage.getItem('userType');
-    console.log('AuthContext 초기화 - localStorage userType:', saved);
+    
     return saved as 'patient' | 'expert' | null || null;
   });
 
@@ -81,7 +81,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         
         if (accessToken && refreshToken) {
           // 토큰이 있으면 인증된 상태로 간주
-          console.log('토큰이 발견되어 자동 로그인 처리 중...');
+        
           
           // 여기서 실제로는 토큰 유효성을 서버에 검증해야 합니다
           // 현재는 토큰 존재 여부만 확인
@@ -91,7 +91,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           }
         } else {
           // 토큰이 없으면 로그아웃 상태로 설정
-          console.log('토큰이 없어 로그아웃 상태로 설정');
+        
           setUserType(null);
           setUserInfo(null);
         }
@@ -116,7 +116,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (originalClearTokens) {
         originalClearTokens();
       }
-      console.log('토큰 삭제로 인한 즉시 로그아웃 처리');
+    
       setUserType(null);
       setUserInfo(null);
     };

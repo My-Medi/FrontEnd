@@ -12,8 +12,6 @@ export const useExpertListQuery = (params: ExpertListRequestParams) => {
     queryKey: ['expertList', params.currentPage, params.pageSize, params.specialty],
     queryFn: async () => {
       const response = await getExpertList(params);
-      console.log('전문가 목록 API 응답:', response);
-      console.log('전문가 목록 데이터:', response.result);
       
       if (!response.isSuccess) {
         throw new Error(response.message || '전문가 목록 조회에 실패했습니다.');
