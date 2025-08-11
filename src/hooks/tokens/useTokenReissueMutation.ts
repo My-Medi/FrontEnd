@@ -21,7 +21,7 @@ export const useTokenReissueMutation = ({
       return response.result;
     },
     onSuccess: (data) => {
-      // 새로운 토큰 저장
+      // 새로운 토큰 저장 (만료, 그랜트타입, 역할 정보는 필요 시 확장 보관)
       saveTokens(data.accessToken, data.refreshToken);
       onSuccess?.(data);
     },

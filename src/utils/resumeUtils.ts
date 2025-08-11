@@ -7,30 +7,40 @@ import { getSpecialtyKoreanName, getSpecialtyFromKorean } from '../types/expert/
  */
 export const transformResumeData = (apiResponse: ExpertResumeResponse): ResumeFormData => {
   // 전문분야 변환 (API는 단일 값, 컴포넌트는 배열)
-  const specialtyKorean = getSpecialtyKoreanName(apiResponse.specialty);
-  
-  // 경력사항 변환
-  const career: CareerFormItem[] = apiResponse.careers.map(career => ({
-    company: career.companyName,
-    start: formatDateForInput(career.startDate),
-    end: formatDateForInput(career.endDate),
-    role: career.jobTitle,
+  const specialtyKorean = getSpecialtyKoreanName((apiResponse as any)?.specialty ?? 'NUTRITIONIST');
+
+  // 경력사항 변환 (없을 수 있으므로 안전 처리)
+  const careersSource = Array.isArray((apiResponse as any)?.careers)
+    ? (apiResponse as any).careers
+    : Array.isArray((apiResponse as any)?.career)
+      ? (apiResponse as any).career
+      : [];
+  const career: CareerFormItem[] = careersSource.map((career: any) => ({
+    company: career?.companyName ?? '',
+    start: formatDateForInput(career?.startDate ?? ''),
+    end: formatDateForInput(career?.endDate ?? ''),
+    role: career?.jobTitle ?? '',
   }));
 
-  // 자격증 변환
-  const certificates: CertificateFormItem[] = apiResponse.licenses.map(license => ({
-    certificateName: license.licenseName,
-    issueDate: formatDateForInput(license.licenseDate),
-    issuingOrganization: license.licenseDescription,
+  // 자격증 변환 (없을 수 있으므로 안전 처리)
+  const licensesSource = Array.isArray((apiResponse as any)?.licenses)
+    ? (apiResponse as any).licenses
+    : Array.isArray((apiResponse as any)?.licenseList)
+      ? (apiResponse as any).licenseList
+      : [];
+  const certificates: CertificateFormItem[] = licensesSource.map((license: any) => ({
+    certificateName: license?.licenseName ?? '',
+    issueDate: formatDateForInput(license?.licenseDate ?? ''),
+    issuingOrganization: license?.licenseDescription ?? '',
   }));
 
   return {
     specialty: [specialtyKorean],
-    companyName: apiResponse.organizationName,
+    companyName: (apiResponse as any)?.organizationName ?? '',
     career,
     certificates,
-    selfIntroduction: apiResponse.introduction,
-    representativeSentence: apiResponse.introSentence,
+    selfIntroduction: (apiResponse as any)?.introduction ?? '',
+    representativeSentence: (apiResponse as any)?.introSentence ?? (apiResponse as any)?.introSentences ?? '',
   };
 };
 
