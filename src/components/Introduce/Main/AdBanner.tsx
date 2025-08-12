@@ -1,9 +1,9 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import bg1 from '../../../assets/Introduce/1.png';
-import bg2 from '../../../assets/Introduce/2.png';
-import bg3 from '../../../assets/Introduce/3.png';
-import bg4 from '../../../assets/Introduce/4.png';
+import bg1 from '../../../assets/Introduce/1.svg';
+import bg2 from '../../../assets/Introduce/2.svg';
+import bg3 from '../../../assets/Introduce/3.svg';
+import bg4 from '../../../assets/Introduce/4.svg';
 import CTAButton from './CTAButton';
 
 interface AdBannerProps {
@@ -31,6 +31,18 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
 
   // 배경 이미지를 메모이제이션
   const backgroundImage = useMemo(() => BACKGROUND_IMAGES[variant] || bg1, [variant]);
+
+  // UI 변경 없이 이미지 프리로드 (초기 마운트 시 4종 모두)
+  useEffect(() => {
+    const imgs: HTMLImageElement[] = [];
+    Object.values(BACKGROUND_IMAGES).forEach((src) => {
+      const img = new Image();
+      img.decoding = 'async';
+      img.src = src;
+      imgs.push(img);
+    });
+    return () => { imgs.length = 0; };
+  }, []);
 
   // 페이지네이션 버튼 클릭 핸들러를 useCallback으로 최적화
   const handlePaginationClick = useCallback((buttonVariant: '1' | '2' | '3' | '4') => {

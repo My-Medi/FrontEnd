@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import unionSvg from '../../../assets/Expert/Union.svg';
 import CustomCheckboxButton from '../../Common/CustomCheckboxButton';
 import { useAuth } from '../../../contexts/AuthContext';
 import SuccessModal from './SuccessModal';
@@ -53,10 +54,11 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onProfileModalCha
 
   const [hasChanges, setHasChanges] = useState(false);
   const [initialData, setInitialData] = useState(formData);
+  const [initializedFromApi, setInitializedFromApi] = useState(false);
 
-  // API 데이터로 폼 초기화 (기존 userInfo가 없을 때만)
+  // API 데이터로 폼 초기화 (한 번만 초기화, userInfo 존재 여부와 무관하게 서버 값을 우선 반영)
   useEffect(() => {
-    if (userProfile && !userInfo) {
+    if (userProfile && !initializedFromApi) {
       const emailStr = userProfile.email || '';
       const [emailLocal, emailDomain] = emailStr.includes('@') ? emailStr.split('@') : [emailStr, '직접입력'];
       const newFormData = {
@@ -70,14 +72,15 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onProfileModalCha
         email: emailLocal,
         emailDomain: emailDomain || '직접입력',
         contact: userProfile.phoneNumber || '',
-        height: userProfile.height?.toString() || '',
-        weight: userProfile.weight?.toString() || ''
+        height: (userProfile.height ?? '') !== '' ? String(userProfile.height) : '',
+        weight: (userProfile.weight ?? '') !== '' ? String(userProfile.weight) : ''
       };
-      
-      setFormData(newFormData);
-      setInitialData(newFormData);
+
+      setFormData((prev) => ({ ...prev, ...newFormData }));
+      setInitialData((prev) => ({ ...prev, ...newFormData }));
+      setInitializedFromApi(true);
     }
-  }, [userProfile, userInfo]);
+  }, [userProfile, initializedFromApi]);
 
   // 전문가 프로필 데이터로 초기화 (전문가 모드)
   useEffect(() => {
@@ -266,7 +269,7 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onProfileModalCha
             >
               {/* 프로필 이미지 또는 기본 아이콘 */}
               <img 
-                src="/src/assets/Expert/Union.svg" 
+                src={unionSvg} 
                 alt="프로필 이미지" 
                 className='w-[97.58px] h-[99.6px] object-contain'
               />
