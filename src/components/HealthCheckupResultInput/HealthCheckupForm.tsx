@@ -46,8 +46,6 @@ const HealthCheckupForm = () => {
     });
   };
 
-  // 이미지 업로드 성공 핸들러는 현재 미사용
-
   // 파일 선택 핸들러 추가
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;

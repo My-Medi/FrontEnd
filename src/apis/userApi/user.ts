@@ -1,5 +1,5 @@
 import API from '../axios';
-import type { ApiResponse, UserProfile } from '../../types/common';
+import type { ApiResponse, UserProfile, UserProfileOverview } from '../../types/common';
 import type { UserScheduleSummaryResponse, UserSchedulesByDateResponse } from '../../types/schedule';
 import { USER_ENDPOINTS } from '../../types/common';
 import type { PersonalSignUpRequest, SignUpResponse } from '../../types/user';
@@ -10,12 +10,27 @@ import type { PersonalSignUpRequest, SignUpResponse } from '../../types/user';
  */
 export const getUserProfile = async (): Promise<ApiResponse<UserProfile>> => {
   try {
-    console.log('사용자 프로필 API 호출:', USER_ENDPOINTS.PROFILE);
-    const response = await API.get<ApiResponse<UserProfile>>(USER_ENDPOINTS.PROFILE);
-    console.log('사용자 프로필 API 응답:', response.data);
+  
+    const response = await API.get<ApiResponse<UserProfile>>(USER_ENDPOINTS.ME);
+  
     return response.data;
   } catch (error) {
-    console.error('사용자 프로필 조회 실패:', error);
+  
+    throw error;
+  }
+};
+
+/**
+ * 요약 사용자 프로필 조회 API (/users/profile)
+ */
+export const getUserProfileOverview = async (): Promise<ApiResponse<UserProfileOverview>> => {
+  try {
+  
+    const response = await API.get<ApiResponse<UserProfileOverview>>(USER_ENDPOINTS.PROFILE);
+  
+    return response.data;
+  } catch (error) {
+  
     throw error;
   }
 };
@@ -27,25 +42,27 @@ export const getUserProfile = async (): Promise<ApiResponse<UserProfile>> => {
  */
 export const updateUserProfile = async (updateData: Partial<UserProfile>): Promise<ApiResponse<UserProfile>> => {
   try {
-    const response = await API.put<ApiResponse<UserProfile>>(USER_ENDPOINTS.PROFILE, updateData);
+    // 새 스펙: PATCH /users
+    const response = await API.patch<ApiResponse<UserProfile>>(USER_ENDPOINTS.ME, updateData);
     return response.data;
   } catch (error) {
-    console.error('사용자 프로필 업데이트 실패:', error);
+  
     throw error;
   }
 };
 
 // 개인 회원가입 API
 export const signUpUser = async (data: PersonalSignUpRequest): Promise<SignUpResponse> => {
-  console.log('회원가입 API 호출 데이터:', data);
+  
   const response = await API.post<SignUpResponse>('/users', data);
-  console.log('회원가입 API 응답:', response.data);
+  
   return response.data;
 };
 
 export const userAPI = {
   signUpUser,
   getUserProfile,
+  getUserProfileOverview,
   updateUserProfile,
 }; 
 

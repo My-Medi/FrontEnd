@@ -20,11 +20,9 @@ const SuccessModal: React.FC<SuccessModalProps> = ({ isOpen, onClose }) => {
   }, [isOpen]);
 
   const handleConfirm = () => {
-    console.log('SuccessModal handleConfirm 호출됨');
     setIsVisible(false);
     // 약간의 지연 후 onClose 호출하여 애니메이션이 완료된 후 모달이 닫히도록 함
     setTimeout(() => {
-      console.log('SuccessModal onClose 호출됨');
       onClose();
     }, 300);
   };
@@ -70,7 +68,6 @@ const SuccessMessage: React.FC = () => (
 const ConfirmButton: React.FC<{ onClick: () => void }> = ({ onClick }) => (
   <button
     onClick={(e) => {
-      console.log('SuccessModal 확인 버튼 클릭됨');
       e.stopPropagation();
       onClick();
     }}

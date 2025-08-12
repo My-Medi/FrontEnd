@@ -1,4 +1,5 @@
 import React from 'react';
+import unionSvg from '../../../assets/Expert/Union.svg';
 
 interface ProfileSelectModalProps {
   isOpen: boolean;
@@ -35,7 +36,7 @@ const ProfileSelectModal: React.FC<ProfileSelectModalProps> = ({
                 className="w-[118.5px] h-[118.5px] bg-[#EDF0F3] border-[0.5px] border-[#1D68FF] rounded-[117px] flex items-center justify-center cursor-pointer hover:border-[2px] hover:shadow-[0px_3px_6px_0px_rgba(29,104,255,0.07),0px_11px_11px_0px_rgba(29,104,255,0.06),0px_26px_15px_0px_rgba(29,104,255,0.03),0px_46px_18px_0px_rgba(29,104,255,0.01),0px_71px_20px_0px_rgba(29,104,255,0)] transition-all duration-200"
               >
                 <img 
-                  src="/src/assets/Expert/Union.svg" 
+                  src={unionSvg} 
                   alt={`프로필 ${profile.id}`} 
                   className="w-[73.19px] h-[74.7px] object-contain"
                 />
@@ -52,7 +53,7 @@ const ProfileSelectModal: React.FC<ProfileSelectModalProps> = ({
                 className="w-[118.5px] h-[118.5px] bg-[#EDF0F3] border-[0.5px] border-[#1D68FF] rounded-[117px] flex items-center justify-center cursor-pointer hover:border-[2px] hover:shadow-[0px_3px_6px_0px_rgba(29,104,255,0.07),0px_11px_11px_0px_rgba(29,104,255,0.06),0px_26px_15px_0px_rgba(29,104,255,0.03),0px_46px_18px_0px_rgba(29,104,255,0.01),0px_71px_20px_0px_rgba(29,104,255,0)] transition-all duration-200"
               >
                 <img 
-                  src="/src/assets/Expert/Union.svg" 
+                  src={unionSvg} 
                   alt={`프로필 ${profile.id}`} 
                   className="w-[73.19px] h-[74.7px] object-contain"
                 />

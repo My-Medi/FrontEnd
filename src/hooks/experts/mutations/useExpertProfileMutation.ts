@@ -12,6 +12,7 @@ export const useExpertProfileUpdateMutation = () => {
     onSuccess: () => {
       // 프로필 업데이트 후 캐시 무효화
       queryClient.invalidateQueries({ queryKey: ['expertProfile'] });
+      queryClient.invalidateQueries({ queryKey: ['expertProfileOverview'] });
     },
     onError: (error) => {
       console.error('전문가 프로필 업데이트 실패:', error);

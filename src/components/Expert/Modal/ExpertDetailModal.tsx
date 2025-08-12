@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import unionSvg from '../../../assets/Expert/Union.svg';
 import backSvg from '../../../assets/Expert/back.svg';
 import RequestModal from './RequestModal';
+import ExpertDetailSkeleton from './ExpertDetailSkeleton';
 import ReRequestConfirmModal from './ReRequestConfirmModal';
 import useModalScrollLock from '../../../hooks/useModalScrollLock';
+import { useRequestConsultationMutation } from '../../../hooks/experts/mutations/useRequestConsultationMutation';
+import SuccessModal from './SuccessModal';
 import { useExpertDetailQuery } from '../../../hooks/experts/queries/useExpertDetailQuery';
 import { getSpecialtyKoreanName } from '../../../types/expert/common';
 import { formatPhoneNumber } from '../../../utils/phoneUtils';
@@ -12,32 +15,43 @@ interface ExpertDetailModalProps {
   expertId: number;
   expertStatus?: 'matched' | 'request' | 'rejected';
   requestDate?: string;
+  matchedAt?: string;
   onClose: () => void;
 }
 
-const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertStatus, requestDate, onClose }) => {
+const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertStatus, requestDate, matchedAt, onClose }) => {
   const [showRequestModal, setShowRequestModal] = useState(false);
   const [showReRequestModal, setShowReRequestModal] = useState(false);
+  const [showDetailSuccess, setShowDetailSuccess] = useState(false);
 
   // 전문가 상세 정보 조회
-  const { data: expert, isLoading, error } = useExpertDetailQuery(expertId);
+  const { data: expert, isLoading, error } = useExpertDetailQuery(expertId, expertStatus);
 
-  useModalScrollLock(!showRequestModal && !showReRequestModal);
+  useModalScrollLock(!showRequestModal && !showReRequestModal && !showDetailSuccess);
 
   // 요청 날짜 포맷팅 함수
   const formatRequestDate = (dateString: string) => {
     if (!dateString) return '';
-    
-    try {
-      const date = new Date(dateString);
+    // 우선 ISO (YYYY-MM-DD) 수동 파싱 (Safari 호환)
+    const isoMatch = dateString.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+    if (isoMatch) {
+      const year = Number(isoMatch[1]);
+      const month = Number(isoMatch[2]);
+      const day = Number(isoMatch[3]);
+      if (Number.isFinite(year) && Number.isFinite(month) && Number.isFinite(day)) {
+        return `${year}. ${month}. ${day}.`;
+      }
+    }
+    // Date 파싱으로 폴백
+    const date = new Date(dateString);
+    if (!isNaN(date.getTime())) {
       const year = date.getFullYear();
       const month = date.getMonth() + 1;
       const day = date.getDate();
-      
       return `${year}. ${month}. ${day}.`;
-    } catch (error) {
-      return dateString;
     }
+    // 최종 폴백: 원본 문자열 반환
+    return dateString;
   };
 
   const handleRequestClick = () => {
@@ -50,23 +64,39 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
     }
   };
 
+  const requestMutation = useRequestConsultationMutation();
   const handleReRequestConfirm = () => {
+    // 재요청 확인 후, 즉시 API 호출하여 성공 모달 표시
     setShowReRequestModal(false);
-    onClose(); // 모든 모달 종료
+    requestMutation.mutate(
+      { expertId, comment: '' },
+      {
+        onSuccess: () => {
+          setShowDetailSuccess(true);
+        },
+        // 실패 시에는 폴백 없이 그대로 유지
+      }
+    );
+  };
+
+  const getKoreanOrdinalWord = (n: number): string => {
+    const mapping: Record<number, string> = {
+      1: '첫',
+      2: '두',
+      3: '세',
+      4: '넷',
+      5: '다섯',
+      6: '여섯',
+    };
+    return mapping[n] || String(n);
   };
 
 
 
 
-  // 로딩 상태
+  // 로딩 상태: 스켈레톤 UI 표시
   if (isLoading) {
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#121218]/40">
-        <div className="bg-white rounded-[40px] p-8">
-          <div className="text-lg text-gray-600">전문가 정보를 불러오는 중...</div>
-        </div>
-      </div>
-    );
+    return <ExpertDetailSkeleton onClose={onClose} />;
   }
 
   // 에러 상태
@@ -121,11 +151,11 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
               {/* 매칭된 전문가일 때는 날짜 표시, 요청중인 경우는 첫번째 요청 표시, 그 외에는 전문가 상세 표시 */}
               {expertStatus === 'matched' ? (
                 <div className='text-[14px] font-medium text-[#9DA0A3] leading-[24px] tracking-[-3%] text-center mb-1'>
-                  함께하고 있어요!
+                  {(matchedAt || expert?.matchedAt) ? `${formatRequestDate(String(matchedAt || expert.matchedAt))}` : ''} 부터 함께하고 있어요!
                 </div>
               ) : expertStatus === 'request' ? (
                 <div className='text-[14px] font-medium text-[#1D68FF] leading-[24px] tracking-[-3%] text-center mb-1 font-[Pretendard]'>
-                  첫번째 요청
+                  {typeof expert.requestCount === 'number' && expert.requestCount > 0 ? ` ${getKoreanOrdinalWord(expert.requestCount)}번째 요청` : ''}
                 </div>
               ) : (
                 <div className='text-[#4D5053] text-sm font-medium leading-[1.71] mb-1'>
@@ -277,8 +307,9 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
         <RequestModal
           isOpen={showRequestModal}
           onClose={() => {
+            // 요청 플로우 종료 시(성공 모달 확인 포함) 모든 모달 닫기
             setShowRequestModal(false);
-            onClose(); // 모든 모달 닫기 (ExpertDetailModal도 함께 닫기)
+            onClose();
           }}
           onBack={() => {
             setShowRequestModal(false);
@@ -290,6 +321,15 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
           expertRealName={expert.nickname || expert.name}
         />
       )}
+
+      {/* 디테일 내 성공 모달 (재요청-즉시 전송 케이스) */}
+      <SuccessModal
+        isOpen={showDetailSuccess}
+        onClose={() => {
+          setShowDetailSuccess(false);
+          onClose();
+        }}
+      />
     </>
   );
 };

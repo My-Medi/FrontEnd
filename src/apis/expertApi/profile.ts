@@ -17,6 +17,20 @@ export const getExpertProfile = async (): Promise<ApiResponse<any>> => {
 };
 
 /**
+ * 전문가 프로필(홈 표출용) 조회 API (/experts/profiles)
+ */
+export const getExpertProfileOverview = async (): Promise<ApiResponse<any>> => {
+  try {
+    // 서버 스펙: GET /experts/profile
+    const response = await API.get<ApiResponse<any>>(`${EXPERT_ENDPOINTS.PROFILE}/profile`);
+    return response.data;
+  } catch (error) {
+    console.error('전문가 프로필(overview) 조회 실패:', error);
+    throw error;
+  }
+};
+
+/**
  * 전문가 프로필 업데이트 API
  * @param updateData - 업데이트할 전문가 정보
  * @returns Promise<ApiResponse<any>>

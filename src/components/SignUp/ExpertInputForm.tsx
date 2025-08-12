@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import fileboxIcon from '../../assets/MyHome/Resume/filebox.svg';
 import { MultipleImageUpload } from '../Common/MultipleImageUpload';
 import type { CareerRequest, LicenseRequest, LicenseImageRequest, ExpertSpecialty } from '../../types/expert';
@@ -58,6 +58,20 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({
       issuingOrganization: "",
     }
   ]);
+
+  const [errors, setErrors] = useState<{
+    specialty?: string;
+    companyName?: string;
+    selfIntroduction?: string;
+    representativeSentence?: string;
+  }>({});
+
+  const firstErrorRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    if (firstErrorRef.current) {
+      firstErrorRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [errors]);
 
   const handleFieldToggle = (field: string) => {
     setSelectedFields(prev => 
@@ -150,6 +164,18 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({
       representativeSentence
     });
     
+    // 필수값 검증
+    const newErrors: typeof errors = {};
+    if (!selectedFields[0]) newErrors.specialty = '전문분야를 선택해주세요.';
+    if (!companyName.trim()) newErrors.companyName = '소속 회사/기관명을 입력해주세요.';
+    if (!selfIntroduction.trim()) newErrors.selfIntroduction = '자기소개를 입력해주세요.';
+    if (!representativeSentence.trim()) newErrors.representativeSentence = '대표 문장을 입력해주세요.';
+
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) {
+      return;
+    }
+
     // 데이터 변환 및 검증 - 모든 필드가 입력되어야 포함
     const careers: CareerRequest[] = careerRows
       .filter(row => 
@@ -195,9 +221,9 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({
 
     const step3Data = {
       specialty: SPECIALTY_MAP[selectedFields[0] || '영양사'],
-      organizationName: companyName || '기본 기관명', // 빈 문자열 대신 기본값
-      introduction: selfIntroduction || '기본 자기소개', // 빈 문자열 대신 기본값
-      introSentence: representativeSentence || '기본 대표 문장', // 빈 문자열 대신 기본값
+      organizationName: companyName,
+      introduction: selfIntroduction,
+      introSentence: representativeSentence,
       careers,
       licenses,
       licenseImages,
@@ -260,7 +286,7 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({
           {/* 점선 구분선 */}
           <div className="hidden xl:block w-[3.3rem] h-0 border border-dashed border-[#DBE6FF] transform rotate-90 mx-5 xl:mx-[0.3rem]"></div>
           
-          <div className="flex items-center gap-6 xl:gap-[1.5rem]">
+          <div className="flex flex-col gap-1 xl:gap-1">
             <input
               type="text"
               value={companyName}
@@ -268,8 +294,12 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({
               placeholder="소속 회사/ 기관명을 입력하세요."
               className="w-full xl:w-[23.4rem] h-9 xl:h-[2.25rem] px-3 xl:px-[0.8rem] border border-[#9DA0A3] rounded-lg xl:rounded-lg text-sm xl:text-sm font-medium placeholder-[#9DA0A3]"
             />
+            {errors.companyName && (
+              <div className="text-xs text-red-500">{errors.companyName}</div>
+            )}
           </div>
         </div>
+        
       </div>
 
       {/* 자격증 업로드 */}
@@ -283,7 +313,7 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({
         <MultipleImageUpload
           onUploadSuccess={handleImageUploadSuccess}
           onUploadError={(error) => console.error('자격증 파일 업로드 실패:', error)}
-          maxSize={5}
+          maxSize={Infinity}
           maxFiles={10}
           accept="image/*,.pdf,.hwp,.doc,.docx"
           className="mb-4"
@@ -377,7 +407,7 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({
                   value={row.issueDate}
                   onChange={(e) => handleCertificateChange(idx, 'issueDate', e.target.value)}
                   className="w-[6.8rem] xl:w-[6.8rem] text-center bg-transparent border-none outline-none text-sm xl:text-sm font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em]"
-                  placeholder="발급일"
+                  placeholder="2025.08.12"
                 />
               </div>
               <div className="p-2 xl:p-[0.375rem_0.75rem] text-center text-sm xl:text-sm font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em] flex items-center justify-center">
@@ -451,7 +481,7 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({
                   value={row.start}
                   onChange={(e) => handleCareerChange(row.id, 'start', e.target.value)}
                   className="w-[6.8rem] xl:w-[6.8rem] text-center bg-transparent border-none outline-none text-sm xl:text-sm font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em]"
-                  placeholder="시작일"
+                  placeholder="2022.03.08"
                 />
                 <div className="w-6 xl:w-[1.5rem] text-center">-</div>
                 <input
@@ -459,7 +489,7 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({
                   value={row.end}
                   onChange={(e) => handleCareerChange(row.id, 'end', e.target.value)}
                   className="w-[6.8rem] xl:w-[6.8rem] text-center bg-transparent border-none outline-none text-sm xl:text-sm font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em]"
-                  placeholder="종료일"
+                  placeholder="2025.08.12"
                 />
               </div>
               <div className="p-2 xl:p-[0.375rem_0.75rem] text-center text-sm xl:text-sm font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em] flex items-center justify-center">
@@ -505,6 +535,9 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({
               placeholder="자기소개를 입력하세요."
             />
           </div>
+          {errors.selfIntroduction && (
+            <div className="text-xs text-red-500 -mt-2">{errors.selfIntroduction}</div>
+          )}
         </div>
       </div>
 
@@ -523,6 +556,9 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({
               placeholder="ex) 매일 1%의 건강을 쌓아가요."
             />
           </div>
+          {errors.representativeSentence && (
+            <div className="text-xs text-red-500 -mt-2">{errors.representativeSentence}</div>
+          )}
         </div>
       </div>
 

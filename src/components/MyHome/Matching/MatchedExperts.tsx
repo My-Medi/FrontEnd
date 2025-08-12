@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ExpertCard from './ExpertCard';
 import ExpertDetailModal from '../../Expert/Modal/ExpertDetailModal';
 import { addExpertCard, type MatchedExpert } from '../../../data/matchedExperts';
+import CancelRequestConfirmModal from './CancelRequestConfirmModal';
 import { useMatchedExpertsQuery } from '../../../hooks/experts/queries/useMatchedExpertsQuery';
 import { useCancelConsultationMutation } from '../../../hooks/experts/mutations/useCancelConsultationMutation';
 
@@ -11,6 +12,8 @@ const MatchedExperts: React.FC = () => {
   const [selectedFilter, setSelectedFilter] = useState<'connected' | 'requested' | 'rejected'>('connected');
   const [selectedExpert, setSelectedExpert] = useState<MatchedExpert | null>(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+  const [pendingCancelExpertId, setPendingCancelExpertId] = useState<string | null>(null);
   
   // API 데이터 조회
   const { data: apiData, isLoading, error } = useMatchedExpertsQuery();
@@ -20,14 +23,16 @@ const MatchedExperts: React.FC = () => {
     ...item,
     career: undefined // API에서 경력사항 데이터가 오지 않으므로 undefined
   })) || [];
-  console.log('API 응답 구조:', {
-    isSuccess: apiData?.isSuccess,
-    code: apiData?.code,
-    message: apiData?.message,
-    resultLength: apiData?.result?.length,
-    firstItem: apiData?.result?.[0]
-  });
-  console.log('변환된 전문가 데이터:', experts);
+  
+  // 중복 expertId 제거 (동일 expertId가 다수 포함되는 경우 대비)
+  const uniqueExperts: MatchedExpert[] = React.useMemo(() => {
+    const map = new Map<number, MatchedExpert>();
+    for (const e of experts) {
+      map.set(e.expertId, e);
+    }
+    return Array.from(map.values());
+  }, [experts]);
+  
   
 
   
@@ -44,10 +49,9 @@ const MatchedExperts: React.FC = () => {
   // 상담요청 취소 뮤테이션
   const cancelConsultationMutation = useCancelConsultationMutation({
     onSuccess: () => {
-      console.log('상담요청이 취소되었습니다.');
+      // 성공 시 별도 로그 출력 제거
     },
-    onError: (error) => {
-      console.error('상담요청 취소 실패:', error);
+    onError: () => {
       alert('상담요청 취소에 실패했습니다. 다시 시도해주세요.');
     },
   });
@@ -81,25 +85,31 @@ const MatchedExperts: React.FC = () => {
     </div>
   );
 
-  const handleUnmatch = (expertId: string) => {
-    // 매칭 끊기 로직 구현
-    console.log('매칭 끊기:', expertId);
+  const handleUnmatch = () => {
     // TODO: API 호출로 매칭 끊기 구현
   };
 
   const handleCancelRequest = (expertId: string) => {
-    // 요청 취소 로직 구현
-    console.log('요청 취소:', expertId);
-    
-    // 해당 전문가의 consultationId 찾기
-    const expert = experts.find(e => e.expertId.toString() === expertId);
+    // 확인 모달 열기
+    setPendingCancelExpertId(expertId);
+    setShowCancelConfirm(true);
+  };
+
+  const confirmCancelRequest = () => {
+    if (!pendingCancelExpertId) return;
+    const expert = experts.find(e => e.expertId.toString() === pendingCancelExpertId);
     if (!expert || !expert.consultationId) {
+      setShowCancelConfirm(false);
+      setPendingCancelExpertId(null);
       alert('상담요청 정보를 찾을 수 없습니다.');
       return;
     }
-    
-    // 상담요청 취소 API 호출
-    cancelConsultationMutation.mutate(expert.consultationId);
+    cancelConsultationMutation.mutate(expert.consultationId, {
+      onSettled: () => {
+        setShowCancelConfirm(false);
+        setPendingCancelExpertId(null);
+      }
+    });
   };
 
   const handleExpertCardClick = (expert: MatchedExpert) => {
@@ -116,13 +126,13 @@ const MatchedExperts: React.FC = () => {
   const getFilteredExperts = () => {
     switch (selectedFilter) {
       case 'connected':
-        return experts.filter(expert => expert.status === 'ACCEPTED');
+        return uniqueExperts.filter(expert => expert.status === 'ACCEPTED');
       case 'requested':
-        return experts.filter(expert => expert.status === 'REQUESTED');
+        return uniqueExperts.filter(expert => expert.status === 'REQUESTED');
       case 'rejected':
-        return experts.filter(expert => expert.status === 'REJECTED');
+        return uniqueExperts.filter(expert => expert.status === 'REJECTED');
       default:
-        return experts;
+        return uniqueExperts;
     }
   };
 
@@ -198,9 +208,9 @@ const MatchedExperts: React.FC = () => {
       <div className="flex flex-wrap justify-start gap-8 max-w-[1021px] w-full">
         {filteredExperts.length > 0 ? (
           <>
-            {filteredExperts.map((expert) => (
+            {filteredExperts.map((expert, idx) => (
               <ExpertCard 
-                key={expert.expertId} 
+                key={`${expert.expertId}-${expert.consultationId ?? idx}`} 
                 expert={expert} 
                 onUnmatch={handleUnmatch}
                 onCancelRequest={handleCancelRequest}
@@ -245,9 +255,23 @@ const MatchedExperts: React.FC = () => {
           expertId={selectedExpert.expertId}
           expertStatus={getStatusForModal(selectedExpert.status)}
           requestDate={selectedExpert.status === 'REQUESTED' ? selectedExpert.requestDate : undefined}
+          matchedAt={selectedExpert.status === 'ACCEPTED' ? (selectedExpert as any).matchedAt : undefined}
           onClose={handleCloseDetailModal}
         />
       )}
+
+      {/* 상담요청 취소 확인 모달 (로그인 확인 모달 스타일) */}
+      <CancelRequestConfirmModal
+        isOpen={showCancelConfirm}
+        onClose={() => {
+          setShowCancelConfirm(false);
+          setPendingCancelExpertId(null);
+        }}
+        onConfirm={confirmCancelRequest}
+        title="해당 상담요청을 취소하시겠습니까?"
+        confirmText="확인"
+        cancelText="취소"
+      />
     </div>
   );
 };
