@@ -345,11 +345,14 @@ const HealthCheckupForm = () => {
         setMedication(
           interview.onMedication === 'POSITIVE' ? '유' : interview.onMedication ? '무' : '',
         );
-        const statuses = (interview as any).lifestyleHabitsStatuses
-          ? (interview as any).lifestyleHabitsStatuses
-          : ((interview as any).lifestyleHabitsStatus
-              ? [(interview as any).lifestyleHabitsStatus]
-              : []);
+        // 서버 표준: lifestyleHabitsStatusList (배열)
+        const statuses = (interview as any).lifestyleHabitsStatusList
+          ? (interview as any).lifestyleHabitsStatusList
+          : (interview as any).lifestyleHabitsStatuses
+            ? (interview as any).lifestyleHabitsStatuses
+            : ((interview as any).lifestyleHabitsStatus
+                ? [(interview as any).lifestyleHabitsStatus]
+                : []);
         const mapped = (statuses as string[]).map((s: string) =>
           s === 'SMOKING_CESSATION_NEEDED' ? '금연 필요'
           : s === 'ALCOHOL_REDUCTION_NEEDED' ? '절주 필요'
@@ -596,7 +599,7 @@ const HealthCheckupForm = () => {
     // 인터뷰 enum
     const hasPastDisease = history === '유' ? 'POSITIVE' : 'NEGATIVE';
     const onMedication = medication === '유' ? 'POSITIVE' : 'NEGATIVE';
-    const lifestyleStatuses: HealthCheckupRequest['interviewDto']['lifestyleHabitsStatuses'] = [
+    const lifestyleStatuses: HealthCheckupRequest['interviewDto']['lifestyleHabitsStatusList'] = [
       ...(lifestyle.includes('금연 필요') ? ['SMOKING_CESSATION_NEEDED'] as const : []),
       ...(lifestyle.includes('절주 필요') ? ['ALCOHOL_REDUCTION_NEEDED'] as const : []),
       ...(lifestyle.includes('신체활동 필요') ? ['PHYSICAL_ACTIVITY_NEEDED'] as const : []),
@@ -650,7 +653,7 @@ const HealthCheckupForm = () => {
       interviewDto: {
         hasPastDisease,
         onMedication,
-        lifestyleHabitsStatuses: lifestyleStatuses,
+        lifestyleHabitsStatusList: lifestyleStatuses,
       },
       hasAdditionalTest: additionalExam === '해당',
       additionalTestDto: {

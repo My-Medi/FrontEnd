@@ -56,8 +56,8 @@ export interface HealthCheckupRequest {
     interviewDto: {
       hasPastDisease: "POSITIVE" | "NEGATIVE"; // 과거 질병 여부
       onMedication: "POSITIVE" | "NEGATIVE"; // 약물 복용 여부
-      // 다중 선택 전송
-      lifestyleHabitsStatuses: (
+      // 서버 스펙: lifestyleHabitsStatusList
+      lifestyleHabitsStatusList: (
         | "SMOKING_CESSATION_NEEDED"
         | "ALCOHOL_REDUCTION_NEEDED"
         | "PHYSICAL_ACTIVITY_NEEDED"
