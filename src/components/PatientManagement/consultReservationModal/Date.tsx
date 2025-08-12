@@ -4,23 +4,50 @@ import TimeIcon from '/src/assets/Calendar/time.svg';
 import LocationIcon from '/src/assets/Calendar/location.svg';
 import MemoIcon from '/src/assets/Calendar/memo.svg';
 import type dayjs from 'dayjs';
+import { createExpertScheduleForUser } from '../../../apis/expertApi/schedule';
+import { useState as useReactState } from 'react';
 import SuccessReservationModal from './SuccessReservationModal';
 
 interface ConsultDateModalProps {
   onClose: (isFromSuccess?: boolean) => void;
   selectedDate: dayjs.Dayjs;
+  userId?: number;
 }
 
-const ConsultDateModal: React.FC<ConsultDateModalProps> = ({ onClose }) => {
+const ConsultDateModal: React.FC<ConsultDateModalProps> = ({ onClose, selectedDate, userId }) => {
   const [hour, setHour] = useState('');
   const [minute, setMinute] = useState('');
   const [meridiem, setMeridiem] = useState<'오전' | '오후'>('오전');
   const [location, setLocation] = useState('');
   const [memo, setMemo] = useState('');
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useReactState(false);
 
-  const handleRegister = () => {
-    setIsSuccessModalOpen(true);
+  const handleRegister = async () => {
+    if (!userId) return;
+    const title = '상담';
+    const meetingDate = selectedDate.format('YYYY-MM-DD');
+    const numHour = parseInt(hour || '0', 10);
+    const numMinute = parseInt(minute || '0', 10);
+    const am = meridiem === '오전';
+
+    try {
+      setIsSubmitting(true);
+      await createExpertScheduleForUser(userId, {
+        title,
+        memo,
+        location,
+        meetingDate,
+        hour: numHour,
+        minute: numMinute,
+        am,
+      });
+      setIsSuccessModalOpen(true);
+    } catch (_e) {
+      // TODO: 에러 토스트가 있다면 연결 가능
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
 
@@ -155,8 +182,9 @@ const ConsultDateModal: React.FC<ConsultDateModalProps> = ({ onClose }) => {
             <button
               className='flex justify-center items-center gap-[10px] w-[274px] h-[48px] px-[80px] py-[20px] rounded-[60px] bg-[#1D68FF] border border-[#E3E6EB] text-[#FFF] text-[18px] font-semibold font-[Pretendard] leading-[27px] tracking-[-0.54px] shadow-[0px_0px_5px_5px_rgba(29,104,255,0.05)] cursor-pointer'
               onClick={handleRegister}
+              disabled={isSubmitting}
             >
-              등록
+              {isSubmitting ? '등록 중...' : '등록'}
             </button>
           </div>
         </div>
