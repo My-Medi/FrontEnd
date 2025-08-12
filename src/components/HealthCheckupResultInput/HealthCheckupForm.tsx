@@ -5,15 +5,15 @@ import CustomCheckboxButton from '../Common/CustomCheckboxButton';
 import backSvg from '../../assets/back.svg';
 import { useNavigate } from 'react-router-dom';
 import fileboxIcon from '../../assets/MyHome/Resume/filebox2.svg';
-import { createHealthReport } from '../../apis/healthCheckupApi/healthCheckup';
+import { createHealthReport, getHealthReportCount } from '../../apis/healthCheckupApi/healthCheckup';
 import useHealthReportQuery from '../../hooks/healthCheckup/useHealthReportQuery';
 import { useHealthReportUpdateMutation } from '../../hooks/healthCheckup/useHealthReportMutation';
 import type { HealthCheckupRequest } from '../../types/healthCheckupForm';
 
 const HealthCheckupForm = () => {
-  // 회차 상태 관리
-  const [rounds, setRounds] = useState([1]);
-  const [currentRound, setCurrentRound] = useState(1);
+  // 회차 상태 관리 (서버 count 기반)
+  const [rounds, setRounds] = useState<number[]>([1]);
+  const [currentRound, setCurrentRound] = useState<number>(1);
   // 회차 추가 핸들러
   const onAddRound = () => {
     const next = Math.max(...rounds) + 1;
@@ -24,6 +24,23 @@ const HealthCheckupForm = () => {
   const onSelectRound = (round: number) => {
     setCurrentRound(round);
   };
+
+  // 초기 로드 시 서버에서 총 회차 불러와 UI 세팅
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await getHealthReportCount();
+        const count = res.result ?? 1;
+        const arr = Array.from({ length: Math.max(1, count) }, (_, i) => i + 1);
+        setRounds(arr);
+        setCurrentRound(arr[arr.length - 1]);
+      } catch (e) {
+        console.error('회차 수 조회 실패', e);
+        setRounds([1]);
+        setCurrentRound(1);
+      }
+    })();
+  }, []);
 
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>([]);
@@ -328,21 +345,110 @@ const HealthCheckupForm = () => {
         setMedication(
           interview.onMedication === 'POSITIVE' ? '유' : interview.onMedication ? '무' : '',
         );
-        const lifestyleLabel =
-          interview.lifestyleHabitsStatus === 'SMOKING_CESSATION_NEEDED'
-            ? '금연 필요'
-            : interview.lifestyleHabitsStatus === 'ALCOHOL_REDUCTION_NEEDED'
-              ? '절주 필요'
-              : interview.lifestyleHabitsStatus === 'STRENGTH_TRAINING_NEEDED'
-                ? '근력운동 필요'
-                : interview.lifestyleHabitsStatus === 'PHYSICAL_ACTIVITY_NEEDED'
-                  ? '신체활동 필요'
-                  : '';
-        setLifestyle(lifestyleLabel ? [lifestyleLabel] : []);
+        const statuses = (interview as any).lifestyleHabitsStatuses
+          ? (interview as any).lifestyleHabitsStatuses
+          : ((interview as any).lifestyleHabitsStatus
+              ? [(interview as any).lifestyleHabitsStatus]
+              : []);
+        const mapped = (statuses as string[]).map((s: string) =>
+          s === 'SMOKING_CESSATION_NEEDED' ? '금연 필요'
+          : s === 'ALCOHOL_REDUCTION_NEEDED' ? '절주 필요'
+          : s === 'STRENGTH_TRAINING_NEEDED' ? '근력운동 필요'
+          : '신체활동 필요'
+        );
+        setLifestyle(mapped);
       }
 
       setAdditionalExam(report.hasAdditionalTest ? '해당' : '미해당');
-      // TODO: 추가검사 상세는 필요 시 매핑
+      // 추가검사 상세 매핑
+      const ad = (report as any).additionalTestDto;
+      if (ad && report.hasAdditionalTest) {
+        // B형 간염
+        const hep = ad.b8Hepatitis || {};
+        const hepApplicable = hep.b8hepatitis_applicability
+          ? hep.b8hepatitis_applicability === 'APPLICABLE'
+          : Boolean(hep.surfaceAntigen || hep.surfaceAntibody || hep.b8HepatitisStatus);
+
+        // 우울증
+        const dep = ad.depression as string | undefined;
+        const depApplicable = dep && dep !== 'NOT_APPLICABLE';
+
+        // 인지기능
+        const cog = ad.cognitiveImpairment as string | undefined;
+        const cogApplicable = cog && cog !== 'NOT_APPLICABLE';
+
+        // 골밀도
+        const bone = ad.boneDensityStatus as string | undefined;
+        const boneApplicable = bone && bone !== 'NOT_APPLICABLE';
+
+        // 노인신체기능
+        const sp = ad.elderlyPhysicalFunctionStatus as string | undefined;
+        const spApplicable = sp && sp !== 'NOT_APPLICABLE';
+
+        // 노인기능 평가
+        const sft = ad.elderlyFunctionTest || {};
+        const sftApplicable = sft.elderlyFunctionTest_applicability
+          ? sft.elderlyFunctionTest_applicability === 'APPLICABLE'
+          : Boolean(sft.fallRiskStatus || sft.dailyLifeStatus || sft.vaccinationStatus || sft.urinationDisorderStatus);
+
+        const detailNext: any = {};
+
+        detailNext.hepatitis = {
+          checked: !!hepApplicable,
+          antigenGeneral: hep.surfaceAntigen === 'NORMAL',
+          antigenDetail: hep.surfaceAntigen === 'PRECISION',
+          antibodyGeneral: hep.surfaceAntibody === 'NORMAL',
+          antibodyDetail: hep.surfaceAntibody === 'PRECISION',
+          hasAntibody: hep.b8HepatitisStatus === 'POSITIVE',
+          noAntibody: hep.b8HepatitisStatus === 'NEGATIVE',
+          suspectCarrier: hep.b8HepatitisStatus === 'SUSPECTED_CARRIER',
+          judgement: hep.b8HepatitisStatus === 'UNDETERMINED',
+        };
+
+        detailNext.depression = {
+          checked: !!depApplicable,
+          none: dep === 'NO_SYMPTOMS',
+          mild: dep === 'MILD',
+          moderate: dep === 'MODERATE_SUSPECTED',
+          severe: dep === 'SEVERE_SUSPECTED',
+        };
+
+        detailNext.cognitive = {
+          checked: !!cogApplicable,
+          none: cog === 'NO_ABNORMALITY',
+          suspect: cog === 'IMPAIRMENT_SUSPECTED',
+        };
+
+        detailNext.bone = {
+          checked: !!boneApplicable,
+          normal: bone === 'NORMAL',
+          osteopenia: bone === 'OSTEOPENIA',
+          osteoporosis: bone === 'OSTEOPOROSIS',
+        };
+
+        detailNext.seniorPhysical = {
+          checked: !!spApplicable,
+          normal: sp === 'NORMAL',
+          low: sp === 'DECLINED',
+        };
+
+        detailNext.seniorFunction = {
+          checked: !!sftApplicable,
+          fallRisknormal: sft.fallRiskStatus === 'NORMAL',
+          fallRiskSuspect: sft.fallRiskStatus === 'HIGH_RISK',
+          ADLnormal: sft.dailyLifeStatus === 'NORMAL',
+          ADLSuspect: sft.dailyLifeStatus === 'NEEDS_ASSISTANCE',
+          vaccineInfluenza: sft.vaccinationStatus === 'NEEDS_INFLUENZA',
+          vaccinePneumonia: sft.vaccinationStatus === 'NEEDS_PNEUMOCOCCAL',
+          vaccineNone: sft.vaccinationStatus === 'NO_NEED',
+          urinationNormal: sft.urinationDisorderStatus === 'NORMAL',
+          urinationSuspect: sft.urinationDisorderStatus === 'SUSPECTED',
+        };
+
+        setAdditionalExamDetail(detailNext);
+      } else {
+        setAdditionalExamDetail({});
+      }
     } catch (e) {
       console.error('리포트 데이터 폼 반영 실패', e);
     }
@@ -490,14 +596,12 @@ const HealthCheckupForm = () => {
     // 인터뷰 enum
     const hasPastDisease = history === '유' ? 'POSITIVE' : 'NEGATIVE';
     const onMedication = medication === '유' ? 'POSITIVE' : 'NEGATIVE';
-    const lifestyleStatus: HealthCheckupRequest['interviewDto']['lifestyleHabitsStatus'] =
-      lifestyle.includes('금연 필요')
-        ? 'SMOKING_CESSATION_NEEDED'
-        : lifestyle.includes('절주 필요')
-          ? 'ALCOHOL_REDUCTION_NEEDED'
-          : lifestyle.includes('근력운동 필요')
-            ? 'STRENGTH_TRAINING_NEEDED'
-            : 'PHYSICAL_ACTIVITY_NEEDED';
+    const lifestyleStatuses: HealthCheckupRequest['interviewDto']['lifestyleHabitsStatuses'] = [
+      ...(lifestyle.includes('금연 필요') ? ['SMOKING_CESSATION_NEEDED'] as const : []),
+      ...(lifestyle.includes('절주 필요') ? ['ALCOHOL_REDUCTION_NEEDED'] as const : []),
+      ...(lifestyle.includes('신체활동 필요') ? ['PHYSICAL_ACTIVITY_NEEDED'] as const : []),
+      ...(lifestyle.includes('근력운동 필요') ? ['STRENGTH_TRAINING_NEEDED'] as const : []),
+    ];
 
     const base: HealthCheckupRequest = {
       hospitalName: hospital.trim(),
@@ -546,64 +650,203 @@ const HealthCheckupForm = () => {
       interviewDto: {
         hasPastDisease,
         onMedication,
-        lifestyleHabitsStatus: lifestyleStatus,
+        lifestyleHabitsStatuses: lifestyleStatuses,
       },
       hasAdditionalTest: additionalExam === '해당',
-      // additionalTestDto: 아래에서 조건부로 주입
-      // @ts-expect-error - 조건부로 추가
-      additionalTestDto: undefined,
+      additionalTestDto: {
+        b8Hepatitis: {
+          b8hepatitis_applicability: 'NOT_APPLICABLE',
+          surfaceAntigen: 'NORMAL',
+          surfaceAntibody: 'NORMAL',
+          b8HepatitisStatus: 'UNDETERMINED',
+        },
+        depression: 'NOT_APPLICABLE',
+        cognitiveImpairment: 'NOT_APPLICABLE',
+        boneDensityStatus: 'NOT_APPLICABLE',
+        elderlyPhysicalFunctionStatus: 'NOT_APPLICABLE',
+        elderlyFunctionTest: {
+          elderlyFunctionTest_applicability: 'NOT_APPLICABLE',
+          fallRiskStatus: 'NORMAL',
+          dailyLifeStatus: 'NORMAL',
+          vaccinationStatus: 'NO_NEED',
+          urinationDisorderStatus: 'NORMAL',
+        },
+      },
     };
 
-    // 추가검사 세팅
-    if (additionalExam === '해당') {
-      base.additionalTestDto = {
-        b8Hepatitis: {
-          surfaceAntigen: detail.hepatitis?.antigenGeneral ? 'NORMAL' : 'PRECISION',
-          surfaceAntibody: detail.hepatitis?.antibodyGeneral ? 'NORMAL' : 'PRECISION',
-          b8HepatitisStatus: detail.hepatitis?.hasAntibody
+    // 추가검사 세팅 (NOT_APPLICABLE 기본 → 개별 적용 시 override)
+    const hasAdditional = additionalExam === '해당';
+
+    // B형 간염
+    const hepatitisApplicable = hasAdditional && !!detail.hepatitis?.checked;
+    base.additionalTestDto.b8Hepatitis = {
+      b8hepatitis_applicability: hepatitisApplicable ? 'APPLICABLE' : 'NOT_APPLICABLE',
+      surfaceAntigen: hepatitisApplicable
+        ? (detail.hepatitis?.antigenGeneral ? 'NORMAL' : 'PRECISION')
+        : 'NORMAL',
+      surfaceAntibody: hepatitisApplicable
+        ? (detail.hepatitis?.antibodyGeneral ? 'NORMAL' : 'PRECISION')
+        : 'NORMAL',
+      b8HepatitisStatus: hepatitisApplicable
+        ? (detail.hepatitis?.hasAntibody
             ? 'POSITIVE'
             : detail.hepatitis?.noAntibody
               ? 'NEGATIVE'
               : detail.hepatitis?.suspectCarrier
                 ? 'SUSPECTED_CARRIER'
-                : 'UNDETERMINED',
-        },
-        depression: detail.depression?.none
+                : 'UNDETERMINED')
+        : 'UNDETERMINED',
+    };
+
+    // 우울증
+    const depressionApplicable = hasAdditional && !!detail.depression?.checked;
+    base.additionalTestDto.depression = depressionApplicable
+      ? (detail.depression?.none
           ? 'NO_SYMPTOMS'
           : detail.depression?.mild
             ? 'MILD'
             : detail.depression?.moderate
               ? 'MODERATE_SUSPECTED'
-              : 'SEVERE_SUSPECTED',
-        cognitiveImpairment: detail.cognitive?.none ? 'NO_ABNORMALITY' : 'IMPAIRMENT_SUSPECTED',
-        boneDensityStatus: detail.bone?.normal
+              : 'SEVERE_SUSPECTED')
+      : 'NOT_APPLICABLE';
+
+    // 인지기능
+    const cognitiveApplicable = hasAdditional && !!detail.cognitive?.checked;
+    base.additionalTestDto.cognitiveImpairment = cognitiveApplicable
+      ? (detail.cognitive?.none ? 'NO_ABNORMALITY' : 'IMPAIRMENT_SUSPECTED')
+      : 'NOT_APPLICABLE';
+
+    // 골밀도
+    const boneApplicable = hasAdditional && !!detail.bone?.checked;
+    base.additionalTestDto.boneDensityStatus = boneApplicable
+      ? (detail.bone?.normal
           ? 'NORMAL'
           : detail.bone?.osteopenia
             ? 'OSTEOPENIA'
-            : 'OSTEOPOROSIS',
-        elderlyPhysicalFunctionStatus: detail.seniorPhysical?.normal ? 'NORMAL' : 'DECLINED',
-        elderlyFunctionTest: {
-          fallRiskStatus: detail.seniorFunction?.fallRisknormal ? 'NORMAL' : 'HIGH_RISK',
-          dailyLifeStatus: detail.seniorFunction?.ADLnormal ? 'NORMAL' : 'NEEDS_ASSISTANCE',
-          vaccinationStatus: detail.seniorFunction?.vaccineInfluenza
+            : detail.bone?.osteoporosis
+              ? 'OSTEOPOROSIS'
+              : 'NORMAL')
+      : 'NOT_APPLICABLE';
+
+    // 노인신체기능검사
+    const seniorPhysicalApplicable = hasAdditional && !!detail.seniorPhysical?.checked;
+    base.additionalTestDto.elderlyPhysicalFunctionStatus = seniorPhysicalApplicable
+      ? (detail.seniorPhysical?.normal ? 'NORMAL' : 'DECLINED')
+      : 'NOT_APPLICABLE';
+
+    // 노인기능평가
+    const seniorFunctionApplicable = hasAdditional && !!detail.seniorFunction?.checked;
+    base.additionalTestDto.elderlyFunctionTest = {
+      elderlyFunctionTest_applicability: seniorFunctionApplicable ? 'APPLICABLE' : 'NOT_APPLICABLE',
+      fallRiskStatus: seniorFunctionApplicable
+        ? (detail.seniorFunction?.fallRisknormal ? 'NORMAL' : 'HIGH_RISK')
+        : 'NORMAL',
+      dailyLifeStatus: seniorFunctionApplicable
+        ? (detail.seniorFunction?.ADLnormal ? 'NORMAL' : 'NEEDS_ASSISTANCE')
+        : 'NORMAL',
+      vaccinationStatus: seniorFunctionApplicable
+        ? (detail.seniorFunction?.vaccineInfluenza
             ? 'NEEDS_INFLUENZA'
             : detail.seniorFunction?.vaccinePneumonia
               ? 'NEEDS_PNEUMOCOCCAL'
-              : 'NO_NEED',
-          urinationDisorderStatus: detail.seniorFunction?.urinationNormal ? 'NORMAL' : 'SUSPECTED',
-        },
-      };
-    } else {
-      // @ts-ignore
-      delete base.additionalTestDto;
-    }
+              : 'NO_NEED')
+        : 'NO_NEED',
+      urinationDisorderStatus: seniorFunctionApplicable
+        ? (detail.seniorFunction?.urinationNormal ? 'NORMAL' : 'SUSPECTED')
+        : 'NORMAL',
+    };
 
     return base;
+  };
+
+  // 필수 체크박스/세부옵션 검증
+  const validateRequiredSelections = (): boolean => {
+    const messages: string[] = [];
+
+    // 계측/기본 상태 선택
+    if (!bmiType) messages.push('BMI 상태를 선택해주세요.');
+    if (!waistType) messages.push('허리둘레 상태를 선택해주세요.');
+    if (!hearingLeft) messages.push('청각(좌) 상태를 선택해주세요.');
+    if (!hearingRight) messages.push('청각(우) 상태를 선택해주세요.');
+
+    // 혈압/혈액/신장/간/요검사/영상검사 상태 선택
+    if (!bpType) messages.push('혈압 상태를 선택해주세요.');
+    if (!hemoglobinStatusLabel) messages.push('혈색소 상태를 선택해주세요.');
+    if (!fastingGlucoseTypeLabel) messages.push('공복혈당 상태를 선택해주세요.');
+    if (!lipidProfile) messages.push('지질 프로필 상태를 선택해주세요.');
+    if (!kidneyFunction) messages.push('신장기능 상태를 선택해주세요.');
+    if (!liverFunction) messages.push('간기능 상태를 선택해주세요.');
+    if (!urineProteinType) messages.push('요단백 상태를 선택해주세요.');
+    if (!chestXray) messages.push('흉부촬영 상태를 선택해주세요.');
+
+    // 문진 (과거병력/약물치료/생활습관)
+    if (!history) messages.push('과거병력을 선택해주세요.');
+    if (!medication) messages.push('약물치료 여부를 선택해주세요.');
+    if (!lifestyle || lifestyle.length === 0) messages.push('생활습관을 최소 1개 이상 선택해주세요.');
+    
+
+    // 추가검사 세부 옵션
+    if (additionalExam === '해당') {
+      const d = additionalExamDetail ?? {};
+      if (d.hepatitis?.checked) {
+        if (!d.hepatitis.antigenGeneral && !d.hepatitis.antigenDetail) {
+          messages.push('B형 간염: 표면항원(일반/정밀)을 선택해주세요.');
+        }
+        if (!d.hepatitis.antibodyGeneral && !d.hepatitis.antibodyDetail) {
+          messages.push('B형 간염: 표면항체(일반/정밀)을 선택해주세요.');
+        }
+        if (!d.hepatitis.hasAntibody && !d.hepatitis.noAntibody && !d.hepatitis.suspectCarrier && !d.hepatitis.judgement) {
+          messages.push('B형 간염: 판정을 선택해주세요.');
+        }
+      }
+      if (d.depression?.checked) {
+        if (!d.depression.none && !d.depression.mild && !d.depression.moderate && !d.depression.severe) {
+          messages.push('우울증: 상태를 선택해주세요.');
+        }
+      }
+      if (d.cognitive?.checked) {
+        if (!d.cognitive.none && !d.cognitive.suspect) {
+          messages.push('인지기능장애: 상태를 선택해주세요.');
+        }
+      }
+      if (d.bone?.checked) {
+        if (!d.bone.normal && !d.bone.osteopenia && !d.bone.osteoporosis) {
+          messages.push('골밀도검사: 상태를 선택해주세요.');
+        }
+      }
+      if (d.seniorPhysical?.checked) {
+        if (!d.seniorPhysical.normal && !d.seniorPhysical.low) {
+          messages.push('노인신체기능검사: 상태를 선택해주세요.');
+        }
+      }
+      if (d.seniorFunction?.checked) {
+        const sf = d.seniorFunction;
+        if (!sf.fallRisknormal && !sf.fallRiskSuspect) {
+          messages.push('노인기능평가: 낙상 상태를 선택해주세요.');
+        }
+        if (!sf.ADLnormal && !sf.ADLSuspect) {
+          messages.push('노인기능평가: 일상생활 수행능력을 선택해주세요.');
+        }
+        if (!sf.vaccineInfluenza && !sf.vaccinePneumonia && !sf.vaccineNone) {
+          messages.push('노인기능평가: 예방접종을 선택해주세요.');
+        }
+        if (!sf.urinationNormal && !sf.urinationSuspect) {
+          messages.push('노인기능평가: 배뇨장애를 선택해주세요.');
+        }
+      }
+    }
+
+    if (messages.length > 0) {
+      alert('다음 항목을 선택해주세요:\n- ' + messages.join('\n- '));
+      return false;
+    }
+    return true;
   };
 
   // 저장 버튼 클릭 핸들러
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateRequiredSelections()) return;
     if (!hospital.trim()) {
       alert('병원명을 입력해주세요.');
       return;
@@ -667,6 +910,7 @@ const HealthCheckupForm = () => {
 
   const handleSaveAndGoReport = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    if (!validateRequiredSelections()) return;
     if (!hospital.trim()) {
       alert('병원명을 입력해주세요.');
       return;
@@ -1394,7 +1638,7 @@ const HealthCheckupForm = () => {
 
       {/* 영상검사 섹션 */}
       <div className='mb-3'>
-        <div className='bg-[#DBE6FF] text-[20px] rounded-[14px] px-6 py-2 font-bold text-base mb-3'>
+        <div className='bg-[#DBE6FF] rounded-[14px] px-6 py-2 font-bold text-base mb-3'>
           영상검사
         </div>
         <div className='bg-white rounded-[14px] p-6'>
@@ -1477,31 +1721,21 @@ const HealthCheckupForm = () => {
       />
 
       {/* 저장 버튼 */}
-      <div className='flex justify-center mt-12 gap-4'>
+      <div className='flex justify-center mt-12 gap-[200px]'>
         <button
           type='submit'
-          className='w-[300px] h-[72px] bg-[#FFF] text-black rounded-[60px] text-[24px] font-semibold shadow border border-[#1D68FF] transition'
+          className='w-[300px] h-[72px] bg-[#FFF] text-black rounded-[60px] text-[24px] font-semibold shadow-[0_0_6px_4px_rgba(29,104,255,0.10)] transition'
           onClick={handleSave}
         >
           {reportResponse?.result ? '수정하기' : '저장하기'}
         </button>
         <button
           className='flex h-[72px] px-20 py-5 justify-center items-center gap-[10px] rounded-[60px] bg-[#1D68FF] text-white text-center font-pretendard text-[24px] font-semibold leading-[36px] tracking-[-0.72px]'
-          style={{
-            boxShadow:
-              '0 0 20px 0 rgba(29, 104, 255, 0.00), 0 0 18px 20px rgba(29, 104, 255, 0.01), 0 0 15px 20px rgba(29, 104, 255, 0.03), 0 0 11px 30px rgba(29, 104, 255, 0.06), 0 0 6px 10px rgba(29, 104, 255, 0.10)',
-          }}
           onClick={handleSaveAndGoReport}
         >
-          저장하고 리포트 보기
+          마이메디컬리포트로 확인하기
         </button>
-        {/* <button
-          type='submit'
-          className='w-[400px] h-[72px] bg-[#1D68FF] text-white rounded-[60px] text-[24px] font-semibold shadow hover:bg-blue-600 transition'
-          onClick={handleSave}
-        >
-          {reportResponse?.result ? '수정하기' : '저장하기'}
-        </button> */}
+
       </div>
     </form>
   );

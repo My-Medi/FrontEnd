@@ -1,5 +1,6 @@
 import API from '../axios';
 import type { HealthCheckupRequest, HealthCheckupFormResponse } from '../../types/healthCheckupForm';
+import type { ApiResponse } from '../../types/common';
 
 // 건강리포트 생성 API
 export const createHealthReport = async (data: HealthCheckupRequest): Promise<HealthCheckupFormResponse> => {
@@ -8,12 +9,6 @@ export const createHealthReport = async (data: HealthCheckupRequest): Promise<He
   return response.data;
 };
 
-// 건강리포트 조회 API (필요시)
-export const getHealthReport = async (reportId: string): Promise<HealthCheckupFormResponse> => {
-  // NOTE: BASE_URL already includes /api/v1
-  const response = await API.get(`/users/reports/${reportId}`);
-  return response.data;
-};
 
 // 건강리포트 회차별 조회 API
 export const getHealthReportByRound = async (round: number): Promise<HealthCheckupFormResponse> => {
@@ -29,4 +24,10 @@ export const updateHealthReport = async (
   // NOTE: BASE_URL already includes /api/v1
   const response = await API.patch('/users/reports', data, { params: { round } });
   return response.data;
+};
+
+// 건강리포트 총 회차 수 조회
+export const getHealthReportCount = async (): Promise<ApiResponse<number>> => {
+  const response = await API.get('/users/reports/count');
+  return response.data as ApiResponse<number>;
 };
