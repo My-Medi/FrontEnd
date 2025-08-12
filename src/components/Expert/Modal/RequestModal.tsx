@@ -22,7 +22,6 @@ const RequestModal: React.FC<RequestModalProps> = ({ isOpen, onClose, onBack, ex
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const queryClient = useQueryClient();
-  const maxLength = 200;
 
   useModalScrollLock(isOpen && !showConfirmModal && !showSuccessModal);
 
@@ -96,9 +95,6 @@ const RequestModal: React.FC<RequestModalProps> = ({ isOpen, onClose, onBack, ex
                 <h2 className="text-2xl font-semibold text-[#121218] leading-[1.5] tracking-[-3%]">
                   전문가에게 전달할 요청사항을 적어주세요!
                 </h2>
-                <p className="text-sm font-medium text-[#9DA0A3] leading-[1.714] tracking-[-3%]">
-                  (200자 이내)
-                </p>
               </div>
             </div>
 
@@ -111,7 +107,6 @@ const RequestModal: React.FC<RequestModalProps> = ({ isOpen, onClose, onBack, ex
                   onKeyPress={handleKeyPress}
                   placeholder="ex) 야근이 많은 직장인, 교대 근무, 하루 10시간 앉아 있음, 어떤 관리를 받고 싶어요!"
                   className="w-full h-full resize-none outline-none text-lg font-medium text-[#121218] leading-[1] tracking-[-3%] placeholder-[#9DA0A3] placeholder:text-lg"
-                  maxLength={maxLength}
                 />
               </div>
               

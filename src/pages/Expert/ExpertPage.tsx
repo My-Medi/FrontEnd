@@ -184,6 +184,7 @@ const ExpertPage = () => {
                     careers={[]}
                     organizationName={expert.organizationName}
                     careerResponseDtoList={expert.careerResponseDtoList}
+                    career={expert.career}
                     onClick={() => setSelectedExpert(mapExpertToDetail(expert))} 
                   />
                 );

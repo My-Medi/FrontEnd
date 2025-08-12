@@ -17,6 +17,7 @@ interface ExpertCardProps {
     startDate: string;
     endDate: string;
   }>;
+  career?: string[]; // 서버 요약 문자열 배열
   onClick?: () => void;
 }
 
@@ -27,8 +28,8 @@ const ExpertCard: React.FC<ExpertCardProps> = ({
   slogan,
   description,
   profile,
-  organizationName,
   careerResponseDtoList,
+  career,
   onClick,
 }) => (
   <div
@@ -65,15 +66,51 @@ const ExpertCard: React.FC<ExpertCardProps> = ({
       <div className="text-[18px] font-medium text-[#25282B] text-left leading-[1.71em] w-full whitespace-nowrap overflow-hidden text-ellipsis">
         {description}
       </div>
-      {careerResponseDtoList && careerResponseDtoList.length > 0 ? (
-        <div className="pt-1 text-[14px] font-medium text-[#75787B] leading-[1.71em]">
-          - {careerResponseDtoList[0].companyName}
-        </div>
-      ) : organizationName && (
-        <div className="pt-1 text-[14px] font-medium text-[#75787B] leading-[1.71em]">
-          - {organizationName}
-        </div>
-      )}
+      {(() => {
+        const parseIsoDate = (d?: string) => {
+          if (!d) return null;
+          const m = d.match(/^(\d{4})-(\d{2})-(\d{2})/);
+          if (!m) return null;
+          return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+        };
+        const diffMonths = (start?: string, end?: string): number | null => {
+          const s = parseIsoDate(start);
+          const e = parseIsoDate(end);
+          if (!s || !e) return null;
+          return (e.getFullYear() - s.getFullYear()) * 12 + (e.getMonth() - s.getMonth());
+        };
+        const formatDuration = (months: number | null): string => {
+          if (months === null) return '';
+          const safe = Math.max(months, 0);
+          if (safe < 12) return `${safe}개월`;
+          const years = Math.floor(safe / 12);
+          const remain = safe % 12;
+          return remain > 0 ? `${years}년 ${remain}개월` : `${years}년`;
+        };
+        if (Array.isArray(careerResponseDtoList) && careerResponseDtoList.length > 0) {
+          const c = careerResponseDtoList[0];
+          const duration = formatDuration(diffMonths(c.startDate, c.endDate));
+          const text = `- ${c.companyName}${duration ? ` ${duration}` : ''}`;
+          return <div className="pt-1 text-[14px] font-medium text-[#75787B] leading-[1.71em]">{text}</div>;
+        }
+        if (Array.isArray(career) && career.length > 0) {
+          const raw = career[0];
+          const m = raw.match(/^(.*?)(\d+)\s*개월$/);
+          if (m) {
+            const title = m[1].trim();
+            const monthsNum = Number(m[2]);
+            const safe = Math.max(monthsNum, 0);
+            if (safe >= 12) {
+              const years = Math.floor(safe / 12);
+              const remain = safe % 12;
+              const duration = remain > 0 ? `${years}년 ${remain}개월` : `${years}년`;
+              return <div className="pt-1 text-[14px] font-medium text-[#75787B] leading-[1.71em]">- {title} {duration}</div>;
+            }
+          }
+          return <div className="pt-1 text-[14px] font-medium text-[#75787B] leading-[1.71em]">- {raw}</div>;
+        }
+        return null;
+      })()}
     </div>
   </div>
 );

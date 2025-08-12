@@ -24,6 +24,7 @@ export interface Expert {
   organizationName: string;
   introduction: string;
   profile: string | null;
+  career?: string[]; // 서버에서 문자열 배열로 오는 경력 요약 (예: ["학생 47개월"]) 
   careerResponseDtoList?: CareerResponse[];
 }
 
