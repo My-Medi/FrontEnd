@@ -20,27 +20,27 @@ const Gage: React.FC<GageProps> = ({ nickname, indicators }) => {
   const cautionCount = indicators.filter((i) => i.stage === '주의').length;
 
   let gageImage = safeGage;
-  let percentage = 90;
-  let percentColor = '#64DF48';
+  let percentage = 96;
+  let percentColor = '#1D68FF';
   let text = `${nickname}님의 건강지수는 ${percentage}%로 안심 단계입니다.`;
   let textColor = '#002F8E';
 
   if (cautionCount >= 1 && cautionCount <= 2 && warningCount === 0) {
     gageImage = normalGage;
     percentage = 86;
-    percentColor = '#FC0';
+    percentColor = '#76E15D';
     text = `${nickname}님의 건강지수는 ${percentage}%로 정상 단계입니다.`;
     textColor = '#136A00';
   } else if ((cautionCount >= 3 || warningCount === 1) && warningCount < 2) {
     gageImage = interestGage;
     percentage = 73;
-    percentColor = '#FF732D';
+    percentColor = '#FC0';
     text = `${nickname}님의 건강지수는 ${percentage}%로 관심 단계입니다.`;
     textColor = '#5B3C00';
   } else if (warningCount === 2) {
     gageImage = warnGage;
     percentage = 58;
-    percentColor = '#ED5151';
+    percentColor = '#FF732D';
     text = `${nickname}님의 건강지수는 ${percentage}%로 주의 단계입니다.`;
     textColor = '#923100';
   } else if (warningCount >= 3) {

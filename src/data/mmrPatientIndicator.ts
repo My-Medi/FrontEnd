@@ -5,7 +5,7 @@ export const patientIndicators = {
       title: '체질량지수',
       value: '17.4',
       unit: 'kg/𝑚²',
-      level: '관심',
+      level: '정상',
     },
     {
       id: 'waist',
@@ -21,14 +21,14 @@ export const patientIndicators = {
       title: '수축기혈압',
       value: '125',
       unit: 'mmHg',
-      level: '주의',
+      level: '정상',
     },
     {
       id: 'dbp',
       title: '이완기혈압',
       value: '100',
       unit: 'mmHg',
-      level: '위험',
+      level: '정상',
     },
   ],
   빈혈: [
@@ -37,7 +37,7 @@ export const patientIndicators = {
       title: '혈색소',
       value: '17.2',
       unit: 'g/dL',
-      level: '주의',
+      level: '정상',
     },
   ],
   당뇨병: [
@@ -46,7 +46,7 @@ export const patientIndicators = {
       title: '공복혈당(FBS)',
       value: '150',
       unit: 'mg/dL',
-      level: '주의',
+      level: '정상',
     },
   ],
   이상지질혈증: [
@@ -76,7 +76,7 @@ export const patientIndicators = {
       title: 'LDL-콜레스테롤',
       value: '160',
       unit: 'mg/dL',
-      level: '위험',
+      level: '정상',
     },
   ],
   신장질환: [
