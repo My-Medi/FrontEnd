@@ -5,8 +5,12 @@ import type { ApiResponse } from '../../types/common';
 
 // 토큰 재발급 응답 타입
 export interface TokenReissueResponse {
+  grantType?: string;
   accessToken: string;
   refreshToken: string;
+  accessTokenExpire?: string; // ISO datetime string
+  refreshTokenExpire?: string; // ISO datetime string
+  role?: string; // e.g., "[ROLE_EXPERT]" or "[ROLE_USER]"
 }
 
 // 토큰 관련 API 함수들

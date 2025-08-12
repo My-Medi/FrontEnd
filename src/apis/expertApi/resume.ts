@@ -31,7 +31,8 @@ export interface ResumeUpdateRequest {
  */
 export const getExpertResume = async (): Promise<ApiResponse<ExpertResumeResponse>> => {
   try {
-    const response = await API.get<ApiResponse<ExpertResumeResponse>>('/experts');
+    // 서버 스펙: GET /experts/resume
+    const response = await API.get<ApiResponse<ExpertResumeResponse>>('/experts/resume');
     return response.data;
   } catch (error) {
     throw error;
@@ -45,7 +46,8 @@ export const getExpertResume = async (): Promise<ApiResponse<ExpertResumeRespons
  */
 export const updateExpertResume = async (resumeData: ResumeUpdateRequest): Promise<ApiResponse<any>> => {
   try {
-    const response = await API.patch<ApiResponse<any>>('/experts/resumes', resumeData);
+    // 서버 스펙: PATCH /experts/resume
+    const response = await API.patch<ApiResponse<any>>('/experts/resume', resumeData);
     return response.data;
   } catch (error) {
     throw error;
