@@ -44,21 +44,6 @@ const HealthCheckupForm = () => {
     });
   };
 
-  const handleImageUploadSuccess = (imageUrls: string[], files: File[]) => {
-    console.log('이미지 업로드 성공 - 받은 URLs:', imageUrls);
-    console.log('업로드된 파일들:', files);
-    setUploadedImageUrls(prev => {
-      const newUrls = [...prev, ...imageUrls];
-      console.log('업데이트된 uploadedImageUrls:', newUrls);
-      return newUrls;
-    });
-    setUploadedFiles(prev => {
-      const newFiles = [...prev, ...files];
-      console.log('업데이트된 uploadedFiles:', newFiles);
-      return newFiles;
-    });
-  };
-
   // 파일 선택 핸들러 추가
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;

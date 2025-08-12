@@ -92,6 +92,15 @@ const SignUp: React.FC = () => {
     return emailDomain === "직접입력" ? email : `${email}@${emailDomain}`;
   }, []);
 
+  // 날짜 문자열 정규화: 'YYYY.MM' | 'YYYY.MM.DD' | 'YYYY-MM' | 'YYYY-MM-DD' -> 'YYYY-MM[-DD]'
+  const normalizeDateForApi = useCallback((raw: string): string => {
+    if (!raw) return raw;
+    const replaced = raw.trim().replace(/\./g, '-');
+    if (/^\d{4}-\d{2}-\d{2}$/.test(replaced)) return replaced;
+    if (/^\d{4}-\d{2}$/.test(replaced)) return `${replaced}-01`;
+    return replaced; // 기타 케이스는 치환만 적용
+  }, []);
+
   // 회원가입 데이터를 API 형식으로 변환
   const transformSignUpData = useCallback((): PersonalSignUpRequest => {
     if (!signUpData.birthDate) {
@@ -164,8 +173,8 @@ const SignUp: React.FC = () => {
       introSentence: step3Data.introSentence,
       careers: step3Data.careers.map((career: any) => ({
         ...career,
-        startDate: career.startDate.replace('.', '-') + '-01', // YYYY.MM -> YYYY-MM-01
-        endDate: career.endDate.replace('.', '-') + '-01', // YYYY.MM -> YYYY-MM-01
+        startDate: normalizeDateForApi(career.startDate),
+        endDate: normalizeDateForApi(career.endDate),
       })),
       licenses: step3Data.licenses.map((license: any) => ({
         ...license,
@@ -182,7 +191,7 @@ const SignUp: React.FC = () => {
     });
     
     return apiData;
-  }, [signUpData, expertBasicData, expertStep3Data, generateEmail]);
+  }, [signUpData, expertBasicData, expertStep3Data, generateEmail, normalizeDateForApi]);
 
   // 비밀번호 확인
   const isPasswordValid = useMemo(() => {
@@ -379,8 +388,8 @@ const SignUp: React.FC = () => {
           introSentence: basicData.introSentence,
           careers: step3Data.careers.map((career: any) => ({
             ...career,
-            startDate: career.startDate.replace('.', '-') + '-01', // 2020.01 -> 2020-01-01
-            endDate: career.endDate.replace('.', '-') + '-01',     // 2023.12 -> 2023-12-01
+            startDate: normalizeDateForApi(career.startDate),
+            endDate: normalizeDateForApi(career.endDate),
           })),
           licenses: step3Data.licenses.map((license: any) => ({
             ...license,
@@ -410,7 +419,7 @@ const SignUp: React.FC = () => {
         alert('전문가 정보를 모두 입력해주세요.');
       }
     }
-  }, [isPasswordValid, signUpData, generateEmail, expertSignUpMutation]);
+  }, [isPasswordValid, signUpData, generateEmail, normalizeDateForApi, expertSignUpMutation]);
 
   const handleCheckNickname = useCallback(() => {
     console.log("닉네임 확인:", signUpData.nickname);

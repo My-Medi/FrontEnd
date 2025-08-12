@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import unionSvg from '../../../assets/Expert/Union.svg';
 import CustomCheckboxButton from '../../Common/CustomCheckboxButton';
 import { useAuth } from '../../../contexts/AuthContext';
 import SuccessModal from './SuccessModal';
@@ -268,7 +269,7 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onProfileModalCha
             >
               {/* 프로필 이미지 또는 기본 아이콘 */}
               <img 
-                src="/src/assets/Expert/Union.svg" 
+                src={unionSvg} 
                 alt="프로필 이미지" 
                 className='w-[97.58px] h-[99.6px] object-contain'
               />
