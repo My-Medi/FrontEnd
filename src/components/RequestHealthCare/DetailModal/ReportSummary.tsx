@@ -75,7 +75,8 @@ const ReportSummary: React.FC<ReportProps> = ({
   ldl,
   urineProtein,
 }) => {
-  const hasAnyValue = [
+  const isEmpty = (v: any) => v === undefined || v === null || (typeof v === 'number' && Number.isNaN(v));
+  const hasAnyValue = ![
     bmi,
     waist,
     sp,
@@ -92,8 +93,7 @@ const ReportSummary: React.FC<ReportProps> = ({
     neutralFat,
     ldl,
     urineProtein,
-  ].some((v) => v !== null && v !== undefined);
-
+  ].every(isEmpty);
   return (
     <>
       <div className='w-[817px] font-[Pretendard]'>
@@ -108,18 +108,16 @@ const ReportSummary: React.FC<ReportProps> = ({
           <img src={TotalConstant} alt='전체 기준' className='w-auto h-[34px]' />
         </div>
 
-        {/* 데이터 없을 때 안내 (데스크톱) */}
-        {!hasAnyValue && (
-          <div className='hidden lg:flex w-full items-center justify-center border border-[#DBE6FF] rounded-[12px] px-6 py-8 text-[#75787B] text-[14px] bg-white'>
-            아직 등록된 리포트가 없습니다. (<a href="https://www.figma.com/design/ZmFe2QEJNPkAeQnLL2KIqa/%EB%A7%88%EC%9D%B4%EB%A9%94%EB%94%94_%EA%B3%B5%EC%9C%A0?node-id=1781-11495&t=m2PYYG9shSAlGuVS-4" target="_blank" rel="noreferrer" className='underline'>Figma</a>)
-          </div>
-        )}
-
-        {/* 리포트 요약 부분 */}
-        {hasAnyValue && (
+        {/* 리포트 요약 부분 (데스크톱) */}
         <div className='hidden lg:flex flex-row gap-[36px] pl-[32px]'>
           {/* 왼쪽 */}
-          <div className='flex flex-col gap-4'>
+          <div className={`flex flex-col gap-4 ${!hasAnyValue ? 'flex-1 items-center justify-center' : ''}`}>
+            {!hasAnyValue ? (
+              <div className='text-[#9DA0A3] text-[14px] font-medium leading-6 tracking-[-0.03em] text-center'>
+                아직 등록된 리포트가 없습니다.
+              </div>
+            ) : (
+              <>
             <div className='flex items-start gap-2'>
               <img src={getStatusIcon('안심')} alt='안심' className='w-3 h-3 mt-3' />
               <div className='flex gap-6'>
@@ -184,6 +182,8 @@ const ReportSummary: React.FC<ReportProps> = ({
                 </div>
               </div>
             </div>
+              </>
+            )}
           </div>
 
           {/* 세로 점선 */}
@@ -192,7 +192,13 @@ const ReportSummary: React.FC<ReportProps> = ({
           </div>
 
           {/* 오른쪽 */}
-          <div className='flex flex-col gap-4'>
+          <div className={`flex flex-col gap-4 ${!hasAnyValue ? 'flex-1 items-center justify-center' : ''}`}>
+            {!hasAnyValue ? (
+              <div className='text-[#9DA0A3] text-[14px] font-medium leading-6 tracking-[-0.03em] text-center'>
+                아직 등록된 리포트가 없습니다.
+              </div>
+            ) : (
+              <>
             <div className='flex items-start gap-2'>
               <img src={getStatusIcon('주의')} alt='주의' className='w-3 h-3 mt-3' />
               <div className='flex gap-22'>
@@ -231,9 +237,10 @@ const ReportSummary: React.FC<ReportProps> = ({
                 </p>
               </div>
             </div>
+              </>
+            )}
           </div>
         </div>
-        )}
       </div>
       {/* 제목 - 모바일 */}
       <div className='lg:hidden w-[full] px-[16px] flex justify-between items-start font-[Pretendard] mt-[20px]'>
@@ -249,12 +256,15 @@ const ReportSummary: React.FC<ReportProps> = ({
         <img src={TotalConstant} alt='전체 기준' className='h-[26px] w-auto ml-4 shrink-0' />
       </div>
 
-      {/* 모바일 UI */}
+      {/* 모바일 빈 상태 */}
       {!hasAnyValue && (
-        <div className='lg:hidden w-[calc(100%-20px)] mx-[10px] px-3 py-4 border border-[#DBE6FF] rounded-[12px] text-center text-[#75787B] text-sm bg-white'>
-          아직 등록된 리포트가 없습니다. (<a href="https://www.figma.com/design/ZmFe2QEJNPkAeQnLL2KIqa/%EB%A7%88%EC%9D%B4%EB%A9%94%EB%94%94_%EA%B3%B5%EC%9C%A0?node-id=1781-11495&t=m2PYYG9shSAlGuVS-4" target="_blank" rel="noreferrer" className='underline'>Figma</a>)
+        <div className='lg:hidden w-full px-[16px] py-5 text-center'>
+          <div className='text-[#9DA0A3] text-[14px] font-medium leading-6 tracking-[-0.03em]'>
+            아직 등록된 리포트가 없습니다.
+          </div>
         </div>
       )}
+      {/* 모바일 UI */}
       {hasAnyValue && (
       <div className='flex flex-wrap ml-[10px] items-start lg:hidden gap-x-[20px] gap-y-[24px] justify-center font-[Pretendard]'>
         {[

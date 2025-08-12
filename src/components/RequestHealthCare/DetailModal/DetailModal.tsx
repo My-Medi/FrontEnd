@@ -17,6 +17,7 @@ interface DetailModalProps {
     testDate?: string | null;
     interests?: string[];
     abnormal?: string[];
+    goal?: string | null;
   };
   onClose: () => void;
   onAccept: () => void;
@@ -69,15 +70,15 @@ const HealthDataModal: React.FC<DetailModalProps> = ({ nickname, requestNote, pr
              />
           </div>
           <div className='flex flex-col gap-[32px] w-max-[496px]'>
-            {/* 관리 목표/기대 - 현재는 관심사 목록으로 간단 표기 */}
-            <RequestHealthGoal goal={(profile?.interests || []).join(', ')} />
+            {/* 관리 목표/기대 - goal 매핑 */}
+            <RequestHealthGoal goal={profile?.goal || ''} />
             {/* 최근 건강검진 이상수치 항목 */}
             <AbnormalPart abnormal={profile?.abnormal || []} />
             {/* 리포트 요약 (값 없으면 내부 안내 표시) */}
             <ReportSummary nickname={nickname} />
           </div>
           {/* 하단 버튼 */}
-          <div className='flex flex-col items-center border-[#DBE6FF] pt-8 w-[300px] h-[56px] gap-4 mt-6 mb-[50px]'>
+          <div className='flex flex-col items-center border-[#DBE6FF] pt-8 w-[300px] h-[56px] gap-4 mt-4 mb-[50px]'>
             <div className='flex gap-[96px]'>
               {/* 거절하기 버튼 */}
               <button
@@ -132,14 +133,14 @@ const HealthDataModal: React.FC<DetailModalProps> = ({ nickname, requestNote, pr
               testDate={profile?.testDate || '-'}
               healthInterest={(profile?.interests || []).join(', ')}
             />
-            <RequestHealthGoal goal={(profile?.interests || []).join(', ')} />
+            <RequestHealthGoal goal={profile?.goal || ''} />
             <AbnormalPart abnormal={profile?.abnormal || []} />
             {/* 리포트 요약 (모바일) */}
             <ReportSummary nickname={nickname} />
           </div>
 
           {/* 하단 버튼 */}
-          <div className='flex flex-col items-center mt-6 gap-2'>
+          <div className='flex flex-col items-center mt-10 gap-2'>
             <button
               onClick={() => {
                 onReject();

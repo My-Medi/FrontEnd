@@ -196,6 +196,7 @@ const RequestHealthCareCard: React.FC<RequestHealthCareCardProps> = ({
             weight: userInfoQuery.data?.weight ?? weight,
             testDate: userInfoQuery.data?.reportRegisterDate ?? null,
             interests: userInfoQuery.data?.healthInterests ?? [],
+            goal: userInfoQuery.data?.goal ?? null,
             abnormal: userInfoQuery.data?.abnormalCheckItems ?? [],
           }}
           onClose={() => setIsModalOpen(false)}

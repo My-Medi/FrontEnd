@@ -4,7 +4,10 @@ import type { ExpertUserInfoResponse, ExpertUserInfo } from '../../../../types/c
 
 export const EXP_USER_INFO_QK = 'expertUserInfo';
 
-export function useExpertUserInfo(userId: number | null, status: 'REQUESTED' | 'APPROVED' | 'REJECTED' = 'REQUESTED') {
+export function useExpertUserInfo(
+  userId: number | null,
+  status: 'REQUESTED' | 'APPROVED' | 'REJECTED' | 'ACCEPTED' = 'REQUESTED',
+) {
   return useQuery<ExpertUserInfoResponse, unknown, ExpertUserInfo>({
     queryKey: [EXP_USER_INFO_QK, userId, status],
     queryFn: () => getExpertUserInfo(userId as number, status),

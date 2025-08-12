@@ -46,7 +46,7 @@ export const deleteApprovedConsultation = async (
 // 특정 사용자 정보 (요청서 상세) 조회
 export const getExpertUserInfo = async (
   userId: number,
-  status: 'REQUESTED' | 'APPROVED' | 'REJECTED' = 'REQUESTED',
+  status: 'REQUESTED' | 'APPROVED' | 'REJECTED' | 'ACCEPTED' = 'REQUESTED',
 ): Promise<ExpertUserInfoResponse> => {
   const res = await API.get<ExpertUserInfoResponse>(
     `/experts/users/${userId}/info`,

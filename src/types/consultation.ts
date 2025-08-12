@@ -30,6 +30,7 @@ export interface ExpertUserInfo {
   gender: 'MALE' | 'FEMALE' | string;
   height: number;
   weight: number;
+  goal?: string; // 관리 목표와 기대
   reportRegisterDate: string | null;
   requestNote: string;
   healthInterests: string[];

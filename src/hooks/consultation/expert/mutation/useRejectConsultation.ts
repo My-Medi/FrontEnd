@@ -64,6 +64,8 @@ export function useRejectConsultation(onDone?: () => void, onFail?: (e: Error) =
     onSettled: () => {
       qc.invalidateQueries({ queryKey: [EXP_REQ_QK] });
       qc.invalidateQueries({ queryKey: [EXP_REQ_INF_QK] });
+      // 환자관리(승인된 회원) 목록도 혹시 모를 동기화 목적
+      qc.invalidateQueries({ queryKey: ['acceptedMembers'] });
       onDone?.();
     },
   });
