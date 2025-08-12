@@ -5,6 +5,8 @@ import CustomCheckboxButton from '../Common/CustomCheckboxButton';
 import backSvg from '../../assets/back.svg';
 import { useNavigate } from 'react-router-dom';
 import fileboxIcon from '../../assets/MyHome/Resume/filebox2.svg';
+import { createHealthReport } from '../../apis/healthCheckupApi/healthCheckup';
+import type { HealthCheckupRequest } from '../../types/healthCheckupForm';
 
 
 
@@ -44,20 +46,7 @@ const HealthCheckupForm = () => {
     });
   };
 
-  const handleImageUploadSuccess = (imageUrls: string[], files: File[]) => {
-    console.log('이미지 업로드 성공 - 받은 URLs:', imageUrls);
-    console.log('업로드된 파일들:', files);
-    setUploadedImageUrls(prev => {
-      const newUrls = [...prev, ...imageUrls];
-      console.log('업데이트된 uploadedImageUrls:', newUrls);
-      return newUrls;
-    });
-    setUploadedFiles(prev => {
-      const newFiles = [...prev, ...files];
-      console.log('업데이트된 uploadedFiles:', newFiles);
-      return newFiles;
-    });
-  };
+  // 이미지 업로드 성공 핸들러는 현재 미사용
 
   // 파일 선택 핸들러 추가
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,85 +89,42 @@ const HealthCheckupForm = () => {
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
   const [bmi, setBmi] = useState('');
-  const [bmiType, setBmiType] = useState<string>('정상');
+  const [bmiType, setBmiType] = useState<'정상' | '저체중' | '과체중' | '비만' | ''>('');
   const [waist, setWaist] = useState('');
-  const [waistType, setWaistType] = useState('정상');
+  const [waistType, setWaistType] = useState<'정상' | '복부비만' | ''>('');
   const [bpHigh, setBpHigh] = useState('');
   const [bpLow, setBpLow] = useState('');
-  const [bpType, setBpType] = useState('유질환자');
+  const [bpType, setBpType] = useState<'정상' | '고혈압 전단계' | '고혈압의심' | '유질환자' | ''>('');
 
-  // const [bloodSugar, setBloodSugar] = useState('');
-  // const [bloodSugarType, setBloodSugarType] = useState('정상');
+  const [hemoglobin, setHemoglobin] = useState('');
+  const [hemoglobinStatusLabel, setHemoglobinStatusLabel] = useState<'정상' | '빈혈의심' | '기타'|''>('');
+  const [fastingGlucose, setFastingGlucose] = useState('');
+  const [fastingGlucoseTypeLabel, setFastingGlucoseTypeLabel] = useState<'정상' | '유질환자' | '공복혈당장애 의심' | '당뇨병 의심'|''>('');
   const [cholesterol, setCholesterol] = useState('');
   const [hdl, setHdl] = useState('');
   const [ldl, setLdl] = useState('');
   const [triglyceride, setTriglyceride] = useState('');
-  const [lipidProfile, setLipidProfile] = useState('정상');
+  const [lipidProfile, setLipidProfile] = useState<'정상' | '고콜레스테롤혈증 의심' | '고중성지방혈증 의심' | '낮은 HDL 콜레스테롤 의심' | '유질환자'|''>('');
   const [protein, setProtein] = useState('');
   // const [proteinType, setProteinType] = useState('정상');
   const [serumCreatinine, setSerumCreatinine] = useState('');
 
-    const [kidneyFunction, setKidneyFunction] = useState('정상');
+    const [kidneyFunction, setKidneyFunction] = useState('');
   const [ast, setAst] = useState('');
   const [alt, setAlt] = useState('');
   const [gammaGtp, setGammaGtp] = useState('');
-  const [liverFunction, setLiverFunction] = useState('정상');
+  const [liverFunction, setLiverFunction] = useState<'정상' | '간기능 장애'|''>('');
   // const [urineProtein, setUrineProtein] = useState('');
-  const [urineProteinType, setUrineProteinType] = useState('정상');
-  const [chestXray, setChestXray] = useState('정상');
-  const [history, setHistory] = useState('무');
-  const [medication, setMedication] = useState('무');
+  const [urineProteinType, setUrineProteinType] = useState<'정상' | '경계' | '요단백 의심'|''>('');
+  const [chestXray, setChestXray] = useState<'정상' | '비활동성 폐결핵' | '질환의심' | '기타' | ''>('');
+  const [history, setHistory] = useState('');
+  const [medication, setMedication] = useState('');
   const [lifestyle, setLifestyle] = useState<string[]>([]);
-  const [hearingLeft, setHearingLeft] = useState('정상');
-  const [hearingRight, setHearingRight] = useState('정상');
+  const [hearingLeft, setHearingLeft] = useState<'정상' | '청력 장애'|''>('');
+  const [hearingRight, setHearingRight] = useState<'정상' | '청력 장애'|''>('');
   const [additionalExam, setAdditionalExam] = useState<'해당' | '미해당'>('미해당');
   const [additionalExamDetail, setAdditionalExamDetail] = useState<any>({
-    hepatitis: {
-      checked: true,
-        antigenGeneral: true,
-        antigenDetail: false,
-        antibodyGeneral: true,
-        antibodyDetail: false,
-        hasAntibody: true,
-        noAntibody: false,
-        suspectCarrier: false,
-        judgement: false,
-        },
-    depression: {
-      checked: true,
-      none: true,
-      mild: false,
-      moderate: false,
-      severe: false,
-    },
-    cognitive: {
-      checked: true,
-      none: true,
-      suspect: false,
-    },
-    bone: {
-      checked: true,
-      normal: true,
-      osteopenia: false,
-      osteoporosis: false,
-    },
-    seniorPhysical: {
-      checked: true,
-      normal: true,
-      low: false,
-    },
-    seniorFunction: {
-      checked: true,
-      fallRisknormal: true,
-      fallRiskSuspect: false,
-      ADLnormal: true,
-      ADLSuspect: false,
-      vaccineInfluenza: true,
-      vaccinePneumonia: false,
-      vaccineNone:false,
-      urinationNormal: true,
-      urinationSuspect: false,
-    },
+    
   });
 
   // BMI 계산 함수
@@ -227,10 +173,218 @@ const HealthCheckupForm = () => {
     calculateBMI(height, value);
   };
 
+  // API 요청 데이터 변환
+ // === replace your transformFormDataToAPI() with this ===
+const transformFormDataToAPI = (): HealthCheckupRequest => {
+  // helper
+  const toInt = (v: string) => Number.isFinite(parseInt(v)) ? parseInt(v) : 0;
+  const toNum = (v: string) => Number.isFinite(parseFloat(v)) ? parseFloat(v) : 0;
+  const detail = additionalExamDetail ?? {};
+
+  const heightNum = toNum(height);
+  const weightNum = toNum(weight);
+  const bmiNum = heightNum > 0 ? Number((weightNum / Math.pow(heightNum / 100, 2)).toFixed(1)) : 0;
+
+  // BMI enum
+  let bmiCategory: HealthCheckupRequest["measurementDto"]["bmiCategory"] = "NORMAL";
+  if (bmiNum < 18.5) bmiCategory = "UNDERWEIGHT";
+  else if (bmiNum >= 30) bmiCategory = "OBESE";
+  else if (bmiNum >= 25) bmiCategory = "OVERWEIGHT";
+
+  // 혈압 enum (라벨이 길어서 포함 여부로 매핑)
+  const bpStatus: HealthCheckupRequest["bloodPressureDto"]["bloodPressureStatus"] =
+    bpType.includes("유질환") ? "HYPERTENSIVE_PATIENT" :
+    bpType.includes("전단계") ? "PREHYPERTENSION" :
+    bpType.includes("의심") ? "HYPERTENSION" :
+    "NORMAL";
+
+  // 지질 enum
+  const cholStatus: HealthCheckupRequest["bloodTestDto"]["cholesterolStatus"] =
+    lipidProfile === "정상" ? "NORMAL" :
+    lipidProfile === "고콜레스테롤혈증 의심" ? "HYPER_CHOLESTEROL_EMIA" :
+    lipidProfile === "고중성지방혈증 의심" ? "HIGH_TRIGLYCERIDES" :
+    lipidProfile === "낮은 HDL 콜레스테롤 의심" ? "LOW_HDL_CHOLESTEROL" :
+    "DISEASE";
+
+  // 신장/간 기능 enum
+  const renalStatus: HealthCheckupRequest["bloodTestDto"]["renalFunctionStatus"] =
+    kidneyFunction === "정상" ? "NORMAL" : "RENAL_FUNCTION_IMPAIRMENT";
+  const liverStatus: HealthCheckupRequest["bloodTestDto"]["liverFunctionStatus"] =
+    liverFunction === "정상" ? "NORMAL" : "LIVER_FUNCTION_IMPAIRMENT";
+
+  // 요검사 enum
+  const urineStatus: HealthCheckupRequest["urineTestDto"]["urineTestStatus"] =
+    urineProteinType === "정상" ? "NORMAL" :
+    urineProteinType === "경계" ? "BORDERLINE" : "PROTEINURIA";
+
+  // 흉부 X-ray enum
+  const imagingStatus: HealthCheckupRequest["imagingTestDto"]["imagingTestStatus"] =
+    chestXray === "정상" ? "NORMAL" :
+    chestXray === "비활동성 폐결핵" ? "INACTIVE_PULMONARY_TUBERCULOSIS" :
+    chestXray === "질환의심" ? "DISEASE" : "OTHERS";
+
+  // 혈색소/공복혈당 enum
+  const hemoglobinStatus: HealthCheckupRequest["bloodTestDto"]["hemoglobinStatus"] =
+    hemoglobinStatusLabel === "정상" ? "NORMAL" :
+    hemoglobinStatusLabel === "빈혈의심" ? "SUSPECTED_ANEMIA" : "OTHERS";
+
+  const fastingType: HealthCheckupRequest["bloodTestDto"]["fastingGlucoseType"] =
+    fastingGlucoseTypeLabel === "정상" ? "NORMAL" :
+    fastingGlucoseTypeLabel === "유질환자" ? "DISEASE" :
+    fastingGlucoseTypeLabel.includes("공복혈당장애") ? "IMPAIRED_FASTING_GLUCOSE" :
+    "DIABETES_MELLITUS";
+
+  // 인터뷰 enum
+  const hasPastDisease = history === "유" ? "POSITIVE" : "NEGATIVE";
+  const onMedication = medication === "유" ? "POSITIVE" : "NEGATIVE";
+  const lifestyleStatus: HealthCheckupRequest["interviewDto"]["lifestyleHabitsStatus"] =
+    lifestyle.includes("금연 필요") ? "SMOKING_CESSATION_NEEDED" :
+    lifestyle.includes("절주 필요") ? "ALCOHOL_REDUCTION_NEEDED" :
+    lifestyle.includes("근력운동 필요") ? "STRENGTH_TRAINING_NEEDED" :
+    "PHYSICAL_ACTIVITY_NEEDED";
+
+  const base: HealthCheckupRequest = {
+    hospitalName: hospital.trim(),
+    checkupDate: date, // YYYY-MM-DD
+    measurementDto: {
+      height: Math.max(0, heightNum),
+      weight: Math.max(0, weightNum),
+      bmi: bmiNum,
+      bmiCategory,
+      waist: Math.max(0, toNum(waist)),
+      waistType: waistType === "복부비만" ? "ABDOMINAL_OBESITY" : "NORMAL",
+      vision: "1.0/1.0", // TODO: 필요시 입력 값으로 교체
+      hearingLeft: hearingLeft === "정상" ? "NORMAL" : "SUSPECTED_DISEASE",
+      hearingRight: hearingRight === "정상" ? "NORMAL" : "SUSPECTED_DISEASE",
+    },
+    bloodPressureDto: {
+      systolic: Math.max(0, toInt(bpHigh)),
+      diastolic: Math.max(0, toInt(bpLow)),
+      bloodPressureStatus: bpStatus,
+    },
+    bloodTestDto: {
+      hemoglobin: Math.max(0, toNum(hemoglobin)),
+      hemoglobinStatus,
+      fastingGlucose: Math.max(0, toInt(fastingGlucose)),
+      fastingGlucoseType: fastingType,
+      totalCholesterol: Math.max(0, toInt(cholesterol)),
+      hdl: Math.max(0, toInt(hdl)),
+      triglyceride: Math.max(0, toInt(triglyceride)),
+      ldl: Math.max(0, toInt(ldl)),
+      cholesterolStatus: cholStatus,
+      // UI 라벨 주의: protein = '혈청 크레아티닌', serumCreatinine = 'eGFR'
+      creatinine: Math.max(0, toNum(protein)),
+      egfr: Math.max(0, toInt(serumCreatinine)),
+      renalFunctionStatus: renalStatus,
+      ast: Math.max(0, toInt(ast)),
+      alt: Math.max(0, toInt(alt)),
+      gtp: Math.max(0, toInt(gammaGtp)),
+      liverFunctionStatus: liverStatus,
+    },
+    urineTestDto: {
+      urineTestStatus: urineStatus,
+    },
+    imagingTestDto: {
+      imagingTestStatus: imagingStatus,
+    },
+    interviewDto: {
+      hasPastDisease,
+      onMedication,
+      lifestyleHabitsStatus: lifestyleStatus,
+    },
+    hasAdditionalTest: additionalExam === "해당",
+    // additionalTestDto: 아래에서 조건부로 주입
+    // @ts-expect-error - 조건부로 추가
+    additionalTestDto: undefined,
+  };
+
+  // 추가검사 세팅
+  if (additionalExam === "해당") {
+    base.additionalTestDto = {
+      b8Hepatitis: {
+        surfaceAntigen: detail.hepatitis?.antigenGeneral ? "NORMAL" : "PRECISION",
+        surfaceAntibody: detail.hepatitis?.antibodyGeneral ? "NORMAL" : "PRECISION",
+        b8HepatitisStatus:
+          detail.hepatitis?.hasAntibody ? "POSITIVE" :
+          detail.hepatitis?.noAntibody ? "NEGATIVE" :
+          detail.hepatitis?.suspectCarrier ? "SUSPECTED_CARRIER" : "UNDETERMINED",
+      },
+      depression:
+        detail.depression?.none ? "NO_SYMPTOMS" :
+        detail.depression?.mild ? "MILD" :
+        detail.depression?.moderate ? "MODERATE_SUSPECTED" : "SEVERE_SUSPECTED",
+      cognitiveImpairment:
+        detail.cognitive?.none ? "NO_ABNORMALITY" : "IMPAIRMENT_SUSPECTED",
+      boneDensityStatus:
+        detail.bone?.normal ? "NORMAL" :
+        detail.bone?.osteopenia ? "OSTEOPENIA" : "OSTEOPOROSIS",
+      elderlyPhysicalFunctionStatus:
+        detail.seniorPhysical?.normal ? "NORMAL" : "DECLINED",
+      elderlyFunctionTest: {
+        fallRiskStatus:
+          detail.seniorFunction?.fallRisknormal ? "NORMAL" : "HIGH_RISK",
+        dailyLifeStatus:
+          detail.seniorFunction?.ADLnormal ? "NORMAL" : "NEEDS_ASSISTANCE",
+        vaccinationStatus:
+          detail.seniorFunction?.vaccineInfluenza ? "NEEDS_INFLUENZA" :
+          detail.seniorFunction?.vaccinePneumonia ? "NEEDS_PNEUMOCOCCAL" : "NO_NEED",
+        urinationDisorderStatus:
+          detail.seniorFunction?.urinationNormal ? "NORMAL" : "SUSPECTED",
+      },
+    };
+  } else {
+    // @ts-ignore
+    delete base.additionalTestDto;
+  }
+
+  return base;
+};
+
+
   // 저장 버튼 클릭 핸들러
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert('저장되었습니다!');
+    if (!hospital.trim()) {
+      alert('병원명을 입력해주세요.');
+      return;
+    }
+    if (!date) {
+      alert('검진일을 선택해주세요.');
+      return;
+    }
+    const requiredNumbers = [
+      height,
+      weight,
+      bpHigh,
+      bpLow,
+      hemoglobin,
+      fastingGlucose,
+      cholesterol,
+      hdl,
+      triglyceride,
+      ldl,
+      protein,
+      serumCreatinine,
+      ast,
+      alt,
+      gammaGtp,
+    ];
+    if (requiredNumbers.some((v) => !v || isNaN(parseFloat(v)))) {
+      alert('필수 검사 수치를 모두 입력해주세요.');
+      return;
+    }
+    try {
+      const payload = transformFormDataToAPI();
+      console.log('HealthReport payload:', payload);
+      await createHealthReport(payload);
+      alert('건강리포트가 성공적으로 생성되었습니다.');
+      navigate('/');
+    } catch (error: any) {
+      console.error('건강리포트 생성 실패:', error);
+      console.error('API error response:', error?.response?.data);
+      const apiMessage = error?.response?.data?.message || error?.message || '알 수 없는 오류';
+      alert(`건강리포트 생성에 실패했습니다.\n사유: ${apiMessage}`);
+    }
   };
 
   // 체크박스 다중 선택
@@ -250,6 +404,12 @@ const HealthCheckupForm = () => {
   return (
     <form
       className="mx-auto px-4 bg-white min-h-screen max-w-[1300px]"
+      onSubmit={(e) => e.preventDefault()}
+      onKeyDown={(e) => {
+        if ((e as React.KeyboardEvent<HTMLFormElement>).key === 'Enter') {
+          e.preventDefault();
+        }
+      }}
     >
       {/* 상단 타이틀/뒤로가기 */}
       <div className="flex items-center justify-center w-full py-8 my-8">
@@ -392,7 +552,7 @@ const HealthCheckupForm = () => {
             </div>
             <div className="flex gap-10 ml-50 mb-[24px]">
               {['저체중', '정상', '과체중', '비만'].map((v) => (
-                <CustomCheckboxButton key={v} checked={bmiType === v} onClick={() => setBmiType(v)} label={v} />
+                <CustomCheckboxButton key={v} checked={bmiType === v} onClick={() => setBmiType(v as '저체중' | '정상' | '과체중' | '비만')} label={v} />
               ))}
             </div>
           </div>
@@ -404,7 +564,7 @@ const HealthCheckupForm = () => {
             </div>
             <div className="flex gap-10 ml-50 mb-[24px]">
               {['정상', '복부비만'].map((v) => (
-                <CustomCheckboxButton key={v} checked={waistType === v} onClick={() => setWaistType(v)} label={v} />
+                <CustomCheckboxButton key={v} checked={waistType === v} onClick={() => setWaistType(v as '정상' | '복부비만')} label={v} />
               ))}
             </div>
           </div>
@@ -430,7 +590,7 @@ const HealthCheckupForm = () => {
                       <CustomCheckboxButton 
                         key={v} 
                         checked={hearingLeft === v} 
-                        onClick={() => setHearingLeft(v)} 
+                        onClick={() => setHearingLeft(v as '정상' | '청력 장애')} 
                         label={v} 
                       />
                     ))}
@@ -446,7 +606,7 @@ const HealthCheckupForm = () => {
                       <CustomCheckboxButton 
                         key={v} 
                         checked={hearingRight === v} 
-                        onClick={() => setHearingRight(v)} 
+                        onClick={() => setHearingRight(v as '정상' | '청력 장애')} 
                         label={v} 
                       />
                     ))}
@@ -472,22 +632,22 @@ const HealthCheckupForm = () => {
           <div className="flex flex-col gap-2 ml-50">
             <div className="flex gap-10 mb-[16px]">
               {['정상', '유질환자'].map((v) => (
-                <CustomCheckboxButton key={v} checked={bpType === v} onClick={() => setBpType(v)} label={v} />
+                <CustomCheckboxButton key={v} checked={bpType === v} onClick={() => setBpType(v as '정상' | '유질환자')} label={v} />
               ))}
             </div>
             <div className="mb-[16px]">
               <CustomCheckboxButton 
                 key="고혈압 전단계(수축기 120-139 또는  이완기 80-89)" 
-                checked={bpType === '고혈압 전단계(수축기 120-139 또는  이완기 80-89)'} 
-                onClick={() => setBpType('고혈압 전단계(수축기 120-139 또는  이완기 80-89)')} 
+                checked={bpType === '고혈압 전단계'} 
+                onClick={() => setBpType('고혈압 전단계(수축기 120-139 또는  이완기 80-89)' as '고혈압 전단계' | '고혈압의심' | '유질환자')} 
                 label="고혈압 전단계(수축기 120-139 또는  이완기 80-89)" 
               />
             </div>
             <div>
               <CustomCheckboxButton 
                 key="고혈압의심 (140이상) 또는 90이상"
-                checked={bpType === '고혈압의심 (140이상) 또는 90이상'} 
-                onClick={() => setBpType('고혈압의심 (140이상) 또는 90이상')} 
+                checked={bpType === '고혈압의심'} 
+                onClick={() => setBpType('고혈압의심 (140이상) 또는 90이상' as '고혈압 전단계' | '고혈압의심' | '유질환자')} 
                 label="고혈압의심 (140이상) 또는 90이상" 
               />
             </div>
@@ -505,11 +665,22 @@ const HealthCheckupForm = () => {
           <div className="border-b-2 border-[#DBE6FF]">
             <div className="flex items-center mb-[24px]">
               <label className="w-40 font-medium text-black text-[18px]">혈색소(g/dL)</label>
-              <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="12.3" />
+              <input
+                type="number"
+                className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10"
+                placeholder="12.3"
+                value={hemoglobin}
+                onChange={(e) => setHemoglobin(e.target.value)}
+              />
             </div>
             <div className="flex gap-10 ml-50 mb-[24px]">
               {['정상', '빈혈의심', '기타'].map((v) => (
-                <CustomCheckboxButton key={v} checked={false} onClick={() => {}} label={v} />
+                <CustomCheckboxButton
+                  key={v}
+                  checked={hemoglobinStatusLabel === v}
+                  onClick={() => setHemoglobinStatusLabel(v as '정상' | '빈혈의심' | '기타')}
+                  label={v}
+                />
               ))}
             </div>
           </div>
@@ -517,11 +688,26 @@ const HealthCheckupForm = () => {
           <div className="border-b-2 border-[#DBE6FF]">
             <div className="flex items-center mb-[24px]">
               <label className="w-40 font-medium text-black text-[18px]">공복혈당(mg/dL)</label>
-              <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="85" />
+              <input
+                type="number"
+                className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10"
+                placeholder="85"
+                value={fastingGlucose}
+                onChange={(e) => setFastingGlucose(e.target.value)}
+              />
             </div>
             <div className="flex gap-10 ml-50 mb-[24px]">
               {['정상', '유질환자', '공복혈당장애 의심', '당뇨병 의심'].map((v) => (
-                <CustomCheckboxButton key={v} checked={false} onClick={() => {}} label={v} />
+                <CustomCheckboxButton
+                  key={v}
+                  checked={fastingGlucoseTypeLabel === v}
+                  onClick={() =>
+                    setFastingGlucoseTypeLabel(
+                      v as '정상' | '유질환자' | '공복혈당장애 의심' | '당뇨병 의심'
+                    )
+                  }
+                  label={v}
+                />
               ))}
             </div>
           </div>
@@ -562,7 +748,7 @@ const HealthCheckupForm = () => {
                   <CustomCheckboxButton 
                     key={v} 
                     checked={lipidProfile === v} 
-                    onClick={() => setLipidProfile(v)} 
+                    onClick={() => setLipidProfile(v as '정상' | '고콜레스테롤혈증 의심' | '고중성지방혈증 의심' | '낮은 HDL 콜레스테롤 의심' | '유질환자')} 
                     label={v} 
                   />
                 ))}
@@ -635,7 +821,7 @@ const HealthCheckupForm = () => {
                 <CustomCheckboxButton 
                   key={v} 
                   checked={liverFunction === v} 
-                  onClick={() => setLiverFunction(v)} 
+                  onClick={() => setLiverFunction(v as '정상' | '간기능 장애')} 
                   label={v} 
                 />
               ))}
@@ -655,7 +841,7 @@ const HealthCheckupForm = () => {
             <label className="w-40 font-medium text-black text-[18px]">요단백</label>
             <div className="flex gap-10 ml-15">
               {['정상', '경계', '단백뇨의심'].map((v) => (
-                <CustomCheckboxButton key={v} checked={urineProteinType === v} onClick={() => setUrineProteinType(v)} label={v} />
+                <CustomCheckboxButton key={v} checked={urineProteinType === v} onClick={() => setUrineProteinType(v as '정상' | '경계' | '요단백 의심')} label={v} />
               ))}
             </div>
           </div>
@@ -672,8 +858,13 @@ const HealthCheckupForm = () => {
           <div className="flex items-center mb-2">
             <label className="w-40 font-medium text-black text-[18px]">흉부촬영</label>
             <div className="flex gap-10 ml-15">
-              {['정상', '비활동성 폐결핵', '질환의심', '기타'].map((v) => (
-                <CustomCheckboxButton key={v} checked={chestXray === v} onClick={() => setChestXray(v)} label={v} />
+                {['정상', '비활동성 폐결핵', '질환의심', '기타'].map((v) => (
+                  <CustomCheckboxButton
+                    key={v}
+                    checked={chestXray === v}
+                    onClick={() => setChestXray(v as '정상' | '비활동성 폐결핵' | '질환의심' | '기타')}
+                    label={v}
+                  />
               ))}
             </div>
           </div>
