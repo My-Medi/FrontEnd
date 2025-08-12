@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import ChartClip from '/src/assets/MyMedicalReport/chart-clip.svg';
 import ChartSideClip from '/src/assets/MyMedicalReport/chart-2-clip.svg';
 
@@ -7,7 +8,10 @@ interface MedicalReportProps {
   selectedRound?: number;
 }
 
-const MedicalReport: React.FC<MedicalReportProps> = ({ username = '', selectedRound = '' }) => {
+const MedicalReport: React.FC<MedicalReportProps> = ({ username = '', selectedRound = '' as unknown as number }) => {
+  const navigate = useNavigate();
+  const handleFindExpert = () => navigate('/expert');
+
   return (
     <div className='flex flex-col mt-[20px]'>
       <div className='w-[1301px] max-h-[2600px] flex-shrink-0 rounded-[20px] border-[2px] border-[#DBE6FF] bg-[linear-gradient(157deg,_rgba(161,189,255,0.30)_-0.5%,_rgba(219,230,255,0.30)_85.34%)] flex flex-col items-center pt-[46px] relative'>
@@ -449,7 +453,10 @@ const MedicalReport: React.FC<MedicalReportProps> = ({ username = '', selectedRo
 
           {/* 전문가 찾기 버튼 */}
           <div className='text-center mt-[32px]'>
-            <button className='text-[24px] w-[300px] h-[60px] bg-[#1D68FF] text-white px-[40px] py-[20px] rounded-[60px] font-medium flex items-center justify-center gap-2 mx-auto hover:bg-blue-700 transition-colors'>
+            <button
+              className='text-[24px] w-[300px] h-[60px] bg-[#1D68FF] text-white px-[40px] py-[20px] rounded-[60px] font-medium flex items-center justify-center gap-2 mx-auto hover:bg-blue-700 transition-colors'
+              onClick={handleFindExpert}
+            >
               <div>전문가 찾기</div>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
