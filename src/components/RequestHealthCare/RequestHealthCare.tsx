@@ -15,15 +15,16 @@ const RequestHealthCare: React.FC = () => {
   const approveMut = useApproveConsultation();
   const rejectMut = useRejectConsultation();
   const totalPages = listQuery.data?.totalPages ?? 0;
+  const content = listQuery.data?.content ?? [];
 
   return (
-    <div className='p-8 xl:p-16'>
+    <div className='p-8 xl:p-16 min-h-[60vh]'>
       <div className='flex justify-center'>
         <RequsetHealthHeader expertNickname='튼튼핏' expertName='이수형' />
       </div>
       {/* 로딩 */}
       {listQuery.isLoading && (
-        <div className='p-10 max-w-[900px] mx-auto'>
+        <div className='p-10 max-w-[900px] mx-auto min-h-[40vh]'>
           <HealthCareCardSkeleton />
           <HealthCareCardSkeleton />
           <HealthCareCardSkeleton />
@@ -32,15 +33,15 @@ const RequestHealthCare: React.FC = () => {
 
       {/* 에러 */}
       {listQuery.isError && (
-        <div className='p-10 max-w-[900px] mx-auto'>
+        <div className='p-10 max-w-[900px] mx-auto min-h-[40vh]'>
           <p className='text-center text-red-600'>목록을 불러오지 못했습니다.</p>
         </div>
       )}
 
       {/* 데이터 */}
       {listQuery.isSuccess && (
-        <div className='p-10 max-w-[900px] mx-auto'>
-          {(listQuery.data.content ?? []).map((c) => (
+        <div className='p-10 max-w-[900px] mx-auto min-h-[40vh]'>
+          {content.map((c) => (
             <RequestHealthCareCard
               key={c.consultationId}
               nickname={c.nickname}
@@ -54,6 +55,11 @@ const RequestHealthCare: React.FC = () => {
               onReject={() => rejectMut.mutate(c.consultationId)}
             />
           ))}
+          {content.length === 0 && (
+            <div className='flex items-center justify-center h-[30vh] text-[#9DA0A3] text-[16px] font-medium'>
+              받은 건강관리요청서가 없습니다.
+            </div>
+          )}
         </div>
       )}
       <div className='justify-center'>

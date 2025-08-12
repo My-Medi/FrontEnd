@@ -21,7 +21,7 @@ const PatientManagementList = () => {
   if (isLoading) {
     return (
       <div
-        className='flex flex-col items-center gap-[40px] max-w-[1188px] px-0 py-[50px] rounded-[20px]'
+        className='flex flex-col items-center gap-[40px] max-w-[1188px] px-0 py-[50px] rounded-[20px] min-h-[60vh]'
         style={{
           border: '0.5px solid #FFF',
           background: '#F6F9FF',
@@ -62,7 +62,7 @@ const PatientManagementList = () => {
   if (error) {
     return (
       <div
-        className='flex flex-col items-center gap-[40px] max-w-[1188px] px-0 py-[50px] rounded-[20px]'
+        className='flex flex-col items-center gap-[40px] max-w-[1188px] px-0 py-[50px] rounded-[20px] min-h-[60vh]'
         style={{
           border: '0.5px solid #FFF',
           background: '#F6F9FF',
@@ -82,7 +82,7 @@ const PatientManagementList = () => {
 
   return (
     <div
-      className='flex flex-col items-center gap-[40px] max-w-[1188px] px-0 py-[50px] rounded-[20px]'
+      className='flex flex-col items-center gap-[40px] max-w-[1188px] px-0 py-[50px] rounded-[20px] min-h-[60vh]'
       style={{
         border: '0.5px solid #FFF',
         background: '#F6F9FF',
