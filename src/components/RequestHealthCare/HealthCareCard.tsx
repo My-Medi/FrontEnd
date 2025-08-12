@@ -251,7 +251,7 @@ const RequestHealthCare: React.FC = () => {
             <RequestHealthCareCard
               key={c.consultationId}
               // API 매핑
-              nickname={c.nickname}
+              nickName={c.nickname}
               gender={c.gender} // 'MALE' | 'FEMALE' 그대로 표기 중이면 그대로 전달
               age={Number(c.age)} // UI가 숫자 기대 → 숫자 변환
               height={c.height}
