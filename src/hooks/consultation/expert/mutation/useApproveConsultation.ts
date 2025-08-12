@@ -73,6 +73,8 @@ export function useApproveConsultation(onDone?: () => void, onFail?: (e: Error) 
       qc.invalidateQueries({ queryKey: [EXP_REQ_INF_QK] });
       qc.invalidateQueries({ queryKey: [EXP_APPROVED_QK] });
       qc.invalidateQueries({ queryKey: [EXP_APPROVED_INF_QK] });
+      // 환자관리(승인된 회원) 목록 갱신
+      qc.invalidateQueries({ queryKey: ['acceptedMembers'] });
       onDone?.();
     },
   });

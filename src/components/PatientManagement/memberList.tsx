@@ -21,7 +21,7 @@ const PatientManagementList = () => {
   if (isLoading) {
     return (
       <div
-        className='flex flex-col items-center gap-[40px] max-w-[1188px] px-0 py-[50px] rounded-[20px]'
+        className='flex flex-col items-center gap-[40px] max-w-[1188px] px-0 py-[50px] rounded-[20px] min-h-[60vh]'
         style={{
           border: '0.5px solid #FFF',
           background: '#F6F9FF',
@@ -32,10 +32,27 @@ const PatientManagementList = () => {
         <h2 className="text-[24px] font-semibold leading-[36px] tracking-[-0.72px] text-[#121218] font-['Pretendard']">
           회원 관리
         </h2>
-        <div className='flex flex-col max-w-[1188px] items-start gap-[24px] w-full'>
-          {/* 간단 스켈레톤 */}
+        <div className='flex flex-col max-w-[1188px] items-center gap-[24px] w-full'>
+          {/* 카드 크기에 맞춘 스켈레톤 */}
           {Array.from({ length: MEMBERS_PER_PAGE }).map((_, i) => (
-            <div key={i} className='w-full h-[120px] rounded-[16px] bg-[#E9F0FF] animate-pulse' />
+            <div
+              key={i}
+              className='flex sm:w-[1046px] w-full h-[168px] px-14 items-center gap-[40px] rounded-[20px] bg-white/80'
+              style={{ boxShadow: '0 0 18px 6px rgba(29, 104, 255, 0.05)' }}
+            >
+              {/* 프로필 원형 */}
+              <div className='w-[124px] h-[124px] rounded-full bg-[#E9F0FF] animate-pulse' />
+              {/* 텍스트 영역 */}
+              <div className='flex flex-col justify-center w-[540px] gap-2'>
+                <div className='w-24 h-5 bg-[#E9F0FF] rounded animate-pulse' />
+                <div className='w-40 h-4 bg-[#E9F0FF] rounded animate-pulse' />
+                <div className='w-36 h-4 bg-[#E9F0FF] rounded animate-pulse' />
+                <div className='w-60 h-4 bg-[#E9F0FF] rounded animate-pulse' />
+                <div className='w-72 h-4 bg-[#E9F0FF] rounded animate-pulse' />
+              </div>
+              {/* 화살표 자리 */}
+              <div className='ml-auto mr-[-40px] w-[160px] h-[160px] rounded-full bg-[#E9F0FF] animate-pulse' />
+            </div>
           ))}
         </div>
       </div>
@@ -45,7 +62,7 @@ const PatientManagementList = () => {
   if (error) {
     return (
       <div
-        className='flex flex-col items-center gap-[40px] max-w-[1188px] px-0 py-[50px] rounded-[20px]'
+        className='flex flex-col items-center gap-[40px] max-w-[1188px] px-0 py-[50px] rounded-[20px] min-h-[60vh]'
         style={{
           border: '0.5px solid #FFF',
           background: '#F6F9FF',
@@ -65,7 +82,7 @@ const PatientManagementList = () => {
 
   return (
     <div
-      className='flex flex-col items-center gap-[40px] max-w-[1188px] px-0 py-[50px] rounded-[20px]'
+      className='flex flex-col items-center gap-[40px] max-w-[1188px] px-0 py-[50px] rounded-[20px] min-h-[60vh]'
       style={{
         border: '0.5px solid #FFF',
         background: '#F6F9FF',

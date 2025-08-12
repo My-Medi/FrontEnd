@@ -90,6 +90,7 @@ const MemberCard: React.FC<{ member: Member }> = ({ member }) => {
       )}
       {showConsultReservationModal && (
         <ConsultReservationModal
+          userId={member.userId}
           onClose={(isFromSuccess = false) => {
             setShowConsultReservationModal(false);
             // 성공 모달에서 확인 버튼을 누르면 모든 모달을 닫기

@@ -8,32 +8,25 @@ import ReportSummary from './ReportSummary';
 
 interface DetailModalProps {
   nickname: string;
+  requestNote?: string;
+  profile?: {
+    age: number | string;
+    gender: string;
+    height: number;
+    weight: number;
+    testDate?: string | null;
+    interests?: string[];
+    abnormal?: string[];
+    goal?: string | null;
+  };
   onClose: () => void;
   onAccept: () => void;
   onReject: () => void;
 }
 
-const reportData = {
-  nickname: '하나',
-  bmi: 17.4,
-  waist: 62,
-  sp: 117,
-  dp: 62,
-  fastingBlood: 130,
-  creatinine: 0.9,
-  eGFR: 72,
-  ast: 18,
-  alt: 9,
-  gtp: 17,
-  hemoglobin: 17.2,
-  cholesterol: 100,
-  hdl: 78,
-  neutralFat: 64,
-  ldl: 100,
-  urineProtein: '정상',
-};
+// 리포트 요약 더미 데이터 제거 (빈 상태는 ReportSummary에서 처리)
 
-const HealthDataModal: React.FC<DetailModalProps> = ({ nickname, onClose, onAccept, onReject }) => {
+const HealthDataModal: React.FC<DetailModalProps> = ({ nickname, requestNote, profile, onClose, onAccept, onReject }) => {
   return (
     <>
       <div className='fixed inset-0 bg-black/30 z-40' />
@@ -58,37 +51,34 @@ const HealthDataModal: React.FC<DetailModalProps> = ({ nickname, onClose, onAcce
                 건강 데이터 상세
               </p>
               <p className='text-[#121218] text-[24px] font-semibold font-[Pretendard] leading-[36px] tracking-[-0.72px]'>
-                {(nickname = '하나')} 회원님의 건강관리 요청서
+                {nickname} 회원님의 건강관리 요청서
               </p>
             </div>
           </div>
           <div>
-            <RequestMessage
-              message={`최근 자취를 시작하면서 식사 패턴이 불규칙해졌어요.\n간헐적 단식 중인데, 공복혈당이 높게 나왔고 종종 두통이 있습니다.
-          주 1회 요가를 하고 있지만 체력이 낮은 편입니다.\n건강하게 체중을 감량하고 싶고, 당 수치도 안정시키고 싶어요.`}
-            />
+             <RequestMessage message={requestNote || ''} />
           </div>
           <div>
-            <PatientInfo
-              nickname='하나'
-              gender='여자'
-              age={27}
-              height={168}
-              weight={52}
-              testDate='2023. 06. 15'
-              healthInterest='영양관리, 체중조절, 혈당관리'
-            />
+             <PatientInfo
+               nickname={nickname}
+               gender={profile?.gender || '-'}
+               age={typeof profile?.age === 'number' ? profile!.age : 0}
+               height={profile?.height || 0}
+               weight={profile?.weight || 0}
+               testDate={profile?.testDate || '-'}
+               healthInterest={(profile?.interests || []).join(', ')}
+             />
           </div>
           <div className='flex flex-col gap-[32px] w-max-[496px]'>
-            <RequestHealthGoal
-              goal='식단 플래너 공유, 1:1 메시지 상담, 주간 체크리스트 제공 등 2개월정도 관리 생각하고 있고
-          체중 3kg 감량과 혈당 정상화, 그리고 꾸준한 식단 루틴을 만들고 싶어요!'
-            />
-            <AbnormalPart abnormal={['공복 혈당', 'BMI / 체지방률']} />
-            <ReportSummary {...reportData} />
+            {/* 관리 목표/기대 - goal 매핑 */}
+            <RequestHealthGoal goal={profile?.goal || ''} />
+            {/* 최근 건강검진 이상수치 항목 */}
+            <AbnormalPart abnormal={profile?.abnormal || []} />
+            {/* 리포트 요약 (값 없으면 내부 안내 표시) */}
+            <ReportSummary nickname={nickname} />
           </div>
           {/* 하단 버튼 */}
-          <div className='flex flex-col items-center border-[#DBE6FF] pt-8 w-[300px] h-[56px] gap-4 mt-6 mb-[50px]'>
+          <div className='flex flex-col items-center border-[#DBE6FF] pt-8 w-[300px] h-[56px] gap-4 mt-4 mb-[50px]'>
             <div className='flex gap-[96px]'>
               {/* 거절하기 버튼 */}
               <button
@@ -131,27 +121,26 @@ const HealthDataModal: React.FC<DetailModalProps> = ({ nickname, onClose, onAcce
             </div>
           </div>
 
-          {/* 본문 영역 */}
+          {/* 본문 영역 (모바일) */}
           <div className='flex flex-col gap-4'>
-            <RequestMessage
-              message={`최근 자취를 시작하면서 식사 패턴이 불규칙해졌어요.\n간헐적 단식 중인데, 공복혈당이 높게 나왔고 종종 두통이 있습니다.\n주 1회 요가를 하고 있지만 체력이 낮은 편입니다.\n건강하게 체중을 감량하고 싶고, 당 수치도 안정시키고 싶어요.`}
-            />
+            <RequestMessage message={requestNote || ''} />
             <PatientInfo
-              nickname='하나'
-              gender='여자'
-              age={27}
-              height={168}
-              weight={52}
-              testDate='2023. 06. 15'
-              healthInterest='영양관리, 체중조절, 혈당관리'
+              nickname={nickname}
+              gender={profile?.gender || '-'}
+              age={typeof profile?.age === 'number' ? profile!.age : 0}
+              height={profile?.height || 0}
+              weight={profile?.weight || 0}
+              testDate={profile?.testDate || '-'}
+              healthInterest={(profile?.interests || []).join(', ')}
             />
-            <RequestHealthGoal goal='식단 플래너 공유, 1:1 메시지 상담, 주간 체크리스트 제공 등 2개월정도 관리 생각하고 있고 체중 3kg 감량과 혈당 정상화, 그리고 꾸준한 식단 루틴을 만들고 싶어요!' />
-            <AbnormalPart abnormal={['공복 혈당', 'BMI / 체지방률']} />
-            <ReportSummary {...reportData} />
+            <RequestHealthGoal goal={profile?.goal || ''} />
+            <AbnormalPart abnormal={profile?.abnormal || []} />
+            {/* 리포트 요약 (모바일) */}
+            <ReportSummary nickname={nickname} />
           </div>
 
           {/* 하단 버튼 */}
-          <div className='flex flex-col items-center mt-6 gap-2'>
+          <div className='flex flex-col items-center mt-10 gap-2'>
             <button
               onClick={() => {
                 onReject();

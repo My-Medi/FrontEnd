@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ExpertIntroSection from '../../components/Expert/Intro/ExpertIntroSection';
 import ExpertCategoryFilter from '../../components/Expert/Filter/ExpertCategoryFilter';
 import ExpertCard from '../../components/Expert/Card/ExpertCard';
@@ -50,7 +50,8 @@ const ExpertPage = () => {
   // API 요청용 파라미터 생성
   const getApiParams = () => {
     const params: any = {
-      currentPage,
+      // 서버는 0-based 페이지 인덱스 기대 → UI(1-based) → API(0-based) 변환
+      currentPage: Math.max(currentPage - 1, 0),
       pageSize: CARDS_PER_PAGE,
     };
 
@@ -88,8 +89,15 @@ const ExpertPage = () => {
     setCurrentPage(1); // 페이지도 1페이지로 초기화
   };
 
+  // 팝오버 카테고리 변경 시 항상 첫 페이지로 이동
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategories]);
+
   // API에서 받은 데이터를 그대로 사용 (서버 사이드 필터링)
   const displayList: Expert[] = expertListData?.expertSummaryProfileDtoList || [];
+  
+  console.log('[ExpertPage] list.length =', displayList.length, 'data =', displayList);
   
   // 전문가의 연결 상태 확인
   const getExpertStatus = (expertId: number): 'matched' | 'request' | 'rejected' => {
@@ -176,6 +184,7 @@ const ExpertPage = () => {
                     careers={[]}
                     organizationName={expert.organizationName}
                     careerResponseDtoList={expert.careerResponseDtoList}
+                    career={expert.career}
                     onClick={() => setSelectedExpert(mapExpertToDetail(expert))} 
                   />
                 );

@@ -9,36 +9,36 @@ import DotCol from '@/assets/dotcol.svg';
 
 interface ReportProps {
   nickname: string;
-  bmi: number;
-  waist: number;
+  bmi?: number | null;
+  waist?: number | null;
   /* 수축기 혈압 */
-  sp: number;
+  sp?: number | null;
   /* 이완기 혈압 */
-  dp: number;
+  dp?: number | null;
   /* 공복혈당 */
-  fastingBlood: number;
+  fastingBlood?: number | null;
   /* 혈청 크레아티닌 */
-  creatinine: number;
+  creatinine?: number | null;
   /* eGFR신사구체여과율 */
-  eGFR: number;
+  eGFR?: number | null;
   /* AST */
-  ast: number;
+  ast?: number | null;
   /* ALT */
-  alt: number;
+  alt?: number | null;
   /* 감마-GTP(Y-GTP) */
-  gtp: number;
+  gtp?: number | null;
   /* 혈색소 */
-  hemoglobin: number;
+  hemoglobin?: number | null;
   /* 총 콜레스테롤 */
-  cholesterol: number;
+  cholesterol?: number | null;
   /* HDL-콜레스테롤 */
-  hdl: number;
+  hdl?: number | null;
   /* 중성지방 */
-  neutralFat: number;
+  neutralFat?: number | null;
   /* LDL-콜레스테롤 */
-  ldl: number;
+  ldl?: number | null;
   /* 요단백 */
-  urineProtein: string;
+  urineProtein?: string | null;
 }
 
 const getStatusIcon = (status: string) => {
@@ -75,6 +75,25 @@ const ReportSummary: React.FC<ReportProps> = ({
   ldl,
   urineProtein,
 }) => {
+  const isEmpty = (v: any) => v === undefined || v === null || (typeof v === 'number' && Number.isNaN(v));
+  const hasAnyValue = ![
+    bmi,
+    waist,
+    sp,
+    dp,
+    fastingBlood,
+    creatinine,
+    eGFR,
+    ast,
+    alt,
+    gtp,
+    hemoglobin,
+    cholesterol,
+    hdl,
+    neutralFat,
+    ldl,
+    urineProtein,
+  ].every(isEmpty);
   return (
     <>
       <div className='w-[817px] font-[Pretendard]'>
@@ -89,10 +108,16 @@ const ReportSummary: React.FC<ReportProps> = ({
           <img src={TotalConstant} alt='전체 기준' className='w-auto h-[34px]' />
         </div>
 
-        {/* 리포트 요약 부분 */}
+        {/* 리포트 요약 부분 (데스크톱) */}
         <div className='hidden lg:flex flex-row gap-[36px] pl-[32px]'>
           {/* 왼쪽 */}
-          <div className='flex flex-col gap-4'>
+          <div className={`flex flex-col gap-4 ${!hasAnyValue ? 'flex-1 items-center justify-center' : ''}`}>
+            {!hasAnyValue ? (
+              <div className='text-[#9DA0A3] text-[14px] font-medium leading-6 tracking-[-0.03em] text-center'>
+                아직 등록된 리포트가 없습니다.
+              </div>
+            ) : (
+              <>
             <div className='flex items-start gap-2'>
               <img src={getStatusIcon('안심')} alt='안심' className='w-3 h-3 mt-3' />
               <div className='flex gap-6'>
@@ -157,6 +182,8 @@ const ReportSummary: React.FC<ReportProps> = ({
                 </div>
               </div>
             </div>
+              </>
+            )}
           </div>
 
           {/* 세로 점선 */}
@@ -165,7 +192,13 @@ const ReportSummary: React.FC<ReportProps> = ({
           </div>
 
           {/* 오른쪽 */}
-          <div className='flex flex-col gap-4'>
+          <div className={`flex flex-col gap-4 ${!hasAnyValue ? 'flex-1 items-center justify-center' : ''}`}>
+            {!hasAnyValue ? (
+              <div className='text-[#9DA0A3] text-[14px] font-medium leading-6 tracking-[-0.03em] text-center'>
+                아직 등록된 리포트가 없습니다.
+              </div>
+            ) : (
+              <>
             <div className='flex items-start gap-2'>
               <img src={getStatusIcon('주의')} alt='주의' className='w-3 h-3 mt-3' />
               <div className='flex gap-22'>
@@ -204,6 +237,8 @@ const ReportSummary: React.FC<ReportProps> = ({
                 </p>
               </div>
             </div>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -221,7 +256,16 @@ const ReportSummary: React.FC<ReportProps> = ({
         <img src={TotalConstant} alt='전체 기준' className='h-[26px] w-auto ml-4 shrink-0' />
       </div>
 
+      {/* 모바일 빈 상태 */}
+      {!hasAnyValue && (
+        <div className='lg:hidden w-full px-[16px] py-5 text-center'>
+          <div className='text-[#9DA0A3] text-[14px] font-medium leading-6 tracking-[-0.03em]'>
+            아직 등록된 리포트가 없습니다.
+          </div>
+        </div>
+      )}
       {/* 모바일 UI */}
+      {hasAnyValue && (
       <div className='flex flex-wrap ml-[10px] items-start lg:hidden gap-x-[20px] gap-y-[24px] justify-center font-[Pretendard]'>
         {[
           {
@@ -276,6 +320,7 @@ const ReportSummary: React.FC<ReportProps> = ({
           </div>
         ))}
       </div>
+      )}
     </>
   );
 };

@@ -91,6 +91,30 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
     return mapping[n] || String(n);
   };
 
+  // 경력 기간 계산 유틸 (YYYY-MM-DD 기준)
+  const parseIsoDate = (d?: string) => {
+    if (!d) return null;
+    const m = d.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (!m) return null;
+    return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  };
+
+  const diffMonths = (start?: string, end?: string): number | null => {
+    const s = parseIsoDate(start);
+    const e = parseIsoDate(end);
+    if (!s || !e) return null;
+    return (e.getFullYear() - s.getFullYear()) * 12 + (e.getMonth() - s.getMonth());
+  };
+
+  const formatDuration = (months: number | null): string => {
+    if (months === null) return '';
+    const safe = Math.max(months, 0);
+    if (safe < 12) return `${Math.max(safe, 1)}개월`;
+    const years = Math.floor(safe / 12);
+    const remain = safe % 12;
+    return remain > 0 ? `${years}년 ${remain}개월` : `${years}년`;
+  };
+
 
 
 
@@ -243,11 +267,16 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
                   <div className='w-5 h-5 bg-[#1D68FF] rounded-md' />
                   <div className='text-xl font-medium text-[#121218]'>경력사항</div>
                 </div>
-                <div className='text-base text-[#121218] whitespace-pre-line leading-[1.375] pl-11 font-normal'>
+                <div className='text-base text-[#121218] leading-[1.7] pl-11 font-normal'>
                   {expert.careers && expert.careers.length > 0 ? (
                     expert.careers.map((career) => (
-                      <div key={career.careerId} className='mb-2'>
-                        <div className='font-medium'>- {career.companyName}</div>
+                      <div key={career.careerId} className='mb-3'>
+                        {(() => {
+                          const months = diffMonths(career.startDate, career.endDate);
+                          const duration = formatDuration(months);
+                          const tail = duration ? ` ${duration}` : '';
+                          return <div className='font-medium'>- {career.companyName}{tail}</div>;
+                        })()}
                       </div>
                     ))
                   ) : (

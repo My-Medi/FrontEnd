@@ -6,9 +6,10 @@ import ConsultDateModal from './Date';
 
 interface ConsultReservationModalProps {
   onClose: (isFromSuccess?: boolean) => void;
+  userId?: number;
 }
 
-const ConsultReservationModal: React.FC<ConsultReservationModalProps> = ({ onClose }) => {
+const ConsultReservationModal: React.FC<ConsultReservationModalProps> = ({ onClose, userId }) => {
   const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(null);
   const [isDateModalOpen, setIsDateModalOpen] = useState(false);
 
@@ -73,7 +74,8 @@ const ConsultReservationModal: React.FC<ConsultReservationModalProps> = ({ onClo
             }
             // 뒤로가기 버튼을 누르면 Calendar 모달은 유지하고 memberCardModal로 돌아감
           }} 
-          selectedDate={selectedDate} 
+          selectedDate={selectedDate}
+          userId={userId}
         />
       )}
     </>
