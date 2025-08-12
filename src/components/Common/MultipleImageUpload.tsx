@@ -17,7 +17,7 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
   onUploadSuccess,
   onUploadError,
   accept = 'image/*',
-  maxSize = 5, // 5MB 기본값
+  maxSize = Infinity, // 용량 제한 없음 (요청에 따라 해제)
   maxFiles = 10,
   className = '',
   children,
@@ -55,26 +55,25 @@ export const MultipleImageUpload: React.FC<MultipleImageUploadProps> = ({
   const validateAndUploadFiles = (files: File[]) => {
     if (files.length === 0) return;
 
-    // 파일 개수 검증
+    // 파일 개수 검증 (파일 개수 제한은 유지, 필요 시 Infinity 전달)
     if (files.length > maxFiles) {
       alert(`최대 ${maxFiles}개의 파일만 업로드 가능합니다.`);
       resetFileInput();
       return;
     }
 
-    // 파일 크기 및 타입 검증
+    // 파일 크기 및 타입 검증 (크기 제한 해제)
     const invalidFiles = files.filter(file => {
-      const fileSizeInMB = file.size / (1024 * 1024);
       const isValidType = file.type.startsWith('image/') || 
                          file.type === 'application/pdf' ||
                          file.type === 'application/vnd.hancom.hwp' ||
                          file.type === 'application/msword' ||
                          file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-      return fileSizeInMB > maxSize || !isValidType;
+      return !isValidType; // 크기 제한은 체크하지 않음
     });
 
     if (invalidFiles.length > 0) {
-      alert(`일부 파일이 조건에 맞지 않습니다.\n- 파일 크기: ${maxSize}MB 이하\n- 파일 타입: 이미지, PDF, 한글, Word 파일만`);
+      alert(`일부 파일이 조건에 맞지 않습니다.\n- 파일 타입: 이미지, PDF, 한글, Word 파일만 허용됩니다.`);
       resetFileInput();
       return;
     }
