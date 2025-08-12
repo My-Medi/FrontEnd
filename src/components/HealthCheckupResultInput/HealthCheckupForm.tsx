@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import RoundSelector from './RoundSelector';
 import AdditionalExamSection from './AdditionalExamSection';
 import CustomCheckboxButton from '../Common/CustomCheckboxButton';
@@ -6,6 +6,8 @@ import backSvg from '../../assets/back.svg';
 import { useNavigate } from 'react-router-dom';
 import fileboxIcon from '../../assets/MyHome/Resume/filebox2.svg';
 import { createHealthReport } from '../../apis/healthCheckupApi/healthCheckup';
+import useHealthReportQuery from '../../hooks/healthCheckup/useHealthReportQuery';
+import { useHealthReportUpdateMutation } from '../../hooks/healthCheckup/useHealthReportMutation';
 import type { HealthCheckupRequest } from '../../types/healthCheckupForm';
 
 
@@ -90,6 +92,7 @@ const HealthCheckupForm = () => {
   const [bmiType, setBmiType] = useState<'정상' | '저체중' | '과체중' | '비만' | ''>('');
   const [waist, setWaist] = useState('');
   const [waistType, setWaistType] = useState<'정상' | '복부비만' | ''>('');
+  const [vision, setVision] = useState('');
   const [bpHigh, setBpHigh] = useState('');
   const [bpLow, setBpLow] = useState('');
   const [bpType, setBpType] = useState<'정상' | '고혈압 전단계' | '고혈압의심' | '유질환자' | ''>('');
@@ -124,6 +127,174 @@ const HealthCheckupForm = () => {
   const [additionalExamDetail, setAdditionalExamDetail] = useState<any>({
     
   });
+
+  // 회차별 기존 리포트 조회
+  const { data: reportResponse } = useHealthReportQuery(currentRound, true);
+  const updateMutation = useHealthReportUpdateMutation(currentRound);
+
+  const resetForm = () => {
+    setDate('');
+    setHospital('');
+    setHeight('');
+    setWeight('');
+    setBmi('');
+    setBmiType('');
+    setWaist('');
+    setWaistType('');
+    setVision('');
+    setBpHigh('');
+    setBpLow('');
+    setBpType('');
+    setHemoglobin('');
+    setHemoglobinStatusLabel('');
+    setFastingGlucose('');
+    setFastingGlucoseTypeLabel('');
+    setCholesterol('');
+    setHdl('');
+    setLdl('');
+    setTriglyceride('');
+    setLipidProfile('');
+    setProtein('');
+    setSerumCreatinine('');
+    setKidneyFunction('');
+    setAst('');
+    setAlt('');
+    setGammaGtp('');
+    setLiverFunction('');
+    setUrineProteinType('');
+    setChestXray('');
+    setHistory('');
+    setMedication('');
+    setLifestyle([]);
+    setHearingLeft('');
+    setHearingRight('');
+    setAdditionalExam('미해당');
+    setAdditionalExamDetail({});
+  };
+
+  const applyReportToForm = (report: HealthCheckupRequest) => {
+    try {
+      setDate(report.checkupDate || '');
+      setHospital(report.hospitalName || '');
+
+      const m = report.measurementDto;
+      if (m) {
+        setHeight(m.height != null ? String(m.height) : '');
+        setWeight(m.weight != null ? String(m.weight) : '');
+        setBmi(m.bmi != null ? String(m.bmi) : '');
+        // BMI 타입은 수치로 유추
+        const bmiValue = Number(m.bmi);
+        if (!isNaN(bmiValue)) {
+          if (bmiValue < 18.5) setBmiType('저체중');
+          else if (bmiValue < 23) setBmiType('정상');
+          else if (bmiValue < 25) setBmiType('과체중');
+          else setBmiType('비만');
+        } else {
+          setBmiType('');
+        }
+        setWaist(m.waist != null ? String(m.waist) : '');
+        setWaistType(m.waistType === 'ABDOMINAL_OBESITY' ? '복부비만' : m.waistType ? '정상' : '');
+        setVision(m.vision || '');
+        setHearingLeft(m.hearingLeft === 'NORMAL' ? '정상' : m.hearingLeft ? '청력 장애' : '');
+        setHearingRight(m.hearingRight === 'NORMAL' ? '정상' : m.hearingRight ? '청력 장애' : '');
+      }
+
+      const bp = report.bloodPressureDto;
+      if (bp) {
+        setBpHigh(bp.systolic != null ? String(bp.systolic) : '');
+        setBpLow(bp.diastolic != null ? String(bp.diastolic) : '');
+        const mapBp = bp.bloodPressureStatus;
+        setBpType(
+          mapBp === 'HYPERTENSIVE_PATIENT' ? '유질환자' :
+          mapBp === 'PREHYPERTENSION' ? '고혈압 전단계' :
+          mapBp === 'HYPERTENSION' ? '고혈압의심' :
+          mapBp === 'NORMAL' ? '정상' : ''
+        );
+      }
+
+      const bt = report.bloodTestDto;
+      if (bt) {
+        setHemoglobin(bt.hemoglobin != null ? String(bt.hemoglobin) : '');
+        setHemoglobinStatusLabel(
+          bt.hemoglobinStatus === 'NORMAL' ? '정상' :
+          bt.hemoglobinStatus === 'SUSPECTED_ANEMIA' ? '빈혈의심' :
+          bt.hemoglobinStatus ? '기타' : ''
+        );
+        setFastingGlucose(bt.fastingGlucose != null ? String(bt.fastingGlucose) : '');
+        setFastingGlucoseTypeLabel(
+          bt.fastingGlucoseType === 'NORMAL' ? '정상' :
+          bt.fastingGlucoseType === 'DISEASE' ? '유질환자' :
+          bt.fastingGlucoseType === 'IMPAIRED_FASTING_GLUCOSE' ? '공복혈당장애 의심' :
+          bt.fastingGlucoseType === 'DIABETES_MELLITUS' ? '당뇨병 의심' : ''
+        );
+        setCholesterol(bt.totalCholesterol != null ? String(bt.totalCholesterol) : '');
+        setHdl(bt.hdl != null ? String(bt.hdl) : '');
+        setTriglyceride(bt.triglyceride != null ? String(bt.triglyceride) : '');
+        setLdl(bt.ldl != null ? String(bt.ldl) : '');
+        setLipidProfile(
+          bt.cholesterolStatus === 'NORMAL' ? '정상' :
+          bt.cholesterolStatus === 'HYPER_CHOLESTEROL_EMIA' ? '고콜레스테롤혈증 의심' :
+          bt.cholesterolStatus === 'HIGH_TRIGLYCERIDES' ? '고중성지방혈증 의심' :
+          bt.cholesterolStatus === 'LOW_HDL_CHOLESTEROL' ? '낮은 HDL 콜레스테롤 의심' :
+          bt.cholesterolStatus === 'DISEASE' ? '유질환자' : ''
+        );
+        setProtein(bt.creatinine != null ? String(bt.creatinine) : '');
+        setSerumCreatinine(bt.egfr != null ? String(bt.egfr) : '');
+        setKidneyFunction(bt.renalFunctionStatus === 'NORMAL' ? '정상' : bt.renalFunctionStatus ? '신장기능 이상 의심' : '');
+        setAst(bt.ast != null ? String(bt.ast) : '');
+        setAlt(bt.alt != null ? String(bt.alt) : '');
+        setGammaGtp(bt.gtp != null ? String(bt.gtp) : '');
+        setLiverFunction(bt.liverFunctionStatus === 'NORMAL' ? '정상' : bt.liverFunctionStatus ? '간기능 장애' : '');
+      }
+
+      const urine = report.urineTestDto;
+      if (urine) {
+        setUrineProteinType(
+          urine.urineTestStatus === 'NORMAL' ? '정상' :
+          urine.urineTestStatus === 'BORDERLINE' ? '경계' :
+          urine.urineTestStatus === 'PROTEINURIA' ? '요단백 의심' : ''
+        );
+      }
+
+      const img = report.imagingTestDto;
+      if (img) {
+        setChestXray(
+          img.imagingTestStatus === 'NORMAL' ? '정상' :
+          img.imagingTestStatus === 'INACTIVE_PULMONARY_TUBERCULOSIS' ? '비활동성 폐결핵' :
+          img.imagingTestStatus === 'DISEASE' ? '질환의심' :
+          img.imagingTestStatus === 'OTHERS' ? '기타' : ''
+        );
+      }
+
+      const interview = report.interviewDto;
+      if (interview) {
+        setHistory(interview.hasPastDisease === 'POSITIVE' ? '유' : interview.hasPastDisease ? '무' : '');
+        setMedication(interview.onMedication === 'POSITIVE' ? '유' : interview.onMedication ? '무' : '');
+        const lifestyleLabel =
+          interview.lifestyleHabitsStatus === 'SMOKING_CESSATION_NEEDED' ? '금연 필요' :
+          interview.lifestyleHabitsStatus === 'ALCOHOL_REDUCTION_NEEDED' ? '절주 필요' :
+          interview.lifestyleHabitsStatus === 'STRENGTH_TRAINING_NEEDED' ? '근력운동 필요' :
+          interview.lifestyleHabitsStatus === 'PHYSICAL_ACTIVITY_NEEDED' ? '신체활동 필요' : '';
+        setLifestyle(lifestyleLabel ? [lifestyleLabel] : []);
+      }
+
+      setAdditionalExam(report.hasAdditionalTest ? '해당' : '미해당');
+      // TODO: 추가검사 상세는 필요 시 매핑
+    } catch (e) {
+      console.error('리포트 데이터 폼 반영 실패', e);
+    }
+  };
+
+  useEffect(() => {
+    const report = reportResponse?.result;
+    if (report) {
+      applyReportToForm(report as HealthCheckupRequest);
+    } else {
+      // 해당 회차 데이터 없으면 초기화
+      resetForm();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reportResponse]);
 
   // BMI 계산 함수
   const calculateBMI = (height: string, weight: string) => {
@@ -251,7 +422,7 @@ const transformFormDataToAPI = (): HealthCheckupRequest => {
       bmiCategory,
       waist: Math.max(0, toNum(waist)),
       waistType: waistType === "복부비만" ? "ABDOMINAL_OBESITY" : "NORMAL",
-      vision: "1.0/1.0", // TODO: 필요시 입력 값으로 교체
+      vision: vision.trim(),
       hearingLeft: hearingLeft === "정상" ? "NORMAL" : "SUSPECTED_DISEASE",
       hearingRight: hearingRight === "정상" ? "NORMAL" : "SUSPECTED_DISEASE",
     },
@@ -374,14 +545,20 @@ const transformFormDataToAPI = (): HealthCheckupRequest => {
     try {
       const payload = transformFormDataToAPI();
       console.log('HealthReport payload:', payload);
-      await createHealthReport(payload);
-      alert('건강리포트가 성공적으로 생성되었습니다.');
+      const hasExisting = Boolean(reportResponse?.result);
+      if (hasExisting) {
+        await updateMutation.mutateAsync(payload);
+        alert('건강리포트가 성공적으로 수정되었습니다.');
+      } else {
+        await createHealthReport(payload);
+        alert('건강리포트가 성공적으로 생성되었습니다.');
+      }
       navigate('/');
     } catch (error: any) {
-      console.error('건강리포트 생성 실패:', error);
+      console.error('건강리포트 저장 실패:', error);
       console.error('API error response:', error?.response?.data);
       const apiMessage = error?.response?.data?.message || error?.message || '알 수 없는 오류';
-      alert(`건강리포트 생성에 실패했습니다.\n사유: ${apiMessage}`);
+      alert(`건강리포트 저장에 실패했습니다.\n사유: ${apiMessage}`);
     }
   };
 
@@ -410,10 +587,10 @@ const transformFormDataToAPI = (): HealthCheckupRequest => {
       }}
     >
       {/* 상단 타이틀/뒤로가기 */}
-      <div className="flex items-center justify-center w-full py-8 my-8">
-      <button
+      <div className="relative flex items-center justify-center w-full py-8 my-8">
+        <button
           onClick={handleBack}
-          className="absolute w-[17px] h-[35px] flex items-center justify-center top-[230px] left-[312px]"
+          className="absolute left-4 top-1/2 -translate-y-1/2 w-[17px] h-[35px] flex items-center justify-center z-10"
           aria-label="뒤로가기"
         >
           <img src={backSvg} alt="뒤로가기" className="w-full h-full object-contain" />
@@ -569,7 +746,13 @@ const transformFormDataToAPI = (): HealthCheckupRequest => {
           {/* 시각이상 */}
           <div className="flex items-center">
             <label className="w-40 text-black text-[18px] font-medium">시각이상(좌/우)</label>
-              <input type="text" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="예) 0.9 / 0.8" />
+              <input
+                type="text"
+                className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10"
+                placeholder="예) 0.9 / 0.8"
+                value={vision}
+                onChange={(e) => setVision(e.target.value)}
+              />
           </div>
           {/* 청각이상 */}
           <div className="border-b-2 border-[#DBE6FF]">
@@ -619,11 +802,11 @@ const transformFormDataToAPI = (): HealthCheckupRequest => {
             <div className="flex gap-4 mb-[24px]">
               <div className="flex items-center gap-2">
                 <span className="ml-10 text-[18px]">수축기 혈압</span>
-                <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-10 w-[180px]" placeholder="120" value={bpHigh} onChange={e => setBpHigh(e.target.value)} />
+                <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="120" value={bpHigh} onChange={e => setBpHigh(e.target.value)} />
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-[18px]">이완기 혈압</span>
-                <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-10 w-[200px]" placeholder="80" value={bpLow} onChange={e => setBpLow(e.target.value)} />
+                <input type="number" className="rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10" placeholder="80" value={bpLow} onChange={e => setBpLow(e.target.value)} />
               </div>
             </div>
           </div>
@@ -637,7 +820,7 @@ const transformFormDataToAPI = (): HealthCheckupRequest => {
               <CustomCheckboxButton 
                 key="고혈압 전단계(수축기 120-139 또는  이완기 80-89)" 
                 checked={bpType === '고혈압 전단계'} 
-                onClick={() => setBpType('고혈압 전단계(수축기 120-139 또는  이완기 80-89)' as '고혈압 전단계' | '고혈압의심' | '유질환자')} 
+                onClick={() => setBpType('고혈압 전단계')} 
                 label="고혈압 전단계(수축기 120-139 또는  이완기 80-89)" 
               />
             </div>
@@ -645,7 +828,7 @@ const transformFormDataToAPI = (): HealthCheckupRequest => {
               <CustomCheckboxButton 
                 key="고혈압의심 (140이상) 또는 90이상"
                 checked={bpType === '고혈압의심'} 
-                onClick={() => setBpType('고혈압의심 (140이상) 또는 90이상' as '고혈압 전단계' | '고혈압의심' | '유질환자')} 
+                onClick={() => setBpType('고혈압의심')} 
                 label="고혈압의심 (140이상) 또는 90이상" 
               />
             </div>
@@ -920,7 +1103,7 @@ const transformFormDataToAPI = (): HealthCheckupRequest => {
           className="w-[400px] h-[72px] bg-[#1D68FF] text-white rounded-[60px] text-[24px] font-semibold shadow hover:bg-blue-600 transition"
           onClick={handleSave}
         >
-          저장하기
+          {reportResponse?.result ? '수정하기' : '저장하기'}
         </button>
       </div>
     </form>
