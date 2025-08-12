@@ -8,7 +8,10 @@ interface MedicalReportProps {
   selectedRound?: number;
 }
 
-const MedicalReport: React.FC<MedicalReportProps> = ({ username = '', selectedRound = '' as unknown as number }) => {
+const MedicalReport: React.FC<MedicalReportProps> = ({
+  username = '',
+  selectedRound = '' as unknown as number,
+}) => {
   const navigate = useNavigate();
   const handleFindExpert = () => navigate('/expert');
 
