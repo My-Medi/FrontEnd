@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Header from '../components/MyMedicalReport/header';
 import Chart from '../components/MyMedicalReport/body/Chart';
+import Header from '../components/Common/MyMedicalReportHeader';
 
 const MyMedicalReport: React.FC = () => {
   const [rounds, setRounds] = useState<number[]>([1, 2]); // 회차 리스트
