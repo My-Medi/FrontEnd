@@ -6,7 +6,11 @@ import { getColorIndicesForDate } from '../Calendar/calendarUtils';
 import { useExpertMonthlySchedules } from '../../../hooks/experts/queries/useExpertSchedules';
 import ExpertScheduleCardSkeleton from './ExpertScheduleCardSkeleton';
 
-const ExpertSchedule: React.FC = () => {
+interface Props {
+  onGoPatientManagement?: () => void;
+}
+
+const ExpertSchedule: React.FC<Props> = ({ onGoPatientManagement }) => {
   const { data, isFetching } = useExpertUpcomingSchedules(true);
   const nearestSchedule = data?.result?.[0] ?? null;
 
@@ -68,7 +72,7 @@ const ExpertSchedule: React.FC = () => {
       <div className="flex justify-end -mt-5 lg:-mt-5 md:-mt-4 sm:-mt-3 lg:flex md:hidden sm:hidden">
         <ActionButton 
           text="환자 관리보기" 
-          onClick={() => console.log('환자 관리보기 클릭')}
+          onClick={() => (onGoPatientManagement ? onGoPatientManagement() : undefined)}
         />
       </div>
     </div>

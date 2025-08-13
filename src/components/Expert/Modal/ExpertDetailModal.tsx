@@ -60,6 +60,10 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
   };
 
   const handleRequestClick = () => {
+    if (expertStatus === 'rejected') {
+      // 거절된 전문가에게는 요청 불가
+      return;
+    }
     if (expertStatus === 'request') {
       // 요청 상태일 때는 재요청 확인 모달 먼저 표시
       setShowReRequestModal(true);
@@ -316,7 +320,8 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
                 </button>
                 <button
                   onClick={handleRequestClick}
-                  className='w-[300px] h-14 rounded-full bg-[#1D68FF] text-white text-xl font-semibold transition cursor-pointer shadow-[0px_0px_1px_3px_rgba(29,104,255,0.03),0px_0px_2px_3px_rgba(29,104,255,0.02),0px_0px_3px_3px_rgba(29,104,255,0.01),0px_0px_4px_0px_rgba(29,104,255,0)]'
+                  disabled={expertStatus === 'rejected'}
+                  className='w-[300px] h-14 rounded-full bg-[#1D68FF] text-white text-xl font-semibold transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-[0px_0px_1px_3px_rgba(29,104,255,0.03),0px_0px_2px_3px_rgba(29,104,255,0.02),0px_0px_3px_3px_rgba(29,104,255,0.01),0px_0px_4px_0px_rgba(29,104,255,0)]'
                 >
                   {expertStatus === 'request' ? '다시 요청서 보내기' : '건강관리요청서 보내기'}
                 </button>

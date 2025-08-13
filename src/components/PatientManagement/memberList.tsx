@@ -4,7 +4,7 @@ import Pagination from '../Expert/Intro/Pagination';
 import { useAcceptedMembersQuery } from '../../hooks/experts/queries/useAcceptedConsultations';
 import type { AcceptedMember } from '../../types/expert/consultation';
 
-const MEMBERS_PER_PAGE = 3; // 스펙: 3개씩
+const MEMBERS_PER_PAGE = 6; // 스펙: 6개씩
 
 const PatientManagementList = () => {
   const [currentPage, setCurrentPage] = useState(1);

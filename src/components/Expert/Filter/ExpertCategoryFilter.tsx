@@ -8,7 +8,7 @@ interface ExpertCategoryFilterProps {
 
 const categories = [
   { label: "전체", value: "전체" },
-  { label: getSpecialtyKoreanName('WELLNESS_COACH'), value: getSpecialtyKoreanName('WELLNESS_COACH') },
+  { label: `${getSpecialtyKoreanName('WELLNESS_COACH')}(정신건강)`, value: getSpecialtyKoreanName('WELLNESS_COACH') },
   { label: getSpecialtyKoreanName('HEALTH_MANAGER'), value: getSpecialtyKoreanName('HEALTH_MANAGER') },
   { label: getSpecialtyKoreanName('NUTRITIONIST'), value: getSpecialtyKoreanName('NUTRITIONIST') },
   { label: getSpecialtyKoreanName('EXERCISE_THERAPIST'), value: getSpecialtyKoreanName('EXERCISE_THERAPIST') },
@@ -21,15 +21,9 @@ const ExpertCategoryFilter: React.FC<ExpertCategoryFilterProps> = ({ selected, o
         key={cat.value}
         className={
           selected === cat.value
-            ? "bg-[#1D68FF] text-white rounded-full px-[4.5rem] py-[0.7rem] border border-[#1D68FF] shadow transition whitespace-nowrap text-lg"
-            : "bg-white text-[#25282B] rounded-full px-[4.5rem] py-[0.7rem] border border-[#DBE6FF] shadow transition whitespace-nowrap text-lg"
+            ? "bg-[#1D68FF] text-white rounded-full px-[4.5rem] py-[0.7rem] border border-[#1D68FF] shadow transition whitespace-nowrap text-lg font-medium font-pretendard leading-9 tracking-[-0.03em] text-center"
+            : "bg-white text-[#25282B] rounded-full px-[4.5rem] py-[0.7rem] border border-[#DBE6FF] shadow transition whitespace-nowrap text-lg font-medium font-pretendard leading-9 tracking-[-0.03em] text-center"
         }
-        style={{
-          fontFamily: "Pretendard, sans-serif",
-          fontWeight: 400,
-          fontStyle: "normal",
-          textAlign: "center",
-        }}
         onClick={() => onSelect(cat.value)}
         type="button"
       >

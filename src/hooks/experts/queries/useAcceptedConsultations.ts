@@ -7,7 +7,7 @@ interface Props {
   enabled?: boolean;
 }
 
-export const useAcceptedMembersQuery = ({ page = 1, size = 3, enabled = true }: Props = {}) => {
+export const useAcceptedMembersQuery = ({ page = 1, size = 6, enabled = true }: Props = {}) => {
   const apiPage = Math.max(0, page - 1);
   return useQuery({
     queryKey: ['acceptedMembers', apiPage, size],
