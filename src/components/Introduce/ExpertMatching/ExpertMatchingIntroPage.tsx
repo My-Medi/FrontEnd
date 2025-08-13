@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../contexts/AuthContext';
 import ServiceIntroPage from '../Common/ServiceIntroPage';
 import BackgroundBlur from '../Common/BackgroundBlur';
 import LoadingSpinner from '../../Common/LoadingSpinner';
@@ -9,6 +10,8 @@ import matchingImage from '../../../assets/Introduce/Matching/m.svg';
 
 const ExpertMatchingIntroPage: React.FC = () => {
   const navigate = useNavigate();
+  const { userType } = useAuth();
+  const isExpert = userType === 'expert';
   const [imagesLoaded, setImagesLoaded] = useState(false);
 
 
@@ -44,7 +47,7 @@ const ExpertMatchingIntroPage: React.FC = () => {
       { text: '전문가의 한줄 조언으로 나의 건강관리 기준을 명확하게!' }
     ],
     ctaDescription: '마이메디를 통해 나에게 꼭 맞는 전문적 조언과 실질적 도움으로\n나의 몸을 더 건강하게 장기적으로 관리해보세요!',
-    onCTAClick: () => navigate('/expert'),
+    onCTAClick: () => { if (!isExpert) navigate('/expert'); },
     combinedImageSrc: matchingImage,
     combinedImageAlt: 'Expert Matching Features',
     combinedImageWidth: '100%',
