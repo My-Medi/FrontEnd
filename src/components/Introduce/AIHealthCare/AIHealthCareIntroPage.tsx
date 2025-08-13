@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../contexts/AuthContext';
 import ServiceIntroPage from '../Common/ServiceIntroPage';
 import BackgroundBlur from '../Common/BackgroundBlur';
 import LoadingSpinner from '../../Common/LoadingSpinner';
@@ -9,6 +10,8 @@ import aiHealthCareImage from '../../../assets/Introduce/AIHealthCare/llm.svg';
 
 const AIHealthCareIntroPage: React.FC = () => {
   const navigate = useNavigate();
+  const { userType } = useAuth();
+  const isExpert = userType === 'expert';
   const [imagesLoaded, setImagesLoaded] = useState(false);
 
 
@@ -55,7 +58,7 @@ const AIHealthCareIntroPage: React.FC = () => {
       { text: '생활 속 건강관리의 주요 포인트를 안내하여 효과적인 건강관리 방향성 제시' }
     ],
     ctaDescription: '마이메디로 나의 건강검진결과를 모아보고 자동분석으로 쉽게 이해하고\n나의 몸을 더 건강하게 장기적으로 관리해보세요!',
-    onCTAClick: () => navigate('/health-terms'),
+    onCTAClick: () => { if (!isExpert) navigate('/health-terms'); },
     combinedImageSrc: aiHealthCareImage,
     combinedImageAlt: 'AI Health Care Features',
     combinedImageWidth: '100%',

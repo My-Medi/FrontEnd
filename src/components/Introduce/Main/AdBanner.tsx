@@ -1,5 +1,6 @@
 import React, { useMemo, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../contexts/AuthContext';
 import bg1 from '../../../assets/Introduce/1.png';
 import bg2 from '../../../assets/Introduce/2.png';
 import bg3 from '../../../assets/Introduce/3.png';
@@ -28,6 +29,8 @@ const ArrowIcon: React.FC<{ className?: string }> = ({ className }) => (
 
 const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) => {
   const navigate = useNavigate();
+  const { userType } = useAuth();
+  const isExpert = userType === 'expert';
 
   // 현재 표시될 배경 이미지 로딩 상태 (초기/변경 시 빠른 표시)
   const [isCurrentImageLoaded, setIsCurrentImageLoaded] = useState<boolean>(false);
@@ -164,7 +167,7 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
       {/* 두 번째 배너에만 버튼 표시 */}
       {isCurrentImageLoaded && variant === '2' && (
         <div className="relative z-10 flex flex-col justify-end items-start h-full pb-[6.7rem] xl:pb-[6.7rem] pl-[1rem] xl:pl-[7.3rem] md:pb-16 md:pl-5 md:justify-end sm:pb-12 sm:pl-7 sm:justify-end">
-          <CTAButton>
+          <CTAButton onClick={() => { if (!isExpert) navigate('/health-result-input'); }}>
             <span className="xl:text-xl md:text-lg sm:text-base">지금 바로 건강 기록하기</span>
             <ArrowIcon className="xl:w-[0.5rem] xl:h-[1rem] md:w-2 md:h-4 sm:w-1.5 sm:h-3" />
           </CTAButton>
@@ -174,7 +177,7 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
       {/* 세 번째 배너에만 버튼 표시 */}
       {isCurrentImageLoaded && variant === '3' && (
         <div className="relative z-10 flex flex-col justify-end items-start h-full pb-[6.7rem] xl:pb-[6.7rem] pl-[7.4rem] xl:pl-[7.4rem] md:pb-16 md:pl-8.5 md:justify-end sm:pb-12 sm:pl-6.5 sm:justify-end">
-          <CTAButton onClick={() => navigate('/expert')}>
+          <CTAButton onClick={() => (!isExpert ? navigate('/expert') : undefined)}>
             <span className="xl:text-xl md:text-lg sm:text-base">전문가 찾기</span>
             <ArrowIcon className="xl:w-[0.5rem] xl:h-[1rem] md:w-2 md:h-4 sm:w-1.5 sm:h-3" />
           </CTAButton>

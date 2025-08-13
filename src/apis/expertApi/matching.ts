@@ -15,10 +15,11 @@ export const cancelConsultation = async (consultationId: number): Promise<void> 
 // 전문가에게 상담 요청
 export const requestConsultation = async (expertId: number, comment: string): Promise<any> => {
   try {
-    // 서버가 쿼리스트링 대신 JSON 본문을 기대하는 경우 400을 방지
+    // 서버 스펙: comment를 쿼리스트링으로 전달
     const response = await axiosInstance.post(
       `/users/consultations/experts/${expertId}`,
-      { comment }
+      undefined,
+      { params: { comment } }
     );
     return response.data;
   } catch (error) {
