@@ -229,7 +229,7 @@ const FileUploadSection: React.FC<FileUploadSectionProps> = ({
 
         {/* 기존 업로드된 파일들 */}
         {existingFiles.map((file, index) => (
-          <div key={file.licenseImageId} className={`${itemWidthClass} h-auto min-h-[2.6rem] xl:h-[2.6rem] bg-[#F0F4FF] rounded-[0.525rem] xl:rounded-[0.525rem] flex items-center justify-between px-4 xl:px-[0.9rem]`}>
+          <div key={file.licenseImageId} className={`${itemWidthClass} h-auto min-h-[2.6rem] xl:h-[2.6rem] bg-[rgba(219,230,255,0.5)] rounded-[0.525rem] xl:rounded-[0.525rem] flex items-center justify-between px-4 xl:px-[0.9rem]`}>
             <div className="flex items-center gap-4 xl:gap-[0.9rem]">
               <span className="text-sm xl:text-sm font-medium text-[#25282B] font-pretendard leading-[1.714] tracking-[-0.03em]">
                 {file.imageTitle || `${newFileTitlePrefix} ${index + 1}`}
@@ -253,7 +253,7 @@ const FileUploadSection: React.FC<FileUploadSectionProps> = ({
 
         {/* 새로 업로드된 파일들 */}
         {uploadedFiles.map((file, index) => (
-          <div key={`${file.name}-${index}`} className={`${itemWidthClass} h-auto min-h-[2.6rem] xl:h-[2.6rem] bg-[#DBE6FF] rounded-[0.525rem] xl:rounded-[0.525rem] flex items-center justify-between px-4 xl:px-[0.9rem]`}>
+          <div key={`${file.name}-${index}`} className={`${itemWidthClass} h-auto min-h-[2.6rem] xl:h-[2.6rem] bg-[rgba(219,230,255,0.5)] rounded-[0.525rem] xl:rounded-[0.525rem] flex items-center justify-between px-4 xl:px-[0.9rem]`}>
             <div className="flex items-center gap-4 xl:gap-[0.9rem]">
               <span className="text-sm xl:text-sm font-medium text-[#25282B] font-pretendard leading-[1.714] tracking-[-0.03em]">{file.name}</span>
             </div>

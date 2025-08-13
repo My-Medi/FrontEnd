@@ -19,6 +19,7 @@ interface DetailModalProps {
     abnormal?: string[];
     goal?: string | null;
   };
+  summary?: any;
   onClose: () => void;
   onAccept: () => void;
   onReject: () => void;
@@ -30,6 +31,7 @@ const HealthDataModal: React.FC<DetailModalProps> = ({
   nickname,
   requestNote,
   profile,
+  summary,
   onClose,
   onAccept,
   onReject,
@@ -86,7 +88,7 @@ const HealthDataModal: React.FC<DetailModalProps> = ({
             {/* 최근 건강검진 이상수치 항목 */}
             <AbnormalPart abnormal={profile?.abnormal || []} />
             {/* 리포트 요약 (값 없으면 내부 안내 표시) */}
-            <ReportSummary nickname={nickname} />
+            <ReportSummary nickname={nickname} summary={summary} />
           </div>
           {/* 하단 버튼 */}
           <div className='flex flex-col items-center border-[#DBE6FF] pt-8 w-[300px] h-[56px] gap-4 mt-4 mb-[50px]'>
@@ -147,7 +149,7 @@ const HealthDataModal: React.FC<DetailModalProps> = ({
             <RequestHealthGoal goal={profile?.goal || ''} />
             <AbnormalPart abnormal={profile?.abnormal || []} />
             {/* 리포트 요약 (모바일) */}
-            <ReportSummary nickname={nickname} />
+            <ReportSummary nickname={nickname} summary={summary} />
           </div>
 
           {/* 하단 버튼 */}

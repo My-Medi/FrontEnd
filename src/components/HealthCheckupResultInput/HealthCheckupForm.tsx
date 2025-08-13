@@ -3,8 +3,9 @@ import RoundSelector from './RoundSelector';
 import AdditionalExamSection from './AdditionalExamSection';
 import CustomCheckboxButton from '../Common/CustomCheckboxButton';
 import backSvg from '../../assets/back.svg';
-import { useNavigate } from 'react-router-dom';
-import fileboxIcon from '../../assets/MyHome/Resume/filebox2.svg';
+import { useNavigate, useLocation } from 'react-router-dom';
+import FileUploadSection from '../Common/FileUploadSection';
+import { useExpertUserReportByRound } from '../../hooks/consultation/expert/queries/useExpertUserReportByRound';
 import { createHealthReport, getHealthReportCount } from '../../apis/healthCheckupApi/healthCheckup';
 import useHealthReportQuery from '../../hooks/healthCheckup/useHealthReportQuery';
 import { useHealthReportUpdateMutation } from '../../hooks/healthCheckup/useHealthReportMutation';
@@ -13,10 +14,15 @@ import SuccessModal from '../MyHome/Edit/SuccessModal';
 import ConfirmModal from '../MyHome/Edit/ConfirmModal';
 
 const HealthCheckupForm = () => {
+  const location = useLocation();
+  const search = new URLSearchParams(location.search);
+  const externalUserId = search.get('userId');
+  const externalRound = search.get('round');
+
   // 회차 상태 관리 (서버 count 기반)
   const [rounds, setRounds] = useState<number[]>([1]);
   const [serverRoundCount, setServerRoundCount] = useState<number>(1);
-  const [currentRound, setCurrentRound] = useState<number>(1);
+  const [currentRound, setCurrentRound] = useState<number>(externalRound ? parseInt(externalRound) : 1);
   // 회차 추가 핸들러
   const onAddRound = () => {
     const currentMax = Math.max(...rounds);
@@ -43,18 +49,17 @@ const HealthCheckupForm = () => {
         const arr = Array.from({ length: Math.max(1, count) }, (_, i) => i + 1);
         setRounds(arr);
         setServerRoundCount(Math.max(1, count));
-        setCurrentRound(arr[arr.length - 1]);
+        if (!externalRound) setCurrentRound(arr[arr.length - 1]);
       } catch (e) {
         console.error('회차 수 조회 실패', e);
         setRounds([1]);
         setServerRoundCount(1);
-        setCurrentRound(1);
+        if (!externalRound) setCurrentRound(1);
       }
     })();
-  }, []);
+  }, [externalRound]);
 
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-  const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>([]);
+  // 파일 업로드(커스텀 구현) 상태는 FileUploadSection으로 대체
 
   // 저장 완료 확인 모달 상태
   const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false);
@@ -64,6 +69,11 @@ const HealthCheckupForm = () => {
     setNavigateAfterConfirm(shouldNavigate);
     setIsConfirmOpen(true);
   };
+  // 업로드 이미지 (컴포넌트 기반)
+  const [reportImages, setReportImages] = useState<Array<{ imageUrl: string; imageTitle: string }>>([]);
+  void reportImages; // avoid unused warning until wired to payload
+  const isBelowInputsDisabled = reportImages.length > 0;
+
   const handleCloseConfirm = () => {
     setIsConfirmOpen(false);
     if (navigateAfterConfirm) {
@@ -72,58 +82,12 @@ const HealthCheckupForm = () => {
     setNavigateAfterConfirm(false);
   };
 
-  const removeFile = (index: number) => {
-    console.log('파일 삭제 호출됨 - 인덱스:', index);
-    console.log('삭제 전 uploadedFiles:', uploadedFiles);
-    console.log('삭제 전 uploadedImageUrls:', uploadedImageUrls);
+  // 기존 수동 업로드 핸들러 제거 (컴포넌트 사용)
 
-    setUploadedFiles((prev) => {
-      const newFiles = prev.filter((_, i) => i !== index);
-      console.log('삭제 후 uploadedFiles:', newFiles);
-      return newFiles;
-    });
-
-    setUploadedImageUrls((prev) => {
-      const newUrls = prev.filter((_, i) => i !== index);
-      console.log('삭제 후 uploadedImageUrls:', newUrls);
-      return newUrls;
-    });
-  };
-
-  // 파일 선택 핸들러 추가
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      const newFiles = Array.from(files);
-      setUploadedFiles((prev) => [...prev, ...newFiles]);
-
-      // 파일 URL 생성 (미리보기용)
-      newFiles.forEach((file) => {
-        const url = URL.createObjectURL(file);
-        setUploadedImageUrls((prev) => [...prev, url]);
-      });
-    }
-  };
+  // 기존 수동 업로드 핸들러 제거 (컴포넌트 사용)
 
   // 드래그 앤 드롭 핸들러 추가
-  const handleDragOver = (event: React.DragEvent) => {
-    event.preventDefault();
-  };
-
-  const handleDrop = (event: React.DragEvent) => {
-    event.preventDefault();
-    const files = event.dataTransfer.files;
-    if (files) {
-      const newFiles = Array.from(files);
-      setUploadedFiles((prev) => [...prev, ...newFiles]);
-
-      // 파일 URL 생성 (미리보기용)
-      newFiles.forEach((file) => {
-        const url = URL.createObjectURL(file);
-        setUploadedImageUrls((prev) => [...prev, url]);
-      });
-    }
-  };
+  // 드래그앤드롭 제거 (컴포넌트 사용)
 
   // 상태 관리 (필요한 모든 항목)
   const [date, setDate] = useState('');
@@ -185,8 +149,14 @@ const HealthCheckupForm = () => {
   const [additionalExam, setAdditionalExam] = useState<'해당' | '미해당'>('미해당');
   const [additionalExamDetail, setAdditionalExamDetail] = useState<any>({});
 
-  // 회차별 기존 리포트 조회
-  const { data: reportResponse } = useHealthReportQuery(currentRound, true);
+  // 회차별 기존 리포트 조회 (전문가가 환자 보기: userId 파라미터 있으면 전문가용 API 사용)
+  const isExpertViewingUser = Boolean(externalUserId);
+  const { data: expertReportResponse } = useExpertUserReportByRound(
+    isExpertViewingUser ? parseInt(externalUserId!) : null,
+    isExpertViewingUser ? currentRound : null,
+    isExpertViewingUser,
+  );
+  const { data: reportResponse } = useHealthReportQuery(currentRound, !isExpertViewingUser);
   const updateMutation = useHealthReportUpdateMutation(currentRound);
 
   const resetForm = () => {
@@ -485,7 +455,7 @@ const HealthCheckupForm = () => {
   };
 
   useEffect(() => {
-    const report = reportResponse?.result;
+    const report = (isExpertViewingUser ? expertReportResponse?.result : reportResponse?.result) as any;
     if (report) {
       applyReportToForm(report as HealthCheckupRequest);
     } else {
@@ -493,7 +463,7 @@ const HealthCheckupForm = () => {
       resetForm();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reportResponse]);
+  }, [reportResponse, expertReportResponse, isExpertViewingUser]);
 
   // BMI 계산 함수
   const calculateBMI = (height: string, weight: string) => {
@@ -971,6 +941,7 @@ const HealthCheckupForm = () => {
         }
       }}
     >
+      <fieldset disabled={isExpertViewingUser}>
       {/* 상단 타이틀/뒤로가기 */}
       <div className='relative flex items-center justify-center w-full py-8 my-8'>
         <button
@@ -999,92 +970,17 @@ const HealthCheckupForm = () => {
             건강검진결과지업로드
           </span>
         </div>
-
-        {/* 파일 업로드 영역 */}
-        <div
-          className='w-full h-auto min-h-[5.9rem] xl:h-[5.9rem] border border-[#DBE6FF] rounded-[0.525rem] xl:rounded-[0.525rem] flex items-center justify-center cursor-pointer transition-colors p-3 xl:p-3 mb-4'
-          onDragOver={handleDragOver}
-          onDrop={handleDrop}
-        >
-          <input
-            type='file'
-            multiple
-            accept='image/*,.pdf'
-            onChange={handleFileSelect}
-            className='hidden'
-            id='file-upload'
-          />
-          <label
-            htmlFor='file-upload'
-            className='flex items-center gap-2 xl:gap-[0.375rem] cursor-pointer'
-          >
-            <svg
-              width='16'
-              height='20'
-              viewBox='0 0 16 20'
-              fill='none'
-              xmlns='http://www.w3.org/2000/svg'
-            >
-              <path
-                d='M9 7.2V2.88L14.4 7.2M2 0.4C1.068 0.4 0 1.468 0 2.8V18C0 18.6364 0.252857 19.247 0.702944 19.6971C1.15303 20.1471 1.76364 20.4 2.4 20.4H13.6C14.2364 20.4 14.847 20.1471 15.2971 19.6971C15.7471 19.247 16 18.6364 16 18V6L10 0.4H2Z'
-                fill='#9DA0A3'
-              />
-            </svg>
-            <p className='text-sm xl:text-sm font-medium text-[#9DA0A3] font-pretendard leading-[1.714] tracking-[-0.03em] text-center'>
-              여기에 파일을 마우스로 끌어오세요.
-            </p>
-          </label>
-        </div>
-
-        {/* 업로드된 파일들 */}
-        {uploadedFiles.length > 0 && (
-          <div className='space-y-2 xl:space-y-[0.6rem] mb-[18px]'>
-            {uploadedFiles.map((file, index) => (
-              <div key={index} className='flex justify-center'>
-                <div className='w-full max-w-[24.7rem] xl:w-[24.7rem] h-auto min-h-[2.6rem] xl:h-[2.6rem] bg-[#DBE6FF] rounded-[0.525rem] xl:rounded-[0.525rem] flex items-center justify-between px-4 xl:px-[0.9rem]'>
-                  <div className='flex items-center gap-4 xl:gap-[0.9rem] flex-1 min-w-0'>
-                    <img
-                      src={fileboxIcon}
-                      alt='업로드된 파일'
-                      className='w-8 h-6 xl:w-[2.2rem] xl:h-[1.6rem] flex-shrink-0'
-                    />
-                    <div className='flex flex-col min-w-0 flex-1'>
-                      <span className='text-sm xl:text-sm font-medium text-[#25282B] font-pretendard leading-[1.714] tracking-[-0.03em] truncate'>
-                        {file.name}
-                      </span>
-                      {uploadedImageUrls[index] && (
-                        <span className='text-xs text-green-600'>✓ 업로드됨</span>
-                      )}
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => removeFile(index)}
-                    className='text-[#9DA0A3] hover:text-[#1D68FF] transition-colors flex-shrink-0 ml-2'
-                  >
-                    ✕
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* 파일 업로드 안내 박스 */}
-      <div className='flex justify-center mb-[34px]'>
-        <div className='w-full max-w-[24.7rem] xl:w-[24.7rem] h-auto min-h-[2.6rem] xl:h-[2.6rem] bg-[#82ABFD] rounded-[0.525rem] xl:rounded-[0.525rem] flex items-center justify-center gap-4 xl:gap-[0.9rem]'>
-          <img
-            src={fileboxIcon}
-            alt='업로드된 파일'
-            className='w-8 h-6 xl:w-[2.2rem] xl:h-[1.6rem]'
-          />
-          <span className='text-sm xl:text-sm font-medium text-white font-pretendard leading-[1.714] tracking-[-0.03em]'>
-            이미지 파일 업로드(png,jpg,pdf)
-          </span>
-        </div>
+        <FileUploadSection
+          existingFiles={[]}
+          onExistingFilesChange={() => {}}
+          onNewImagesChange={(images) => setReportImages(images)}
+          accept='image/*,.pdf'
+          allowMultiple
+        />
       </div>
 
       {/* 검진일/검진장소 입력 */}
+      <fieldset disabled={isBelowInputsDisabled}>
       <div className='flex items-center gap-8 mb-8'>
         <div className='flex items-center gap-2'>
           <label className='font-semibold text-base text-[18px] text-black mr-2'>검진일</label>
@@ -1106,8 +1002,10 @@ const HealthCheckupForm = () => {
           />
         </div>
       </div>
+      </fieldset>
 
       {/* 계측 검사 섹션 */}
+      <fieldset disabled={isBelowInputsDisabled}>
       <div className='mb-10'>
         <div className='bg-[#DBE6FF] rounded-[14px] px-6 py-2 font-bold text-base mb-2'>
           계측 검사
@@ -1323,8 +1221,10 @@ const HealthCheckupForm = () => {
           </div>
         </div>
       </div>
+      </fieldset>
 
       {/* 혈액 검사 섹션 */}
+      <fieldset disabled={isBelowInputsDisabled}>
       <div className='mb-[24px]'>
         <div className='bg-[#DBE6FF] rounded-[14px] font-bold px-6 py-2 text-[18px] mb-[24px]'>
           혈액 검사
@@ -1616,8 +1516,10 @@ const HealthCheckupForm = () => {
           </div>
         </div>
       </div>
+      </fieldset>
 
       {/* 요검사 섹션 */}
+      <fieldset disabled={isBelowInputsDisabled}>
       <div className='mb-3'>
         <div className='bg-[#DBE6FF] rounded-[14px] px-6 py-2 font-bold text-base mb-3'>요검사</div>
         <div className='bg-white rounded-[14px] p-6'>
@@ -1637,8 +1539,10 @@ const HealthCheckupForm = () => {
           </div>
         </div>
       </div>
+      </fieldset>
 
       {/* 영상검사 섹션 */}
+      <fieldset disabled={isBelowInputsDisabled}>
       <div className='mb-3'>
         <div className='bg-[#DBE6FF] rounded-[14px] px-6 py-2 font-bold text-base mb-3'>
           영상검사
@@ -1662,8 +1566,10 @@ const HealthCheckupForm = () => {
           </div>
         </div>
       </div>
+      </fieldset>
 
       {/* 진찰(문진) 섹션 */}
+      <fieldset disabled={isBelowInputsDisabled}>
       <div className='mb-3'>
         <div className='bg-[#DBE6FF] rounded-[14px] px-6 py-2 font-bold text-base mb-3'>
           진찰(문진)
@@ -1713,6 +1619,7 @@ const HealthCheckupForm = () => {
           </div>
         </div>
       </div>
+      </fieldset>
 
       {/* 추가검사 */}
       <AdditionalExamSection
@@ -1723,6 +1630,7 @@ const HealthCheckupForm = () => {
       />
 
       {/* 저장 버튼 */}
+      {!isExpertViewingUser && (
       <div className='flex justify-center mt-12 gap-[200px]'>
         <button
           type='submit'
@@ -1739,6 +1647,8 @@ const HealthCheckupForm = () => {
         </button>
 
       </div>
+      )}
+      </fieldset>
       {/* 저장 완료 확인 모달 */}
       <SuccessModal
         isOpen={isConfirmOpen}
