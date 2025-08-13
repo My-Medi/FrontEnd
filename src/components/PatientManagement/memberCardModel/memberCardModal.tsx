@@ -43,9 +43,10 @@ const MemberCardModal: React.FC<MemberCardModalProps> = ({
   const [showAdviceModal, setShowAdviceModal] = useState(false);
   const [showConsultModal, setShowConsultModal] = useState(false);
   const navigate = useNavigate();
-  const [selectedRound] = useState<number>(1);
   const { data: info } = useExpertUserInfo(member.userId, 'ACCEPTED');
   const { data: summary } = useExpertReportSummary(member.userId);
+  // 요약 API의 round 값을 사용해 바로 이동할 회차를 결정
+  const selectedRound = useMemo(() => summary?.round ?? 1, [summary?.round]);
 
   const toKoreanGender = (g?: string) => {
     const norm = (g ?? '').toUpperCase();
@@ -59,6 +60,7 @@ const MemberCardModal: React.FC<MemberCardModalProps> = ({
     return typeof a === 'number' ? a : parseInt(a as any, 10) || 0;
   }, [info?.age, member.age]);
   const handleClick = () => {
+    if (!summary) return;
     navigate(`/health-result-input?userId=${member.userId}&round=${selectedRound || 1}`);
   };
   return (
@@ -142,7 +144,8 @@ const MemberCardModal: React.FC<MemberCardModalProps> = ({
                   {/* 페이지 이동 버튼 */}
                   <button
                     onClick={handleClick}
-                    className='flex justify-center items-center gap-[10px] w-[280px] h-[48px] px-[80px] py-[20px] rounded-[60px] bg-[#FFF] border border-[#E3E6EB] text-[#25282B] text-[18px] font-medium font-[Pretendard] leading-[36px] tracking-[-0.54px] shadow-[0px_0px_5px_5px_rgba(29,104,255,0.05)] cursor-pointer'
+                    disabled={!summary}
+                    className='flex justify-center items-center gap-[10px] w-[280px] h-[48px] px-[80px] py-[20px] rounded-[60px] bg-[#FFF] border border-[#E3E6EB] text-[#25282B] text-[18px] font-medium font-[Pretendard] leading-[36px] tracking-[-0.54px] shadow-[0px_0px_5px_5px_rgba(29,104,255,0.05)] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
                   >
                     리포트 전체 보기
                   </button>
