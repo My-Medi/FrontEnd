@@ -9,7 +9,7 @@ const SummaryTextArea: React.FC<SummaryTextAreaProps> = ({ selectedCategory }) =
 
   if (!data) return null;
 
-  const { ageGroup, gender, rank, nickname, category, comparison } = data;
+  const { ageGroup, nickname, category, comparison } = data;
   const connector = comparison === '비슷합니다' ? '과' : '보다';
 
   return (
@@ -24,20 +24,6 @@ const SummaryTextArea: React.FC<SummaryTextAreaProps> = ({ selectedCategory }) =
         height: '73px',
       }}
     >
-      <p
-        style={{
-          color: '#121218',
-          fontFamily: 'Pretendard',
-          fontSize: '24px',
-          fontWeight: 600,
-          lineHeight: '36px',
-          letterSpacing: '-0.72px',
-          margin: 0,
-        }}
-      >
-        {ageGroup} {gender} 중 {rank}
-      </p>
-
       <p
         style={{
           fontFamily: 'Pretendard',
@@ -55,7 +41,7 @@ const SummaryTextArea: React.FC<SummaryTextAreaProps> = ({ selectedCategory }) =
         <span style={{ color: '#4D5053' }}>님</span>
         <span style={{ color: '#121218' }}>&nbsp;{category}</span>
         <span style={{ color: '#4D5053' }}>&nbsp;가능성은</span>
-        <span style={{ color: '#121218' }}>&nbsp;{ageGroup} 평균</span>
+        <span style={{ color: '#121218' }}>&nbsp;{ageGroup}대 평균</span>
         <span style={{ color: '#4D5053' }}>{connector}</span>
         <span style={{ color: '#121218' }}>&nbsp;{comparison}</span>
         <span style={{ color: '#121218' }}>.</span>

@@ -30,7 +30,7 @@ const RequestHealthCareCard: React.FC<RequestHealthCareCardProps> = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   // 상세 API는 모달 열릴 때만 트리거
-  const userInfoQuery = useExpertUserInfo(isModalOpen ? userId ?? null : null, 'REQUESTED');
+  const userInfoQuery = useExpertUserInfo(isModalOpen ? (userId ?? null) : null, 'REQUESTED');
   const ageDisplay = typeof age === 'number' ? `만 ${age}세` : age;
   const toKoreanGender = (g?: string) => {
     const norm = (g ?? '').toString().toUpperCase();
@@ -100,12 +100,12 @@ const RequestHealthCareCard: React.FC<RequestHealthCareCardProps> = ({
             </div>
 
             <div
-            className='flex items-center justify-center text-[#1D68FF] font-semibold cursor-pointer'
-            onClick={() => setIsModalOpen(true)}
-          >
-            <span className='mr-2 text-sm'>건강데이터 자세히 보기</span>
-            <FiChevronRight size={24} color='#1D68FF' />
-          </div>
+              className='flex items-center justify-center text-[#1D68FF] font-semibold cursor-pointer'
+              onClick={() => setIsModalOpen(true)}
+            >
+              <span className='mr-2 text-sm'>건강데이터 자세히 보기</span>
+              <FiChevronRight size={24} color='#1D68FF' />
+            </div>
 
             <div className='w-full mt-[8px] whitespace-nowrap text-[#1D68FF] font-semibold flex justify-center items-center gap-4'>
               <button
@@ -165,7 +165,9 @@ const RequestHealthCareCard: React.FC<RequestHealthCareCardProps> = ({
             </div>
           </div>
           <div className='flex items-center justify-center text-[#1D68FF] font-semibold'>
-            <button type='button' onClick={() => setIsModalOpen(true)}>건강데이터 자세히 보기</button>
+            <button type='button' onClick={() => setIsModalOpen(true)}>
+              건강데이터 자세히 보기
+            </button>
           </div>
           <div className='flex justify-between pt-4 border-t border-[#DBE6FF]'>
             <button
@@ -186,9 +188,9 @@ const RequestHealthCareCard: React.FC<RequestHealthCareCardProps> = ({
       </div>
 
       {isModalOpen && (
-          <HealthDataModal
+        <HealthDataModal
           nickname={nickname}
-          requestNote={(userInfoQuery.data?.requestNote) || requestMessage}
+          requestNote={userInfoQuery.data?.requestNote || requestMessage}
           profile={{
             age: userInfoQuery.data?.age ?? (typeof age === 'number' ? age : 0),
             gender: toKoreanGender(userInfoQuery.data?.gender ?? gender),

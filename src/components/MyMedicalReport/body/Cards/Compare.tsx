@@ -16,7 +16,7 @@ const stageKeyMap: Record<string, string> = {
 };
 
 //비교 제외 ID(요단백은 공간만 차지)
-const noCompareIndicators = ['proteinuria'];
+const noCompareIndicators = ['urine'];
 
 const Compare: React.FC<CompareProps> = ({ stage, patientValue, averageValue, indicatorId }) => {
   const patientNum = parseFloat(patientValue);

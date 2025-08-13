@@ -26,7 +26,14 @@ interface DetailModalProps {
 
 // 리포트 요약 더미 데이터 제거 (빈 상태는 ReportSummary에서 처리)
 
-const HealthDataModal: React.FC<DetailModalProps> = ({ nickname, requestNote, profile, onClose, onAccept, onReject }) => {
+const HealthDataModal: React.FC<DetailModalProps> = ({
+  nickname,
+  requestNote,
+  profile,
+  onClose,
+  onAccept,
+  onReject,
+}) => {
   return (
     <>
       <div className='fixed inset-0 bg-black/30 z-40' />
@@ -42,7 +49,11 @@ const HealthDataModal: React.FC<DetailModalProps> = ({ nickname, requestNote, pr
               }}
               className='cursor-pointer shrink-0 flex items-center justify-center hover:opacity-80 transition-opacity'
             >
-              <img src={BackIcon} alt='뒤로가기' className='w-[17px] h-[35px] pointer-events-none' />
+              <img
+                src={BackIcon}
+                alt='뒤로가기'
+                className='w-[17px] h-[35px] pointer-events-none'
+              />
             </button>
 
             {/* 텍스트 블럭 */}
@@ -56,18 +67,18 @@ const HealthDataModal: React.FC<DetailModalProps> = ({ nickname, requestNote, pr
             </div>
           </div>
           <div>
-             <RequestMessage message={requestNote || ''} />
+            <RequestMessage message={requestNote || ''} />
           </div>
           <div>
-             <PatientInfo
-               nickname={nickname}
-               gender={profile?.gender || '-'}
-               age={typeof profile?.age === 'number' ? profile!.age : 0}
-               height={profile?.height || 0}
-               weight={profile?.weight || 0}
-               testDate={profile?.testDate || '-'}
-               healthInterest={(profile?.interests || []).join(', ')}
-             />
+            <PatientInfo
+              nickname={nickname}
+              gender={profile?.gender || '-'}
+              age={typeof profile?.age === 'number' ? profile!.age : 0}
+              height={profile?.height || 0}
+              weight={profile?.weight || 0}
+              testDate={profile?.testDate || '-'}
+              healthInterest={(profile?.interests || []).join(', ')}
+            />
           </div>
           <div className='flex flex-col gap-[32px] w-max-[496px]'>
             {/* 관리 목표/기대 - goal 매핑 */}
