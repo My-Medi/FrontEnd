@@ -78,6 +78,8 @@ export const getUserSchedulesMonthly = async (
   return response.data;
 };
 
+// 리포트 요약 API 사용 제거
+
 // 특정 날짜 스케줄 상세 조회
 export const getUserSchedulesByDate = async (
   date: string

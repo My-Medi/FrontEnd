@@ -5,7 +5,7 @@ interface AbnormalProps {
 const AbnormalPart: React.FC<AbnormalProps> = ({ abnormal }) => {
   return (
     <>
-      <div className='hidden lg:flex w-[817px] h-[86px] flex flex-col items-start font-[Pretendard]'>
+      <div className='hidden lg:flex w-[817px] flex flex-col items-start'>
         {/* 제목 + 파란 네모 아이콘 */}
         <div className='flex items-center'>
           <div className='w-[14.25px] h-[14.25px] bg-[#1D68FF] rounded-[4.5px] mr-[16px]' />
@@ -14,12 +14,15 @@ const AbnormalPart: React.FC<AbnormalProps> = ({ abnormal }) => {
           </span>
         </div>
 
-        {/* 최근 건강검진의 이상수치 항목 내용 */}
-        <ul className='list-disc pl-[48px] pt-[10px] pr-[10px] pb-[10px] max-w-[480px] text-[#121218] text-[14px] leading-[22px] tracking-[-0.42px] font-light space-y-[2px]'>
+        {/* 최근 건강검진의 이상수치 항목 내용 (작은 도트) */}
+        <div className='pl-[48px] pt-[10px] pr-[10px] pb-[10px] max-w-[480px] text-[#121218] text-[14px] leading-[22px] tracking-[-0.42px] font-light space-y-[4px]'>
           {abnormal.map((item, idx) => (
-            <li key={idx}>{item}</li>
+            <div key={idx} className='flex items-start gap-2'>
+              <span className='mt-[10px] w-[4px] h-[4px] rounded-full bg-[#121218] inline-block' />
+              <span>{item}</span>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
       {/* 모바일 뷰 */}
       <div className='lg:hidden w-full px-[16px] flex flex-col items-start font-[Pretendard] mt-[20px]'>
@@ -29,11 +32,14 @@ const AbnormalPart: React.FC<AbnormalProps> = ({ abnormal }) => {
             최근 건강검진의 이상수치 항목
           </span>
         </div>
-        <ul className='list-disc pl-[22px] pt-[10px] pr-[10px] pb-[8px] text-[#121218] text-[13px] leading-[20px] tracking-[-0.38px] font-light space-y-[2px]'>
+        <div className='pl-[22px] pt-[10px] pr-[10px] pb-[8px] text-[#121218] text-[13px] leading-[20px] tracking-[-0.38px] font-light space-y-[4px]'>
           {abnormal.map((item, idx) => (
-            <li key={idx}>{item}</li>
+            <div key={idx} className='flex items-start gap-2'>
+              <span className='mt-[8px] w-[3px] h-[3px] rounded-full bg-[#121218] inline-block' />
+              <span>{item}</span>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
     </>
   );

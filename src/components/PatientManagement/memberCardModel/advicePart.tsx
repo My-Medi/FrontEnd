@@ -34,7 +34,7 @@ const AdvicePart = () => {
     : patientManagementAdviceList.slice(0, 2);
 
   return (
-    <div className='flex flex-col mt-[-30px] font-[Pretendard]'>
+    <div className='flex flex-col font-[Pretendard]'>
       {/* 타이틀 */}
       <div className='hidden lg:flex w-[817px] h-[86px] flex-col items-start justify-center'>
         <div className='flex items-center'>
@@ -46,7 +46,7 @@ const AdvicePart = () => {
       </div>
 
       {/* 조언 리스트 */}
-      <div className='flex flex-col mt-[-16px]'>
+      <div className='flex flex-col'>
         {visibleAdvice.map((item, index) => (
           <AdviceItem key={index} message={item.message} registerDate={item.registerDate} />
         ))}
