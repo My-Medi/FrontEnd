@@ -40,6 +40,13 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
   const hasConfirmPassword = values.passwordCheck.trim().length > 0;
   const passwordsMatch = hasConfirmPassword && values.password === values.passwordCheck;
 
+  const isNameError = submitted && values.name.trim().length === 0;
+  const isBirthDateError = submitted && !/^\d{6}$/.test(values.birthDate.trim());
+  const isNicknameError = submitted && values.nickname.trim().length === 0;
+  const isLoginIdError = submitted && values.loginId.trim().length === 0;
+  const isEmailError = submitted && values.email.trim().length === 0;
+  const isPhoneError = submitted && values.phoneNumber.trim().length === 0;
+
   const handleNext = () => {
     setSubmitted(true);
 
@@ -61,7 +68,7 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
   return (
     <form className='mt-[40px]' onSubmit={e => { e.preventDefault(); handleNext(); }}>
         {/* 성명 */}
-        <div className='flex items-center space-x-3'>
+        <div className={`flex items-center space-x-3${isNameError ? ' ' : ' mb-[32px]'}`}>
           <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
           <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>성명</label>
           <input
@@ -73,12 +80,12 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
           />
           
         </div>
-        {submitted && values.name.trim().length === 0 && (
-            <div className='ml-[300px] mt-[5px] mb-[32px] text-[10px] text-red-500'>성명을 입력해주세요.</div>
+        {isNameError && (
+            <div className='ml-[300px] mt-[5px] mb-[32px] mt-[5px] text-[10px] text-red-500'>성명을 입력해주세요.</div>
           )}
 
         {/* 생년월일 */}
-        <div className='flex items-center space-x-3'>
+        <div className={`flex items-center space-x-3${isBirthDateError ? ' ' : ' mb-[32px]'}`}>
           <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
           <label className='text-gray-700 font-medium min-w-[120px] flex items-center h-[36px]'>생년월일(6자리)</label>
           <input
@@ -91,7 +98,7 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
           />
 
         </div>
-        {submitted && !/^\d{6}$/.test(values.birthDate.trim()) && (
+        {isBirthDateError && (
             <div className='ml-[300px] mt-[5px] mb-[32px] text-[10px] text-red-500'>생년월일 6자리를 입력해주세요.</div>
           )}
 
@@ -146,7 +153,7 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
         </div>
 
         {/* 닉네임 */}
-        <div className='flex items-center space-x-3'>
+        <div className={`flex items-center space-x-3${isNicknameError ? ' ' : ' mb-[32px]'}`}>
           <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
           <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>닉네임</label>
           <input
@@ -165,19 +172,19 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
             닉네임 확인
           </button>
         </div>
-        {submitted && values.nickname.trim().length === 0 && (
+        {isNicknameError && (
             <div className='ml-[300px] mt-[5px] mb-[32px] text-[10px] text-red-500'>닉네임을 입력해주세요.</div>
           )}
         
         {/* 닉네임 아래 점선 */}
-        <div className='flex justify-center'>
+        <div className='flex justify-center mb-[32px]'>
           <svg xmlns="http://www.w3.org/2000/svg" width="700" height="2" viewBox="0 0 700 2" fill="none">
             <path d="M1 1L700 1.00005" stroke="#DBE6FF" strokeWidth="0.5" strokeLinecap="square" strokeLinejoin="round" strokeDasharray="1.8 1.8"/>
           </svg>
         </div>
 
         {/* 아이디 */}
-        <div className='flex items-center space-x-3'>
+        <div className={`flex items-center space-x-3${isLoginIdError ? ' ' : ' mb-[32px]'}`}>
           <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
           <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>아이디</label>
           <input
@@ -196,12 +203,12 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
             아이디 확인
           </button>
         </div>
-        {submitted && values.loginId.trim().length === 0 && (
+        {isLoginIdError && (
             <div className='ml-[300px] mt-[5px] mb-[32px] text-[10px] text-red-500'>아이디를 입력해주세요.</div>
           )}
 
         {/* 비밀번호 */}
-        <div className='flex items-center space-x-3'>
+        <div className={`flex items-center space-x-3${isEmailError ? ' ' : ' '}`}>
           <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
           <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>비밀번호</label>
           <div className='relative ml-[180px]'>
@@ -286,6 +293,7 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
         </div>
 
         {/* 이메일 */}
+        <div className={`flex items-center space-x-3${isEmailError ? ' ' : ' mb-[32px]'}`}>
         <div className='flex items-center space-x-3'>
           <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
           <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>이메일</label>
@@ -296,6 +304,7 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
             placeholder='이메일을 입력하세요.'
             className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[180px]'
           />
+          </div>
 
           <span className='text-gray-500'>@</span>
           <select
@@ -310,12 +319,13 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
             ))}
           </select>
         </div>
-        {submitted && values.email.trim().length === 0 && (
+        {isEmailError && (
             <div className='ml-[300px] mt-[5px] mb-[32px] text-[10px] text-red-500'>이메일을 입력해주세요.</div>
           )}
 
         {/* 연락처 */}
-        <div className='flex items-center space-x-3'>
+        
+        <div className={`flex items-center space-x-3${isPhoneError ? ' ' : ' mb-[32px]'}`}>
           <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
           <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>연락처</label>
           <input
@@ -326,11 +336,12 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
             className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[180px]'
           />
         </div>
-        {submitted && values.phoneNumber.trim().length === 0 && (
+        {isPhoneError && (
             <div className='ml-[300px] mt-[5px] mb-[32px] text-[10px] text-red-500'>연락처를 입력해주세요.</div>
           )}
 
         {/* 연락처 아래 점선 */}
+        
         <div className='flex justify-center mb-[32px]'>
           <svg xmlns="http://www.w3.org/2000/svg" width="700" height="2" viewBox="0 0 700 2" fill="none">
             <path d="M1 1L700 1.00005" stroke="#DBE6FF" strokeWidth="0.5" strokeLinecap="square" strokeLinejoin="round" strokeDasharray="1.8 1.8"/>
