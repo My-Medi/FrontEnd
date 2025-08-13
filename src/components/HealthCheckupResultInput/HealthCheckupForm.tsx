@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import RoundSelector from './RoundSelector';
+import MyMedicalReportRoundSelector from '../Common/MyMedicalReportRoundSelector';
 import AdditionalExamSection from './AdditionalExamSection';
 import CustomCheckboxButton from '../Common/CustomCheckboxButton';
 import backSvg from '../../assets/back.svg';
@@ -38,6 +38,9 @@ const HealthCheckupForm = () => {
   // 회차 선택 핸들러
   const onSelectRound = (round: number) => {
     setCurrentRound(round);
+  };
+  const handleRoundFilterClick = () => {
+    // 건강검진 입력 페이지에서는 별도의 필터 동작이 필요 없음 (콜백만 전달)
   };
 
   // 초기 로드 시 서버에서 총 회차 불러와 UI 세팅
@@ -956,11 +959,12 @@ const HealthCheckupForm = () => {
 
       {/* 회차 선택/추가/이전회차 보기 */}
       <div className='flex inline-flex items-center gap-2 mb-8'>
-        <RoundSelector
+        <MyMedicalReportRoundSelector
           rounds={rounds}
-          currentRound={currentRound}
+          selectedRound={currentRound}
+          onRoundChange={onSelectRound}
           onAddRound={onAddRound}
-          onSelectRound={onSelectRound}
+          onFilterClick={handleRoundFilterClick}
         />
       </div>
 
