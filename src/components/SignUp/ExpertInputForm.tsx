@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import fileboxIcon from '../../assets/MyHome/Resume/filebox.svg';
-import { MultipleImageUpload } from '../Common/MultipleImageUpload';
+import FileUploadSection from '../Common/FileUploadSection';
 import type { CareerRequest, LicenseRequest, LicenseImageRequest, ExpertSpecialty } from '../../types/expert';
 
 interface ExpertInputFormProps {
@@ -23,6 +22,12 @@ interface CertificateRow {
   issuingOrganization: string;
 }
 
+interface ExistingFileItem {
+  licenseImageId: number;
+  imageUrl: string;
+  imageTitle: string;
+}
+
 const SPECIALTY_MAP: { [key: string]: ExpertSpecialty } = {
   '영양사': 'NUTRITIONIST',
   '건강관리사': 'HEALTH_MANAGER',
@@ -34,14 +39,13 @@ const SPECIALTY_MAP: { [key: string]: ExpertSpecialty } = {
 const ExpertInputForm: React.FC<ExpertInputFormProps> = ({ 
   onNext, 
   onPrev, 
- 
+  initialData,
 }) => {
   const [selectedFields, setSelectedFields] = useState<string[]>(['영양사']);
   const [companyName, setCompanyName] = useState("");
   const [selfIntroduction, setSelfIntroduction] = useState("");
   const [representativeSentence, setRepresentativeSentence] = useState("");
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-  const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>([]);
+  const [newLicenseImages, setNewLicenseImages] = useState<LicenseImageRequest[]>([]);
   const [careerRows, setCareerRows] = useState<CareerRow[]>([
     {
       id: 1,
@@ -59,6 +63,8 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({
     }
   ]);
 
+  const [existingFiles, setExistingFiles] = useState<ExistingFileItem[]>([]);
+
   const [errors, setErrors] = useState<{
     specialty?: string;
     companyName?: string;
@@ -72,6 +78,17 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({
       firstErrorRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [errors]);
+  useEffect(() => {
+    if (initialData && Array.isArray(initialData.licenseImages) && initialData.licenseImages.length > 0) {
+      const mapped: ExistingFileItem[] = initialData.licenseImages.map((img: { imageUrl: string; imageTitle: string }, index: number) => ({
+        licenseImageId: index + 1,
+        imageUrl: img.imageUrl,
+        imageTitle: img.imageTitle,
+      }));
+      setExistingFiles(mapped);
+    }
+  }, [initialData]);
+
 
   const handleFieldToggle = (field: string) => {
     setSelectedFields(prev => 
@@ -83,22 +100,11 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({
 
 
 
-  const removeFile = (index: number) => {
-    console.log('파일 삭제 호출됨 - 인덱스:', index);
-    console.log('삭제 전 uploadedFiles:', uploadedFiles);
-    console.log('삭제 전 uploadedImageUrls:', uploadedImageUrls);
-    
-    setUploadedFiles(prev => {
-      const newFiles = prev.filter((_, i) => i !== index);
-      console.log('삭제 후 uploadedFiles:', newFiles);
-      return newFiles;
-    });
-    
-    setUploadedImageUrls(prev => {
-      const newUrls = prev.filter((_, i) => i !== index);
-      console.log('삭제 후 uploadedImageUrls:', newUrls);
-      return newUrls;
-    });
+  const handleNewImagesChange = (images: Array<{ imageUrl: string; imageTitle: string }>) => {
+    setNewLicenseImages(prev => [
+      ...prev,
+      ...images.map(({ imageUrl, imageTitle }) => ({ imageUrl, imageTitle })),
+    ]);
   };
 
   const handleCareerChange = (id: number, field: keyof CareerRow, value: string) => {
@@ -137,27 +143,13 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({
     setCertificateRows(newRows);
   };
 
-  const handleImageUploadSuccess = (imageUrls: string[], files: File[]) => {
-    console.log('이미지 업로드 성공 - 받은 URLs:', imageUrls);
-    console.log('업로드된 파일들:', files);
-    setUploadedImageUrls(prev => {
-      const newUrls = [...prev, ...imageUrls];
-      console.log('업데이트된 uploadedImageUrls:', newUrls);
-      return newUrls;
-    });
-    setUploadedFiles(prev => {
-      const newFiles = [...prev, ...files];
-      console.log('업데이트된 uploadedFiles:', newFiles);
-      return newFiles;
-    });
-  };
+  // 기존 MultipleImageUpload 전용 콜백은 사용하지 않음 (FileUploadSection으로 대체)
 
 
 
   const handleNext = () => {
     console.log('ExpertInputForm handleNext 호출됨');
-    console.log('현재 uploadedFiles:', uploadedFiles);
-    console.log('현재 uploadedImageUrls:', uploadedImageUrls);
+    console.log('현재 신규 업로드 이미지:', newLicenseImages);
     console.log('현재 입력값들:', {
       companyName,
       selfIntroduction,
@@ -204,20 +196,13 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({
       }));
 
     // 이미지 URL 매핑 개선 - 파일과 URL 개수가 일치하지 않을 수 있으므로 안전장치 추가
-    const licenseImages: LicenseImageRequest[] = [];
-    for (let i = 0; i < uploadedFiles.length; i++) {
-      const file = uploadedFiles[i];
-      const imageUrl = uploadedImageUrls[i] || '';
-      console.log(`파일 ${i}: ${file.name} -> URL: ${imageUrl}`);
-      if (imageUrl) {
-        licenseImages.push({
-          imageUrl,
-          imageTitle: file.name,
-        });
-      }
-    }
+    // 기존 파일 + 신규 업로드 병합
+    const mergedLicenseImages: LicenseImageRequest[] = [
+      ...existingFiles.map(({ imageUrl, imageTitle }) => ({ imageUrl, imageTitle })),
+      ...newLicenseImages,
+    ];
 
-    console.log('생성된 licenseImages:', licenseImages);
+    console.log('생성된 licenseImages:', mergedLicenseImages);
 
     const step3Data = {
       specialty: SPECIALTY_MAP[selectedFields[0] || '영양사'],
@@ -226,7 +211,7 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({
       introSentence: representativeSentence,
       careers,
       licenses,
-      licenseImages,
+      licenseImages: mergedLicenseImages,
     };
 
     console.log('ExpertInputForm onNext 호출 전:', step3Data);
@@ -304,71 +289,17 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({
 
       {/* 자격증 업로드 */}
       <div className="w-[716px] mb-8">
-        <div className="flex items-center gap-4 xl:gap-[0.9rem] mb-4 xl:mb-[0.9rem]">
+        <div className="flex items-center gap-4 xl:gap-[0.9rem] mb-4 xl:mb-0">
           <div className="w-3 h-3 xl:w-[0.7rem] xl:h-[0.7rem] bg-[#1D68FF] rounded-[0.225rem] xl:rounded-[0.225rem]"></div>
           <span className="text-base xl:text-[1.05rem] font-medium text-[#121218] font-pretendard">자격증</span>
         </div>
-        
-        {/* MultipleImageUpload 컴포넌트 사용 */}
-        <MultipleImageUpload
-          onUploadSuccess={handleImageUploadSuccess}
-          onUploadError={(error) => console.error('자격증 파일 업로드 실패:', error)}
-          maxSize={Infinity}
-          maxFiles={10}
-          accept="image/*,.pdf,.hwp,.doc,.docx"
-          className="mb-4"
-        >
-          <div 
-            className="w-full h-auto min-h-[5.9rem] xl:h-[5.9rem] border border-[#DBE6FF] rounded-[0.525rem] xl:rounded-[0.525rem] flex items-center justify-center cursor-pointer transition-colors p-3 xl:p-3 mb-4"
-          >
-            <div className="flex items-center gap-2 xl:gap-[0.375rem]">
-              <svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M9 7.2V2.88L14.4 7.2M2 0.4C1.068 0.4 0 1.468 0 2.8V18C0 18.6364 0.252857 19.247 0.702944 19.6971C1.15303 20.1471 1.76364 20.4 2.4 20.4H13.6C14.2364 20.4 14.847 20.1471 15.2971 19.6971C15.7471 19.247 16 18.6364 16 18V6L10 0.4H2Z" fill="#9DA0A3"/>
-              </svg>
-              <p className="text-sm xl:text-sm font-medium text-[#9DA0A3] font-pretendard leading-[1.714] tracking-[-0.03em] text-center">
-                여기에 파일을 마우스로 끌어오세요.
-              </p>
-            </div>
-          </div>
-        </MultipleImageUpload>
-        
-        {/* 업로드된 파일들 */}
-        {uploadedFiles.length > 0 && (
-          <div className="space-y-2 xl:space-y-[0.6rem] mb-4">
-            {uploadedFiles.map((file, index) => (
-              <div key={index} className="flex justify-center">
-                <div className="w-full max-w-[24.7rem] xl:w-[24.7rem] h-auto min-h-[2.6rem] xl:h-[2.6rem] bg-[#DBE6FF] rounded-[0.525rem] xl:rounded-[0.525rem] flex items-center justify-between px-4 xl:px-[0.9rem]">
-                  <div className="flex items-center gap-4 xl:gap-[0.9rem] flex-1 min-w-0">
-                    <img src={fileboxIcon} alt="업로드된 파일" className="w-8 h-6 xl:w-[2.2rem] xl:h-[1.6rem] flex-shrink-0" />
-                    <div className="flex flex-col min-w-0 flex-1">
-                      <span className="text-sm xl:text-sm font-medium text-[#25282B] font-pretendard leading-[1.714] tracking-[-0.03em] truncate">
-                        {file.name}
-                      </span>
-                      {uploadedImageUrls[index] && (
-                        <span className="text-xs text-green-600">✓ 업로드됨</span>
-                      )}
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => removeFile(index)}
-                    className="text-[#9DA0A3] hover:text-[#1D68FF] transition-colors flex-shrink-0 ml-2"
-                  >
-                    ✕
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* 파일 업로드 안내 박스 */}
-        <div className="flex justify-center mb-4">
-          <div className="w-full max-w-[24.7rem] xl:w-[24.7rem] h-auto min-h-[2.6rem] xl:h-[2.6rem] bg-[#DBE6FF] rounded-[0.525rem] xl:rounded-[0.525rem] flex items-center justify-center gap-4 xl:gap-[0.9rem]">
-            <img src={fileboxIcon} alt="업로드된 파일" className="w-8 h-6 xl:w-[2.2rem] xl:h-[1.6rem]" />
-            <span className="text-sm xl:text-sm font-medium text-[#25282B] font-pretendard leading-[1.714] tracking-[-0.03em]">
-              이미지 파일 업로드(png,jpg,pdf)
-            </span>
-          </div>
+        <div className="xl:mt-[0.6rem] xl:mb-[1.2rem]">
+          <FileUploadSection
+            existingFiles={existingFiles}
+            onExistingFilesChange={setExistingFiles}
+            onNewImagesChange={handleNewImagesChange}
+            accept="image/*,.pdf,.hwp,.doc,.docx"
+          />
         </div>
 
         {/* 자격증 테이블 */}
