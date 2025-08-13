@@ -186,7 +186,7 @@ const RequestHealthCareCard: React.FC<RequestHealthCareCardProps> = ({
       </div>
 
       {isModalOpen && (
-        <HealthDataModal
+          <HealthDataModal
           nickname={nickname}
           requestNote={(userInfoQuery.data?.requestNote) || requestMessage}
           profile={{
