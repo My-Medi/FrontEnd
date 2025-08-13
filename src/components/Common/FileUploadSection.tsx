@@ -280,5 +280,3 @@ const FileUploadSection: React.FC<FileUploadSectionProps> = ({
 };
 
 export default FileUploadSection;
-
-

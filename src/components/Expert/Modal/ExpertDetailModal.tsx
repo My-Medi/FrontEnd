@@ -31,7 +31,7 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
   const { data: expert, isLoading, error } = useExpertDetailQuery(expertId, expertStatus);
   const healthProposalQuery = useHealthProposalQuery();
 
-  useModalScrollLock(!showRequestModal && !showReRequestModal && !showDetailSuccess);
+  useModalScrollLock(!showRequestModal && !showReRequestModal && !showDetailSuccess && !showFillRequestPrompt);
 
   // 요청 날짜 포맷팅 함수
   const formatRequestDate = (dateString: string) => {
@@ -145,7 +145,7 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
       {/* ExpertDetailModal */}
       <div
         className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-300 ${
-          showRequestModal || showReRequestModal ? 'hidden' : 'opacity-100'
+          showRequestModal || showReRequestModal || showFillRequestPrompt ? 'hidden' : 'opacity-100'
         }`}
       >
         {/* 모달 배경 */}
@@ -325,6 +325,7 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
             onClose(); // 모든 모달 닫기 (ExpertDetailModal도 함께 닫기)
           }}
           onConfirm={handleReRequestConfirm}
+          expertId={expert.expertId}
           expertName={expert.name}
           expertPosition={getSpecialtyKoreanName(expert.specialty)}
           expertRealName={expert.nickname || expert.name}
@@ -341,7 +342,10 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
             </div>
             <div className="flex justify-center gap-4">
               <button
-                onClick={() => setShowFillRequestPrompt(false)}
+                onClick={() => {
+                  setShowFillRequestPrompt(false);
+                  onClose();
+                }}
                 className="w-[180px] h-[44px] rounded-full bg-white text-[#25282B] border border-[#E3E6EB] font-medium"
               >
                 닫기
@@ -350,7 +354,8 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
                 onClick={() => {
                   setShowFillRequestPrompt(false);
                   onClose();
-                  navigate('/myhome');
+                  // 마이홈 환자 사이드바에서 '건강관리요청서 작성하기'는 index 3
+                  navigate('/myhome', { state: { selectedMenu: 3 } });
                 }}
                 className="w-[180px] h-[44px] rounded-full bg-[#1D68FF] text-white font-semibold"
               >

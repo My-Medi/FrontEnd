@@ -1,28 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import SuccessModal from './SuccessModal';
 import useModalScrollLock from '../../../hooks/useModalScrollLock';
+import { useRequestConsultationMutation } from '../../../hooks/experts/mutations/useRequestConsultationMutation';
 
 interface ReRequestConfirmModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: () => void;
+  onConfirm: () => void; // deprecated (not used)
+  expertId: number;
   expertName: string;
   expertPosition: string;
   expertRealName: string;
+  comment?: string;
 }
 
 const ReRequestConfirmModal: React.FC<ReRequestConfirmModalProps> = ({ 
   isOpen, 
   onClose, 
-  onConfirm, 
-  // expertName,
-  // expertPosition,
-  // expertRealName
+  // onConfirm, 
+  expertId,
+  comment,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useModalScrollLock(isOpen && !showSuccessModal);
+
+  const requestConsultationMutation = useRequestConsultationMutation({ skipQueryInvalidation: true });
 
   useEffect(() => {
     if (isOpen) {
@@ -33,13 +38,25 @@ const ReRequestConfirmModal: React.FC<ReRequestConfirmModalProps> = ({
   }, [isOpen]);
 
   const handleConfirm = () => {
-    // onConfirm 호출하여 상위에서 RequestModal 열도록 함
-    onConfirm();
-    onClose(); // ReRequestConfirmModal 닫기
+    // 즉시 재요청 전송 (쿼리 파라미터 comment 포함)
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    requestConsultationMutation.mutate(
+      { expertId, comment: comment ?? '재요청' },
+      {
+        onSuccess: () => {
+          setShowSuccessModal(true);
+        },
+        onSettled: () => {
+          setIsSubmitting(false);
+        },
+      }
+    );
   };
 
   const handleSuccessClose = () => {
     setShowSuccessModal(false);
+    onClose();
   };
 
   if (!isOpen) return null;
@@ -89,10 +106,11 @@ const ReRequestConfirmModal: React.FC<ReRequestConfirmModalProps> = ({
               </button>
                              <button
                  onClick={handleConfirm}
+                 disabled={isSubmitting}
                  className="w-full sm:w-[300px] h-14 rounded-full bg-[#1D68FF] text-white text-[20px] font-semibold leading-[36px] tracking-[-0.03em] transition cursor-pointer"
                  style={{ boxShadow: '0px 0px 2px 6px rgba(29, 104, 255, 0.06), 0px 0px 4px 6px rgba(29, 104, 255, 0.04), 0px 0px 6px 6px rgba(29, 104, 255, 0.02), 0px 0px 8px 0px rgba(29, 104, 255, 0)' }}
                >
-                 보내기
+                 {isSubmitting ? '전송중...' : '보내기'}
                </button>
             </div>
           </div>

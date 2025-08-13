@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import SideBar from '../../components/MyHome/Layout/SideBar';
 import SimpleBox from '../../components/MyHome/Layout/SimpleBox';
@@ -17,6 +18,7 @@ const MyHome: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<number | undefined>(undefined);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const { userType } = useAuth();
+  const location = useLocation();
 
 
 
@@ -28,6 +30,14 @@ const MyHome: React.FC = () => {
   }, []);
 
   // 더미 스케줄 초기화 제거
+
+  // 외부에서 전달된 초기 메뉴 선택 적용 (예: navigate('/myhome', { state: { selectedMenu: 3 } }))
+  useEffect(() => {
+    const state = location.state as { selectedMenu?: number } | null;
+    if (state && typeof state.selectedMenu === 'number') {
+      setSelectedMenu(state.selectedMenu);
+    }
+  }, [location.state]);
 
   // 사이드바 이미지 사전 로딩
   useEffect(() => {

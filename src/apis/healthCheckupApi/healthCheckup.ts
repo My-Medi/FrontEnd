@@ -31,3 +31,17 @@ export const getHealthReportCount = async (): Promise<ApiResponse<number>> => {
   const response = await API.get('/users/reports/count');
   return response.data as ApiResponse<number>;
 };
+
+// 건강검진 결과지 이미지 파싱
+export const parseHealthReportImage = async (
+  imageFile: File,
+): Promise<ApiResponse<HealthCheckupRequest>> => {
+  const formData = new FormData();
+  formData.append('imageFile', imageFile);
+  const response = await API.post<ApiResponse<HealthCheckupRequest>>(
+    '/users/reports/parsing',
+    formData,
+    { headers: { 'Content-Type': 'multipart/form-data' } }
+  );
+  return response.data;
+};
