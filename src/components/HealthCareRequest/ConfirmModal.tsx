@@ -19,20 +19,20 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onConfirm, userName
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center ">
       {/* 배경 오버레이 */}
       <div className="absolute inset-0" style={{ backgroundColor: 'rgba(18, 18, 24, 0.40)' }}></div>
 
       {/* 모달 컨테이너 */}
-      <div className="relative bg-white rounded-lg p-6 w-[605px] h-[265px] mx-4">
+      <div className="relative bg-white rounded-[18px] w-[587px] h-[312px] px-[62px] py-[27px]">
         {/* 메시지 */}
-        <div className="text-center mb-[30px] pt-[60px] pb-[20px]">
-          <p className="text-gray-800 text-lg">제안서가 등록되었습니다!<br/>
+        <div className="text-center pt-[60px] pb-[64px]">
+          <p className="text-black text-[24px] font-medium leading-[40px] tracking-[-0.72px]">제안서가 등록되었습니다!<br/>
           {userName}님에게 딱 맞는 전문가와 연결해 드릴게요!</p>
         </div>
 
         {/* 버튼들 */}
-        <div className="flex justify-center gap-4">
+        <div className="flex justify-center gap-[30px] ">
           <button
             onClick={onConfirm}
             className="w-[216px] h-[47px] bg-white text-gray-700 rounded-[36px] shadow-[0_0_6px_4px_rgba(29,104,255,0.10)] transition-colors font-medium"
