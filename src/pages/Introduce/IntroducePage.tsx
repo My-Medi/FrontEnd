@@ -54,7 +54,7 @@ const IntroducePage: React.FC = () => {
   }
 
   return (
-    <main className="min-h-screen">
+    <main>
       {/* 광고 배너 섹션 */}
       <section className="w-full flex justify-center px-4 pt-6 pb-9 xl:px-4 md:px-6 sm:px-4">
         <div className="w-full max-w-7xl xl:max-w-7xl md:max-w-7xl">

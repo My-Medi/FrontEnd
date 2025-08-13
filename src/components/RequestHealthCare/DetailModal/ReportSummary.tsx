@@ -105,6 +105,22 @@ const ReportSummary: React.FC<ReportProps> = ({
     urineProtein: urineProtein ?? summary?.urine?.urineTestStatus ?? null,
   };
 
+  const mapUrineProteinStatus = (status?: string | null) => {
+    if (!status) return '-';
+    const s = String(status).toUpperCase();
+    switch (s) {
+      case 'NORMAL':
+        return '정상';
+      case 'BORDERLINE':
+        return '경계';
+      case 'PROTEINURIA':
+        return '단백뇨의심';
+      default:
+        return status;
+    }
+  };
+  const urineProteinDisplay = mapUrineProteinStatus(derived.urineProtein as any);
+
   const isEmpty = (v: any) => v === undefined || v === null || (typeof v === 'number' && Number.isNaN(v));
   const hasAnyValue = !Object.values(derived).every(isEmpty);
   return (
@@ -246,7 +262,7 @@ const ReportSummary: React.FC<ReportProps> = ({
                   요단백
                 </p>
                 <p className='text-[14px] mt-[7px] font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
-                  {derived.urineProtein ?? '-'}
+                  {urineProteinDisplay}
                 </p>
               </div>
             </div>
@@ -316,7 +332,7 @@ const ReportSummary: React.FC<ReportProps> = ({
               `LDL-콜레스테롤 : ${derived.ldl ?? '-'} mg/dL`,
             ],
           },
-          { title: '요단백', status: '안심', values: [`${derived.urineProtein ?? '-'}`] },
+          { title: '요단백', status: '안심', values: [`${urineProteinDisplay}`] },
         ].map((section, idx) => (
           <div key={idx} className='flex w-[160px] flex-col items-start'>
             <div className='flex items-center gap-2 mb-1'>

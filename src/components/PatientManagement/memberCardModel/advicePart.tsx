@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import openDataImg from '/src/assets/open-data.svg';
-import { patientManagementAdviceList } from '../../../data/patientManagementAdvice';
+import { useExpertUserAdvices } from '../../../hooks/experts/queries/useExpertUserAdvices';
 
 interface AdviceItemProps {
   message: string;
@@ -8,6 +8,26 @@ interface AdviceItemProps {
 }
 
 const AdviceItem: React.FC<AdviceItemProps> = ({ message, registerDate }) => {
+  const formatShortDate = (dateString: string) => {
+    if (!dateString) return '';
+    const m = dateString.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+    if (m) {
+      const yy = Number(m[1]) % 100;
+      const month = Number(m[2]);
+      const day = Number(m[3]);
+      if (Number.isFinite(yy) && Number.isFinite(month) && Number.isFinite(day)) {
+        return `${yy}. ${month}. ${day}.`;
+      }
+    }
+    const d = new Date(dateString);
+    if (!isNaN(d.getTime())) {
+      const yy = d.getFullYear() % 100;
+      const month = d.getMonth() + 1;
+      const day = d.getDate();
+      return `${yy}. ${month}. ${day}.`;
+    }
+    return dateString;
+  };
   return (
     <>
       <div className='flex h-[76px] px-[32px] items-center border-y border-[#82ABFD]'>
@@ -19,19 +39,17 @@ const AdviceItem: React.FC<AdviceItemProps> = ({ message, registerDate }) => {
       </div>
       <div className='flex flex-col items-end mb-[5px]'>
         <span className='text-[#4D5053] font-[Pretendard] text-[14px] font-medium leading-[24px] tracking-[-0.42px]'>
-          {registerDate} 등록
+          {formatShortDate(registerDate)} 등록
         </span>
       </div>
     </>
   );
 };
 
-const AdvicePart = () => {
+const AdvicePart: React.FC<{ userId?: number }> = ({ userId }) => {
   const [showAll, setShowAll] = useState(false);
-
-  const visibleAdvice = showAll
-    ? patientManagementAdviceList
-    : patientManagementAdviceList.slice(0, 2);
+  const { data } = useExpertUserAdvices(userId ?? null, 0, showAll ? 10 : 2);
+  const adviceList = data?.adviceList ?? [];
 
   return (
     <div className='flex flex-col font-[Pretendard]'>
@@ -47,8 +65,8 @@ const AdvicePart = () => {
 
       {/* 조언 리스트 */}
       <div className='flex flex-col'>
-        {visibleAdvice.map((item, index) => (
-          <AdviceItem key={index} message={item.message} registerDate={item.registerDate} />
+        {adviceList.map((item) => (
+          <AdviceItem key={item.adviceId} message={item.adviceComment} registerDate={item.createdDate} />
         ))}
       </div>
 
