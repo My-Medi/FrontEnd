@@ -23,7 +23,7 @@ const ExpertHome: React.FC<ExpertHomeProps> = ({
   today,
   onDateSelect,
   onEditInfo,
-  // onMenuSelect,
+  onMenuSelect,
 }) => {
   switch (selectedMenu) {
     case 0: // 마이 홈
@@ -34,7 +34,7 @@ const ExpertHome: React.FC<ExpertHomeProps> = ({
             userType='expert'
             useApiData={true}
           />
-          <ExpertSchedule />
+          <ExpertSchedule onGoPatientManagement={() => onMenuSelect(1)} />
           <HomeCalendar selectedDate={selectedDate} today={today} onDateSelect={onDateSelect} userType='expert' />
         </>
       );

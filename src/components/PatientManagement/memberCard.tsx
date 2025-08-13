@@ -39,6 +39,7 @@ const MemberCard: React.FC<{ member: Member }> = ({ member }) => {
     <div
       className='flex sm:w-[1046px] w-full cursor-pointer h-[168px] px-14 items-center gap-[40px] rounded-[20px]'
       style={{ border: `0.5px solid ${color}`, background: 'rgba(255, 255, 255, 0.80)' }}
+      onClick={() => setShowMemberCardModal(true)}
     >
       <div className='w-[124px] h-[124px] rounded-full border-[2px] border-[#1D68FF] overflow-hidden'>
         <img
@@ -60,7 +61,7 @@ const MemberCard: React.FC<{ member: Member }> = ({ member }) => {
         <span>건강 관심 분야 : {member.healthInterest.join(', ')}</span>
       </div>
 
-      <div className='ml-auto mr-[-40px]' onClick={() => setShowMemberCardModal(true)}>
+      <div className='ml-auto mr-[-40px]'>
         <FiChevronRight
           className='flex cursor-pointer'
           size={160}
