@@ -74,9 +74,9 @@ const EmptyReport = () => {
               <path
                 d='M2.44995 1.90039L10.55 10.0004L2.44995 18.1004'
                 stroke='white'
-                stroke-width='3'
-                stroke-linecap='round'
-                stroke-linejoin='round'
+                strokeWidth='3'
+                strokeLinecap='round'
+                strokeLinejoin='round'
               />
             </svg>
           </button>
