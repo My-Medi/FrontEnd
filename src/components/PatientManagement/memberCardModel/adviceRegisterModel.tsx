@@ -1,21 +1,30 @@
 import React, { useState } from 'react';
 import BackIcon from '/src/assets/back.svg';
+import { useRegisterAdviceMutation } from '../../../hooks/experts/mutations/useRegisterAdviceMutation';
 
 interface AdviceRegisterModalProps {
+  userId: number;
   onClose: (isFromRegister?: boolean) => void; // 모달을 닫을 때 실행할 함수
 }
 
-const AdviceRegisterModal: React.FC<AdviceRegisterModalProps> = ({ onClose }) => {
+const AdviceRegisterModal: React.FC<AdviceRegisterModalProps> = ({ userId, onClose }) => {
   const [adviceText, setAdviceText] = useState('');
+  const registerAdvice = useRegisterAdviceMutation();
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setAdviceText(e.target.value);
   };
 
   const handleRegister = () => {
-    alert('한줄 조언 등록 완료');
-    // 등록 버튼을 누르면 모든 모달을 닫기
-    onClose(true); // isFromRegister = true
+    if (!adviceText.trim()) return;
+    registerAdvice.mutate(
+      { userId, adviceComment: adviceText.trim() },
+      {
+        onSuccess: () => {
+          onClose(true);
+        },
+      },
+    );
   };
   return (
     <>
@@ -48,7 +57,8 @@ const AdviceRegisterModal: React.FC<AdviceRegisterModalProps> = ({ onClose }) =>
           <textarea
             value={adviceText}
             onChange={handleTextChange}
-            className='w-full ml-[40px] mt-[20px] h-[42px] p-[10px_24px] resize-none rounded-[14px] border border-[#C5C8CB] bg-[#FFF] text-[14px] text-[#121218] font-[Pretendard] leading-[22px] placeholder:text-[#75787B] max-w-full'
+            rows={1}
+            className='w-full ml-[40px] mt-[20px] h-[42px] p-[10px_24px] resize-none rounded-[14px] border border-[#C5C8CB] bg-[#FFF] text-[14px] text-[#121218] font-[Pretendard] leading-[22px] placeholder:text-[#75787B] max-w-full overflow-hidden'
             placeholder='한줄 조언을 등록해 보세요!'
           />
 

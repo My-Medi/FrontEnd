@@ -134,7 +134,7 @@ const MemberCardModal: React.FC<MemberCardModalProps> = ({
                 <RequestHealthGoal goal={info?.goal ?? ''} />
                 <MemberReauestMessage message={info?.requestNote ?? ''} />
                 {/* 여기가 등록한 한줄 조언 */}
-                <AdvicePart />
+                <AdvicePart userId={member.userId} />
                 <AbnormalPart abnormal={info?.abnormalCheckItems ?? []} />
                 <ReportSummary nickname={info?.nickname ?? member.nickname} summary={summary} />
               </div>
@@ -157,7 +157,12 @@ const MemberCardModal: React.FC<MemberCardModalProps> = ({
       )}
       {/* AdviceRegisterModal 열기 */}
 
-      {showAdviceModal && <AdviceRegisterModal onClose={() => setShowAdviceModal(false)} />}
+      {showAdviceModal && (
+        <AdviceRegisterModal
+          userId={member.userId}
+          onClose={() => setShowAdviceModal(false)}
+        />
+      )}
       {showConsultModal && <ConsultReservationModal onClose={() => setShowConsultModal(false)} />}
     </>
   );

@@ -79,13 +79,12 @@ const MemberCard: React.FC<{ member: Member }> = ({ member }) => {
       )}
       {showAdviceRegisterModal && (
         <AdviceRegisterModal
+          userId={member.userId}
           onClose={(isFromRegister = false) => {
             setShowAdviceRegisterModal(false);
-            // 등록 버튼을 누르면 모든 모달을 닫기
             if (isFromRegister) {
               setShowMemberCardModal(false);
             }
-            // 뒤로가기 버튼을 누르면 memberCardModal로 돌아감
           }}
         />
       )}

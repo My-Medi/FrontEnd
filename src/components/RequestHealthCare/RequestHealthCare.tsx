@@ -16,11 +16,13 @@ const RequestHealthCare: React.FC = () => {
   const rejectMut = useRejectConsultation();
   const totalPages = listQuery.data?.totalPages ?? 0;
   const content = listQuery.data?.content ?? [];
+  const expertNickname = listQuery.data?.nickname ?? '';
+  const expertName = listQuery.data?.name ?? '';
 
   return (
     <div className='p-8 xl:p-16 min-h-[60vh]'>
       <div className='flex justify-center'>
-        <RequsetHealthHeader expertNickname='튼튼핏' expertName='이수형' />
+        <RequsetHealthHeader expertNickname={expertNickname} expertName={expertName} />
       </div>
       {/* 로딩 */}
       {listQuery.isLoading && (
