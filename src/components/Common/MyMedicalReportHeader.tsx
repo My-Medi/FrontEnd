@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import FilterIcon from '/src/assets/MyMedicalReport/filter.svg';
+import React from 'react';
 import HealthConstantIcon from '/src/assets/health-constants/total-constant.svg';
+import MyMedicalReportRoundSelector from './MyMedicalReportRoundSelector';
 
 interface HeaderProps {
   nickname: string;
@@ -27,16 +27,7 @@ const Header: React.FC<HeaderProps> = ({
   onAddRound,
   onFilterClick,
 }) => {
-  const shouldDisplayRoundSection = () => {
-    // 배열이 존재하고, 길이가 0보다 크며, 실제 유효한 회차 데이터가 있을 때만 표시
-    return Array.isArray(rounds) && rounds.length > 0 && rounds.some((round) => round > 0);
-  };
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-
-  const toggleFilter = () => {
-    setIsFilterOpen(!isFilterOpen);
-    onFilterClick();
-  };
+  
 
   return (
     <div className='w-[1301px] mx-auto pt-6'>
@@ -74,57 +65,13 @@ const Header: React.FC<HeaderProps> = ({
           </div>
 
           {/* 회차 버튼 영역 */}
-          {shouldDisplayRoundSection() && (
-            <div className='flex mt-[10px] items-center gap-2 relative'>
-              <button
-                onClick={onAddRound}
-                className='flex h-10 px-[30px] justify-center items-center gap-[10px] text-[#25282B] bg-white text-[16px] font-medium leading-[36px] tracking-[-0.48px] border border-[#D9D9D9] rounded-full'
-              >
-                + NEW
-              </button>
-
-              {[...rounds.slice(-2)].reverse().map((round) => (
-                <button
-                  key={round}
-                  onClick={() => onRoundChange(round)}
-                  className={`flex h-10 px-[30px] justify-center items-center gap-[10px] rounded-full border text-[16px] font-semibold leading-[22px] tracking-[-0.48px] ${
-                    selectedRound === round
-                      ? 'bg-[#82ABFD] border-[#82ABFD] text-white'
-                      : 'bg-white border-[#D9D9D9] text-[#25282B]'
-                  }`}
-                >
-                  {round}회차
-                </button>
-              ))}
-
-              <div className='relative'>
-                <img
-                  src={FilterIcon}
-                  width={88}
-                  height={40}
-                  onClick={toggleFilter}
-                  className='cursor-pointer ml-2 mr-[-10px]'
-                  alt='필터'
-                />
-                {isFilterOpen && (
-                  <div className='absolute top-[45px] right-0 z-10 bg-white shadow-lg rounded-md py-2 px-4 max-h-[250px] overflow-y-auto border border-gray-200'>
-                    {rounds.map((round) => (
-                      <div
-                        key={round}
-                        onClick={() => {
-                          onRoundChange(round);
-                          setIsFilterOpen(false);
-                        }}
-                        className='text-[#121218] text-sm py-1 hover:bg-gray-100 cursor-pointer text-center'
-                      >
-                        {round}회차
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
+          <MyMedicalReportRoundSelector
+            rounds={rounds}
+            selectedRound={selectedRound}
+            onRoundChange={onRoundChange}
+            onAddRound={onAddRound}
+            onFilterClick={onFilterClick}
+          />
         </div>
 
         {/* 오른쪽 - 텍스트 + 색상 이미지 */}

@@ -4,6 +4,8 @@ import type {
   ExpertUserInfoResponse,
 } from '../../types/consultation';
 import API from '../axios';
+import type { ReportSummaryResponse } from '../../types/reportSummary';
+import type { HealthCheckupFormResponse } from '../../types/healthCheckupForm';
 
 export const getExpertRequestedConsultations = async (
   page = 0,
@@ -51,6 +53,28 @@ export const getExpertUserInfo = async (
   const res = await API.get<ExpertUserInfoResponse>(
     `/experts/users/${userId}/info`,
     { params: { status } },
+  );
+  return res.data;
+};
+
+// 전문가용 특정 사용자 리포트 요약 조회
+export const getExpertReportSummary = async (
+  userId: number,
+): Promise<ReportSummaryResponse> => {
+  const res = await API.get<ReportSummaryResponse>(
+    `/experts/reports/users/${userId}/summary`,
+  );
+  return res.data;
+};
+
+// 전문가가 특정 사용자 리포트 상세(회차) 조회
+export const getExpertUserReportByRound = async (
+  userId: number,
+  round: number,
+): Promise<HealthCheckupFormResponse> => {
+  const res = await API.get<HealthCheckupFormResponse>(
+    `/experts/reports/users/${userId}`,
+    { params: { round } },
   );
   return res.data;
 };

@@ -8,8 +8,9 @@ import MemberReauestMessage from './memberRequestMessage';
 import AdvicePart from './advicePart';
 import AdviceRegisterModal from './adviceRegisterModel';
 import ConsultReservationModal from '../consultReservationModal/CalendarModal';
-import { useNavigate } from 'react-router-dom';
 import { useExpertUserInfo } from '../../../hooks/consultation/expert/queries/useExpertUserInfo';
+import { useExpertReportSummary } from '../../../hooks/consultation/expert/queries/useExpertReportSummary';
+import { useNavigate } from 'react-router-dom';
 
 interface Member {
   userId: number;
@@ -42,7 +43,9 @@ const MemberCardModal: React.FC<MemberCardModalProps> = ({
   const [showAdviceModal, setShowAdviceModal] = useState(false);
   const [showConsultModal, setShowConsultModal] = useState(false);
   const navigate = useNavigate();
+  const [selectedRound] = useState<number>(1);
   const { data: info } = useExpertUserInfo(member.userId, 'ACCEPTED');
+  const { data: summary } = useExpertReportSummary(member.userId);
 
   const toKoreanGender = (g?: string) => {
     const norm = (g ?? '').toUpperCase();
@@ -56,7 +59,7 @@ const MemberCardModal: React.FC<MemberCardModalProps> = ({
     return typeof a === 'number' ? a : parseInt(a as any, 10) || 0;
   }, [info?.age, member.age]);
   const handleClick = () => {
-    navigate('/health-result-input');
+    navigate(`/health-result-input?userId=${member.userId}&round=${selectedRound || 1}`);
   };
   return (
     <>
@@ -131,7 +134,7 @@ const MemberCardModal: React.FC<MemberCardModalProps> = ({
                 {/* 여기가 등록한 한줄 조언 */}
                 <AdvicePart />
                 <AbnormalPart abnormal={info?.abnormalCheckItems ?? []} />
-                <ReportSummary nickname={info?.nickname ?? member.nickname} />
+                <ReportSummary nickname={info?.nickname ?? member.nickname} summary={summary} />
               </div>
               {/* 하단 버튼 */}
               <div className='flex flex-col ml-[12px] items-center border-[#DBE6FF] w-[300px] h-[56px] gap-4 '>

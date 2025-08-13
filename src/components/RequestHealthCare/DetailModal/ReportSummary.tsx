@@ -9,6 +9,16 @@ import DotCol from '@/assets/dotcol.svg';
 
 interface ReportProps {
   nickname: string;
+  summary?: {
+    obesity?: { bmi?: number; waistType?: string };
+    hypertension?: { systolic?: number; diastolic?: number };
+    diabetes?: { fastingGlucose?: number };
+    kidney?: { creatinine?: number; egfr?: number };
+    liver?: { ast?: number; alt?: number; gtp?: number };
+    anemia?: { hemoglobin?: number };
+    dyslipidemia?: { totalCholesterol?: number; hdl?: number; triglyceride?: number; ldl?: number };
+    urine?: { urineTestStatus?: string };
+  };
   bmi?: number | null;
   waist?: number | null;
   /* 수축기 혈압 */
@@ -58,6 +68,7 @@ const getStatusIcon = (status: string) => {
 
 const ReportSummary: React.FC<ReportProps> = ({
   nickname,
+  summary,
   bmi,
   waist,
   sp,
@@ -75,9 +86,6 @@ const ReportSummary: React.FC<ReportProps> = ({
   ldl,
   urineProtein,
 }) => {
-  // 외부 API 의존 제거: 상위에서 전달된 값만 표시
-  const summary = undefined as any;
-
   const derived = {
     bmi: bmi ?? summary?.obesity?.bmi ?? null,
     waist: waist ?? (summary?.obesity?.waistType as any) ?? null,
@@ -276,39 +284,39 @@ const ReportSummary: React.FC<ReportProps> = ({
           {
             title: '비만/복부비만',
             status: '안심',
-            values: [`체질량 지수 : ${bmi} kg/m²`, `허리둘레 : ${waist} mm/HG`],
+            values: [`체질량 지수 : ${derived.bmi ?? '-'} kg/m²`, `허리둘레 : ${derived.waist ?? '-'} mm/HG`],
           },
           {
             title: '고혈압',
             status: '정상',
-            values: [`수축기 혈압 : ${sp} kg/m²`, `이완기 혈압 : ${dp} mm/HG`],
+            values: [`수축기 혈압 : ${derived.sp ?? '-'} kg/m²`, `이완기 혈압 : ${derived.dp ?? '-'} mm/HG`],
           },
-          { title: '당뇨병', status: '주의', values: [`공복혈당 : ${fastingBlood} mg/dL`] },
+          { title: '당뇨병', status: '주의', values: [`공복혈당 : ${derived.fastingBlood ?? '-'} mg/dL`] },
           {
             title: '신장질환',
             status: '안심',
             values: [
-              `혈청 크레아티닌 : ${creatinine} mg/dL`,
-              `eGFR신사구체여과율 : ${eGFR} ml/min/1.73m²`,
+              `혈청 크레아티닌 : ${derived.creatinine ?? '-'} mg/dL`,
+              `eGFR신사구체여과율 : ${derived.eGFR ?? '-'} ml/min/1.73m²`,
             ],
           },
           {
             title: '간장질환',
             status: '정상',
-            values: [`AST : ${ast} IU/L`, `ALT : ${alt} IU/L`, `감마-GTP(Y-GTP) : ${gtp} IU/L`],
+            values: [`AST : ${derived.ast ?? '-'} IU/L`, `ALT : ${derived.alt ?? '-'} IU/L`, `감마-GTP(Y-GTP) : ${derived.gtp ?? '-'} IU/L`],
           },
-          { title: '빈혈', status: '주의', values: [`혈색소 : ${hemoglobin} g/dL`] },
+          { title: '빈혈', status: '주의', values: [`혈색소 : ${derived.hemoglobin ?? '-'} g/dL`] },
           {
             title: '이상지질혈증',
             status: '정상',
             values: [
-              `총콜레스테롤 : ${cholesterol} mg/dL`,
-              `HDL-콜레스테롤 : ${hdl} mg/dL`,
-              `중성지방 : ${neutralFat} mg/dL`,
-              `LDL-콜레스테롤 : ${ldl} mg/dL`,
+              `총콜레스테롤 : ${derived.cholesterol ?? '-'} mg/dL`,
+              `HDL-콜레스테롤 : ${derived.hdl ?? '-'} mg/dL`,
+              `중성지방 : ${derived.neutralFat ?? '-'} mg/dL`,
+              `LDL-콜레스테롤 : ${derived.ldl ?? '-'} mg/dL`,
             ],
           },
-          { title: '요단백', status: '안심', values: [`${urineProtein}`] },
+          { title: '요단백', status: '안심', values: [`${derived.urineProtein ?? '-'}`] },
         ].map((section, idx) => (
           <div key={idx} className='flex w-[160px] flex-col items-start'>
             <div className='flex items-center gap-2 mb-1'>

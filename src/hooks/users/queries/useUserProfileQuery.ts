@@ -22,7 +22,7 @@ export const useUserProfileQuery = () => {
 };
 
 // 요약 사용자 프로필 조회 훅 (/users/profile)
-export const useUserProfileOverviewQuery = () => {
+export const useUserProfileOverviewQuery = (enabled: boolean = true) => {
   return useQuery<UserProfileOverview>({
     queryKey: ['userProfileOverview'],
     queryFn: async () => {
@@ -32,6 +32,7 @@ export const useUserProfileOverviewQuery = () => {
       }
       return response.result!;
     },
+    enabled,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
     retry: 2,

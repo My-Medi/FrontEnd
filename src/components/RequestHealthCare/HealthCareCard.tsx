@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FiChevronRight } from 'react-icons/fi';
 import HealthDataModal from './DetailModal/DetailModal';
+import { useExpertReportSummary } from '../../hooks/consultation/expert/queries/useExpertReportSummary';
 import { useExpertUserInfo } from '../../hooks/consultation/expert/queries/useExpertUserInfo';
 
 export interface RequestHealthCareCardProps {
@@ -31,6 +32,7 @@ const RequestHealthCareCard: React.FC<RequestHealthCareCardProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   // 상세 API는 모달 열릴 때만 트리거
   const userInfoQuery = useExpertUserInfo(isModalOpen ? (userId ?? null) : null, 'REQUESTED');
+  const reportSummaryQuery = useExpertReportSummary(isModalOpen ? (userId ?? null) : null);
   const ageDisplay = typeof age === 'number' ? `만 ${age}세` : age;
   const toKoreanGender = (g?: string) => {
     const norm = (g ?? '').toString().toUpperCase();
@@ -201,6 +203,10 @@ const RequestHealthCareCard: React.FC<RequestHealthCareCardProps> = ({
             goal: userInfoQuery.data?.goal ?? null,
             abnormal: userInfoQuery.data?.abnormalCheckItems ?? [],
           }}
+          // 요약 데이터 전달
+          // ReportSummary는 상위에서 내려준 값이 있으면 표시
+          // health modal 내부에서 그대로 전달
+          summary={reportSummaryQuery.data}
           onClose={() => setIsModalOpen(false)}
           onAccept={() => {
             onAccept?.();

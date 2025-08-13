@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import unionSvg from '../../../assets/Expert/Union.svg';
 import backSvg from '../../../assets/Expert/back.svg';
 import RequestModal from './RequestModal';
@@ -10,6 +11,7 @@ import SuccessModal from './SuccessModal';
 import { useExpertDetailQuery } from '../../../hooks/experts/queries/useExpertDetailQuery';
 import { getSpecialtyKoreanName } from '../../../types/expert/common';
 import { formatPhoneNumber } from '../../../utils/phoneUtils';
+import { useHealthProposalQuery } from '../../../hooks/healthProposal/useHealthProposalQuery';
 
 interface ExpertDetailModalProps {
   expertId: number;
@@ -23,9 +25,12 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
   const [showRequestModal, setShowRequestModal] = useState(false);
   const [showReRequestModal, setShowReRequestModal] = useState(false);
   const [showDetailSuccess, setShowDetailSuccess] = useState(false);
+  const [showFillRequestPrompt, setShowFillRequestPrompt] = useState(false);
+  const navigate = useNavigate();
 
   // 전문가 상세 정보 조회
   const { data: expert, isLoading, error } = useExpertDetailQuery(expertId, expertStatus);
+  const healthProposalQuery = useHealthProposalQuery();
 
   useModalScrollLock(!showRequestModal && !showReRequestModal && !showDetailSuccess);
 
@@ -59,8 +64,13 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
       // 요청 상태일 때는 재요청 확인 모달 먼저 표시
       setShowReRequestModal(true);
     } else {
-      // 거절 상태일 때는 바로 요청 모달 표시
-      setShowRequestModal(true);
+      // 요청 전, 건강관리요청서 작성 여부 확인
+      const hasProposal = !!healthProposalQuery.data?.result;
+      if (hasProposal) {
+        setShowRequestModal(true);
+      } else {
+        setShowFillRequestPrompt(true);
+      }
     }
   };
 
@@ -329,6 +339,36 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
           expertPosition={getSpecialtyKoreanName(expert.specialty)}
           expertRealName={expert.nickname || expert.name}
         />
+      )}
+
+      {/* 건강관리요청서 작성 안내 모달 */}
+      {showFillRequestPrompt && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4" onClick={() => setShowFillRequestPrompt(false)}>
+          <div className="absolute inset-0 bg-[#121218]/40" />
+          <div className="relative bg-white rounded-[24px] w-[520px] max-w-full p-8" onClick={(e) => e.stopPropagation()}>
+            <div className="text-center text-[#121218] text-[18px] font-medium leading-[28px] mb-6">
+              건강관리요청서를 먼저 작성해주세요.
+            </div>
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => setShowFillRequestPrompt(false)}
+                className="w-[180px] h-[44px] rounded-full bg-white text-[#25282B] border border-[#E3E6EB] font-medium"
+              >
+                닫기
+              </button>
+              <button
+                onClick={() => {
+                  setShowFillRequestPrompt(false);
+                  onClose();
+                  navigate('/myhome');
+                }}
+                className="w-[180px] h-[44px] rounded-full bg-[#1D68FF] text-white font-semibold"
+              >
+                작성하러 가기
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* 요청사항 작성 모달 */}

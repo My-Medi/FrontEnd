@@ -6,7 +6,8 @@ import { useUserProfileOverviewQuery } from '../../../hooks/users/queries/useUse
 const NavBar = memo(() => {
   const navigate = useNavigate();
   const { userType, isAuthenticated } = useAuth();
-  const { data: profileOverview } = useUserProfileOverviewQuery();
+  const isExpert = userType === 'expert';
+  const { data: profileOverview } = useUserProfileOverviewQuery(!isExpert);
 
   // 디버깅용: userType 변경 시 콘솔에 출력
   useEffect(() => {}, [userType]);
