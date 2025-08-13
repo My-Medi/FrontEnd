@@ -9,14 +9,23 @@ import { createHealthReport, getHealthReportCount } from '../../apis/healthCheck
 import useHealthReportQuery from '../../hooks/healthCheckup/useHealthReportQuery';
 import { useHealthReportUpdateMutation } from '../../hooks/healthCheckup/useHealthReportMutation';
 import type { HealthCheckupRequest } from '../../types/healthCheckupForm';
+import SuccessModal from '../MyHome/Edit/SuccessModal';
+import ConfirmModal from '../MyHome/Edit/ConfirmModal';
 
 const HealthCheckupForm = () => {
   // 회차 상태 관리 (서버 count 기반)
   const [rounds, setRounds] = useState<number[]>([1]);
+  const [serverRoundCount, setServerRoundCount] = useState<number>(1);
   const [currentRound, setCurrentRound] = useState<number>(1);
   // 회차 추가 핸들러
   const onAddRound = () => {
-    const next = Math.max(...rounds) + 1;
+    const currentMax = Math.max(...rounds);
+    // 서버에 저장된 총 회차 수 + 1(새 회차)까지만 허용
+    if (currentMax >= serverRoundCount + 1) {
+      alert('새 회차는 한 번에 하나만 추가할 수 있어요. 먼저 저장해 주세요.');
+      return;
+    }
+    const next = currentMax + 1;
     setRounds([...rounds, next]);
     setCurrentRound(next);
   };
@@ -33,10 +42,12 @@ const HealthCheckupForm = () => {
         const count = res.result ?? 1;
         const arr = Array.from({ length: Math.max(1, count) }, (_, i) => i + 1);
         setRounds(arr);
+        setServerRoundCount(Math.max(1, count));
         setCurrentRound(arr[arr.length - 1]);
       } catch (e) {
         console.error('회차 수 조회 실패', e);
         setRounds([1]);
+        setServerRoundCount(1);
         setCurrentRound(1);
       }
     })();
@@ -44,6 +55,22 @@ const HealthCheckupForm = () => {
 
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>([]);
+
+  // 저장 완료 확인 모달 상태
+  const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false);
+  const [navigateAfterConfirm, setNavigateAfterConfirm] = useState<boolean>(false);
+  const [isGoReportConfirmOpen, setIsGoReportConfirmOpen] = useState<boolean>(false);
+  const openConfirm = (shouldNavigate = false) => {
+    setNavigateAfterConfirm(shouldNavigate);
+    setIsConfirmOpen(true);
+  };
+  const handleCloseConfirm = () => {
+    setIsConfirmOpen(false);
+    if (navigateAfterConfirm) {
+      navigate('/my-medical-report');
+    }
+    setNavigateAfterConfirm(false);
+  };
 
   const removeFile = (index: number) => {
     console.log('파일 삭제 호출됨 - 인덱스:', index);
@@ -766,27 +793,6 @@ const HealthCheckupForm = () => {
   const validateRequiredSelections = (): boolean => {
     const messages: string[] = [];
 
-    // 계측/기본 상태 선택
-    if (!bmiType) messages.push('BMI 상태를 선택해주세요.');
-    if (!waistType) messages.push('허리둘레 상태를 선택해주세요.');
-    if (!hearingLeft) messages.push('청각(좌) 상태를 선택해주세요.');
-    if (!hearingRight) messages.push('청각(우) 상태를 선택해주세요.');
-
-    // 혈압/혈액/신장/간/요검사/영상검사 상태 선택
-    if (!bpType) messages.push('혈압 상태를 선택해주세요.');
-    if (!hemoglobinStatusLabel) messages.push('혈색소 상태를 선택해주세요.');
-    if (!fastingGlucoseTypeLabel) messages.push('공복혈당 상태를 선택해주세요.');
-    if (!lipidProfile) messages.push('지질 프로필 상태를 선택해주세요.');
-    if (!kidneyFunction) messages.push('신장기능 상태를 선택해주세요.');
-    if (!liverFunction) messages.push('간기능 상태를 선택해주세요.');
-    if (!urineProteinType) messages.push('요단백 상태를 선택해주세요.');
-    if (!chestXray) messages.push('흉부촬영 상태를 선택해주세요.');
-
-    // 문진 (과거병력/약물치료/생활습관)
-    if (!history) messages.push('과거병력을 선택해주세요.');
-    if (!medication) messages.push('약물치료 여부를 선택해주세요.');
-    if (!lifestyle || lifestyle.length === 0) messages.push('생활습관을 최소 1개 이상 선택해주세요.');
-    
 
     // 추가검사 세부 옵션
     if (additionalExam === '해당') {
@@ -861,19 +867,7 @@ const HealthCheckupForm = () => {
     const requiredNumbers = [
       height,
       weight,
-      bpHigh,
-      bpLow,
-      hemoglobin,
-      fastingGlucose,
-      cholesterol,
-      hdl,
-      triglyceride,
-      ldl,
-      protein,
-      serumCreatinine,
-      ast,
-      alt,
-      gammaGtp,
+      bmi
     ];
     if (requiredNumbers.some((v) => !v || isNaN(parseFloat(v)))) {
       alert('필수 검사 수치를 모두 입력해주세요.');
@@ -885,11 +879,12 @@ const HealthCheckupForm = () => {
       const hasExisting = Boolean(reportResponse?.result);
       if (hasExisting) {
         await updateMutation.mutateAsync(payload);
-        alert('건강리포트가 성공적으로 수정되었습니다.');
       } else {
         await createHealthReport(payload);
-        alert('건강리포트가 성공적으로 생성되었습니다.');
+        // 새 회차 저장 성공 시, 서버 카운트 최신화 (로컬 기준으로 보정)
+        setServerRoundCount((prev) => Math.max(prev, Math.max(...rounds)));
       }
+      openConfirm();
     } catch (error: any) {
       console.error('건강리포트 저장 실패:', error);
       console.error('API error response:', error?.response?.data);
@@ -911,17 +906,15 @@ const HealthCheckupForm = () => {
     navigate('/');
   };
 
-  const handleSaveAndGoReport = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSaveAndGoReport = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (!validateRequiredSelections()) return;
-    if (!hospital.trim()) {
-      alert('병원명을 입력해주세요.');
-      return;
-    }
-    if (!date) {
-      alert('검진일을 선택해주세요.');
-      return;
-    }
+    setIsGoReportConfirmOpen(true);
+  };
+
+  const handleConfirmGoReport = async () => {
+    if (!validateRequiredSelections()) { setIsGoReportConfirmOpen(false); return; }
+    if (!hospital.trim()) { alert('병원명을 입력해주세요.'); setIsGoReportConfirmOpen(false); return; }
+    if (!date) { alert('검진일을 선택해주세요.'); setIsGoReportConfirmOpen(false); return; }
     const requiredNumbers = [
       height,
       weight,
@@ -941,25 +934,31 @@ const HealthCheckupForm = () => {
     ];
     if (requiredNumbers.some((v) => !v || isNaN(parseFloat(v)))) {
       alert('필수 검사 수치를 모두 입력해주세요.');
+      setIsGoReportConfirmOpen(false);
       return;
     }
-
     try {
       const payload = transformFormDataToAPI();
       const hasExisting = Boolean(reportResponse?.result);
       if (hasExisting) {
         await updateMutation.mutateAsync(payload);
-        alert('건강리포트가 성공적으로 수정되었습니다.');
       } else {
         await createHealthReport(payload);
-        alert('건강리포트가 성공적으로 생성되었습니다.');
+        setServerRoundCount((prev) => Math.max(prev, Math.max(...rounds)));
       }
+      setIsGoReportConfirmOpen(false);
       navigate('/my-medical-report');
     } catch (error: any) {
       console.error('건강리포트 저장 후 이동 실패:', error);
       const apiMessage = error?.response?.data?.message || error?.message || '알 수 없는 오류';
       alert(`이동 중 오류가 발생했습니다.\n사유: ${apiMessage}`);
+      setIsGoReportConfirmOpen(false);
     }
+  };
+
+  const handleCancelGoReport = () => {
+    setIsGoReportConfirmOpen(false);
+    navigate('/my-medical-report');
   };
 
   return (
@@ -1730,7 +1729,7 @@ const HealthCheckupForm = () => {
           className='w-[300px] h-[72px] bg-[#FFF] text-black rounded-[60px] text-[24px] font-semibold shadow-[0_0_6px_4px_rgba(29,104,255,0.10)] transition'
           onClick={handleSave}
         >
-          {reportResponse?.result ? '수정하기' : '저장하기'}
+          {reportResponse?.result ? '저장하기' : '저장하기'}
         </button>
         <button
           className='flex h-[72px] px-20 py-5 justify-center items-center gap-[10px] rounded-[60px] bg-[#1D68FF] text-white text-center font-pretendard text-[24px] font-semibold leading-[36px] tracking-[-0.72px]'
@@ -1740,6 +1739,19 @@ const HealthCheckupForm = () => {
         </button>
 
       </div>
+      {/* 저장 완료 확인 모달 */}
+      <SuccessModal
+        isOpen={isConfirmOpen}
+        onClose={handleCloseConfirm}
+        message="건강리포트가 저장되었습니다"
+      />
+      {/* 이동 확인 모달 */}
+      <ConfirmModal
+        isOpen={isGoReportConfirmOpen}
+        onClose={handleCancelGoReport}
+        onConfirm={handleConfirmGoReport}
+        onCancel={handleCancelGoReport}
+      />
     </form>
   );
 };
