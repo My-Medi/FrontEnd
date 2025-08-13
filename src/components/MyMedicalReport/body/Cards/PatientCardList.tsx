@@ -25,7 +25,7 @@ const PatientCardList = () => {
         {patientData.map((patient) => {
           const average = averageData.find((avg) => avg.id === patient.id);
           return (
-            <div key={patient.id} className='mb-[10px] mt-[60px]'>
+            <div key={patient.id} className='mb-[10px] mt-[48px]'>
               {/* 설명 문구 */}
               {average && (
                 <IndicationDescription
@@ -33,11 +33,18 @@ const PatientCardList = () => {
                   patientValue={patient.value}
                   averageValue={average.value}
                   ageGroup={average.ageGroup}
+                  rank=''
+                  gender={patient.gender}
+                  // 신규 백엔드 필드
+                  ageGroup10Yr={average.ageGroup10Yr}
+                  rankType={average.rankType as '상위' | '하위'}
+                  rankPercent={average.rankPercent}
+                  comparisonText={average.comparisonText}
                 />
               )}
 
               {/* 좌우 카드 묶음 */}
-              <div className='flex gap-4 items-center'>
+              <div className='flex gap-4  items-center'>
                 <LeftPatientCard
                   nickname={nickname}
                   title={patient.title}

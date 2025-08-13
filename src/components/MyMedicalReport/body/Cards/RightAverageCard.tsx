@@ -5,7 +5,7 @@ interface RightAverageCardProps {
   ageGroup: string; // "20대"
   value: string; // "115"
   unit: string; //  "mm/HG"
-  standard: string; //  "120 미만"
+  standard?: string; //  "120 미만" - optional now
   gender?: string; // "여"
 }
 
@@ -55,9 +55,11 @@ const RightAverageCard: React.FC<RightAverageCardProps> = ({
           <span style={{ fontSize: '18px', fontWeight: 500 }}>{unit}</span>
         </div>
 
-        <p style={{ fontSize: '24px', fontWeight: 500, color: '#75787B', margin: 0 }}>
-          정상 기준 수치 {gender ? `${gender} ${standard}` : standard}
-        </p>
+        {standard && (
+          <p style={{ fontSize: '24px', fontWeight: 500, color: '#75787B', margin: 0 }}>
+            정상 기준 수치 {gender ? `${gender} ${standard}` : standard}
+          </p>
+        )}
       </div>
 
       {/* 하단 점선 + 원 */}

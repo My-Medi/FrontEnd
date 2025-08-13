@@ -6,6 +6,7 @@ export const patientIndicators = {
       value: '17.4',
       unit: 'kg/𝑚²',
       level: '정상',
+      gender: '여성',
     },
     {
       id: 'waist',
@@ -13,6 +14,7 @@ export const patientIndicators = {
       value: '62',
       unit: 'cm',
       level: '안심',
+      gender: '여성',
     },
   ],
   고혈압: [
@@ -22,6 +24,7 @@ export const patientIndicators = {
       value: '125',
       unit: 'mmHg',
       level: '정상',
+      gender: '여성',
     },
     {
       id: 'dbp',
@@ -29,6 +32,7 @@ export const patientIndicators = {
       value: '100',
       unit: 'mmHg',
       level: '정상',
+      gender: '여성',
     },
   ],
   빈혈: [
@@ -38,15 +42,17 @@ export const patientIndicators = {
       value: '17.2',
       unit: 'g/dL',
       level: '정상',
+      gender: '여성',
     },
   ],
   당뇨병: [
     {
       id: 'fbs',
-      title: '공복혈당(FBS)',
+      title: '공복혈당',
       value: '150',
       unit: 'mg/dL',
       level: '정상',
+      gender: '여성',
     },
   ],
   이상지질혈증: [
@@ -56,6 +62,7 @@ export const patientIndicators = {
       value: '100',
       unit: 'mg/dL',
       level: '정상',
+      gender: '여성',
     },
     {
       id: 'hdl',
@@ -63,6 +70,7 @@ export const patientIndicators = {
       value: '78',
       unit: 'mg/dL',
       level: '정상',
+      gender: '여성',
     },
     {
       id: 'tg',
@@ -70,6 +78,7 @@ export const patientIndicators = {
       value: '64',
       unit: 'mg/dL',
       level: '정상',
+      gender: '여성',
     },
     {
       id: 'ldl',
@@ -77,6 +86,7 @@ export const patientIndicators = {
       value: '160',
       unit: 'mg/dL',
       level: '정상',
+      gender: '여성',
     },
   ],
   신장질환: [
@@ -86,6 +96,7 @@ export const patientIndicators = {
       value: '0.8',
       unit: 'mg/dL',
       level: '정상',
+      gender: '여성',
     },
     {
       id: 'egfr',
@@ -93,38 +104,43 @@ export const patientIndicators = {
       value: '72',
       unit: 'mL/min/1.73㎡',
       level: '정상',
+      gender: '여성',
     },
   ],
   간장질환: [
     {
       id: 'ast',
-      title: 'AST(SGOT)',
-      value: '18',
+      title: 'AST',
+      value: '25',
       unit: 'IU/L',
       level: '정상',
+      gender: '여성',
     },
     {
       id: 'alt',
-      title: 'ALT(SGPT)',
-      value: '9',
+      title: 'ALT',
+      value: '30',
       unit: 'IU/L',
       level: '정상',
+      gender: '여성',
     },
     {
-      id: 'ygtp',
-      title: '감마-GTP(Y-GTP)',
-      value: '17',
+      id: 'ggt',
+      title: '감마-GTP',
+      value: '35',
       unit: 'IU/L',
       level: '정상',
+      gender: '여성',
     },
   ],
   요단백: [
     {
-      id: 'proteinuria',
+      id: 'urine',
       title: '요단백',
       value: '정상',
       unit: '',
       level: '정상',
+      gender: '여성',
     },
   ],
-} as const;
+};

@@ -19,7 +19,7 @@ const Chart: React.FC<ChartProps> = ({ checkupDate, nickname }) => {
   // level -> stage로 키 변환해서 Gage에 맞게 가공
   const indicators = rawIndicators.map((item) => ({
     id: item.id,
-    stage: item.level, // level 키를 stage로 맞춰줌
+    stage: item.level as '안심' | '정상' | '관심' | '주의' | '위험', // 타입 캐스팅 추가
   }));
   return (
     <div className='flex flex-col'>
