@@ -1,19 +1,62 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Chart from '../components/MyMedicalReport/body/Chart';
 import Header from '../components/Common/MyMedicalReportHeader';
+import { useNavigate } from 'react-router-dom';
+import { getHealthReportByRound, getHealthReportCount } from '../apis/healthCheckupApi/healthCheckup';
 
 const MyMedicalReport: React.FC = () => {
-  const [rounds, setRounds] = useState<number[]>([1, 2]); // 회차 리스트
-  const [selectedRound, setSelectedRound] = useState<number>(2); // 현재 선택된 회차
+  const navigate = useNavigate();
+  const [rounds, setRounds] = useState<number[]>([]); // 서버에서 불러온 회차 리스트
+  const [selectedRound, setSelectedRound] = useState<number>(1); // 현재 선택된 회차
+  const [checkupDate, setCheckupDate] = useState<string>('');
+
+  // 초기 로드시 서버의 총 회차 수를 불러와 UI 세팅
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await getHealthReportCount();
+        const count = res.result ?? 0;
+        if (count <= 0) {
+          navigate('/empty-report');
+          return;
+        }
+        const safeCount = Math.max(1, count);
+        const arr = Array.from({ length: safeCount }, (_, i) => i + 1);
+        setRounds(arr);
+        setSelectedRound(safeCount);
+      } catch (e) {
+        console.error('회차 수 조회 실패', e);
+        setRounds([1]);
+        setSelectedRound(1);
+      }
+    })();
+  }, []);
+
+  // 선택된 회차 변경 시 해당 회차 데이터 조회하여 화면에 반영
+  useEffect(() => {
+    (async () => {
+      if (!selectedRound) return;
+      try {
+        const res = await getHealthReportByRound(selectedRound);
+        const raw = res.result?.checkupDate ?? '';
+        // YYYY-MM-DD -> YYYY/MM/DD 표기로 변경 (replaceAll 미지원 환경 대비)
+        setCheckupDate(raw.split('-').join('/'));
+      } catch (e) {
+        console.error('회차별 리포트 조회 실패', e);
+        setCheckupDate('');
+      }
+    })();
+  }, [selectedRound]);
 
   const handleRoundChange = (round: number) => {
     setSelectedRound(round);
   };
 
   const handleAddRound = () => {
-    const nextRound = rounds.length > 0 ? rounds[rounds.length - 1] + 1 : 1;
-    setRounds((prev) => [...prev, nextRound]);
-    setSelectedRound(nextRound);
+    const currentMax = rounds.length > 0 ? Math.max(...rounds) : 0;
+    const nextRound = currentMax + 1;
+    // 새 회차 입력 화면으로 이동 (저장 완료 후 목록/회차 갱신됨)
+    navigate(`/health-result-input?round=${nextRound}`);
   };
 
   const handleFilterClick = () => {
@@ -35,7 +78,7 @@ const MyMedicalReport: React.FC = () => {
         onFilterClick={handleFilterClick}
       />
       <div className='flex justify-center mt-[30px]'>
-        <Chart checkupDate='2024/06/27' nickname='하나' />
+        <Chart checkupDate={checkupDate || '-'} nickname='하나' />
       </div>
     </div>
   );
