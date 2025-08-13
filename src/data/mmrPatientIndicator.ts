@@ -3,7 +3,7 @@ export const patientIndicators = {
     {
       id: 'bmi',
       title: '체질량지수',
-      value: '17.4',
+      value: '',
       unit: 'kg/𝑚²',
       level: '정상',
       gender: '여성',

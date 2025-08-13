@@ -9,6 +9,8 @@ import type { Category } from '../../../../constants/medicalCategory';
 import SummaryTextArea from '../SummaryTextArea';
 import Compare from './Compare';
 
+const isUnknown = (v: unknown) => v === undefined || v === null || v === '' || v === 'unknown';
+
 const PatientCardList = () => {
   const [currentCategory, setCurrentCategory] = useState<Category>('비만/복부비만');
   const nickname = '하나';
@@ -24,14 +26,16 @@ const PatientCardList = () => {
       <div>
         {patientData.map((patient) => {
           const average = averageData.find((avg) => avg.id === patient.id);
+          const unknown = isUnknown(patient.value);
+
           return (
             <div key={patient.id} className='mb-[10px] mt-[48px]'>
               {/* 설명 문구 */}
               {average && (
                 <IndicationDescription
                   indicatorName={patient.title}
-                  patientValue={patient.value}
-                  averageValue={average.value}
+                  patientValue={patient.value as any}
+                  averageValue={average.value as any}
                   ageGroup={average.ageGroup}
                   rank=''
                   gender={patient.gender}
@@ -40,23 +44,26 @@ const PatientCardList = () => {
                   rankType={average.rankType as '상위' | '하위'}
                   rankPercent={average.rankPercent}
                   comparisonText={average.comparisonText}
+                  isUnknown={unknown} // 추가: 안내 문구 전환
                 />
               )}
 
               {/* 좌우 카드 묶음 */}
-              <div className='flex gap-4  items-center'>
+              <div className='flex gap-4 items-center'>
                 <LeftPatientCard
                   nickname={nickname}
                   title={patient.title}
-                  value={patient.value}
+                  value={unknown ? undefined : (patient.value as any)} // 값 숨김
                   unit={patient.unit}
                   stage={patient.level as any}
+                  isUnknown={unknown} // 회색 테마 전환
                 />
+                {/* 비교/우측 평균 카드는 유지 (요구사항: 디자인 그대로) */}
                 {average && (
                   <Compare
                     stage={patient.level as any}
-                    patientValue={patient.value}
-                    averageValue={average.value}
+                    patientValue={patient.value as any}
+                    averageValue={average.value as any}
                     indicatorId={patient.id}
                   />
                 )}

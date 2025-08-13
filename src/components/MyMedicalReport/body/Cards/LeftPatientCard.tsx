@@ -5,9 +5,10 @@ import TooltipForTerm from './TooltipForTerm';
 interface LeftPatientCardProps {
   nickname: string;
   title: string;
-  value: string;
+  value?: string;
   unit?: string;
   stage: '정상' | '주의' | '위험' | '안심' | '관심';
+  isUnknown?: boolean;
 }
 
 const LeftPatientCard: React.FC<LeftPatientCardProps> = ({
@@ -16,12 +17,26 @@ const LeftPatientCard: React.FC<LeftPatientCardProps> = ({
   value,
   unit,
   stage,
+  isUnknown = false,
 }) => {
   const style = stageStyleMap[stage];
 
-  return (
-    <div
-      style={{
+  const wrapperStyle: React.CSSProperties = isUnknown
+    ? {
+        width: '420px',
+        height: '226px',
+        borderRadius: '15px',
+        padding: '30px',
+        background:
+          'radial-gradient(79.04% 79.48% at 50% 50%, rgba(157, 160, 163, 0.20) 0%, rgba(157, 160, 163, 0.00) 100%)',
+        border: '1px solid #9DA0A3',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        boxShadow: '0 2px 6px 0 rgba(120, 120, 120, 0.15)',
+      }
+    : {
         width: '420px',
         height: '226px',
         borderRadius: '15px',
@@ -33,8 +48,16 @@ const LeftPatientCard: React.FC<LeftPatientCardProps> = ({
         alignItems: 'center',
         justifyContent: 'center',
         boxShadow: '0 2px 6px 0 rgba(120, 120, 120, 0.15)',
-      }}
-    >
+      };
+
+  const dashedColor = isUnknown ? '#9DA0A3' : style.dashedStroke;
+  const circleFill = isUnknown ? 'rgba(157, 160, 163, 0.50)' : (style.circleFill as string);
+  const valueColor = isUnknown ? '#C0C2C4' : '#121218';
+  const unitColor = isUnknown ? '#121218' : '#121218';
+  const stageTextColor = isUnknown ? '#9DA0A3' : style.textColor;
+
+  return (
+    <div style={wrapperStyle}>
       <p
         style={{
           fontWeight: 600,
@@ -57,10 +80,11 @@ const LeftPatientCard: React.FC<LeftPatientCardProps> = ({
             fontSize: '32px',
             fontWeight: 500,
             letterSpacing: '-0.96px',
-            color: '#121218',
+            color: valueColor,
+            minWidth: '1ch', // 레이아웃 안정
           }}
         >
-          {value}
+          {value ?? ''} {/* 빈 문자열로 표시 */}
         </span>
         {unit && (
           <span
@@ -68,7 +92,7 @@ const LeftPatientCard: React.FC<LeftPatientCardProps> = ({
               fontSize: '18px',
               fontWeight: 500,
               letterSpacing: '-0.54px',
-              color: '#121218',
+              color: unitColor,
             }}
           >
             {unit}
@@ -82,12 +106,12 @@ const LeftPatientCard: React.FC<LeftPatientCardProps> = ({
           fontSize: '28px',
           fontWeight: 600,
           letterSpacing: '-0.84px',
-          color: style.textColor,
+          color: stageTextColor,
           marginTop: '10px',
           marginBottom: '12px',
         }}
       >
-        {stage} 단계
+        {isUnknown ? '단계' : `${stage} 단계`}
       </p>
 
       {/* 점선 + 원 */}
@@ -101,25 +125,22 @@ const LeftPatientCard: React.FC<LeftPatientCardProps> = ({
           alignItems: 'flex-start',
         }}
       >
-        {/* 점선 */}
         <div
           style={{
             width: '100%',
             height: '1px',
-            borderTop: `2px dotted ${style.dashedStroke}`,
+            borderTop: `2px dotted ${dashedColor}`,
             position: 'absolute',
             top: '12px',
           }}
         />
-
-        {/* 원 + 퍼지는 그림자 */}
         <div
           style={{
             width: '24px',
             height: '24px',
             borderRadius: '50%',
-            backgroundColor: style.circleFill,
-            boxShadow: `0 0 8px 2px ${style.circleFill}`,
+            backgroundColor: circleFill,
+            boxShadow: `0 0 8px 2px ${circleFill}`,
             position: 'relative',
             zIndex: 1,
           }}

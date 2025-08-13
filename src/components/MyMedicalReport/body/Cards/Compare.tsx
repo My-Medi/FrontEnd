@@ -15,13 +15,12 @@ const stageKeyMap: Record<string, string> = {
   관심: 'interest',
 };
 
-//비교 제외 ID(요단백은 공간만 차지)
+// 비교 제외 ID(요단백은 공간만 차지)
 const noCompareIndicators = ['urine'];
 
-const Compare: React.FC<CompareProps> = ({ stage, patientValue, averageValue, indicatorId }) => {
-  const patientNum = parseFloat(patientValue);
-  const averageNum = parseFloat(averageValue);
+const isUnknown = (v: unknown) => v === undefined || v === null || v === '' || v === 'unknown';
 
+const Compare: React.FC<CompareProps> = ({ stage, patientValue, averageValue, indicatorId }) => {
   const wrapperStyle: React.CSSProperties = {
     display: 'flex',
     justifyContent: 'center',
@@ -38,6 +37,18 @@ const Compare: React.FC<CompareProps> = ({ stage, patientValue, averageValue, in
     );
   }
 
+  if (isUnknown(patientValue)) {
+    return (
+      <img
+        src={`/src/assets/MyMedicalReport/compare/unknown.svg`}
+        alt='비교-unknown'
+        style={{ width: '26px', height: '54px', margin: '0 80px' }}
+      />
+    );
+  }
+
+  const patientNum = parseFloat(patientValue);
+  const averageNum = parseFloat(averageValue);
   if (isNaN(patientNum) || isNaN(averageNum) || averageNum === 0) return null;
 
   let comparison: 'small' | 'same' | 'big';
@@ -52,11 +63,7 @@ const Compare: React.FC<CompareProps> = ({ stage, patientValue, averageValue, in
     <img
       src={svgPath}
       alt={`부등호-${comparison}`}
-      style={{
-        width: '26px',
-        height: '54px',
-        margin: '0 80px',
-      }}
+      style={{ width: '26px', height: '54px', margin: '0 80px' }}
     />
   );
 };
