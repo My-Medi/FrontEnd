@@ -1,6 +1,6 @@
 export type HealthStatus = 'SAFE' | 'WATCH' | 'DANGER' | 'NORMAL' | 'CAUTION' | 'UNKNOWN';
 
-export type Rank = '상위' | '중간' | '하위' | '비교불가' | null;
+export type Rank = '상위' | '하위' | '비교불가' | null;
 
 //비만-체질량지수
 export interface ComparingBmi {
@@ -214,11 +214,14 @@ export interface ComparingUrineProtein {
 //요단백(카테고리)
 export interface UrineProteinAssessmentDto {
   comparingUrineProtein: ComparingUrineProtein;
+  averageComparisonResult: string;
 }
 
 export interface MyMedicalReportResponse {
   totalDataSize: number;
   ageGroup10Yr: number; //연령
+  nickname: string;
+  gender: string;
   obesityAssessmentDto: ObesityAssessmentDto; //비만
   hypertensionAssessmentDto: HypertensionAssessmentDto; //고혈압
   anemiaAssessmentDto: AnemiaAssessmentDto; //빈혈

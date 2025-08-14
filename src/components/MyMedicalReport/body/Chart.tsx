@@ -4,8 +4,9 @@ import ChartSideClip from '/src/assets/MyMedicalReport/chart-2-clip.svg';
 import SafeFace from '/src/assets/health-icons/safe-face.svg';
 import PatientCardList from './Cards/PatientCardList';
 import Gage from './Gage';
-import { patientIndicators } from '../../../data/mmrPatientIndicator';
 import BottomButtons from '../BottomButtons';
+import { useComparingReportQuery } from '../../../hooks/myMedicalReport/useComparingReportQuery';
+import { mapReportToCombinedByCategory } from '../../../utils/mappers/medicalReportMapper';
 
 interface ChartProps {
   checkupDate: string;
@@ -13,14 +14,42 @@ interface ChartProps {
 }
 
 const Chart: React.FC<ChartProps> = ({ checkupDate, nickname }) => {
-  // patientIndicators 객체를 배열로 펼침
-  const rawIndicators = Object.values(patientIndicators).flat();
+  // API 데이터 가져오기
+  const { data: reportData, isLoading, error } = useComparingReportQuery();
 
-  // level -> stage로 키 변환해서 Gage에 맞게 가공
-  const indicators = rawIndicators.map((item) => ({
-    id: item.id,
-    stage: item.level as '안심' | '정상' | '관심' | '주의' | '위험', // 타입 캐스팅 추가
-  }));
+  // API 데이터가 있으면 사용, 없으면 기본값 사용
+  const displayNickname = reportData?.nickname || nickname;
+
+  // indicators 데이터 준비
+  let indicators: Array<{ id: string; stage: '안심' | '정상' | '관심' | '주의' | '위험' }> = [];
+
+  if (reportData) {
+    // API 데이터를 컴포넌트에서 사용할 수 있는 형태로 변환
+    const combinedData = mapReportToCombinedByCategory(
+      reportData,
+      {}, // categoryMap 대신 빈 객체 사용 (API에서 데이터를 받으므로 불필요)
+      reportData.nickname,
+    );
+
+    // 모든 카테고리의 데이터를 하나의 배열로 합치기
+    indicators = Object.values(combinedData)
+      .flat()
+      .map((row) => ({
+        id: row.indicatorId,
+        stage:
+          row.leftProps.stage === '알수없음'
+            ? '정상'
+            : (row.leftProps.stage as '안심' | '정상' | '관심' | '주의' | '위험'),
+      }));
+  }
+
+  if (isLoading) {
+    return <div>로딩 중...</div>;
+  }
+
+  if (error) {
+    return <div>데이터를 불러오는데 실패했습니다.</div>;
+  }
   return (
     <div className='flex flex-col'>
       <div className='w-[1301px] max-h-[2600px] flex-shrink-0 rounded-[20px] border-[2px] border-[#DBE6FF] bg-[linear-gradient(157deg,_rgba(161,189,255,0.30)_-0.5%,_rgba(219,230,255,0.30)_85.34%)] flex flex-col items-center pt-[46px] relative'>
@@ -59,7 +88,8 @@ const Chart: React.FC<ChartProps> = ({ checkupDate, nickname }) => {
                   {checkupDate}
                 </div>
               </div>
-              안녕하세요! <span className='text-[#1D68FF]'>{nickname}</span>님의 메디컬리포트입니다.
+              안녕하세요! <span className='text-[#1D68FF]'>{displayNickname}</span>님의
+              메디컬리포트입니다.
               <img
                 src={SafeFace}
                 alt='safe-face'
@@ -70,10 +100,10 @@ const Chart: React.FC<ChartProps> = ({ checkupDate, nickname }) => {
             </div>
             <div className='flex w-[556px] h-[556px] mt-[50px] mb-[100px]'>
               {/*원형 그래프*/}
-              <Gage nickname={nickname} indicators={indicators} />
+              <Gage nickname={displayNickname} indicators={indicators} />
             </div>
 
-            <PatientCardList />
+            <PatientCardList nickname={nickname} />
           </div>
         </div>
       </div>

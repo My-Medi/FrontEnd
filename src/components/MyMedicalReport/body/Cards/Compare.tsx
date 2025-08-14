@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface CompareProps {
-  stage: '정상' | '주의' | '위험' | '안심' | '관심';
+  stage: '정상' | '주의' | '위험' | '안심' | '관심' | '알수없음';
   patientValue: string;
   averageValue: string;
   indicatorId: string;
@@ -13,6 +13,7 @@ const stageKeyMap: Record<string, string> = {
   위험: 'danger',
   안심: 'safe',
   관심: 'interest',
+  알수없음: 'unknown',
 };
 
 // 비교 제외 ID(요단백은 공간만 차지)
@@ -37,7 +38,8 @@ const Compare: React.FC<CompareProps> = ({ stage, patientValue, averageValue, in
     );
   }
 
-  if (isUnknown(patientValue)) {
+  // '알수없음' stage이거나 값이 unknown인 경우 unknown 이미지 사용
+  if (stage === '알수없음' || isUnknown(patientValue)) {
     return (
       <img
         src={`/src/assets/MyMedicalReport/compare/unknown.svg`}
@@ -56,7 +58,7 @@ const Compare: React.FC<CompareProps> = ({ stage, patientValue, averageValue, in
   else if (patientNum > averageNum) comparison = 'big';
   else comparison = 'same';
 
-  const stageKey = stageKeyMap[stage];
+  const stageKey = stageKeyMap[stage] || 'normal';
   const svgPath = `/src/assets/MyMedicalReport/compare/${stageKey}-${comparison}.svg`;
 
   return (

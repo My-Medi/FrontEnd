@@ -7,7 +7,7 @@ interface LeftPatientCardProps {
   title: string;
   value?: string;
   unit?: string;
-  stage: '정상' | '주의' | '위험' | '안심' | '관심';
+  stage: '정상' | '주의' | '위험' | '안심' | '관심' | '알수없음';
   isUnknown?: boolean;
 }
 
@@ -19,9 +19,11 @@ const LeftPatientCard: React.FC<LeftPatientCardProps> = ({
   stage,
   isUnknown = false,
 }) => {
-  const style = stageStyleMap[stage];
+  // '알수없음' stage일 때는 isUnknown 스타일 사용
+  const shouldUseUnknownStyle = isUnknown || stage === '알수없음';
+  const style = stage === '알수없음' ? stageStyleMap['정상'] : stageStyleMap[stage];
 
-  const wrapperStyle: React.CSSProperties = isUnknown
+  const wrapperStyle: React.CSSProperties = shouldUseUnknownStyle
     ? {
         width: '420px',
         height: '226px',
@@ -50,11 +52,13 @@ const LeftPatientCard: React.FC<LeftPatientCardProps> = ({
         boxShadow: '0 2px 6px 0 rgba(120, 120, 120, 0.15)',
       };
 
-  const dashedColor = isUnknown ? '#9DA0A3' : style.dashedStroke;
-  const circleFill = isUnknown ? 'rgba(157, 160, 163, 0.50)' : (style.circleFill as string);
-  const valueColor = isUnknown ? '#C0C2C4' : '#121218';
-  const unitColor = isUnknown ? '#121218' : '#121218';
-  const stageTextColor = isUnknown ? '#9DA0A3' : style.textColor;
+  const dashedColor = shouldUseUnknownStyle ? '#9DA0A3' : style.dashedStroke;
+  const circleFill = shouldUseUnknownStyle
+    ? 'rgba(157, 160, 163, 0.50)'
+    : (style.circleFill as string);
+  const valueColor = shouldUseUnknownStyle ? '#C0C2C4' : '#121218';
+  const unitColor = shouldUseUnknownStyle ? '#121218' : '#121218';
+  const stageTextColor = shouldUseUnknownStyle ? '#9DA0A3' : style.textColor;
 
   return (
     <div style={wrapperStyle}>
@@ -84,7 +88,7 @@ const LeftPatientCard: React.FC<LeftPatientCardProps> = ({
             minWidth: '1ch', // 레이아웃 안정
           }}
         >
-          {value ?? ''} {/* 빈 문자열로 표시 */}
+          {shouldUseUnknownStyle ? '' : (value ?? '')} {/* unknown일 때는 빈 값 */}
         </span>
         {unit && (
           <span
@@ -111,7 +115,7 @@ const LeftPatientCard: React.FC<LeftPatientCardProps> = ({
           marginBottom: '12px',
         }}
       >
-        {isUnknown ? '단계' : `${stage} 단계`}
+        {shouldUseUnknownStyle ? '단계' : `${stage} 단계`}
       </p>
 
       {/* 점선 + 원 */}

@@ -1,16 +1,24 @@
-import axiosInstance from '../axios';
+import API from '../axios';
+import type { ApiResponse } from '../../types';
 import type { MyMedicalReportResponse } from '../../types/myMedicalReport/compare';
 
-export const getMedicalReportCompare = async (): Promise<MyMedicalReportResponse> => {
-  console.log('🌐 API 호출: GET /api/v1/users/reports/comparing');
+// GET /v1/users/reports/comparing
+export async function getComparingReport(round?: number): Promise<MyMedicalReportResponse> {
+  // 항상 round=1을 기본값으로 사용
+  const params = { round: round || 1 };
+
   try {
-    const response = await axiosInstance.get<MyMedicalReportResponse>(
-      '/api/v1/users/reports/comparing',
+    const { data } = await API.get<ApiResponse<MyMedicalReportResponse>>(
+      '/users/reports/comparing', // /v1 제거 (baseURL에 이미 포함됨)
+      { params },
     );
-    console.log('✅ API 응답 성공:', response.data);
-    return response.data;
+
+    if (!data?.isSuccess || !data.result) {
+      throw new Error(data?.message ?? 'Failed to fetch comparing report');
+    }
+
+    return data.result;
   } catch (error) {
-    console.error('❌ API 호출 실패:', error);
     throw error;
   }
-};
+}
