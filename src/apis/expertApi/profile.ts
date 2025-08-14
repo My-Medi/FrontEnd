@@ -44,7 +44,8 @@ export const updateExpertProfile = async (updateData: {
   profileImgUrl: string;
 }): Promise<ApiResponse<any>> => {
   try {
-    const response = await API.patch<ApiResponse<any>>(`${EXPERT_ENDPOINTS.PROFILE}/profiles`, updateData);
+    // 서버 스펙: PATCH /experts (단일 리소스 업데이트)
+    const response = await API.patch<ApiResponse<any>>(EXPERT_ENDPOINTS.PROFILE, updateData);
     return response.data;
   } catch (error) {
     console.error('전문가 프로필 업데이트 실패:', error);
