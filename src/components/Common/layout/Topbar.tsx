@@ -114,7 +114,8 @@ const Topbar = memo(() => {
               )}
               <div className="relative">
                 <p
-                  className='text-[#25282B] text-sm font-[300] leading-[1.4] tracking-[-0.42px] whitespace-nowrap font-[Pretendard] cursor-default'
+                  onClick={userType ? () => navigate('/myhome', { state: { selectedMenu: userType === 'expert' ? 4 : 1 } }) : undefined}
+                  className={`text-[#25282B] text-sm font-[300] leading-[1.4] tracking-[-0.42px] whitespace-nowrap font-[Pretendard] ${userType ? 'cursor-pointer hover:text-[#1D68FF] transition-colors duration-200' : 'cursor-default'}`}
                 >
                   알림
                 </p>
@@ -219,7 +220,8 @@ const Topbar = memo(() => {
                 </a>
               )}
               <a
-                className='px-4 py-2 text-lg text-gray-700 cursor-default'
+                onClick={userType ? () => { setIsMenuOpen(false); navigate('/myhome', { state: { selectedMenu: userType === 'expert' ? 4 : 1 } }); } : undefined}
+                className={`px-4 py-2 text-lg text-gray-700 ${userType ? 'cursor-pointer hover:text-[#1d68ff]' : 'cursor-default'}`}
               >
                 알림
               </a>

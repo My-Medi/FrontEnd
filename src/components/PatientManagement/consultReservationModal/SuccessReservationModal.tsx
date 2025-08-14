@@ -8,18 +8,23 @@ interface SuccessReservationModalProps {
 
 const SuccessReservationModal: React.FC<SuccessReservationModalProps> = ({ onClose, onShowMyHome }) => {
   const navigate = useNavigate();
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // 모달 완전 닫기
+    onClose();
+    // 마이홈으로 이동 (전문가 마이홈)
     if (onShowMyHome) {
       onShowMyHome();
     } else {
-      navigate('/myhome');
+      navigate('/myhome', { state: { selectedMenu: 0 } });
     }
   };
   return (
     <>
       <div className='fixed inset-0 bg-black/30 z-100' />
-      <div className='fixed inset-0 flex items-center justify-center z-110'>
-        <div className='bg-white rounded-[30px] shadow-lg w-[889px] h-[224px] pl-[80px] pt-[50px] pr-[80px] pb-[50px] flex flex-col items-center justify-center gap-6'>
+      <div className='fixed inset-0 flex items-center justify-center z-110' onClick={(e) => { e.stopPropagation(); }}>
+        <div className='bg-white rounded-[30px] shadow-lg w-[889px] h-[224px] pl-[80px] pt-[50px] pr-[80px] pb-[50px] flex flex-col items-center justify-center gap-6' onClick={(e) => { e.stopPropagation(); }}>
           <p className=' w-full justify-center text-[#4D5053] items-center flex flex-col font-[Pretendard] text-[24px] leading-[36px] tracking-[-0.72px] font-semibold'>
             상담 예약일이 등록되었습니다!
           </p>
@@ -32,7 +37,7 @@ const SuccessReservationModal: React.FC<SuccessReservationModalProps> = ({ onClo
             </button>
             <button
               className='flex text-[18px] font-[Pretendard] leading-[36px] tracking-[-0.54px] text-[#FFF] justify-center items-center gap-[10px] w-[274px] h-[48px] px-[80px] py-[20px] rounded-[60px] bg-[#1D68FF] border border-[#E3E6EB] text-[#FFF] text-[18px] font-semibold font-[Pretendard] leading-[27px] tracking-[-0.54px] shadow-[0px_0px_5px_5px_rgba(29,104,255,0.05)] cursor-pointer'
-              onClick={onClose}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClose(); }}
             >
               확인
             </button>

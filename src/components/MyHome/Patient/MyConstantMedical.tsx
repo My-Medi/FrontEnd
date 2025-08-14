@@ -14,29 +14,30 @@ const MyConstantMedical: React.FC = () => {
   const nickname = profileData?.nickname || '사용자';
 
   // API 응답이 없거나 로딩 중인 경우 기본값 사용
-  const status: HealthStatus = healthStatusData?.result
-    ? mapApiResultToHealthStatus(healthStatusData.result)
-    : '정상'; // 기본값
+  // 데이터가 없으면 안내 문구만 표시
+  const hasData = Boolean(healthStatusData?.result);
+  const status: HealthStatus = hasData
+    ? mapApiResultToHealthStatus(healthStatusData!.result)
+    : '정상';
 
   // status가 유효한지 확인하고, 유효하지 않으면 기본값 사용
   const current = healthStatusMap[status];
 
-  // current가 undefined인 경우를 대비한 안전 처리
-  if (!current) {
-    console.warn(`Invalid health status: ${status}, falling back to '정상'`);
-    return (
-      <div className='w-full pt-6 pl-10 xl:pt-6 xl:pl-10 md:pt-6 md:pl-6 sm:pt-4 sm:pl-4'>
-        <div className='text-[#121212] text-lg font-semibold leading-[1.5] tracking-[-0.54px] xl:text-lg md:text-base sm:text-sm'>
-          내 건강은 지금!
-        </div>
-        <div className='mt-4 xl:mt-4 md:mt-3 sm:mt-2'>
-          <div className='w-full max-w-[48.75rem] h-[4.75rem] bg-yellow-50 border border-yellow-200 flex items-center justify-center'>
-            <span className='text-yellow-600'>건강 상태 정보를 불러오는 중입니다.</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
+	// current가 undefined이거나 매핑 실패 시에도 안내 문구 표시
+	if (!current) {
+		return (
+			<div className='w-full pt-6 pl-10 xl:pt-6 xl:pl-10 md:pt-6 md:pl-6 sm:pt-4 sm:pl-4'>
+				<div className='text-[#121212] text-lg font-semibold leading-[1.5] tracking-[-0.54px] xl:text-lg md:text-base sm:text-sm'>
+					내 건강은 지금!
+				</div>
+				<div className='mt-4 xl:mt-4 md:mt-3 sm:mt-2'>
+					<div className='w-full max-w-[48.75rem] h-[4.75rem] bg-white border border-[#DBE6FF] flex items-center justify-center rounded'>
+						<span className='text-[#4D5053] text-sm'>등록된 건강지표가 없습니다.</span>
+					</div>
+				</div>
+			</div>
+		);
+	}
 
   // 로딩 중이거나 에러가 있는 경우 처리
   if (isLoading) {
@@ -52,15 +53,31 @@ const MyConstantMedical: React.FC = () => {
     );
   }
 
-  if (error) {
+	if (error) {
+		return (
+			<div className='w-full pt-6 pl-10 xl:pt-6 xl:pl-10 md:pt-6 md:pl-6 sm:pt-4 sm:pl-4'>
+				<div className='text-[#121212] text-lg font-semibold leading-[1.5] tracking-[-0.54px] xl:text-lg md:text-base sm:text-sm'>
+					내 건강은 지금!
+				</div>
+				<div className='mt-4 xl:mt-4 md:mt-3 sm:mt-2'>
+					<div className='w-full max-w-[48.75rem] h-[4.75rem] bg-white border border-[#DBE6FF] flex items-center justify-center rounded'>
+						<span className='text-[#4D5053] text-sm'>등록된 건강지표가 없습니다.</span>
+					</div>
+				</div>
+			</div>
+		);
+	}
+
+  // 데이터가 아예 없을 때
+  if (!isLoading && !error && !hasData) {
     return (
       <div className='w-full pt-6 pl-10 xl:pt-6 xl:pl-10 md:pt-6 md:pl-6 sm:pt-4 sm:pl-4'>
         <div className='text-[#121212] text-lg font-semibold leading-[1.5] tracking-[-0.54px] xl:text-lg md:text-base sm:text-sm'>
           내 건강은 지금!
         </div>
         <div className='mt-4 xl:mt-4 md:mt-3 sm:mt-2'>
-          <div className='w-full max-w-[48.75rem] h-[4.75rem] bg-red-50 border border-red-200 flex items-center justify-center'>
-            <span className='text-red-600'>건강 상태를 불러오는데 실패했습니다.</span>
+          <div className='w-full max-w-[48.75rem] h-[4.75rem] bg-white border border-[#DBE6FF] flex items-center justify-center rounded'>
+            <span className='text-[#4D5053] text-sm'>등록된 건강지표가 없습니다.</span>
           </div>
         </div>
       </div>
