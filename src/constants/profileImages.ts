@@ -1,8 +1,8 @@
 export const DEFAULT_PROFILE_IMAGES: string[] = [
-  'https://mymedi-bucket.s3.ap-northeast-2.amazonaws.com/1b6d11c4-95e7-4a0e-aa66-5eb3d1ff3dd6.svg',
-  'https://mymedi-bucket.s3.ap-northeast-2.amazonaws.com/6f674b48-ec68-41e0-885d-f90934e480fb.svg',
-  'https://mymedi-bucket.s3.ap-northeast-2.amazonaws.com/e02bc95f-4f4a-47f2-8d93-3bd38eab0036.svg',
-  'https://mymedi-bucket.s3.ap-northeast-2.amazonaws.com/78b610f0-ad3a-4ad1-b6db-a41af30bff51.svg',
-  'https://mymedi-bucket.s3.ap-northeast-2.amazonaws.com/5a67d423-3689-4ccc-804a-c53266e707aa.svg',
-  'https://mymedi-bucket.s3.ap-northeast-2.amazonaws.com/47d4cbde-7372-4cd8-b3d2-ba0a2ebb31e4.svg',
+  'https://mymedi-bucket.s3.ap-northeast-2.amazonaws.com/b58493c1-f983-4a4b-a213-bf783309f61b.png',
+  'https://mymedi-bucket.s3.ap-northeast-2.amazonaws.com/bbbbd1bf-a5b2-479f-a20d-9ae031bf6008.png',
+  'https://mymedi-bucket.s3.ap-northeast-2.amazonaws.com/946d31d2-34d4-4993-a3f6-fe2e4ef35b24.png',
+  'https://mymedi-bucket.s3.ap-northeast-2.amazonaws.com/7ba6a3d0-d0af-470b-96e9-bd54d24db329.png',
+  'https://mymedi-bucket.s3.ap-northeast-2.amazonaws.com/a9418732-d5e4-48d4-9c1f-9f5b0e17714b.png',
+  'https://mymedi-bucket.s3.ap-northeast-2.amazonaws.com/aea444fb-f0bb-4ef7-ab09-b2d327ec0cf2.png',
 ];
