@@ -9,6 +9,7 @@ import ProfileSelectModal from './ProfileSelectModal';
 import { useUserProfileQuery } from '../../../hooks/users/queries/useUserProfileQuery';
 import { useUserProfileUpdateMutation } from '../../../hooks/users/mutations/useUserProfileMutation';
 import { useExpertProfileQuery } from '../../../hooks/experts/queries/useExpertProfileQuery';
+import { checkNicknameDuplication } from '../../../apis/duplicationApi/duplication';
 import { useExpertProfileUpdateMutation } from '../../../hooks/experts/mutations/useExpertProfileMutation';
 
 interface EditInfoProps {
@@ -53,6 +54,9 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onProfileModalCha
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [selectedProfileImage, setSelectedProfileImage] = useState<string | null>(null);
+  // 닉네임 중복 확인 상태 (닉네임 변경 시 필수)
+  const [nicknameChecked, setNicknameChecked] = useState(false);
+  const [nicknameAvailable, setNicknameAvailable] = useState<boolean | null>(null);
 
   const [hasChanges, setHasChanges] = useState(false);
   const [initialData, setInitialData] = useState(formData);
@@ -141,6 +145,11 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onProfileModalCha
       ...prev,
       [field]: value
     }));
+    if (field === 'nickname') {
+      // 닉네임이 변경되면 확인 상태 초기화
+      setNicknameChecked(false);
+      setNicknameAvailable(null);
+    }
   };
 
   const handleNumericInputChange = (field: 'height' | 'weight') => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -183,8 +192,16 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onProfileModalCha
   };
 
   const handleSave = () => {
-    console.log('저장된 데이터:', formData);
-    
+    // 닉네임이 변경된 경우, 중복 확인을 통과해야 저장 가능
+    const originalNickname = initialData.nickname ?? '';
+    const currentNickname = formData.nickname?.trim() ?? '';
+    if (currentNickname !== originalNickname) {
+      if (!nicknameChecked || nicknameAvailable !== true) {
+        alert('닉네임 중복 확인을 완료해주세요.');
+        return;
+      }
+    }
+
     if (userType === 'expert') {
       // 전문가 프로필 업데이트
       const expertUpdateData = {
@@ -363,6 +380,22 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onProfileModalCha
           <button
             type='button'
             className='w-[101px] h-[36px] bg-gray-100 text-black rounded-[8.4px] ml-[24.4px]'
+            onClick={async () => {
+              const nickname = formData.nickname.trim();
+              if (!nickname) {
+                alert('닉네임을 입력해주세요.');
+                return;
+              }
+              try {
+                const isDuplicate = await checkNicknameDuplication(nickname);
+                setNicknameChecked(true);
+                setNicknameAvailable(!isDuplicate);
+                if (isDuplicate) alert('이미 사용 중인 닉네임입니다.');
+                else alert('사용 가능한 닉네임입니다.');
+              } catch (_) {
+                alert('닉네임 확인 중 오류가 발생했습니다.');
+              }
+            }}
           >
             닉네임 확인
           </button>
