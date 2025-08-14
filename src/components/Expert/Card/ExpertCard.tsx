@@ -1,5 +1,5 @@
 import React from "react";
-import unionSvg from '../../../assets/Expert/Union.svg';
+import RoundAvatar from '../../Common/RoundAvatar';
 
 interface ExpertCardProps {
   nickname: string;
@@ -43,17 +43,7 @@ const ExpertCard: React.FC<ExpertCardProps> = ({
       <div className="text-[20px] font-medium text-[#121218] text-center leading-[1.3] px-2 whitespace-nowrap overflow-hidden text-ellipsis max-w-full">
         {slogan}
       </div>
-      <div className="w-[171px] h-[171px] bg-[#EDF0F3] rounded-full border-[4.5px] border-[#1D68FF] flex items-center justify-center overflow-hidden">
-        {(!profile || profile === "") ? (
-          <img src={unionSvg} alt="기본 프로필" className="w-[92px] h-[92px]" />
-        ) : (
-          typeof profile === "string" ? (
-            <img src={profile} alt="프로필" className="w-full h-full object-cover rounded-full" />
-          ) : (
-            profile
-          )
-        )}
-      </div>
+      <RoundAvatar src={typeof profile === 'string' ? profile : undefined} containerClass="w-[171px] h-[171px] border-[4.5px] border-[#1D68FF]" />
     </div>
     <div className="flex flex-col items-start gap-1 pt-2 w-full">
       <div className="w-full truncate">

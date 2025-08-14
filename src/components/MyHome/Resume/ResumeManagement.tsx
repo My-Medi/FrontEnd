@@ -9,6 +9,7 @@ import CertificateSection from './CertificateSection';
 import SelfIntroductionSection from './SelfIntroductionSection';
 import RepresentativeSentenceSection from './RepresentativeSentenceSection';
 import ActionButtons from './ActionButtons';
+import ResumeConfirmModal from './ResumeConfirmModal.tsx';
 import CareerSection from './CareerSection';
 
 interface ResumeManagementProps {}
@@ -20,7 +21,6 @@ const ResumeManagement: React.FC<ResumeManagementProps> = () => {
   // 수정 뮤테이션
   const updateResumeMutation = useExpertResumeUpdateMutation({
     onSuccess: () => {
-      alert('이력서가 성공적으로 수정되었습니다.');
     },
     onError: () => {
       alert('이력서 수정에 실패했습니다. 다시 시도해주세요.');
@@ -92,6 +92,11 @@ const ResumeManagement: React.FC<ResumeManagementProps> = () => {
 
   // 이력서 수정 핸들러
   const handleResumeUpdate = useCallback(() => {
+    setIsConfirmOpen(true);
+  }, []);
+
+  const handleConfirmSave = useCallback(() => {
+    setIsConfirmOpen(false);
     if (!resumeData) {
       alert('이력서 데이터를 불러올 수 없습니다.');
       return;
@@ -107,6 +112,8 @@ const ResumeManagement: React.FC<ResumeManagementProps> = () => {
     
     updateResumeMutation.mutate(updateRequest);
   }, [formData, resumeData, newLicenseImages, existingLicenseImages, updateResumeMutation]);
+
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   // 로딩 상태 처리
   if (isLoading) {
@@ -177,6 +184,10 @@ const ResumeManagement: React.FC<ResumeManagementProps> = () => {
       </div>
 
       <ActionButtons onUpdate={handleResumeUpdate} isLoading={updateResumeMutation.isPending} />
+      <ResumeConfirmModal
+        isOpen={isConfirmOpen}
+        onConfirm={handleConfirmSave}
+      />
     </div>
   );
 };

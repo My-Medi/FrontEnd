@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Chart from '../components/MyMedicalReport/body/Chart';
 import Header from '../components/Common/MyMedicalReportHeader';
 import { useNavigate } from 'react-router-dom';
-import { getHealthReportByRound, getHealthReportCount } from '../apis/healthCheckupApi/healthCheckup';
+import { getHealthReportByRound } from '../apis/healthCheckupApi/healthCheckup';
 import { getDefaultReport } from '../apis/userApi/user';
 
 interface UserInfo {
@@ -30,17 +30,15 @@ const MyMedicalReport: React.FC = () => {
         const userData = userRes.result;
         setUserInfo(userData);
 
-        // 회차 수 조회
-        const res = await getHealthReportCount();
-        const count = res.result ?? 0;
+        // 회차 수: default report의 reportCount 사용
+        const count = userData?.reportCount ?? 0;
         if (count <= 0) {
           navigate('/empty-report');
           return;
         }
-        const safeCount = Math.max(1, count);
-        const arr = Array.from({ length: safeCount }, (_, i) => i + 1);
+        const arr = Array.from({ length: count }, (_, i) => i + 1);
         setRounds(arr);
-        setSelectedRound(safeCount);
+        setSelectedRound(count);
       } catch (e) {
         console.error('사용자 정보 또는 회차 수 조회 실패', e);
         setRounds([1]);

@@ -31,7 +31,7 @@ const mapExpertToDetail = (expert: Expert): ExpertDetail => ({
   name: expert.name,
   position: getSpecialtyKoreanName(expert.specialty),
   nickname: expert.nickname || expert.name, // nickname이 null이면 name 사용
-  profileImage: (expert as any).profileImgUrl || (expert as any).profileImageUrl || '', // 우선순위: profileImgUrl > profileImageUrl > profile
+  profileImage: (expert as any).profileImgUrl || (expert as any).profileImageUrl || '', 
   slogan: (expert as any).introSentence || expert.introduction,
   introduction: expert.introduction,
   affiliation: expert.organizationName,
@@ -175,7 +175,7 @@ const ExpertPage = () => {
                     role={getSpecialtyKoreanName(expert.specialty)}
                     slogan={(expert as any).introSentence || expert.introduction}
                     description={expert.introduction}
-                    profile={(expert as any).profileImgUrl || (expert as any).profileImageUrl || expert.profile || ''}
+                    profile={(expert as any).profileImgUrl || (expert as any).profileImageUrl || ''}
                     careers={[]}
                     organizationName={expert.organizationName}
                     careerResponseDtoList={expert.careerResponseDtoList}
