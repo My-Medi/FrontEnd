@@ -96,7 +96,6 @@ const LoginPage = () => {
   };
 
   const handleFindID = () => {
-    console.log('아이디 찾기 클릭됨');
     setShowFindID(true);
   };
 

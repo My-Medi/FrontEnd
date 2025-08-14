@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import SkeletonBlock from '../../Common/SkeletonBlock';
 import BackIcon from '/src/assets/back.svg';
 import PatientInfo from '../../RequestHealthCare/DetailModal/PatientInfo';
 import RequestHealthGoal from '../../RequestHealthCare/DetailModal/HealthGoal';
@@ -43,8 +44,8 @@ const MemberCardModal: React.FC<MemberCardModalProps> = ({
   const [showAdviceModal, setShowAdviceModal] = useState(false);
   const [showConsultModal, setShowConsultModal] = useState(false);
   const navigate = useNavigate();
-  const { data: info } = useExpertUserInfo(member.userId, 'ACCEPTED');
-  const { data: summary } = useExpertReportSummary(member.userId);
+  const { data: info, isLoading: isInfoLoading } = useExpertUserInfo(member.userId, 'ACCEPTED');
+  const { data: summary, isLoading: isSummaryLoading } = useExpertReportSummary(member.userId);
   // 요약 API의 round 값을 사용해 바로 이동할 회차를 결정
   const selectedRound = useMemo(() => summary?.round ?? 1, [summary?.round]);
 
@@ -63,6 +64,9 @@ const MemberCardModal: React.FC<MemberCardModalProps> = ({
     if (!summary) return;
     navigate(`/health-result-input?userId=${member.userId}&round=${selectedRound || 1}`);
   };
+  const isLoading = isInfoLoading || isSummaryLoading;
+
+  
   return (
     <>
       {!showAdviceModal && !showConsultModal && (
@@ -100,15 +104,28 @@ const MemberCardModal: React.FC<MemberCardModalProps> = ({
                 </div>
               </div>
               <div>
-                <PatientInfo
-                  nickname={info?.nickname ?? member.nickname}
-                  gender={toKoreanGender(info?.gender ?? member.gender)}
-                  age={ageDisplay}
-                  height={info?.height ?? member.height}
-                  weight={info?.weight ?? member.weight}
-                  testDate={info?.reportRegisterDate ?? member.testDate}
-                  healthInterest={(info?.healthInterests ?? member.healthInterest).join(', ')}
-                />
+                {isLoading ? (
+                  <div className='hidden lg:flex flex items-center w-[824px] h-[154px] px-[56px] gap-[40px] rounded-[20px] border border-[#DBE6FF] bg-white'>
+                    <div className='w-[124px] h-[124px] rounded-full bg-gray-200 animate-pulse' />
+                    <div className='flex-1 flex flex-col gap-2'>
+                      <SkeletonBlock className='w-40 h-6' />
+                      <SkeletonBlock className='w-80 h-4' />
+                      <SkeletonBlock className='w-72 h-4' />
+                      <SkeletonBlock className='w-64 h-4' />
+                    </div>
+                  </div>
+                ) : (
+                  <PatientInfo
+                    profileImageUrl={info?.profileImg}
+                    nickname={info?.nickname ?? member.nickname}
+                    gender={toKoreanGender(info?.gender ?? member.gender)}
+                    age={ageDisplay}
+                    height={info?.height ?? member.height}
+                    weight={info?.weight ?? member.weight}
+                    testDate={info?.reportRegisterDate ?? member.testDate}
+                    healthInterest={(info?.healthInterests ?? member.healthInterest).join(', ')}
+                  />
+                )}
               </div>
               <div className='flex flex-col gap-[34px] w-max-[496px] whitespace-pre-line'>
                 {/* 여기에 한줄 조언 등록 버튼이랑 상담예약일 지정 버튼 */}
@@ -131,12 +148,31 @@ const MemberCardModal: React.FC<MemberCardModalProps> = ({
                     </button>
                   </div>
                 </div>
-                <RequestHealthGoal goal={info?.goal ?? ''} />
-                <MemberReauestMessage message={info?.requestNote ?? ''} />
+                {isLoading ? (
+                  <>
+                    <SkeletonBlock className='w-[400px] h-6' />
+                    <SkeletonBlock className='w-[600px] h-24' />
+                  </>
+                ) : (
+                  <>
+                    <RequestHealthGoal goal={info?.goal ?? ''} />
+                    <MemberReauestMessage message={info?.requestNote ?? ''} />
+                  </>
+                )}
                 {/* 여기가 등록한 한줄 조언 */}
-                <AdvicePart userId={member.userId} />
-                <AbnormalPart abnormal={info?.abnormalCheckItems ?? []} />
-                <ReportSummary nickname={info?.nickname ?? member.nickname} summary={summary} />
+                {isLoading ? (
+                  <>
+                    <SkeletonBlock className='w-[600px] h-10' />
+                    <SkeletonBlock className='w-[600px] h-20' />
+                    <SkeletonBlock className='w-[600px] h-32' />
+                  </>
+                ) : (
+                  <>
+                    <AdvicePart userId={member.userId} />
+                    <AbnormalPart abnormal={info?.abnormalCheckItems ?? []} />
+                    <ReportSummary nickname={info?.nickname ?? member.nickname} summary={summary} />
+                  </>
+                )}
               </div>
               {/* 하단 버튼 */}
               <div className='flex flex-col ml-[12px] items-center border-[#DBE6FF] w-[300px] h-[56px] gap-4 '>

@@ -4,7 +4,7 @@ import type {
   ExpertRequestedConsultationList,
   ExpertRequestedConsultationListResponse,
 } from '../../../../types/consultation';
-import { getExpertRequestedConsultations } from '../../../../apis/consultationApi/consultation';
+import { getExpertRequestedConsultations } from '../../../../apis/expertApi/consultation';
 
 // ====== 쿼리 키 상수 ======
 export const EXP_REQ_QK = 'expertRequestedConsultations';

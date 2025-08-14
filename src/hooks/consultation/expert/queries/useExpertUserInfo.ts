@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getExpertUserInfo } from '../../../../apis/consultationApi/consultation';
+import { getExpertUserInfo } from '../../../../apis/expertApi/consultation';
 import type { ExpertUserInfoResponse, ExpertUserInfo } from '../../../../types/consultation';
 
 export const EXP_USER_INFO_QK = 'expertUserInfo';

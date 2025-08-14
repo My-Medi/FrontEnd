@@ -1,4 +1,16 @@
 import React from 'react';
+import {
+  RequestMessageSkeletonLg,
+  ProfileRowSkeletonLg,
+  GoalSkeletonLg,
+  AbnormalSkeletonLg,
+  SummarySkeletonLg,
+  RequestMessageSkeletonSm,
+  ProfileRowSkeletonSm,
+  GoalSkeletonSm,
+  AbnormalSkeletonSm,
+  SummarySkeletonSm,
+} from './Skeletons';
 import BackIcon from '/src/assets/back.svg';
 import RequestHealthGoal from './HealthGoal';
 import RequestMessage from './RequestMessage';
@@ -10,6 +22,7 @@ interface DetailModalProps {
   nickname: string;
   requestNote?: string;
   profile?: {
+    profileImageUrl?: string;
     age: number | string;
     gender: string;
     height: number;
@@ -20,6 +33,7 @@ interface DetailModalProps {
     goal?: string | null;
   };
   summary?: any;
+  isLoading?: boolean;
   onClose: () => void;
   onAccept: () => void;
   onReject: () => void;
@@ -35,6 +49,7 @@ const HealthDataModal: React.FC<DetailModalProps> = ({
   onClose,
   onAccept,
   onReject,
+  isLoading = false,
 }) => {
   return (
     <>
@@ -68,27 +83,30 @@ const HealthDataModal: React.FC<DetailModalProps> = ({
               </p>
             </div>
           </div>
+          <div>{isLoading ? <RequestMessageSkeletonLg /> : <RequestMessage message={requestNote || ''} />}</div>
           <div>
-            <RequestMessage message={requestNote || ''} />
-          </div>
-          <div>
-            <PatientInfo
-              nickname={nickname}
-              gender={profile?.gender || '-'}
-              age={typeof profile?.age === 'number' ? profile!.age : 0}
-              height={profile?.height || 0}
-              weight={profile?.weight || 0}
-              testDate={profile?.testDate || '-'}
-              healthInterest={(profile?.interests || []).join(', ')}
-            />
+            {isLoading ? (
+              <ProfileRowSkeletonLg />
+            ) : (
+              <PatientInfo
+                nickname={nickname}
+                profileImageUrl={profile?.profileImageUrl}
+                gender={profile?.gender || '-'}
+                age={typeof profile?.age === 'number' ? profile!.age : 0}
+                height={profile?.height || 0}
+                weight={profile?.weight || 0}
+                testDate={profile?.testDate || '-'}
+                healthInterest={(profile?.interests || []).join(', ')}
+              />
+            )}
           </div>
           <div className='flex flex-col gap-[32px] w-max-[496px]'>
             {/* 관리 목표/기대 - goal 매핑 */}
-            <RequestHealthGoal goal={profile?.goal || ''} />
+            {isLoading ? <GoalSkeletonLg /> : <RequestHealthGoal goal={profile?.goal || ''} />}
             {/* 최근 건강검진 이상수치 항목 */}
-            <AbnormalPart abnormal={profile?.abnormal || []} />
+            {isLoading ? <AbnormalSkeletonLg /> : <AbnormalPart abnormal={profile?.abnormal || []} />}
             {/* 리포트 요약 (값 없으면 내부 안내 표시) */}
-            <ReportSummary nickname={nickname} summary={summary} />
+            {isLoading ? <SummarySkeletonLg /> : <ReportSummary nickname={nickname} summary={summary} />}
           </div>
           {/* 하단 버튼 */}
           <div className='flex flex-col items-center border-[#DBE6FF] pt-8 w-[300px] h-[56px] gap-4 mt-4 mb-[50px]'>
@@ -136,20 +154,25 @@ const HealthDataModal: React.FC<DetailModalProps> = ({
 
           {/* 본문 영역 (모바일) */}
           <div className='flex flex-col gap-4'>
-            <RequestMessage message={requestNote || ''} />
-            <PatientInfo
-              nickname={nickname}
-              gender={profile?.gender || '-'}
-              age={typeof profile?.age === 'number' ? profile!.age : 0}
-              height={profile?.height || 0}
-              weight={profile?.weight || 0}
-              testDate={profile?.testDate || '-'}
-              healthInterest={(profile?.interests || []).join(', ')}
-            />
-            <RequestHealthGoal goal={profile?.goal || ''} />
-            <AbnormalPart abnormal={profile?.abnormal || []} />
+            {isLoading ? <RequestMessageSkeletonSm /> : <RequestMessage message={requestNote || ''} />}
+            {isLoading ? (
+              <ProfileRowSkeletonSm />
+            ) : (
+              <PatientInfo
+                nickname={nickname}
+                profileImageUrl={profile?.profileImageUrl}
+                gender={profile?.gender || '-'}
+                age={typeof profile?.age === 'number' ? profile!.age : 0}
+                height={profile?.height || 0}
+                weight={profile?.weight || 0}
+                testDate={profile?.testDate || '-'}
+                healthInterest={(profile?.interests || []).join(', ')}
+              />
+            )}
+            {isLoading ? <GoalSkeletonSm /> : <RequestHealthGoal goal={profile?.goal || ''} />}
+            {isLoading ? <AbnormalSkeletonSm /> : <AbnormalPart abnormal={profile?.abnormal || []} />}
             {/* 리포트 요약 (모바일) */}
-            <ReportSummary nickname={nickname} summary={summary} />
+            {isLoading ? <SummarySkeletonSm /> : <ReportSummary nickname={nickname} summary={summary} />}
           </div>
 
           {/* 하단 버튼 */}

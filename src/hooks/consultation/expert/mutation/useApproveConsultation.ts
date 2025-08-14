@@ -3,7 +3,7 @@ import type {
   ExpertRequestedConsultationList,
   ExpertRequestedConsultationListResponse,
 } from '../../../../types/consultation';
-import { approveConsultation } from '../../../../apis/consultationApi/consultation';
+import { approveConsultation } from '../../../../apis/expertApi/consultation';
 import {
   EXP_APPROVED_INF_QK,
   EXP_APPROVED_QK,

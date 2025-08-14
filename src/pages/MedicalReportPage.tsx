@@ -39,8 +39,7 @@ const MyMedicalReport: React.FC = () => {
         const arr = Array.from({ length: count }, (_, i) => i + 1);
         setRounds(arr);
         setSelectedRound(count);
-      } catch (e) {
-        console.error('사용자 정보 또는 회차 수 조회 실패', e);
+    } catch (e) {
         setRounds([1]);
         setSelectedRound(1);
       }
@@ -56,8 +55,7 @@ const MyMedicalReport: React.FC = () => {
         const raw = res.result?.checkupDate ?? '';
         // YYYY-MM-DD -> YYYY/MM/DD 표기로 변경 (replaceAll 미지원 환경 대비)
         setCheckupDate(raw.split('-').join('/'));
-      } catch (e) {
-        console.error('회차별 리포트 조회 실패', e);
+    } catch (e) {
         setCheckupDate('');
       }
     })();
@@ -74,9 +72,7 @@ const MyMedicalReport: React.FC = () => {
     navigate(`/health-result-input?round=${nextRound}`);
   };
 
-  const handleFilterClick = () => {
-    console.log('전체 회차 보기 클릭됨');
-  };
+  const handleFilterClick = () => {};
 
   return (
     <div className='min-h-screen bg-white'>
