@@ -28,4 +28,4 @@ export const tokenAPI = {
   },
 };
 
-export default tokenAPI; 
+export default tokenAPI;

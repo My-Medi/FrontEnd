@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import StepSelector from "../../components/SignUp/StepSelector";
+import { checkNicknameDuplication, checkLoginIdDuplication } from "../../apis/duplicationApi/duplication";
 import SignUpInfo from "../../components/SignUp/Info";
 import ExpertInputForm from "../../components/SignUp/ExpertInputForm";
 import SignUpComplete from "../../components/SignUp/SignUpComplete";
@@ -61,6 +62,11 @@ const SignUp: React.FC = () => {
   const [signUpData, setSignUpData] = useState<SignUpFormData>(initialSignUpData);
   const [expertBasicData, setExpertBasicData] = useState<ExpertBasicData | null>(null);
   const [expertStep3Data, setExpertStep3Data] = useState<ExpertSignUpStep3Request | null>(null);
+  // 닉네임 중복 확인 상태 (회원가입 단계 필수 통과)
+  const [nicknameChecked, setNicknameChecked] = useState(false);
+  const [nicknameAvailable, setNicknameAvailable] = useState<boolean | null>(null);
+  const [loginIdChecked, setLoginIdChecked] = useState(false);
+  const [loginIdAvailable, setLoginIdAvailable] = useState<boolean | null>(null);
   const navigate = useNavigate();
 
   // 개인 회원가입 뮤테이션
@@ -198,6 +204,15 @@ const SignUp: React.FC = () => {
         setCurrentStep("info");
         break;
       case "info":
+        // 닉네임 중복 확인은 필수 (사용 가능해야 다음 단계 진행)
+        if (!nicknameChecked || nicknameAvailable !== true) {
+          alert('닉네임 중복 확인을 완료해주세요.');
+          return;
+        }
+        if (!loginIdChecked || loginIdAvailable !== true) {
+          alert('아이디 중복 확인을 완료해주세요.');
+          return;
+        }
         if (userType === "expert") {
           setCurrentStep("expert-info");
         } else {
@@ -269,6 +284,15 @@ const SignUp: React.FC = () => {
       ...prev,
       [field]: value
     }));
+    if (field === 'nickname') {
+      // 닉네임 변경 시 중복확인 상태 초기화
+      setNicknameChecked(false);
+      setNicknameAvailable(null);
+    }
+    if (field === 'loginId') {
+      setLoginIdChecked(false);
+      setLoginIdAvailable(null);
+    }
   }, []);
 
   const handleExpertDataChange = useCallback((data: any) => {
@@ -345,12 +369,43 @@ const SignUp: React.FC = () => {
     }
   }, [isPasswordValid, signUpData, generateEmail, normalizeDateForApi, expertSignUpMutation]);
 
-  const handleCheckNickname = useCallback(() => {
-    // 닉네임 중복확인 API 연동 지점
+  const handleCheckNickname = useCallback(async () => {
+    const nickname = signUpData.nickname.trim();
+    if (!nickname) {
+      alert('닉네임을 입력해주세요.');
+      return;
+    }
+    try {
+      const isDuplicate = await checkNicknameDuplication(nickname);
+      // API 스펙: result = true → 중복, false → 사용 가능
+      setNicknameChecked(true);
+      setNicknameAvailable(!isDuplicate);
+      if (isDuplicate) {
+        alert('이미 사용 중인 닉네임입니다.');
+      } else {
+        alert('사용 가능한 닉네임입니다.');
+      }
+    } catch (_) {
+      alert('닉네임 확인 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+    }
   }, [signUpData.nickname]);
 
   const handleCheckId = useCallback(() => {
-    // 아이디 중복확인 API 연동 지점
+    const loginId = signUpData.loginId.trim();
+    if (!loginId) {
+      alert('아이디를 입력해주세요.');
+      return;
+    }
+    checkLoginIdDuplication(loginId)
+      .then((isDuplicate) => {
+        setLoginIdChecked(true);
+        setLoginIdAvailable(!isDuplicate);
+        if (isDuplicate) alert('이미 사용 중인 아이디입니다.');
+        else alert('사용 가능한 아이디입니다.');
+      })
+      .catch(() => {
+        alert('아이디 확인 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+      });
   }, [signUpData.loginId]);
 
   // 로딩 상태
