@@ -148,9 +148,8 @@ const ReportSummary: React.FC<ReportProps> = ({
             ) : (
               <>
             <div className='flex items-start gap-2'>
-
-                <div className='flex items-start'>
-                <p className='text-[#121218] text-[16px] leading-[36px] font-medium tracking-[-0.48px] w-[128px] shrink-0'>
+                <div className='flex items-star gap-[20px]'>
+                <p className='text-[#121218] text-[16px] leading-[36px] font-medium tracking-[-0.48px] shrink-0'>
                   비만/복부비만
                 </p>
                 <div className='flex flex-col mt-[4px] text-[14px] font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
@@ -167,8 +166,8 @@ const ReportSummary: React.FC<ReportProps> = ({
             </div>
 
             <div className='flex items-start gap-2'>
-              <div className='flex items-start'>
-                <p className='text-[#121218] text-[16px] leading-[36px] font-medium tracking-[-0.48px] w-[128px] shrink-0'>
+              <div className='flex items-start gap-[65px]'>
+                <p className='text-[#121218] text-[16px] leading-[36px] font-medium tracking-[-0.48px] shrink-0'>
                   고혈압
                 </p>
                 <div className='flex flex-col mt-[4px] gap-1 text-[14px] font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
@@ -185,8 +184,8 @@ const ReportSummary: React.FC<ReportProps> = ({
             </div>
 
             <div className='flex items-start gap-2'>
-              <div className='flex items-start'>
-                <p className='text-[16px] font-medium leading-[36px] tracking-[-0.48px] text-[#121218] w-[128px] shrink-0'>
+              <div className='flex items-start gap-[65px]'>
+                <p className='text-[16px] font-medium leading-[36px] tracking-[-0.48px] text-[#121218] shrink-0'>
                   당뇨병
                 </p>
                 <div className='flex items-start gap-2 mt-[4px]'>
@@ -199,8 +198,8 @@ const ReportSummary: React.FC<ReportProps> = ({
             </div>
 
             <div className='flex items-start gap-2'>
-              <div className='flex items-start'>
-                <p className='text-[16px] font-medium leading-[36px] tracking-[-0.48px] text-[#121218] w-[128px] shrink-0'>
+              <div className='flex items-start gap-[52px]'>
+                <p className='text-[16px] font-medium leading-[36px] tracking-[-0.48px] text-[#121218] shrink-0'>
                   신장질환
                 </p>
                 <div className='text-[14px] gap-1 mt-[4px] flex-col font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
@@ -218,8 +217,8 @@ const ReportSummary: React.FC<ReportProps> = ({
 
             <div className='flex items-start gap-2'>
 
-              <div className='flex items-start'>
-                <p className='text-[16px] font-medium leading-[36px] tracking-[-0.48px] text-[#121218] w-[128px] shrink-0'>
+              <div className='flex items-start gap-[52px]'>
+                <p className='text-[16px] font-medium leading-[36px] tracking-[-0.48px] text-[#121218] shrink-0'>
                   간장질환
                 </p>
                 <div className='text-[14px] gap-1 mt-[4px] flex-col font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
@@ -256,8 +255,8 @@ const ReportSummary: React.FC<ReportProps> = ({
             ) : (
               <>
             <div className='flex items-start gap-2'>
-              <div className='flex gap-[20px] items-start'>
-                <p className='text-[16px] font-medium leading-[36px] tracking-[-0.48px] text-[#121218] w-[96px] shrink-0'>
+              <div className='flex gap-[20px] items-start gap-[77px]'>
+                <p className='text-[16px] font-medium leading-[36px] tracking-[-0.48px] text-[#121218] shrink-0'>
                   빈혈
                 </p>
                 <div className='flex items-start gap-2 mt-[4px]'>
@@ -270,8 +269,8 @@ const ReportSummary: React.FC<ReportProps> = ({
             </div>
 
             <div className='flex items-start gap-2'>
-              <div className='flex gap-[20px] items-start'>
-                <p className='text-[16px] font-medium leading-[36px] tracking-[-0.48px] text-[#121218] w-[96px] shrink-0'>
+              <div className='flex gap-[20px] items-start gap-[24px]'>
+                <p className='text-[16px] font-medium leading-[36px] tracking-[-0.48px] text-[#121218] shrink-0'>
                   이상지질혈증
                 </p>
                 <div className='text-[14px] mt-[4px] flex-col gap-1 font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
@@ -296,8 +295,8 @@ const ReportSummary: React.FC<ReportProps> = ({
             </div>
 
             <div className='flex items-start gap-2'>
-              <div className='flex gap-[20px] items-start'>
-                <p className='text-[16px] font-medium leading-[36px] tracking-[-0.48px] text-[#121218] w-[96px] shrink-0'>
+              <div className='flex gap-[20px] items-start gap-[64px]'>
+                <p className='text-[16px] font-medium leading-[36px] tracking-[-0.48px] text-[#121218] shrink-0'>
                   요단백
                 </p>
                 <div className='flex items-start gap-2 mt-[4px]'>
