@@ -1,6 +1,32 @@
 <img width="1920" height="1080" alt="표지" src="https://github.com/user-attachments/assets/07801c12-f933-4603-a03f-8e805a84ee26" />
 
 
+<p align="center">
+  <img alt="React" src="https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white" />
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white" />
+  <img alt="Vite" src="https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=white" />
+  <img alt="Tailwind CSS" src="https://img.shields.io/badge/TailwindCSS-3-06B6D4?logo=tailwindcss&logoColor=white" />
+  <img alt="pnpm" src="https://img.shields.io/badge/pnpm-latest-F69220?logo=pnpm&logoColor=white" />
+  <img alt="Netlify" src="https://img.shields.io/badge/Netlify-00C7B7?logo=netlify&logoColor=white" />
+  <img alt="TanStack Query" src="https://img.shields.io/badge/TanStack%20Query-FF4154?logo=reactquery&logoColor=white" />
+  <img alt="ESLint" src="https://img.shields.io/badge/ESLint-4B32C3?logo=eslint&logoColor=white" />
+  <img alt="Axios" src="https://img.shields.io/badge/Axios-5A29E4?logo=axios&logoColor=white" />
+  <img alt="React Router" src="https://img.shields.io/badge/React%20Router-CA4245?logo=reactrouter&logoColor=white" />
+</p>
+
+<p align="center">
+  <a href="#-프로젝트-개요">프로젝트 개요</a> •
+  <a href="#-주요-기능">주요 기능</a> •
+  <a href="#-기술-스택">기술 스택</a> •
+  <a href="#-0-getting-started-시작하기">시작하기</a> •
+  <a href="#-파일-구조">파일 구조</a> •
+  <a href="#-team-my-medi-fronted-developers">팀</a> •
+  <a href="#-git-flow">Git Flow</a> •
+  <a href="#-commit-유형-prefix">Commit 규칙</a>
+</p>
+
+---
+
 ## 프로젝트 개요
 - **My-Medi**는 개인 건강검진 결과를 기반으로 AI 리포트(LLM)를 생성하고, 전문가 매칭과 건강 관리 제안을 제공하는 서비스입니다.
 - 사용자는 검진표를 업로드/입력하여 나만의 메디컬 리포트를 만들고, 회차별로 관리하며 전문가와 상담·매칭할 수 있습니다.
@@ -31,6 +57,14 @@ pnpm run dev
 ```
 
 - 기본 API 주소는 환경변수를 사용합니다. 필요 시 루트에 `.env` 파일을 생성하고 값을 설정하세요.
+
+
+### NPM Scripts
+```bash
+pnpm run build    # 프로덕션 빌드
+pnpm run preview  # 빌드 결과 로컬 미리보기
+pnpm run lint     # ESLint 검사
+```
 
 ## 파일 구조
 프로젝트 핵심 디렉터리 개요입니다.
@@ -81,6 +115,12 @@ FrontEnd2/
   </tr>
 </table>
 
+## 빠른 링크 (주요 페이지)
+- `/my-medical-report` 마이 메디컬 리포트 (회차 선택/지표 비교)
+- `/medical-report-llm` AI 메디컬 리포트 (LLM 요약/가이드)
+- `/health-result-input` 건강검진 결과 입력
+- `/expert` 전문가 목록/상세/요청
+
 ## Git Flow
 - main : 최종적으로 배포되는 브랜치
 - dev : 배포 전, 개발 중심으로 검증 위주의 브랜치
@@ -104,8 +144,3 @@ FrontEnd2/
 | `clean` | 불필요한 코드 제거, 정리 |
 | `design` | UI/UX 디자인 작업 또는 개선 |
 | `style` | 코드 스타일 변경 (세미콜론, 들여쓰기 등) – 기능 변화 없음 |
-
-## 🚨 github 주의사항
-- Pull request 생성 시, main인지 dev인지 반드시 확인
-- 기능 별로 branch 생성
-- commit 시, 업데이트 확인(pull) 후에 push하기

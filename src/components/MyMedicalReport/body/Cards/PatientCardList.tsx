@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useComparingReportQuery } from '../../../../hooks/myMedicalReport/useComparingReportQuery';
 import { mapReportToCombinedByCategory } from '../../../../utils/mappers/medicalReportMapper';
 import type { Category } from '../../../../constants/medicalCategory';
@@ -8,12 +8,29 @@ import IndicationDescription from './IndicationDescription';
 import CategorySelector from '../CategorySelector';
 import SummaryTextArea from '../SummaryTextArea';
 import Compare from './Compare';
+import { getDefaultReport } from '../../../../apis/userApi/user';
 
 const PatientCardList = ({ nickname, round }: { nickname?: string; round?: number }) => {
   const [currentCategory, setCurrentCategory] = useState<Category>('비만/복부비만');
 
   // API 데이터 가져오기
   const { data: reportData, isLoading, error } = useComparingReportQuery(round);
+
+  // 기본 리포트의 gender를 가져와 한글로 변환하여 사용 (남/여)
+  const [defaultGenderKor, setDefaultGenderKor] = useState<string | undefined>(undefined);
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await getDefaultReport();
+        const g: string | undefined = res?.result?.gender;
+        if (g === 'MALE') setDefaultGenderKor('남');
+        else if (g === 'FEMALE') setDefaultGenderKor('여');
+        else setDefaultGenderKor(undefined);
+      } catch (_) {
+        setDefaultGenderKor(undefined);
+      }
+    })();
+  }, []);
 
   // API 데이터가 있으면 사용, 없으면 기본값 사용
   const displayNickname = reportData?.nickname || nickname || '사용자';
@@ -56,7 +73,7 @@ const PatientCardList = ({ nickname, round }: { nickname?: string; round?: numbe
                 averageValue={row.descProps.averageValue}
                 ageGroup={row.descProps.ageGroup}
                 rank={row.descProps.rank}
-                gender={row.descProps.gender}
+                gender={defaultGenderKor ?? row.descProps.gender}
                 ageGroup10Yr={row.descProps.ageGroup10Yr}
                 rankType={row.descProps.rankType}
                 rankPercent={row.descProps.rankPercent}
