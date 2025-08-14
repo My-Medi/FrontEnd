@@ -12,7 +12,7 @@ const defaultMessages = [
   '건강 목표에 한 걸음 더!'
 ];
 
-const FunLoadingOverlay: React.FC<FunLoadingOverlayProps> = ({ isOpen, messages }) => {
+const ParsingLoadingOverlay: React.FC<FunLoadingOverlayProps> = ({ isOpen, messages }) => {
   const lines = useMemo(() => (messages && messages.length > 0 ? messages : defaultMessages), [messages]);
   const [idx, setIdx] = useState(0);
 
@@ -24,6 +24,19 @@ const FunLoadingOverlay: React.FC<FunLoadingOverlayProps> = ({ isOpen, messages 
     }, 1400);
     return () => clearInterval(id);
   }, [isOpen, lines.length]);
+
+  // 스크롤 락: 오버레이 표시 중에는 페이지 스크롤 비활성화
+  useEffect(() => {
+    if (!isOpen) return;
+    const prevHtmlOverflow = document.documentElement.style.overflow;
+    const prevBodyOverflow = document.body.style.overflow;
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.documentElement.style.overflow = prevHtmlOverflow;
+      document.body.style.overflow = prevBodyOverflow;
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -60,6 +73,6 @@ const FunLoadingOverlay: React.FC<FunLoadingOverlayProps> = ({ isOpen, messages 
   );
 };
 
-export default FunLoadingOverlay;
+export default ParsingLoadingOverlay;
 
 

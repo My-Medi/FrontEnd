@@ -6,13 +6,13 @@ import backSvg from '../../assets/back.svg';
 import { useNavigate, useLocation } from 'react-router-dom';
 import FileUploadSection from '../Common/FileUploadSection';
 import { useExpertUserReportByRound } from '../../hooks/consultation/expert/queries/useExpertUserReportByRound';
-import FunLoadingOverlay from './FunLoadingOverlay';
 import { createHealthReport, getHealthReportCount, parseHealthReportImage } from '../../apis/healthCheckupApi/healthCheckup';
 import useHealthReportQuery from '../../hooks/healthCheckup/useHealthReportQuery';
 import { useHealthReportUpdateMutation } from '../../hooks/healthCheckup/useHealthReportMutation';
 import type { HealthCheckupRequest } from '../../types/healthCheckupForm';
 import SuccessModal from '../MyHome/Edit/SuccessModal';
 import ConfirmModal from '../MyHome/Edit/ConfirmModal';
+import ParsingLoadingOverlay from './ParsingLoadingOverlay';
 
 const HealthCheckupForm = () => {
   const location = useLocation();
@@ -1031,7 +1031,7 @@ const HealthCheckupForm = () => {
         </div>
       </div>
       </fieldset>
-      <FunLoadingOverlay isOpen={isParsing} messages={[]} />
+      <ParsingLoadingOverlay isOpen={isParsing} messages={[]} />
 
       {/* 계측 검사 섹션 */}
       <fieldset>
