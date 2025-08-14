@@ -6,7 +6,8 @@ import backSvg from '../../assets/back.svg';
 import { useNavigate, useLocation } from 'react-router-dom';
 import FileUploadSection from '../Common/FileUploadSection';
 import { useExpertUserReportByRound } from '../../hooks/consultation/expert/queries/useExpertUserReportByRound';
-import { createHealthReport, getHealthReportCount, parseHealthReportImage } from '../../apis/healthCheckupApi/healthCheckup';
+import { createHealthReport, parseHealthReportImage } from '../../apis/healthCheckupApi/healthCheckup';
+import { getDefaultReport } from '../../apis/userApi/user';
 import useHealthReportQuery from '../../hooks/healthCheckup/useHealthReportQuery';
 import { useHealthReportUpdateMutation } from '../../hooks/healthCheckup/useHealthReportMutation';
 import type { HealthCheckupRequest } from '../../types/healthCheckupForm';
@@ -44,15 +45,15 @@ const HealthCheckupForm = () => {
     // 건강검진 입력 페이지에서는 별도의 필터 동작이 필요 없음 (콜백만 전달)
   };
 
-  // 초기 로드 시 서버에서 총 회차 불러와 UI 세팅
+  // 초기 로드 시 서버에서 총 회차(reportCount) 불러와 UI 세팅
   useEffect(() => {
     (async () => {
       try {
-        const res = await getHealthReportCount();
-        const count = res.result ?? 1;
-        const arr = Array.from({ length: Math.max(1, count) }, (_, i) => i + 1);
+        const res = await getDefaultReport();
+        const count = Math.max(1, (res as any)?.result?.reportCount ?? 1);
+        const arr = Array.from({ length: count }, (_, i) => i + 1);
         setRounds(arr);
-        setServerRoundCount(Math.max(1, count));
+        setServerRoundCount(count);
         if (!externalRound) setCurrentRound(arr[arr.length - 1]);
       } catch (e) {
         console.error('회차 수 조회 실패', e);
@@ -76,6 +77,8 @@ const HealthCheckupForm = () => {
   // 업로드 이미지 (컴포넌트 기반)
   // 이미지 파싱 로딩 상태
   const [isParsing, setIsParsing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [hasJustSaved, setHasJustSaved] = useState(false);
 
   const handleCloseConfirm = () => {
     setIsConfirmOpen(false);
@@ -828,6 +831,7 @@ const HealthCheckupForm = () => {
   // 저장 버튼 클릭 핸들러
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSaving) return;
     if (!validateRequiredSelections()) return;
     if (!hospital.trim()) {
       alert('병원명을 입력해주세요.');
@@ -847,6 +851,7 @@ const HealthCheckupForm = () => {
       return;
     }
     try {
+      setIsSaving(true);
       const payload = transformFormDataToAPI();
       console.log('HealthReport payload:', payload);
       const hasExisting = Boolean(reportResponse?.result);
@@ -857,12 +862,15 @@ const HealthCheckupForm = () => {
         // 새 회차 저장 성공 시, 서버 카운트 최신화 (로컬 기준으로 보정)
         setServerRoundCount((prev) => Math.max(prev, Math.max(...rounds)));
       }
+      setHasJustSaved(true);
       openConfirm();
     } catch (error: any) {
       console.error('건강리포트 저장 실패:', error);
       console.error('API error response:', error?.response?.data);
       const apiMessage = error?.response?.data?.message || error?.message || '알 수 없는 오류';
       alert(`건강리포트 저장에 실패했습니다.\n사유: ${apiMessage}`);
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -881,10 +889,16 @@ const HealthCheckupForm = () => {
 
   const handleSaveAndGoReport = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    if (hasJustSaved) {
+      setHasJustSaved(false);
+      navigate('/my-medical-report');
+      return;
+    }
     setIsGoReportConfirmOpen(true);
   };
 
   const handleConfirmGoReport = async () => {
+    if (isSaving) { setIsGoReportConfirmOpen(false); return; }
     if (!validateRequiredSelections()) { setIsGoReportConfirmOpen(false); return; }
     if (!hospital.trim()) { alert('병원명을 입력해주세요.'); setIsGoReportConfirmOpen(false); return; }
     if (!date) { alert('검진일을 선택해주세요.'); setIsGoReportConfirmOpen(false); return; }
@@ -911,6 +925,7 @@ const HealthCheckupForm = () => {
       return;
     }
     try {
+      setIsSaving(true);
       const payload = transformFormDataToAPI();
       const hasExisting = Boolean(reportResponse?.result);
       if (hasExisting) {
@@ -926,6 +941,9 @@ const HealthCheckupForm = () => {
       const apiMessage = error?.response?.data?.message || error?.message || '알 수 없는 오류';
       alert(`이동 중 오류가 발생했습니다.\n사유: ${apiMessage}`);
       setIsGoReportConfirmOpen(false);
+    }
+    finally {
+      setIsSaving(false);
     }
   };
 
@@ -1663,16 +1681,22 @@ const HealthCheckupForm = () => {
       <div className='flex justify-center mt-12 gap-[200px]'>
         <button
           type='submit'
-          className='w-[300px] h-[72px] bg-[#FFF] text-black rounded-[60px] text-[24px] font-semibold shadow-[0_0_6px_4px_rgba(29,104,255,0.10)] transition'
+          disabled={isSaving}
+          className={`w-[300px] h-[72px] rounded-[60px] text-[24px] font-semibold transition ${
+            isSaving ? 'bg-gray-300 text-white cursor-not-allowed' : 'bg-[#FFF] text-black shadow-[0_0_6px_4px_rgba(29,104,255,0.10)]'
+          }`}
           onClick={handleSave}
         >
-          {reportResponse?.result ? '저장하기' : '저장하기'}
+          {isSaving ? '저장중...' : '저장하기'}
         </button>
         <button
-          className='flex h-[72px] px-20 py-5 justify-center items-center gap-[10px] rounded-[60px] bg-[#1D68FF] text-white text-center font-pretendard text-[24px] font-semibold leading-[36px] tracking-[-0.72px]'
+          disabled={isSaving}
+          className={`flex h-[72px] px-20 py-5 justify-center items-center gap-[10px] rounded-[60px] text-white text-center font-pretendard text-[24px] font-semibold leading-[36px] tracking-[-0.72px] ${
+            isSaving ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#1D68FF]'
+          }`}
           onClick={handleSaveAndGoReport}
         >
-          마이메디컬리포트로 확인하기
+          {isSaving ? '마이메디컬리포트로 확인하기' : '마이메디컬리포트로 확인하기'}
         </button>
 
       </div>
