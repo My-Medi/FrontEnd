@@ -66,6 +66,15 @@ const getStatusIcon = (status: string) => {
   }
 };
 
+// 공용 상태 아이콘 컴포넌트 (스타일 고정, 접근성 레이블 포함)
+export const HealthStatusIcon: React.FC<{ status: string; className?: string }> = ({ status, className }) => (
+  <img
+    src={getStatusIcon(status)}
+    alt={status}
+    className={`w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px] ${className || ''}`}
+  />
+);
+
 const ReportSummary: React.FC<ReportProps> = ({
   nickname,
   summary,
@@ -194,11 +203,11 @@ const ReportSummary: React.FC<ReportProps> = ({
                 </p>
                 <div className='flex flex-col mt-[4px] text-[14px] font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
                   <div className='flex items-start gap-2'>
-                    <img src={getStatusIcon(statuses.obesityBmi)} alt={statuses.obesityBmi} className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                    <HealthStatusIcon status={statuses.obesityBmi} />
                     <p>체질량 지수 : {derived.bmi ?? '-'} kg/m²</p>
                   </div>
                   <div className='flex items-start gap-2'>
-                    <img src={getStatusIcon(statuses.obesityWaist)} alt={statuses.obesityWaist} className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                    <HealthStatusIcon status={statuses.obesityWaist} />
                     <p>허리둘레 : {derived.waist ?? '-'} mm/HG</p>
                   </div>
                 </div>
@@ -212,11 +221,11 @@ const ReportSummary: React.FC<ReportProps> = ({
                 </p>
                 <div className='flex flex-col mt-[4px] gap-1 text-[14px] font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
                   <div className='flex items-start gap-2'>
-                    <img src={getStatusIcon(statuses.hypertensionSystolic)} alt={statuses.hypertensionSystolic} className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                    <HealthStatusIcon status={statuses.hypertensionSystolic} />
                     <p>수축기 혈압 : {derived.sp ?? '-'} kg/m²</p>
                   </div>
                   <div className='flex items-start gap-2'>
-                    <img src={getStatusIcon(statuses.hypertensionDiastolic)} alt={statuses.hypertensionDiastolic} className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                    <HealthStatusIcon status={statuses.hypertensionDiastolic} />
                     <p>이완기 혈압 : {derived.dp ?? '-'} mm/HG</p>
                   </div>
                 </div>
@@ -229,7 +238,7 @@ const ReportSummary: React.FC<ReportProps> = ({
                   당뇨병
                 </p>
                 <div className='flex items-start gap-2 mt-[4px]'>
-                  <img src={getStatusIcon(statuses.diabetesFasting)} alt={statuses.diabetesFasting} className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                  <HealthStatusIcon status={statuses.diabetesFasting} />
                   <p className='text-[14px] font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
                     공복혈당 : {derived.fastingBlood ?? '-'} mg/dL
                   </p>
@@ -244,11 +253,11 @@ const ReportSummary: React.FC<ReportProps> = ({
                 </p>
                 <div className='text-[14px] gap-1 mt-[4px] flex-col font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
                   <div className='flex items-start gap-2'>
-                    <img src={getStatusIcon(statuses.kidneyCreatinine)} alt={statuses.kidneyCreatinine} className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                    <HealthStatusIcon status={statuses.kidneyCreatinine} />
                     <p>혈청 크레아티닌 : {derived.creatinine ?? '-'} mg/dL</p>
                   </div>
                   <div className='flex items-start gap-2'>
-                    <img src={getStatusIcon(statuses.kidneyEgfr)} alt={statuses.kidneyEgfr} className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                    <HealthStatusIcon status={statuses.kidneyEgfr} />
                     <p>eGFR신사구체여과율 : {derived.eGFR ?? '-'} ml/min/1.73m²</p>
                   </div>
                 </div>
@@ -263,15 +272,15 @@ const ReportSummary: React.FC<ReportProps> = ({
                 </p>
                 <div className='text-[14px] gap-1 mt-[4px] flex-col font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
                   <div className='flex items-start gap-2'>
-                    <img src={getStatusIcon(statuses.liverAst)} alt={statuses.liverAst} className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                    <HealthStatusIcon status={statuses.liverAst} />
                     <p>AST : {derived.ast ?? '-'} IU/L</p>
                   </div>
                   <div className='flex items-start gap-2'>
-                    <img src={getStatusIcon(statuses.liverAlt)} alt={statuses.liverAlt} className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                    <HealthStatusIcon status={statuses.liverAlt} />
                     <p>ALT : {derived.alt ?? '-'} IU/L</p>
                   </div>
                   <div className='flex items-start gap-2'>
-                    <img src={getStatusIcon(statuses.liverGtp)} alt={statuses.liverGtp} className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                    <HealthStatusIcon status={statuses.liverGtp} />
                     <p>감마-GTP(Y-GTP) : {derived.gtp ?? '-'} IU/L</p>
                   </div>
                 </div>
@@ -300,7 +309,7 @@ const ReportSummary: React.FC<ReportProps> = ({
                   빈혈
                 </p>
                 <div className='flex items-start gap-2 mt-[4px]'>
-                  <img src={getStatusIcon(statuses.anemiaHemoglobin)} alt={statuses.anemiaHemoglobin} className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                  <HealthStatusIcon status={statuses.anemiaHemoglobin} />
                   <p className='text-[14px] font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
                     혈색소 : {derived.hemoglobin ?? '-'} g/dL
                   </p>
@@ -315,19 +324,19 @@ const ReportSummary: React.FC<ReportProps> = ({
                 </p>
                 <div className='text-[14px] mt-[4px] flex-col gap-1 font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
                   <div className='flex items-start gap-2'>
-                    <img src={getStatusIcon(statuses.dyslipidemiaTotalChol)} alt={statuses.dyslipidemiaTotalChol} className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                    <HealthStatusIcon status={statuses.dyslipidemiaTotalChol} />
                     <p>총콜레스테롤 : {derived.cholesterol ?? '-'} mg/dL</p>
                   </div>
                   <div className='flex items-start gap-2'>
-                    <img src={getStatusIcon(statuses.dyslipidemiaHdl)} alt={statuses.dyslipidemiaHdl} className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                    <HealthStatusIcon status={statuses.dyslipidemiaHdl} />
                     <p>HDL-콜레스테롤 : {derived.hdl ?? '-'} mg/dL</p>
                   </div>
                   <div className='flex items-start gap-2'>
-                    <img src={getStatusIcon(statuses.dyslipidemiaTriglyceride)} alt={statuses.dyslipidemiaTriglyceride} className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                    <HealthStatusIcon status={statuses.dyslipidemiaTriglyceride} />
                     <p>중성지방 : {derived.neutralFat ?? '-'} mg/dL</p>
                   </div>
                   <div className='flex items-start gap-2'>
-                    <img src={getStatusIcon(statuses.dyslipidemiaLdl)} alt={statuses.dyslipidemiaLdl} className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                    <HealthStatusIcon status={statuses.dyslipidemiaLdl} />
                     <p>LDL-콜레스테롤 : {derived.ldl ?? '-'} mg/dL</p>
                   </div>
                 </div>
@@ -340,7 +349,7 @@ const ReportSummary: React.FC<ReportProps> = ({
                   요단백
                 </p>
                 <div className='flex items-start gap-2 mt-[4px]'>
-                  <img src={getStatusIcon(statuses.urineProtein)} alt={statuses.urineProtein} className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                  <HealthStatusIcon status={statuses.urineProtein} />
                   <p className='text-[14px] font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
                     {urineProteinDisplay}
                   </p>

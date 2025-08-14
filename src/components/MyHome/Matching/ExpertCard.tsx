@@ -4,7 +4,7 @@ import { type MatchedExpert } from '../../../data/matchedExperts';
 import { getSpecialtyKoreanName } from '../../../types/expert/common';
 import { formatPhoneNumber } from '../../../utils/phoneUtils';
 import plusIcon from '../../../assets/MyHome/plus.svg';
-import unionSvg from '../../../assets/Expert/Union.svg';
+import RoundAvatar from '../../Common/RoundAvatar';
 
 interface ExpertCardProps {
   expert: MatchedExpert;
@@ -117,21 +117,7 @@ const ExpertCard: React.FC<ExpertCardProps> = ({ expert, onUnmatch, onCancelRequ
         </div>
 
         {/* 프로필 이미지 */}
-        <div className="w-[145px] h-[145px] bg-[#EDF0F3] border-[4.5px] border-[#1D68FF] rounded-full flex items-center justify-center mb-6 overflow-hidden">
-          {expert.profileImgUrl ? (
-            <img 
-              src={expert.profileImgUrl} 
-              alt={`${expert.nickname} 프로필`}
-              className="w-full h-full rounded-full object-cover"
-            />
-          ) : (
-            <img 
-              src={unionSvg} 
-              alt="기본 프로필" 
-              className="w-[78px] h-[80px]" 
-            />
-          )}
-        </div>
+        <RoundAvatar src={expert.profileImgUrl} containerClass="w-[145px] h-[145px] border-[4.5px] border-[#1D68FF] mb-6" />
 
         {/* 하단 정보 */}
         <div className="flex flex-col gap-1.5">
