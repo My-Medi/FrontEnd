@@ -34,6 +34,11 @@ const IndicationDescription: React.FC<IndicationDescriptionProps> = ({
     return null;
   }
 
+  // 요단백은 IndicationDescription을 표시하지 않음
+  if (indicatorName === '요단백') {
+    return null;
+  }
+
   // 신규 포맷이 모두 제공되면 그 문구를 그대로 사용
   const hasNewFormat =
     typeof ageGroup10Yr === 'number' &&
