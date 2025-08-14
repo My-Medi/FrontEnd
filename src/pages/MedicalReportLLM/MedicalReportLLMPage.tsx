@@ -1,15 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MedicalReport from '../../components/MedicalReportLLM/MedicalReport';
 import Header from '../../components/Common/MyMedicalReportHeader';
 import { useMedicalReportLlmQuery } from '../../hooks/healthCheckup/useMedicalReportLlmQuery';
 import LlmLoadingOverlay from '../../components/MedicalReportLLM/LlmLoadingOverlay';
+import { getDefaultReport } from '../../apis/userApi/user';
+
+interface UserInfo {
+  nickname: string;
+  gender: string;
+  age: number;
+  weight: number;
+  height: number;
+  reportCount: number;
+}
 
 const MedicalReportLLMPage: React.FC = () => {
   // 요구사항: round는 1로 고정
   const [rounds] = useState<number[]>([1]);
   const [selectedRound, setSelectedRound] = useState<number>(1);
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
   const { data, isLoading, isError } = useMedicalReportLlmQuery(1, true);
+
+  // 초기 로드시 사용자 기본 정보 조회
+  useEffect(() => {
+    (async () => {
+      try {
+        const userRes = await getDefaultReport();
+        const userData = userRes.result;
+        setUserInfo(userData);
+      } catch (e) {
+        console.error('사용자 정보 조회 실패', e);
+      }
+    })();
+  }, []);
 
   const handleRoundChange = (round: number) => {
     setSelectedRound(round);
@@ -27,11 +51,11 @@ const MedicalReportLLMPage: React.FC = () => {
         <LlmLoadingOverlay isOpen={isLoading} />
         {/* 헤더 섹션 */}
         <Header
-          nickname={data?.result?.nickname || ''}
-          age={23}
-          height={168}
-          weight={52}
-          checkupCount={rounds.length}
+          nickname={userInfo?.nickname || data?.result?.nickname || '사용자'}
+          age={userInfo?.age || 0}
+          height={userInfo?.height || 0}
+          weight={userInfo?.weight || 0}
+          checkupCount={userInfo?.reportCount || rounds.length}
           rounds={rounds}
           selectedRound={selectedRound}
           onRoundChange={handleRoundChange}
@@ -40,7 +64,7 @@ const MedicalReportLLMPage: React.FC = () => {
         />
         {/* 메디컬 리포트 콘텐츠 */}
         <MedicalReport
-          username={data?.result?.nickname || ''}
+          username={userInfo?.nickname || data?.result?.nickname || '사용자'}
           selectedRound={selectedRound}
           isLoading={!!isLoading}
           isError={!!isError}

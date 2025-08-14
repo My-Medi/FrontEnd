@@ -90,3 +90,12 @@ export const getUserSchedulesByDate = async (
   );
   return response.data;
 };
+
+export const getDefaultReport = async () => {
+  try {
+    const response = await API.get('/users/reports/default');
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

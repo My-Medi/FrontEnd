@@ -180,7 +180,7 @@ const MedicalReport: React.FC<MedicalReportProps> = ({
               }}
             >
               <span className='text-[#1D68FF]'>{username}</span>님의 마이메디컬리포트{' '}
-              {selectedRound} 건강 상태를 반영하여
+              {selectedRound}회차 건강 상태를 반영하여
               <br />
               <span className='text-[#1D68FF]'>마이메디 AI</span>가 분석한 건강검진결과입니다.
             </p>
