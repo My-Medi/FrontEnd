@@ -48,7 +48,7 @@ const ExpertCard: React.FC<ExpertCardProps> = ({
           <img src={unionSvg} alt="기본 프로필" className="w-[92px] h-[92px]" />
         ) : (
           typeof profile === "string" ? (
-            <img src={profile} alt="프로필" className="w-[92px] h-[92px] rounded-full" />
+            <img src={profile} alt="프로필" className="w-full h-full object-cover rounded-full" />
           ) : (
             profile
           )

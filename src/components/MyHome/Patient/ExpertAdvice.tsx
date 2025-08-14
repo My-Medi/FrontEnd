@@ -1,12 +1,15 @@
 import React from "react";
 import ActionButton from "../Common/ActionButton";
+import { useLatestAdvice } from "../../../hooks/users/queries/useLatestAdvice";
 
 interface Props {
-    adviceText: string;
     onMenuSelect?: (menuIndex: number) => void;
   }
   
-  const ExpertAdvice: React.FC<Props> = ({ adviceText, onMenuSelect }) => {
+  const ExpertAdvice: React.FC<Props> = ({ onMenuSelect }) => {
+    const { data } = useLatestAdvice();
+    const adviceText = data?.adviceComment || "등록된 전문가의 최신 조언이 없습니다.";
+    
     const handleExpertClick = () => {
       if (onMenuSelect) {
         onMenuSelect(2); // 매칭된 전문가 메뉴 (인덱스 2)

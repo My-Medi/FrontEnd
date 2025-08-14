@@ -6,12 +6,13 @@ import backSvg from '../../assets/back.svg';
 import { useNavigate, useLocation } from 'react-router-dom';
 import FileUploadSection from '../Common/FileUploadSection';
 import { useExpertUserReportByRound } from '../../hooks/consultation/expert/queries/useExpertUserReportByRound';
-import { createHealthReport, getHealthReportCount } from '../../apis/healthCheckupApi/healthCheckup';
+import { createHealthReport, getHealthReportCount, parseHealthReportImage } from '../../apis/healthCheckupApi/healthCheckup';
 import useHealthReportQuery from '../../hooks/healthCheckup/useHealthReportQuery';
 import { useHealthReportUpdateMutation } from '../../hooks/healthCheckup/useHealthReportMutation';
 import type { HealthCheckupRequest } from '../../types/healthCheckupForm';
 import SuccessModal from '../MyHome/Edit/SuccessModal';
 import ConfirmModal from '../MyHome/Edit/ConfirmModal';
+import ParsingLoadingOverlay from './ParsingLoadingOverlay';
 
 const HealthCheckupForm = () => {
   const location = useLocation();
@@ -73,9 +74,8 @@ const HealthCheckupForm = () => {
     setIsConfirmOpen(true);
   };
   // 업로드 이미지 (컴포넌트 기반)
-  const [reportImages, setReportImages] = useState<Array<{ imageUrl: string; imageTitle: string }>>([]);
-  void reportImages; // avoid unused warning until wired to payload
-  const isBelowInputsDisabled = reportImages.length > 0;
+  // 이미지 파싱 로딩 상태
+  const [isParsing, setIsParsing] = useState(false);
 
   const handleCloseConfirm = () => {
     setIsConfirmOpen(false);
@@ -977,14 +977,38 @@ const HealthCheckupForm = () => {
         <FileUploadSection
           existingFiles={[]}
           onExistingFilesChange={() => {}}
-          onNewImagesChange={(images) => setReportImages(images)}
+          onNewImagesChange={() => {}}
+          uploadFiles={async (files) => {
+            // 1) S3 업로드 → URL 획득
+            // 2) 첫 파일을 바로 파싱 API에도 전송 (서버가 파일 수신해 파싱)
+            //    S3 URL은 보여주기/참고용으로 유지
+            try {
+              if (!files || files.length === 0) return [];
+              setIsParsing(true);
+              const s3UrlsRes = await (await import('../../apis/imageApi/image')).imageAPI.uploadImages(files);
+              const urls = s3UrlsRes.result || [];
+              // 동시에 첫 파일로 파싱 실행
+              const parsed = await parseHealthReportImage(files[0]);
+              const result = (parsed as any).result;
+              if (result) {
+                applyReportToForm(result as any);
+              }
+              return urls; // FileUploadSection이 새 파일 목록 표시를 위해 URL 반환
+            } catch (e) {
+              console.error('이미지 업로드/파싱 실패', e);
+              alert('이미지 업로드/파싱에 실패했습니다. 다시 시도해주세요.');
+              return [];
+            } finally {
+              setIsParsing(false);
+            }
+          }}
           accept='image/*,.pdf'
           allowMultiple
         />
       </div>
 
       {/* 검진일/검진장소 입력 */}
-      <fieldset disabled={isBelowInputsDisabled}>
+      <fieldset>
       <div className='flex items-center gap-8 mb-8'>
         <div className='flex items-center gap-2'>
           <label className='font-semibold text-base text-[18px] text-black mr-2'>검진일</label>
@@ -1007,9 +1031,10 @@ const HealthCheckupForm = () => {
         </div>
       </div>
       </fieldset>
+      <ParsingLoadingOverlay isOpen={isParsing} messages={[]} />
 
       {/* 계측 검사 섹션 */}
-      <fieldset disabled={isBelowInputsDisabled}>
+      <fieldset>
       <div className='mb-10'>
         <div className='bg-[#DBE6FF] rounded-[14px] px-6 py-2 font-bold text-base mb-2'>
           계측 검사
@@ -1228,7 +1253,7 @@ const HealthCheckupForm = () => {
       </fieldset>
 
       {/* 혈액 검사 섹션 */}
-      <fieldset disabled={isBelowInputsDisabled}>
+      <fieldset>
       <div className='mb-[24px]'>
         <div className='bg-[#DBE6FF] rounded-[14px] font-bold px-6 py-2 text-[18px] mb-[24px]'>
           혈액 검사
@@ -1523,7 +1548,7 @@ const HealthCheckupForm = () => {
       </fieldset>
 
       {/* 요검사 섹션 */}
-      <fieldset disabled={isBelowInputsDisabled}>
+      <fieldset>
       <div className='mb-3'>
         <div className='bg-[#DBE6FF] rounded-[14px] px-6 py-2 font-bold text-base mb-3'>요검사</div>
         <div className='bg-white rounded-[14px] p-6'>
@@ -1546,7 +1571,7 @@ const HealthCheckupForm = () => {
       </fieldset>
 
       {/* 영상검사 섹션 */}
-      <fieldset disabled={isBelowInputsDisabled}>
+      <fieldset>
       <div className='mb-3'>
         <div className='bg-[#DBE6FF] rounded-[14px] px-6 py-2 font-bold text-base mb-3'>
           영상검사
@@ -1573,7 +1598,7 @@ const HealthCheckupForm = () => {
       </fieldset>
 
       {/* 진찰(문진) 섹션 */}
-      <fieldset disabled={isBelowInputsDisabled}>
+      <fieldset>
       <div className='mb-3'>
         <div className='bg-[#DBE6FF] rounded-[14px] px-6 py-2 font-bold text-base mb-3'>
           진찰(문진)

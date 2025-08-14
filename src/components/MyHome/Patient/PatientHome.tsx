@@ -35,10 +35,7 @@ const PatientHome: React.FC<PatientHomeProps> = ({
             useApiData={true} // API 데이터 사용
           />
           <MyConstantMedical status='안심' />
-          <ExpertAdvice 
-            adviceText='하루 1시간 이상 걷기, 추천 운동법으로 혈당 수치를 낮춰보세요!' 
-            onMenuSelect={onMenuSelect}
-          />
+          <ExpertAdvice onMenuSelect={onMenuSelect} />
           <HomeCalendar
             selectedDate={selectedDate}
             today={today}

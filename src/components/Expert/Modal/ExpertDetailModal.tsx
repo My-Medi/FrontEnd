@@ -6,7 +6,6 @@ import RequestModal from './RequestModal';
 import ExpertDetailSkeleton from './ExpertDetailSkeleton';
 import ReRequestConfirmModal from './ReRequestConfirmModal';
 import useModalScrollLock from '../../../hooks/useModalScrollLock';
-import { useRequestConsultationMutation } from '../../../hooks/experts/mutations/useRequestConsultationMutation';
 import SuccessModal from './SuccessModal';
 import { useExpertDetailQuery } from '../../../hooks/experts/queries/useExpertDetailQuery';
 import { getSpecialtyKoreanName } from '../../../types/expert/common';
@@ -32,7 +31,7 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
   const { data: expert, isLoading, error } = useExpertDetailQuery(expertId, expertStatus);
   const healthProposalQuery = useHealthProposalQuery();
 
-  useModalScrollLock(!showRequestModal && !showReRequestModal && !showDetailSuccess);
+  useModalScrollLock(!showRequestModal && !showReRequestModal && !showDetailSuccess && !showFillRequestPrompt);
 
   // 요청 날짜 포맷팅 함수
   const formatRequestDate = (dateString: string) => {
@@ -60,10 +59,6 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
   };
 
   const handleRequestClick = () => {
-    if (expertStatus === 'rejected') {
-      // 거절된 전문가에게는 요청 불가
-      return;
-    }
     if (expertStatus === 'request') {
       // 요청 상태일 때는 재요청 확인 모달 먼저 표시
       setShowReRequestModal(true);
@@ -78,19 +73,10 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
     }
   };
 
-  const requestMutation = useRequestConsultationMutation();
   const handleReRequestConfirm = () => {
-    // 재요청 확인 후, 즉시 API 호출하여 성공 모달 표시
+    // 재요청 확인 후, 요청서 작성 모달로 이동해 코멘트를 받도록 통일
     setShowReRequestModal(false);
-    requestMutation.mutate(
-      { expertId, comment: '' },
-      {
-        onSuccess: () => {
-          setShowDetailSuccess(true);
-        },
-        // 실패 시에는 폴백 없이 그대로 유지
-      }
-    );
+    setShowRequestModal(true);
   };
 
   const getKoreanOrdinalWord = (n: number): string => {
@@ -159,7 +145,7 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
       {/* ExpertDetailModal */}
       <div
         className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-300 ${
-          showRequestModal || showReRequestModal ? 'hidden' : 'opacity-100'
+          showRequestModal || showReRequestModal || showFillRequestPrompt ? 'hidden' : 'opacity-100'
         }`}
       >
         {/* 모달 배경 */}
@@ -320,8 +306,7 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
                 </button>
                 <button
                   onClick={handleRequestClick}
-                  disabled={expertStatus === 'rejected'}
-                  className='w-[300px] h-14 rounded-full bg-[#1D68FF] text-white text-xl font-semibold transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-[0px_0px_1px_3px_rgba(29,104,255,0.03),0px_0px_2px_3px_rgba(29,104,255,0.02),0px_0px_3px_3px_rgba(29,104,255,0.01),0px_0px_4px_0px_rgba(29,104,255,0)]'
+                  className='w-[300px] h-14 rounded-full bg-[#1D68FF] text-white text-xl font-semibold transition cursor-pointer shadow-[0px_0px_1px_3px_rgba(29,104,255,0.03),0px_0px_2px_3px_rgba(29,104,255,0.02),0px_0px_3px_3px_rgba(29,104,255,0.01),0px_0px_4px_0px_rgba(29,104,255,0)]'
                 >
                   {expertStatus === 'request' ? '다시 요청서 보내기' : '건강관리요청서 보내기'}
                 </button>
@@ -340,6 +325,7 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
             onClose(); // 모든 모달 닫기 (ExpertDetailModal도 함께 닫기)
           }}
           onConfirm={handleReRequestConfirm}
+          expertId={expert.expertId}
           expertName={expert.name}
           expertPosition={getSpecialtyKoreanName(expert.specialty)}
           expertRealName={expert.nickname || expert.name}
@@ -356,7 +342,10 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
             </div>
             <div className="flex justify-center gap-4">
               <button
-                onClick={() => setShowFillRequestPrompt(false)}
+                onClick={() => {
+                  setShowFillRequestPrompt(false);
+                  onClose();
+                }}
                 className="w-[180px] h-[44px] rounded-full bg-white text-[#25282B] border border-[#E3E6EB] font-medium"
               >
                 닫기
@@ -365,7 +354,8 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
                 onClick={() => {
                   setShowFillRequestPrompt(false);
                   onClose();
-                  navigate('/myhome');
+                  // 마이홈 환자 사이드바에서 '건강관리요청서 작성하기'는 index 3
+                  navigate('/myhome', { state: { selectedMenu: 3 } });
                 }}
                 className="w-[180px] h-[44px] rounded-full bg-[#1D68FF] text-white font-semibold"
               >

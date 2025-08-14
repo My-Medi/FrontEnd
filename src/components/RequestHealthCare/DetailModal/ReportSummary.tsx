@@ -105,6 +105,22 @@ const ReportSummary: React.FC<ReportProps> = ({
     urineProtein: urineProtein ?? summary?.urine?.urineTestStatus ?? null,
   };
 
+  const mapUrineProteinStatus = (status?: string | null) => {
+    if (!status) return '-';
+    const s = String(status).toUpperCase();
+    switch (s) {
+      case 'NORMAL':
+        return '정상';
+      case 'BORDERLINE':
+        return '경계';
+      case 'PROTEINURIA':
+        return '단백뇨의심';
+      default:
+        return status;
+    }
+  };
+  const urineProteinDisplay = mapUrineProteinStatus(derived.urineProtein as any);
+
   const isEmpty = (v: any) => v === undefined || v === null || (typeof v === 'number' && Number.isNaN(v));
   const hasAnyValue = !Object.values(derived).every(isEmpty);
   return (
@@ -132,66 +148,92 @@ const ReportSummary: React.FC<ReportProps> = ({
             ) : (
               <>
             <div className='flex items-start gap-2'>
-              <img src={getStatusIcon('안심')} alt='안심' className='w-3 h-3 mt-3' />
-              <div className='flex gap-6'>
-                <p className='text-[#121218] text-[16px] leading-[36px] font-medium tracking-[-0.48px]'>
+                <div className='flex items-star gap-[20px]'>
+                <p className='text-[#121218] text-[16px] leading-[36px] font-medium tracking-[-0.48px] shrink-0'>
                   비만/복부비만
                 </p>
-                <div className='flex flex-col mt-[7px] gap-1 text-[14px] font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
-                  <p>체질량 지수 : {derived.bmi ?? '-'} kg/m²</p>
-                  <p>허리둘레 : {derived.waist ?? '-'} mm/HG</p>
+                <div className='flex flex-col mt-[4px] text-[14px] font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
+                  <div className='flex items-start gap-2'>
+                    <img src={getStatusIcon('정상')} alt='정상' className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                    <p>체질량 지수 : {derived.bmi ?? '-'} kg/m²</p>
+                  </div>
+                  <div className='flex items-start gap-2'>
+                    <img src={getStatusIcon('정상')} alt='정상' className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                    <p>허리둘레 : {derived.waist ?? '-'} mm/HG</p>
+                  </div>
                 </div>
               </div>
             </div>
 
             <div className='flex items-start gap-2'>
-              <img src={getStatusIcon('정상')} alt='정상' className='w-3 h-3 mt-3' />
-              <div className='flex gap-17'>
-                <p className='text-[#121218] text-[16px] leading-[36px] font-medium tracking-[-0.48px]'>
+              <div className='flex items-start gap-[65px]'>
+                <p className='text-[#121218] text-[16px] leading-[36px] font-medium tracking-[-0.48px] shrink-0'>
                   고혈압
                 </p>
-                <div className='flex flex-col mt-[8px] gap-1 text-[14px] font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
-                  <p>수축기 혈압 : {derived.sp ?? '-'} kg/m²</p>
-                  <p>이완기 혈압 : {derived.dp ?? '-'} mm/HG</p>
+                <div className='flex flex-col mt-[4px] gap-1 text-[14px] font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
+                  <div className='flex items-start gap-2'>
+                    <img src={getStatusIcon('정상')} alt='정상' className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                    <p>수축기 혈압 : {derived.sp ?? '-'} kg/m²</p>
+                  </div>
+                  <div className='flex items-start gap-2'>
+                    <img src={getStatusIcon('정상')} alt='정상' className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                    <p>이완기 혈압 : {derived.dp ?? '-'} mm/HG</p>
+                  </div>
                 </div>
               </div>
             </div>
 
             <div className='flex items-start gap-2'>
-              <img src={getStatusIcon('주의')} alt='주의' className='w-3 h-3 mt-3' />
-              <div className='flex gap-17'>
-                <p className='text-[16px] font-medium leading-[36px] tracking-[-0.48px] text-[#121218]'>
+              <div className='flex items-start gap-[65px]'>
+                <p className='text-[16px] font-medium leading-[36px] tracking-[-0.48px] text-[#121218] shrink-0'>
                   당뇨병
                 </p>
-                <p className='text-[14px] mt-[7.5px] font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
-                  공복혈당 : {derived.fastingBlood ?? '-'} mg/dL
-                </p>
-              </div>
-            </div>
-
-            <div className='flex items-start gap-2'>
-              <img src={getStatusIcon('안심')} alt='안심' className='w-3 h-3 mt-3' />
-              <div className='flex gap-13'>
-                <p className='text-[16px] font-medium leading-[36px] tracking-[-0.48px] text-[#121218]'>
-                  신장질환
-                </p>
-                <div className='text-[14px] gap-1 mt-[8px] flex-col font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
-                  <p>혈청 크레아티닌 : {derived.creatinine ?? '-'} mg/dL</p>
-                  <p>eGFR신사구체여과율 : {derived.eGFR ?? '-'} ml/min/1.73m²</p>
+                <div className='flex items-start gap-2 mt-[4px]'>
+                  <img src={getStatusIcon('정상')} alt='정상' className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                  <p className='text-[14px] font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
+                    공복혈당 : {derived.fastingBlood ?? '-'} mg/dL
+                  </p>
                 </div>
               </div>
             </div>
 
             <div className='flex items-start gap-2'>
-              <img src={getStatusIcon('정상')} alt='정상' className='w-3 h-3 mt-3' />
-              <div className='flex gap-13'>
-                <p className='text-[16px] font-medium leading-[36px] tracking-[-0.48px] text-[#121218]'>
+              <div className='flex items-start gap-[52px]'>
+                <p className='text-[16px] font-medium leading-[36px] tracking-[-0.48px] text-[#121218] shrink-0'>
+                  신장질환
+                </p>
+                <div className='text-[14px] gap-1 mt-[4px] flex-col font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
+                  <div className='flex items-start gap-2'>
+                    <img src={getStatusIcon('정상')} alt='정상' className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                    <p>혈청 크레아티닌 : {derived.creatinine ?? '-'} mg/dL</p>
+                  </div>
+                  <div className='flex items-start gap-2'>
+                    <img src={getStatusIcon('정상')} alt='정상' className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                    <p>eGFR신사구체여과율 : {derived.eGFR ?? '-'} ml/min/1.73m²</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className='flex items-start gap-2'>
+
+              <div className='flex items-start gap-[52px]'>
+                <p className='text-[16px] font-medium leading-[36px] tracking-[-0.48px] text-[#121218] shrink-0'>
                   간장질환
                 </p>
-                <div className='text-[14px] gap-1 mt-[7px] flex-col font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
-                  <p>AST : {derived.ast ?? '-'} IU/L</p>
-                  <p>ALT : {derived.alt ?? '-'} IU/L</p>
-                  <p>감마-GTP(Y-GTP) : {derived.gtp ?? '-'} IU/L</p>
+                <div className='text-[14px] gap-1 mt-[4px] flex-col font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
+                  <div className='flex items-start gap-2'>
+                    <img src={getStatusIcon('정상')} alt='정상' className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                    <p>AST : {derived.ast ?? '-'} IU/L</p>
+                  </div>
+                  <div className='flex items-start gap-2'>
+                    <img src={getStatusIcon('정상')} alt='정상' className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                    <p>ALT : {derived.alt ?? '-'} IU/L</p>
+                  </div>
+                  <div className='flex items-start gap-2'>
+                    <img src={getStatusIcon('정상')} alt='정상' className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                    <p>감마-GTP(Y-GTP) : {derived.gtp ?? '-'} IU/L</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -213,41 +255,56 @@ const ReportSummary: React.FC<ReportProps> = ({
             ) : (
               <>
             <div className='flex items-start gap-2'>
-              <img src={getStatusIcon('주의')} alt='주의' className='w-3 h-3 mt-3' />
-              <div className='flex gap-22'>
-                <p className='text-[16px] font-medium leading-[36px] tracking-[-0.48px] text-[#121218]'>
+              <div className='flex gap-[20px] items-start gap-[77px]'>
+                <p className='text-[16px] font-medium leading-[36px] tracking-[-0.48px] text-[#121218] shrink-0'>
                   빈혈
                 </p>
-                <p className='text-[14px] mt-[6px] font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
-                  혈색소 : {derived.hemoglobin ?? '-'} g/dL
-                </p>
-              </div>
-            </div>
-
-            <div className='flex items-start gap-2'>
-              <img src={getStatusIcon('정상')} alt='정상' className='w-[12px] h-[12px] mt-3' />
-              <div className='flex gap-8'>
-                <p className='text-[16px] font-medium leading-[36px] tracking-[-0.48px] text-[#121218]'>
-                  이상지질혈증
-                </p>
-                <div className='text-[14px] mt-[8px] flex-col gap-1 font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
-                  <p>총콜레스테롤 : {derived.cholesterol ?? '-'} mg/dL</p>
-                  <p>HDL-콜레스테롤 : {derived.hdl ?? '-'} mg/dL</p>
-                  <p>중성지방 : {derived.neutralFat ?? '-'} mg/dL</p>
-                  <p>LDL-콜레스테롤 : {derived.ldl ?? '-'} mg/dL</p>
+                <div className='flex items-start gap-2 mt-[4px]'>
+                  <img src={getStatusIcon('정상')} alt='정상' className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                  <p className='text-[14px] font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
+                    혈색소 : {derived.hemoglobin ?? '-'} g/dL
+                  </p>
                 </div>
               </div>
             </div>
 
             <div className='flex items-start gap-2'>
-              <img src={getStatusIcon('안심')} alt='안심' className='w-[12px] h-[12px] mt-3' />
-              <div className='flex gap-18'>
-                <p className='text-[16px] font-medium leading-[36px] tracking-[-0.48px] text-[#121218]'>
+              <div className='flex gap-[20px] items-start gap-[24px]'>
+                <p className='text-[16px] font-medium leading-[36px] tracking-[-0.48px] text-[#121218] shrink-0'>
+                  이상지질혈증
+                </p>
+                <div className='text-[14px] mt-[4px] flex-col gap-1 font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
+                  <div className='flex items-start gap-2'>
+                    <img src={getStatusIcon('정상')} alt='정상' className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                    <p>총콜레스테롤 : {derived.cholesterol ?? '-'} mg/dL</p>
+                  </div>
+                  <div className='flex items-start gap-2'>
+                    <img src={getStatusIcon('정상')} alt='정상' className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                    <p>HDL-콜레스테롤 : {derived.hdl ?? '-'} mg/dL</p>
+                  </div>
+                  <div className='flex items-start gap-2'>
+                    <img src={getStatusIcon('정상')} alt='정상' className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                    <p>중성지방 : {derived.neutralFat ?? '-'} mg/dL</p>
+                  </div>
+                  <div className='flex items-start gap-2'>
+                    <img src={getStatusIcon('정상')} alt='정상' className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                    <p>LDL-콜레스테롤 : {derived.ldl ?? '-'} mg/dL</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className='flex items-start gap-2'>
+              <div className='flex gap-[20px] items-start gap-[64px]'>
+                <p className='text-[16px] font-medium leading-[36px] tracking-[-0.48px] text-[#121218] shrink-0'>
                   요단백
                 </p>
-                <p className='text-[14px] mt-[7px] font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
-                  {derived.urineProtein ?? '-'}
-                </p>
+                <div className='flex items-start gap-2 mt-[4px]'>
+                  <img src={getStatusIcon('정상')} alt='정상' className='w-[12px] h-[12px] min-w-[12px] min-h-[12px] shrink-0 mt-[5px]' />
+                  <p className='text-[14px] font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
+                    {urineProteinDisplay}
+                  </p>
+                </div>
               </div>
             </div>
               </>
@@ -316,7 +373,7 @@ const ReportSummary: React.FC<ReportProps> = ({
               `LDL-콜레스테롤 : ${derived.ldl ?? '-'} mg/dL`,
             ],
           },
-          { title: '요단백', status: '안심', values: [`${derived.urineProtein ?? '-'}`] },
+          { title: '요단백', status: '안심', values: [`${urineProteinDisplay}`] },
         ].map((section, idx) => (
           <div key={idx} className='flex w-[160px] flex-col items-start'>
             <div className='flex items-center gap-2 mb-1'>

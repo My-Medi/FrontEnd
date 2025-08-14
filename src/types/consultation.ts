@@ -14,6 +14,9 @@ export interface ExpertRequestedConsultation {
 export interface ExpertRequestedConsultationList {
   content: ExpertRequestedConsultation[];
   totalPages: number;
+  // 서버 응답 확장 필드 (전문가 헤더 표출용)
+  name?: string;
+  nickname?: string;
 }
 
 export type ExpertRequestedConsultationListResponse = ApiResponse<ExpertRequestedConsultationList>;

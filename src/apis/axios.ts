@@ -48,16 +48,11 @@ API.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const { refreshToken, accessToken } = getTokens();
+        const { refreshToken } = getTokens();
         if (refreshToken) {
-          // 토큰 재발급 요청 (POST 방식, body로 refreshToken 전달)
-          const response = await axios.post(`${BASE_URL}${AUTH_ENDPOINTS.REISSUE}`, 
-            { refresh: refreshToken },
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`
-              }
-            }
+          // 서버 스펙에 맞춰 쿼리스트링 방식으로 통일
+          const response = await axios.post(
+            `${BASE_URL}${AUTH_ENDPOINTS.REISSUE}?refresh=${encodeURIComponent(refreshToken)}`
           );
 
           const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data.result;

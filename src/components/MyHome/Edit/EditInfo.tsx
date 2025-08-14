@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import unionSvg from '../../../assets/Expert/Union.svg';
+import { DEFAULT_PROFILE_IMAGES } from '../../../constants/profileImages';
 import CustomCheckboxButton from '../../Common/CustomCheckboxButton';
 import { useAuth } from '../../../contexts/AuthContext';
 import SuccessModal from './SuccessModal';
@@ -51,6 +52,7 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onProfileModalCha
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [selectedProfileImage, setSelectedProfileImage] = useState<string | null>(null);
 
   const [hasChanges, setHasChanges] = useState(false);
   const [initialData, setInitialData] = useState(formData);
@@ -78,6 +80,11 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onProfileModalCha
 
       setFormData((prev) => ({ ...prev, ...newFormData }));
       setInitialData((prev) => ({ ...prev, ...newFormData }));
+      // 프로필 이미지 초기 반영 (GET /users 응답)
+      const initialProfileImg = (userProfile as any).profileImgUrl || (userProfile as any).profileImageUrl || '';
+      if (initialProfileImg) {
+        setSelectedProfileImage(initialProfileImg);
+      }
       setInitializedFromApi(true);
     }
   }, [userProfile, initializedFromApi]);
@@ -104,6 +111,11 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onProfileModalCha
       };
       setFormData(newFormData);
       setInitialData(newFormData);
+      // 전문가 프로필 이미지 초기 반영 (GET /experts/profile 응답)
+      const initialExpertProfileImg = expert.profileImgUrl || expert.profileImageUrl || '';
+      if (initialExpertProfileImg) {
+        setSelectedProfileImage(initialExpertProfileImg);
+      }
     }
   }, [expertProfileQuery.data, userType, userInfo]);
 
@@ -159,9 +171,15 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onProfileModalCha
     onBack?.();
   };
 
-  const handleProfileSelect = () => {
+  const handleProfileSelect = (profileIndex: number) => {
+    // S3 사전 업로드/환경변수 URL 우선, 없으면 로컬 폴백
+    const selectedImage = DEFAULT_PROFILE_IMAGES[profileIndex - 1]; // profileIndex는 1부터 시작
+    setSelectedProfileImage(selectedImage);
     setShowProfileModal(false);
     onProfileModalChange?.(false);
+    
+    // 변경사항 추적을 위해 hasChanges를 true로 설정
+    setHasChanges(true);
   };
 
   const handleSave = () => {
@@ -175,7 +193,7 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onProfileModalCha
         gender: formData.gender === 'male' ? 'MALE' : 'FEMALE' as 'MALE' | 'FEMALE',
         nickname: formData.nickname,
         phoneNumber: formData.contact,
-        profileImgUrl: '' // 프로필 이미지 URL은 별도 처리 필요
+        profileImgUrl: selectedProfileImage || '' // 선택된 프로필 이미지 URL
       };
       
       if (expertProfileUpdateMutation) {
@@ -203,7 +221,7 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onProfileModalCha
         birthDate: formData.birthDate,
         nickname: formData.nickname,
         phoneNumber: formData.contact,
-        profileImgUrl: '', // 프로필 이미지 URL은 별도 처리 필요
+        profileImgUrl: selectedProfileImage || '', // 선택된 프로필 이미지 URL
         height: toNumberOrUndefined(formData.height),
         weight: toNumberOrUndefined(formData.weight)
       };
@@ -255,7 +273,9 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onProfileModalCha
         )}
         <h1 className='text-2xl font-bold text-gray-800 text-center mt-[50px]'>회원정보 수정</h1>
       </div>
-      <form className='mt-[40px]'>
+
+      
+      <form className={`mt-[40px] transition-all duration-300 ${showProfileModal ? 'filter brightness-80 pointer-events-none' : ''}`}>
         {/* 사용자 프로필 섹션 */}
         <div className='flex justify-center mb-8'>
           <div className='relative'>
@@ -267,12 +287,20 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onProfileModalCha
                 onProfileModalChange?.(true);
               }}
             >
-              {/* 프로필 이미지 또는 기본 아이콘 */}
-              <img 
-                src={unionSvg} 
-                alt="프로필 이미지" 
-                className='w-[97.58px] h-[99.6px] object-contain'
-              />
+              {/* 선택된 프로필 이미지 또는 기본 아이콘 */}
+              {selectedProfileImage ? (
+                <img 
+                  src={selectedProfileImage} 
+                  alt="선택된 프로필 이미지" 
+                  className='w-[158px] h-[158px] object-cover rounded-[156px]'
+                />
+              ) : (
+                <img 
+                  src={unionSvg} 
+                  alt="프로필 이미지" 
+                  className='w-[97.58px] h-[99.6px] object-contain'
+                />
+              )}
             </div>
           </div>
         </div>

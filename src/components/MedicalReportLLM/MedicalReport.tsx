@@ -2,15 +2,20 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import ChartClip from '/src/assets/MyMedicalReport/chart-clip.svg';
 import ChartSideClip from '/src/assets/MyMedicalReport/chart-2-clip.svg';
+import type { MedicalReportLlmResult } from '../../types/myMedicalReport/llm';
 
 interface MedicalReportProps {
   username?: string;
   selectedRound?: number;
+  isLoading?: boolean;
+  isError?: boolean;
+  llmData?: MedicalReportLlmResult;
 }
 
 const MedicalReport: React.FC<MedicalReportProps> = ({
   username = '',
   selectedRound = '' as unknown as number,
+  llmData,
 }) => {
   const navigate = useNavigate();
   const handleFindExpert = () => navigate('/expert');
@@ -86,9 +91,9 @@ const MedicalReport: React.FC<MedicalReportProps> = ({
                     width='227'
                     height='83'
                     filterUnits='userSpaceOnUse'
-                    color-interpolation-filters='sRGB'
+                    colorInterpolationFilters='sRGB'
                   >
-                    <feFlood flood-opacity='0' result='BackgroundImageFix' />
+                    <feFlood floodOpacity='0' result='BackgroundImageFix' />
                     <feColorMatrix
                       in='SourceAlpha'
                       type='matrix'
@@ -193,77 +198,16 @@ const MedicalReport: React.FC<MedicalReportProps> = ({
               >
                 주요 이상 수치
               </h2>
-              <span className='text-gray-500 text-[18px]'>
-                현재 건강검진 결과를 바탕으로, 다음과 같은 수치에서 주의가 필요해 보여요!
-              </span>
+              {/* 설명 문구 제거: 하드코딩 텍스트 삭제 */}
             </div>
 
             <div className='space-y-3'>
-              <div className='flex items-start gap-3 ml-[60px] mb-[24px]'>
-                <div className='w-[11px] h-[11px] bg-[#1D68FF] rounded mt-2 flex-shrink-0'></div>
-                <div>
-                  <span className='text-black font-normal text-[20px]'>공복혈당:</span>
-                  <span className='text-black font-normal text-[20px]'>
-                    {' '}
-                    107 mg/dL → 정상기준 (70~99)을 초과해 당뇨 전단계로 분류됩니다.
-                  </span>
+              {llmData?.majorAbnormalItems?.map((text, idx) => (
+                <div key={`abnormal-${idx}`} className='flex items-start gap-3 ml-[60px] mb-[24px]'>
+                  <div className='w-[11px] h-[11px] bg-[#1D68FF] rounded mt-2 flex-shrink-0'></div>
+                  <div className='text-black font-normal text-[20px]'>{text}</div>
                 </div>
-              </div>
-
-              <div className='flex items-start gap-3 ml-[60px] mb-[24px]'>
-                <div className='w-[11px] h-[11px] bg-[#1D68FF] rounded mt-2 flex-shrink-0'></div>
-                <div>
-                  <span className='text-black font-normal text-[20px]'>LDL콜레스테롤:</span>
-                  <span className='text-black font-normal text-[20px]'>
-                    {' '}
-                    153 mg/dL → 경계 수치로, 심혈관 질환 위험이 조금씩 생기기 시작한 상태에요.
-                  </span>
-                </div>
-              </div>
-
-              <div className='flex items-start gap-3 ml-[60px] mb-[24px]'>
-                <div className='w-[11px] h-[11px] bg-[#1D68FF] rounded mt-2 flex-shrink-0'></div>
-                <div>
-                  <span className='text-black font-normal text-[20px]'>중성지방:</span>
-                  <span className='text-black font-normal text-[20px]'>
-                    {' '}
-                    186 mg/dL → 높은 편으로, 특히 식습관과 관련이 많아요.
-                  </span>
-                </div>
-              </div>
-
-              <div className='flex items-start gap-3 ml-[60px] mb-[24px]'>
-                <div className='w-[11px] h-[11px] bg-[#1D68FF] rounded mt-2 flex-shrink-0'></div>
-                <div>
-                  <span className='text-black font-normal text-[20px]'>ALT (간 수치):</span>
-                  <span className='text-black font-normal text-[20px]'>
-                    {' '}
-                    42 IU/L → 간 기능 이상을 의심할 수 있어요.
-                  </span>
-                </div>
-              </div>
-
-              <div className='flex items-start gap-3 ml-[60px] mb-[24px]'>
-                <div className='w-[11px] h-[11px] bg-[#1D68FF] rounded mt-2 flex-shrink-0'></div>
-                <div>
-                  <span className='text-black font-normal text-[20px]'>BMI:</span>
-                  <span className='text-black font-normal text-[20px]'>
-                    {' '}
-                    26.1 → 과체중 범위로, 체중관리가 필요할 수 있어요.
-                  </span>
-                </div>
-              </div>
-
-              <div className='flex items-start gap-3 ml-[60px] mb-[24px]'>
-                <div className='w-[11px] h-[11px] bg-[#1D68FF] rounded mt-2 flex-shrink-0'></div>
-                <div>
-                  <span className='text-black font-normal text-[20px]'>혈압:</span>
-                  <span className='text-black font-normal text-[20px]'>
-                    {' '}
-                    132/87 mmHg → 고혈압 전단계입니다.
-                  </span>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
 
@@ -279,67 +223,76 @@ const MedicalReport: React.FC<MedicalReportProps> = ({
               >
                 생활 습관 제안
               </h2>
-              <span className='text-gray-500 text-[18px]'>
-                최근 건강상태와 수치를 종합해봤을 때, 다음과 같은 생활습관 개선이 도움이 될 것
-                같아요.
-              </span>
+              {/* 설명 문구 제거: 하드코딩 텍스트 삭제 */}
             </div>
 
-            <div className='space-y-4 ml-[60px]'>
-              <div
-                className='mb-[32px] bg-[#F6F9FF] rounded-lg w-[950px] p-4 border-2 border-white'
-                style={{
-                  filter:
-                    'drop-shadow(0 0 6px rgba(29, 104, 255, 0.10)) drop-shadow(0 0 11px rgba(29, 104, 255, 0.06)) drop-shadow(0 0 15px rgba(29, 104, 255, 0.03)) drop-shadow(0 0 18px rgba(29, 104, 255, 0.01)) drop-shadow(0 0 20px rgba(29, 104, 255, 0.00))',
-                }}
-              >
-                <h3 className='text-[#1D68FF] text-[20px] font-medium mb-2'>식습관</h3>
-                <p className='text-black text-[20px]'>
-                  야식이나 당류 위주의 식사가 잡다면, 공복혈당과 중성지방 수치를 올릴 수 있어요.
-                  하루 1끼 채소 중심 식단으로 바꿔보는 건 어떨까요?
-                </p>
+            <div className='space-y-[3.125rem] ml-[60px]'>
+              <div className='w-[1069px]'>
+                <div
+                  className='rounded-[0.875rem] p-[2px] bg-[linear-gradient(149deg,#FFFFFF_20%,#DBE6FF_100%)]'
+                  style={{
+                    boxShadow:
+                      '0 0 6px 2px rgba(29,104,255,0.08), 0 0 11px 6px rgba(29,104,255,0.05), 0 0 15px 4px rgba(29,104,255,0.03), 0 0 18px 3px rgba(29,104,255,0.01)'
+                  }}
+                >
+                  <div className='relative rounded-[0.875rem] bg-[#F6F9FF] pl-[28px] pr-[28px] pt-[34px] pb-[34px]'>
+                    <h3 className='absolute left-4 top-0 -translate-y-1/2 text-[#1D68FF] text-[20px] font-semibold tracking-[-3%]'>식습관</h3>
+                    <p className='text-[#25282B] text-[20px] leading-[36px] font-medium tracking-[-3%] mt-1'>
+                      {llmData?.lifestyleAdvice?.[0] || ''}
+                    </p>
+                  </div>
+                </div>
               </div>
 
-              <div
-                className='mb-[32px] bg-[#F6F9FF] rounded-lg w-[950px] p-4 border-2 border-white'
-                style={{
-                  filter:
-                    'drop-shadow(0 0 6px rgba(29, 104, 255, 0.10)) drop-shadow(0 0 11px rgba(29, 104, 255, 0.06)) drop-shadow(0 0 15px rgba(29, 104, 255, 0.03)) drop-shadow(0 0 18px rgba(29, 104, 255, 0.01)) drop-shadow(0 0 20px rgba(29, 104, 255, 0.00))',
-                }}
-              >
-                <h3 className='text-[#1D68FF] text-[20px] font-medium mb-2'>운동</h3>
-                <p className='text-black text-[20px]'>
-                  현재 활동량이 적다면, 걷기부터라도 시작해보세요. 주 3회 이상, 30분 정도의 유산소
-                  운동이 간 수치와 혈당 조절에 큰 도움이 돼요.
-                </p>
+              <div className='w-[1069px]'>
+                <div
+                  className='rounded-[0.875rem] p-[2px] bg-[linear-gradient(149deg,#FFFFFF_20%,#DBE6FF_100%)]'
+                  style={{
+                    boxShadow:
+                      '0 0 6px 2px rgba(29,104,255,0.08), 0 0 11px 6px rgba(29,104,255,0.05), 0 0 15px 4px rgba(29,104,255,0.03), 0 0 18px 3px rgba(29,104,255,0.01)'
+                  }}
+                >
+                  <div className='relative rounded-[0.875rem] bg-[#F6F9FF] pl-[28px] pr-[28px] pt-[34px] pb-[34px]'>
+                    <h3 className='absolute left-4 top-0 -translate-y-1/2 text-[#1D68FF] text-[20px] font-semibold tracking-[-3%]'>운동</h3>
+                    <p className='text-[#25282B] text-[20px] leading-[36px] font-medium tracking-[-3%] mt-1'>
+                      {llmData?.lifestyleAdvice?.[1] || ''}
+                    </p>
+                  </div>
+                </div>
               </div>
 
-              <div
-                className='mb-[32px] bg-[#F6F9FF] rounded-lg w-[950px] p-4 border-2 border-white'
-                style={{
-                  filter:
-                    'drop-shadow(0 0 6px rgba(29, 104, 255, 0.10)) drop-shadow(0 0 11px rgba(29, 104, 255, 0.06)) drop-shadow(0 0 15px rgba(29, 104, 255, 0.03)) drop-shadow(0 0 18px rgba(29, 104, 255, 0.01)) drop-shadow(0 0 20px rgba(29, 104, 255, 0.00))',
-                }}
-              >
-                <h3 className='text-[#1D68FF] text-[20px] font-medium mb-2'>카페인/음주 습관</h3>
-                <p className='text-black text-[20px]'>
-                  음주나 잦은 카페인 섭취는 간수치와 체중 증가에 영향을 줄 수 있어요. 음주는 주 1회
-                  이하, 하루 1~2잔 이내로 조절하는 걸 추천드려요.
-                </p>
+              <div className='w-[1069px]'>
+                <div
+                  className='rounded-[0.875rem] p-[2px] bg-[linear-gradient(149deg,#FFFFFF_20%,#DBE6FF_100%)]'
+                  style={{
+                    boxShadow:
+                      '0 0 6px 2px rgba(29,104,255,0.08), 0 0 11px 6px rgba(29,104,255,0.05), 0 0 15px 4px rgba(29,104,255,0.03), 0 0 18px 3px rgba(29,104,255,0.01)'
+                  }}
+                >
+                  <div className='relative rounded-[0.875rem] bg-[#F6F9FF] pl-[28px] pr-[28px] pt-[34px] pb-[34px]'>
+                    <h3 className='absolute left-4 top-0 -translate-y-1/2 text-[#1D68FF] text-[20px] font-semibold tracking-[-3%]'>카페인/음주 습관</h3>
+                    <p className='text-[#25282B] text-[20px] leading-[36px] font-medium tracking-[-3%] mt-1'>
+                      {llmData?.lifestyleAdvice?.[2] || ''}
+                    </p>
+                  </div>
+                </div>
               </div>
 
-              <div
-                className=' bg-[#F6F9FF] rounded-lg w-[950px] p-4 border-2 border-white'
-                style={{
-                  filter:
-                    'drop-shadow(0 0 6px rgba(29, 104, 255, 0.10)) drop-shadow(0 0 11px rgba(29, 104, 255, 0.06)) drop-shadow(0 0 15px rgba(29, 104, 255, 0.03)) drop-shadow(0 0 18px rgba(29, 104, 255, 0.01)) drop-shadow(0 0 20px rgba(29, 104, 255, 0.00))',
-                }}
-              >
-                <h3 className='text-[#1D68FF] text-[20px] font-medium mb-2'>수면</h3>
-                <p className='text-black text-[20px]'>
-                  만성피로를 느끼시나요? 수면 시간이 부족하면 혈압과 혈당 모두 영향을 받을 수
-                  있어요. 매일 6~7시간 이상의 숙면이 중요해요.
-                </p>
+              <div className='w-[1069px]'>
+                <div
+                  className='rounded-[0.875rem] p-[2px] bg-[linear-gradient(149deg,#FFFFFF_20%,#DBE6FF_100%)]'
+                  style={{
+                    boxShadow:
+                      '0 0 6px 2px rgba(29,104,255,0.08), 0 0 11px 6px rgba(29,104,255,0.05), 0 0 15px 4px rgba(29,104,255,0.03), 0 0 18px 3px rgba(29,104,255,0.01)'
+                  }}
+                >
+                  <div className='relative rounded-[0.875rem] bg-[#F6F9FF] pl-[28px] pr-[28px] pt-[34px] pb-[34px]'>
+                    <h3 className='absolute left-4 top-0 -translate-y-1/2 text-[#1D68FF] text-[20px] font-semibold tracking-[-3%]'>수면</h3>
+                    <p className='text-[#25282B] text-[20px] leading-[36px] font-medium tracking-[-3%] mt-1'>
+                      {llmData?.lifestyleAdvice?.[3] || ''}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -356,50 +309,22 @@ const MedicalReport: React.FC<MedicalReportProps> = ({
               >
                 발병 위험순위 TOP 3
               </h2>
-              <span className='text-gray-500 text-[18px]'>
-                검진 결과를 바탕으로, 특히 주의가 필요한 건강 이슈를 TOP3로 정리했어요!
-              </span>
+              {/* 설명 문구 제거: 하드코딩 텍스트 삭제 */}
             </div>
 
             <div className='space-y-4'>
-              <div className='mb-[32px]'>
-                <div className='flex items-center gap-[25px] mb-[8px]'>
-                  <span className='text-[#1D68FF] font-bold text-[20px] ml-[60px]'>1위</span>
-                  <h3 className='text-black font-bold text-[20px]'>대사증후군</h3>
-                  <span className='text-gray-600 text-[16px]'>
-                    (공복혈당 ↑, 중성지방 ↑, HDL ↓, 복부비만(BMI 기준))
-                  </span>
+              {llmData?.top3Risks?.map((risk) => (
+                <div key={`risk-${risk.rank}`} className='mb-[32px]'>
+                  <div className='flex items-center gap-[25px] mb-[8px]'>
+                    <span className='text-[#1D68FF] font-bold text-[20px] ml-[60px]'>
+                      {risk.rank}위
+                    </span>
+                    <h3 className='text-black font-bold text-[20px]'>{risk.title}</h3>
+                    <span className='text-gray-600 text-[16px]'>{risk.indicators}</span>
+                  </div>
+                  <p className='text-black ml-[110px]'>{risk.description}</p>
                 </div>
-                <p className='text-black ml-[110px]'>
-                  여러 지표가 함께 경고를 보내고 있어요. 특히 HDL(좋은 콜레스테롤) 수치가 낮은 것은
-                  체내 지방 대사에 문제가 있다는 신호입니다. 지금부터 식단 개선과 유산소 운동이
-                  필요해요!
-                </p>
-              </div>
-
-              <div className='mb-[32px]'>
-                <div className='flex items-center gap-[25px] mb-[8px]'>
-                  <span className='text-[#1D68FF] font-bold text-[20px] ml-[60px]'>2위</span>
-                  <h3 className='text-black font-bold text-[20px]'>알콜성 지방간</h3>
-                  <span className='text-gray-600 text-[16px]'>(AST/ALT ↑, 감마-GTP ↑)</span>
-                </div>
-                <p className='text-black ml-[110px]'>
-                  간 수치가 전반적으로 높고, 술을 거의 마시지 않는다면 지방간 가능성을 의심할 수
-                  있어요. 기름진 음식, 야식 등을 줄이고 간 해독을 위한 영양관리도 필요해요.
-                </p>
-              </div>
-
-              <div className='mb-[80px]'>
-                <div className='flex items-center gap-[25px] mb-[8px]'>
-                  <span className='text-[#1D68FF] font-bold text-[20px] ml-[60px]'>3위</span>
-                  <h3 className='text-black font-bold text-[20px]'>만성 신장 기능 저하 위험</h3>
-                  <span className='text-gray-600 text-[16px]'>(크레아티닌 ↑, eGFR ↓)</span>
-                </div>
-                <p className='text-black ml-[110px]'>
-                  현재로선 심각한 단계는 아니지만, 사구체여과율(eGFR) 이 살짝 낮아요. 평소 수분
-                  섭취량과 단백질 섭취량을 점검하고, 앞으로도 꾸준한 모니터링이 필요해요.
-                </p>
-              </div>
+              ))}
             </div>
           </div>
 
@@ -423,34 +348,18 @@ const MedicalReport: React.FC<MedicalReportProps> = ({
               </h2>
 
               <div className='space-y-2 text-black text-[20px] text-center leading-relaxed'>
-                <p>전체적으로 보면, 지금은 건강을 다시 한 번 점검해야 할 시기인 것 같아요.</p>
-                <p>아직은 대부분 경고 단계이지만 관리로 충분히 회복 가능한 상태입니다.</p>
-                <p>
-                  특히 혈당, 중성지방, 간 수치가 동시에 높게 나온 경우는{' '}
-                  <span className='text-[#1D68FF] font-bold'>
-                    생활 습관과 식단의 영향을 강하게 받고 있다는 신호예요!!
-                  </span>
-                </p>
-                <p>지금부터 차근차근 바꿔나간다면 건강을 충분히 회복할 수 있어요!</p>
+                {llmData?.summary && (
+                  <p className='text-center text-[20px] leading-[36px] tracking-[-3%]'>{llmData.summary}</p>
+                )}
               </div>
             </div>
 
             <div className='mt-6 space-y-2 flex flex-col items-center'>
-              <div className='flex items-center gap-2'>
-                <span className='text-[#82ABFD] text-[20px]'>
-                  → 영양사와 상담을 통해 식단 가이드를 받아보시고,
-                </span>
-              </div>
-              <div className='flex items-center gap-2'>
-                <span className='text-[#82ABFD] text-[20px]'>
-                  → 운동처방사와 함께 운동 루틴을 짜보는 것도 좋아요.
-                </span>
-              </div>
-              <div className='flex items-center gap-2'>
-                <span className='text-[#82ABFD] text-[20px]'>
-                  → 향후 6개월 뒤 재검진을 통해 변화된 수치를 체크해보는 걸 추천드려요!
-                </span>
-              </div>
+              {llmData?.recommendedActions?.map((action, idx) => (
+                <div key={`action-${idx}`} className='flex items-center gap-2'>
+                  <span className='text-[#82ABFD] text-[20px]'>→ {action}</span>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -471,9 +380,9 @@ const MedicalReport: React.FC<MedicalReportProps> = ({
                 <path
                   d='M2.44995 1.90039L10.55 10.0004L2.44995 18.1004'
                   stroke='white'
-                  stroke-width='3'
-                  stroke-linecap='round'
-                  stroke-linejoin='round'
+                  strokeWidth='3'
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
                 />
               </svg>
             </button>

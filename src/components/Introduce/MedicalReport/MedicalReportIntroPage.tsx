@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../contexts/AuthContext';
 import ServiceIntroPage from '../Common/ServiceIntroPage';
 import BackgroundBlur from '../Common/BackgroundBlur';
 import LoadingSpinner from '../../Common/LoadingSpinner';
@@ -9,6 +10,8 @@ import mdImage from '../../../assets/Introduce/MedicalReport/md.svg';
 
 const MedicalReportIntroPage: React.FC = () => {
   const navigate = useNavigate();
+  const { userType } = useAuth();
+  const isExpert = userType === 'expert';
   const [imagesLoaded, setImagesLoaded] = useState(false);
 
 
@@ -55,7 +58,7 @@ const MedicalReportIntroPage: React.FC = () => {
       { text: '2년마다 받은 검진 결과를 한 곳에서 통합 관리해 추세를 파악' }
     ],
     ctaDescription: '마이메디로 나의 건강검진결과를 모아보고 자동분석으로 쉽게 이해하고\n나의 몸을 더 건강하게 장기적으로 관리해보세요!',
-    onCTAClick: () => navigate('/health-result-input'),
+    onCTAClick: () => { if (!isExpert) navigate('/health-result-input'); },
     combinedImageSrc: mdImage,
     combinedImageAlt: 'Medical Report Features',
     combinedImageWidth: '100%',
