@@ -33,7 +33,7 @@ const ExpertCard: React.FC<ExpertCardProps> = ({
   onClick,
 }) => (
   <div
-    className="w-full max-w-[25rem] h-[31.25rem] bg-[rgba(255,255,255,0.8)] rounded-[15px] border border-[#DBE6FF] border-[0.5px] flex flex-col items-center justify-center gap-4 px-6 pt-9 pb-10 cursor-pointer transition pl-[31px]"
+    className="w-full max-w-[25rem] h-[31.25rem] bg-[rgba(255,255,255,0.8)] rounded-[15px] border border-[#DBE6FF] border-[0.5px] flex flex-col items-center justify-center gap-4 px-6 pt-9 pb-10 cursor-pointer transition pl-[31px] hover:bg-[#DBE6FF]/20 transition-shadow duration-200 hover:shadow-[0_0_24px_0_#DBE6FF]"
     style={{ boxShadow: 'none' }}
     onClick={onClick}
   >

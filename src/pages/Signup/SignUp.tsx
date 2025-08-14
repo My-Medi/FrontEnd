@@ -423,8 +423,8 @@ const SignUp: React.FC = () => {
           <img src={backSvg} alt="뒤로가기" className="w-full h-full object-contain" />
         </button>
       )}
-      <h1 className="text-[32px] font-bold text-[#121218] font-pretendard leading-[1.25] tracking-[-0.03em]">
-        회원가입
+      <h1 className="text-[24px] font-semibold text-[#121218] font-pretendard leading-[36px] tracking-[-0.03em] text-center">
+        마이메디 회원가입
       </h1>
     </div>
   ), [handlePrev]);

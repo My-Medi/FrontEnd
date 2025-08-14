@@ -193,9 +193,7 @@ const ConsultDateModal: React.FC<ConsultDateModalProps> = ({ onClose, selectedDa
       )}
       {isSuccessModalOpen && (
         <SuccessReservationModal onClose={() => {
-          setIsSuccessModalOpen(false);
-          // 성공 모달에서 확인 버튼을 누르면 모든 모달을 완전히 닫기
-          // Calendar 모달까지 닫기 위해 onClose 호출
+          // 확인 버튼 클릭 시 즉시 상위 모달까지 완전 종료
           onClose(true); // isFromSuccess = true
         }} />
       )}
