@@ -4,6 +4,7 @@ import { FIXED_YEAR, INDICATOR_META } from '../../constants/indicatorMeta';
 import type { Category } from '../../constants/medicalCategory';
 import type { HealthStatus, MyMedicalReportResponse } from '../../types/myMedicalReport/compare';
 import { RIGHT_TO_LEFT_ID } from './idNormalize';
+import { mapCompareHealthStatusToStage } from './healthStatusMapper';
 
 type RightItem = {
   id: string;
@@ -260,8 +261,27 @@ export function mapReportToCombinedByCategory(
       | { value: any; status?: HealthStatus; gender?: string }
       | undefined;
     const valueRaw = lv?.value;
-    const isUnk = isUnknown(valueRaw);
-    const stageKor = korStageFrom(lv?.status);
+
+    // 요단백의 경우 healthStatus를 직접 사용하고, rank가 null이어도 unknown으로 처리하지 않음
+    let stageKor: CompareStageKor;
+    let isUnk: boolean;
+
+    if (leftId === 'urine') {
+      const healthStatus = res.urineProteinAssessmentDto?.comparingUrineProtein?.healthStatus;
+      stageKor = mapCompareHealthStatusToStage(healthStatus);
+      // 요단백의 경우 healthStatus가 있으면 unknown이 아님
+      isUnk = !healthStatus || healthStatus === 'UNKNOWN';
+      console.log('Urine debug:', {
+        leftId,
+        valueRaw,
+        healthStatus,
+        stageKor,
+        isUnk,
+      });
+    } else {
+      stageKor = korStageFrom(lv?.status);
+      isUnk = isUnknown(valueRaw);
+    }
 
     // API에서 받은 평균값 데이터 (백엔드 응답에서 추출)
     const getAverageValue = () => {
@@ -326,7 +346,14 @@ export function mapReportToCombinedByCategory(
       leftProps: {
         nickname,
         title: meta.title,
-        value: isUnk ? undefined : String(valueRaw),
+        value: (() => {
+          if (isUnk) return undefined;
+          // 요단백의 경우 value 없이 undefined 반환
+          if (leftId === 'urine') {
+            return undefined;
+          }
+          return String(valueRaw);
+        })(),
         unit: meta.unit,
         stage: stageKor,
         isUnknown: isUnk,
