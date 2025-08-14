@@ -114,8 +114,7 @@ const Topbar = memo(() => {
               )}
               <div className="relative">
                 <p
-                  onClick={() => setShowNotification(!showNotification)}
-                  className='text-[#25282B] text-sm font-[300] leading-[1.4] tracking-[-0.42px] cursor-pointer whitespace-nowrap font-[Pretendard] hover:text-[#1D68FF] transition-colors duration-200'
+                  className='text-[#25282B] text-sm font-[300] leading-[1.4] tracking-[-0.42px] whitespace-nowrap font-[Pretendard] cursor-default'
                 >
                   알림
                 </p>
@@ -124,8 +123,6 @@ const Topbar = memo(() => {
                   onClose={() => setShowNotification(false)}
                   onAction={() => {
                     setShowNotification(false);
-                    // 여기에 실제 액션 처리 로직 추가
-                    console.log('매칭 전문가 페이지로 이동');
                   }}
                   message="준호 핏 운동 처방사님께서 매칭을 수락하셨어요!"
                   actionText="매칭 전문가 보러가기"
@@ -138,7 +135,7 @@ const Topbar = memo(() => {
               >
                 <input
                   type='text'
-                  placeholder='Search'
+                placeholder='건강용어를 검색해보세요.'
                   className='bg-transparent text-[#121218]/50 placeholder-[#121218]/50 text-[14px] font-[Pretendard] font-light leading-[20px] outline-none flex-1'
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
@@ -222,8 +219,7 @@ const Topbar = memo(() => {
                 </a>
               )}
               <a
-                onClick={() => setShowNotification(true)}
-                className='px-4 py-2 text-lg text-gray-700 hover:text-[#1d68ff] cursor-pointer'
+                className='px-4 py-2 text-lg text-gray-700 cursor-default'
               >
                 알림
               </a>
