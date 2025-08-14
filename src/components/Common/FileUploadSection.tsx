@@ -41,15 +41,24 @@ const FileUploadSection: React.FC<FileUploadSectionProps> = ({
   const imageUploadMutation = useImageUploadMutation({
     onSuccess: (data) => {
       if (data.result && data.result.length > 0) {
-        const newUrls = [...uploadedFileUrls, ...data.result];
-        setUploadedFileUrls(newUrls);
-        if (onNewImagesChange) {
-          const newImages = data.result.map((url, index) => ({
-            imageUrl: url,
-            imageTitle:
-              uploadedFiles[uploadedFileUrls.length + index]?.name || `${newFileTitlePrefix} ${uploadedFileUrls.length + index + 1}`,
-          }));
-          onNewImagesChange(newImages);
+        const incomingUrls: string[] = data.result;
+        const prevSet = new Set(uploadedFileUrls);
+        const existingSet = new Set((existingFiles || []).map((f) => f.imageUrl));
+        const uniqueIncoming = incomingUrls.filter((url) => !prevSet.has(url) && !existingSet.has(url));
+
+        if (uniqueIncoming.length > 0) {
+          const merged = Array.from(new Set([...uploadedFileUrls, ...uniqueIncoming]));
+          const startIndex = uploadedFileUrls.length;
+          setUploadedFileUrls(merged);
+
+          if (onNewImagesChange) {
+            const newImages = uniqueIncoming.map((url, index) => ({
+              imageUrl: url,
+              imageTitle:
+                uploadedFiles[startIndex + index]?.name || `${newFileTitlePrefix} ${startIndex + index + 1}`,
+            }));
+            onNewImagesChange(newImages);
+          }
         }
       }
       setIsUploading(false);
@@ -113,14 +122,21 @@ const FileUploadSection: React.FC<FileUploadSectionProps> = ({
     if (uploadFiles) {
       uploadFiles(uniqueFiles)
         .then((urls) => {
-          const newUrls = [...uploadedFileUrls, ...urls];
-          setUploadedFileUrls(newUrls);
-          if (onNewImagesChange) {
-            const newImages = urls.map((url, index) => ({
-              imageUrl: url,
-              imageTitle: uniqueFiles[index]?.name || `${newFileTitlePrefix} ${uploadedFileUrls.length + index + 1}`,
-            }));
-            onNewImagesChange(newImages);
+          const prevSet = new Set(uploadedFileUrls);
+          const existingSet = new Set((existingFiles || []).map((f) => f.imageUrl));
+          const uniqueIncoming = (urls || []).filter((url) => !!url && !prevSet.has(url) && !existingSet.has(url));
+
+          if (uniqueIncoming.length > 0) {
+            const merged = Array.from(new Set([...uploadedFileUrls, ...uniqueIncoming]));
+            setUploadedFileUrls(merged);
+            if (onNewImagesChange) {
+              const startIndex = uploadedFileUrls.length;
+              const newImages = uniqueIncoming.map((url, index) => ({
+                imageUrl: url,
+                imageTitle: uniqueFiles[index]?.name || `${newFileTitlePrefix} ${startIndex + index + 1}`,
+              }));
+              onNewImagesChange(newImages);
+            }
           }
         })
         .catch(() => {
@@ -252,28 +268,31 @@ const FileUploadSection: React.FC<FileUploadSectionProps> = ({
         ))}
 
         {/* 새로 업로드된 파일들 */}
-        {uploadedFiles.map((file, index) => (
-          <div key={`${file.name}-${index}`} className={`${itemWidthClass} h-auto min-h-[2.6rem] xl:h-[2.6rem] bg-[rgba(219,230,255,0.5)] rounded-[0.525rem] xl:rounded-[0.525rem] flex items-center justify-between px-4 xl:px-[0.9rem]`}>
-            <div className="flex items-center gap-4 xl:gap-[0.9rem]">
-              <span className="text-sm xl:text-sm font-medium text-[#25282B] font-pretendard leading-[1.714] tracking-[-0.03em]">{file.name}</span>
-            </div>
-            <div className="flex items-center gap-2 xl:gap-[0.5rem]">
-              {uploadedFileUrls[index] && (
+        {uploadedFiles.map((file, index) => {
+          const url = uploadedFileUrls[index];
+          const existsInProp = (existingFiles || []).some((f) => f.imageUrl === url);
+          if (!url || existsInProp) return null;
+          return (
+            <div key={`${file.name}-${index}`} className={`${itemWidthClass} h-auto min-h-[2.6rem] xl:h-[2.6rem] bg-[rgba(219,230,255,0.5)] rounded-[0.525rem] xl:rounded-[0.525rem] flex items-center justify-between px-4 xl:px-[0.9rem]`}>
+              <div className="flex items-center gap-4 xl:gap-[0.9rem]">
+                <span className="text-sm xl:text-sm font-medium text-[#25282B] font-pretendard leading-[1.714] tracking-[-0.03em]">{file.name}</span>
+              </div>
+              <div className="flex items-center gap-2 xl:gap-[0.5rem]">
                 <a
-                  href={uploadedFileUrls[index]}
+                  href={url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[#1D68FF] hover:text-[#0056CC] transition-colors text-xs xl:text-xs"
                 >
                   보기
                 </a>
-              )}
-              <button onClick={() => handleFileRemove(index)} className="text-[#9DA0A3] hover:text-[#1D68FF] transition-colors">
-                ✕
-              </button>
+                <button onClick={() => handleFileRemove(index)} className="text-[#9DA0A3] hover:text-[#1D68FF] transition-colors">
+                  ✕
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

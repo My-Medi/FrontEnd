@@ -117,12 +117,12 @@ const ExpertCard: React.FC<ExpertCardProps> = ({ expert, onUnmatch, onCancelRequ
         </div>
 
         {/* 프로필 이미지 */}
-        <div className="w-[145px] h-[145px] bg-[#EDF0F3] border-[4.5px] border-[#1D68FF] rounded-full flex items-center justify-center mb-6">
+        <div className="w-[145px] h-[145px] bg-[#EDF0F3] border-[4.5px] border-[#1D68FF] rounded-full flex items-center justify-center mb-6 overflow-hidden">
           {expert.profileImgUrl ? (
             <img 
               src={expert.profileImgUrl} 
               alt={`${expert.nickname} 프로필`}
-              className="w-[78px] h-[80px] rounded-full object-cover"
+              className="w-full h-full rounded-full object-cover"
             />
           ) : (
             <img 

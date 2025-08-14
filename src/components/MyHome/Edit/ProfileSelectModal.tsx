@@ -1,10 +1,5 @@
 import React from 'react';
-import profile1 from '../../../assets/MyHome/profile/profileImg1.svg';
-import profile2 from '../../../assets/MyHome/profile/profileImg2.png';
-import profile3 from '../../../assets/MyHome/profile/profileImg3.svg';
-import profile4 from '../../../assets/MyHome/profile/profileImg4.png';
-import profile5 from '../../../assets/MyHome/profile/profileImg5.svg';
-import profile6 from '../../../assets/MyHome/profile/profileImg6.svg';
+import { DEFAULT_PROFILE_IMAGES } from '../../../constants/profileImages';
 
 interface ProfileSelectModalProps {
   isOpen: boolean;
@@ -19,14 +14,7 @@ const ProfileSelectModal: React.FC<ProfileSelectModalProps> = ({
 }) => {
   if (!isOpen) return null;
 
-  const profileOptions = [
-    { id: 1, name: 'profile1', image: profile1 },
-    { id: 2, name: 'profile2', image: profile2 },
-    { id: 3, name: 'profile3', image: profile3 },
-    { id: 4, name: 'profile4', image: profile4 },
-    { id: 5, name: 'profile5', image: profile5 },
-    { id: 6, name: 'profile6', image: profile6 }
-  ];
+  const profileOptions = DEFAULT_PROFILE_IMAGES.map((image, idx) => ({ id: idx + 1, name: `profile${idx + 1}`, image }));
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">

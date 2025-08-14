@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import unionSvg from '../../../assets/Expert/Union.svg';
-import profile1 from '../../../assets/MyHome/profile/profileImg1.svg';
-import profile2 from '../../../assets/MyHome/profile/profileImg2.png';
-import profile3 from '../../../assets/MyHome/profile/profileImg3.svg';
-import profile4 from '../../../assets/MyHome/profile/profileImg4.png';
-import profile5 from '../../../assets/MyHome/profile/profileImg5.svg';
-import profile6 from '../../../assets/MyHome/profile/profileImg6.svg';
+import { DEFAULT_PROFILE_IMAGES } from '../../../constants/profileImages';
 import CustomCheckboxButton from '../../Common/CustomCheckboxButton';
 import { useAuth } from '../../../contexts/AuthContext';
 import SuccessModal from './SuccessModal';
@@ -85,6 +80,11 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onProfileModalCha
 
       setFormData((prev) => ({ ...prev, ...newFormData }));
       setInitialData((prev) => ({ ...prev, ...newFormData }));
+      // 프로필 이미지 초기 반영 (GET /users 응답)
+      const initialProfileImg = (userProfile as any).profileImgUrl || (userProfile as any).profileImageUrl || '';
+      if (initialProfileImg) {
+        setSelectedProfileImage(initialProfileImg);
+      }
       setInitializedFromApi(true);
     }
   }, [userProfile, initializedFromApi]);
@@ -111,6 +111,11 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onProfileModalCha
       };
       setFormData(newFormData);
       setInitialData(newFormData);
+      // 전문가 프로필 이미지 초기 반영 (GET /experts/profile 응답)
+      const initialExpertProfileImg = expert.profileImgUrl || expert.profileImageUrl || '';
+      if (initialExpertProfileImg) {
+        setSelectedProfileImage(initialExpertProfileImg);
+      }
     }
   }, [expertProfileQuery.data, userType, userInfo]);
 
@@ -167,12 +172,8 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onProfileModalCha
   };
 
   const handleProfileSelect = (profileIndex: number) => {
-    // 프로필 이미지 배열 (ProfileSelectModal과 동일한 순서)
-    const profileImages = [
-      profile1, profile2, profile3, profile4, profile5, profile6
-    ];
-    
-    const selectedImage = profileImages[profileIndex - 1]; // profileIndex는 1부터 시작
+    // S3 사전 업로드/환경변수 URL 우선, 없으면 로컬 폴백
+    const selectedImage = DEFAULT_PROFILE_IMAGES[profileIndex - 1]; // profileIndex는 1부터 시작
     setSelectedProfileImage(selectedImage);
     setShowProfileModal(false);
     onProfileModalChange?.(false);
