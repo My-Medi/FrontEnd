@@ -50,7 +50,8 @@ const IndicationDescription: React.FC<IndicationDescriptionProps> = ({
       indicatorName === 'LDL-콜레스테롤' ||
       indicatorName === '혈청 크레아티닌' ||
       indicatorName === 'eGFR(신사구체여과율)' ||
-      indicatorName === '요단백';
+      indicatorName === '요단백' ||
+      indicatorName === '혈색소';
 
     return (
       <div>
@@ -96,7 +97,8 @@ const IndicationDescription: React.FC<IndicationDescriptionProps> = ({
     indicatorName === 'LDL-콜레스테롤' ||
     indicatorName === '혈청 크레아티닌' ||
     indicatorName === 'eGFR(신사구체여과율)' ||
-    indicatorName === '요단백';
+    indicatorName === '요단백' ||
+    indicatorName === '혈색소';
 
   return (
     <div>
