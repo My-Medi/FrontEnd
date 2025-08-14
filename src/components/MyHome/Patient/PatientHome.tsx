@@ -34,7 +34,7 @@ const PatientHome: React.FC<PatientHomeProps> = ({
             userType='patient'
             useApiData={true} // API 데이터 사용
           />
-          <MyConstantMedical status='안심' />
+          <MyConstantMedical />
           <ExpertAdvice onMenuSelect={onMenuSelect} />
           <HomeCalendar
             selectedDate={selectedDate}
