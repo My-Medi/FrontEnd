@@ -1,5 +1,6 @@
 // utils/mappers/medicalReportMapper.ts
 
+import { FIXED_YEAR, INDICATOR_META } from '../../constants/indicatorMeta';
 import type { Category } from '../../constants/medicalCategory';
 import type { HealthStatus, MyMedicalReportResponse } from '../../types/myMedicalReport/compare';
 import { RIGHT_TO_LEFT_ID } from './idNormalize';
@@ -30,10 +31,10 @@ const korStageFrom = (status?: HealthStatus): CompareStageKor => {
       return '안심';
     case 'NORMAL':
       return '정상';
-    case 'INTEREST':
-      return '관심';
-    case 'WATCH':
+    case 'CAUTION':
       return '주의';
+    case 'WATCH':
+      return '관심';
     case 'DANGER':
       return '위험';
     default:
@@ -41,10 +42,15 @@ const korStageFrom = (status?: HealthStatus): CompareStageKor => {
   }
 };
 
-const sexKor = (g?: string) => (g === 'MALE' ? '남성' : g === 'FEMALE' ? '여성' : undefined);
+function resolveStandard(id: keyof typeof INDICATOR_META, gender?: '남성' | '여성') {
+  const s = INDICATOR_META[id]?.standard;
+  return typeof s === 'function' ? s({ gender }) : s;
+}
+
+const sexKor = (g?: string) => (g === 'MALE' ? '남' : g === 'FEMALE' ? '여' : undefined);
 
 // 좌측 카드에서 쓸 메타(타이틀·단위)
-// 필요 시 보강 가능. (표준치는 Right 카드가 들고 있으므로 optional)
+// (표준치는 Right 카드가 아닌, 상수 레이어에서 계산하여 주입)
 const LEFT_META: Record<string, { title: string; unit?: string }> = {
   bmi: { title: '체질량지수', unit: 'kg/𝑚²' },
   waist: { title: '허리둘레', unit: 'cm' },
@@ -258,12 +264,15 @@ export function mapReportToCombinedByCategory(
       },
       rightProps: right
         ? {
-            year: right.year,
+            year: FIXED_YEAR, // ✅ 고정 연도
             ageGroup: right.ageGroup,
             value: right.value ?? '',
-            unit: right.unit ?? '',
-            standard: right.standard,
-            gender: right.gender,
+            unit: INDICATOR_META[leftId as keyof typeof INDICATOR_META]?.unit ?? right.unit ?? '', // ✅ 단위는 상수 우선
+            standard: resolveStandard(
+              leftId as keyof typeof INDICATOR_META,
+              lv?.gender as '남성' | '여성' | undefined,
+            ), // 정상 기준 상수에서 계산
+            gender: lv?.gender, // 좌측 성별(남/여) 기준으로 문구 생성
           }
         : undefined,
       descProps: right
