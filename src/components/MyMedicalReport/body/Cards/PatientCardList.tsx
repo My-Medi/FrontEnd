@@ -9,11 +9,11 @@ import CategorySelector from '../CategorySelector';
 import SummaryTextArea from '../SummaryTextArea';
 import Compare from './Compare';
 
-const PatientCardList = ({ nickname }: { nickname?: string }) => {
+const PatientCardList = ({ nickname, round }: { nickname?: string; round?: number }) => {
   const [currentCategory, setCurrentCategory] = useState<Category>('비만/복부비만');
 
   // API 데이터 가져오기
-  const { data: reportData, isLoading, error } = useComparingReportQuery();
+  const { data: reportData, isLoading, error } = useComparingReportQuery(round);
 
   // API 데이터가 있으면 사용, 없으면 기본값 사용
   const displayNickname = reportData?.nickname || nickname || '사용자';

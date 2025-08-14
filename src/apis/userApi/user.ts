@@ -99,3 +99,18 @@ export const getDefaultReport = async () => {
     throw error;
   }
 };
+
+/**
+ * 작성해 둔 요청사항 조회 API
+ * GET /users/proposals/request-note
+ */
+export const getUserRequestNote = async (): Promise<ApiResponse<{ userId: number; requestNote: string }>> => {
+  try {
+    const response = await API.get<ApiResponse<{ userId: number; requestNote: string }>>(
+      '/users/proposals/request-note'
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

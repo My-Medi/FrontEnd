@@ -10,11 +10,12 @@ import { useComparingReportQuery } from '../../../hooks/myMedicalReport/useCompa
 interface ChartProps {
   checkupDate: string;
   nickname: string;
+  selectedRound?: number;
 }
 
-const Chart: React.FC<ChartProps> = ({ checkupDate, nickname }) => {
+const Chart: React.FC<ChartProps> = ({ checkupDate, nickname, selectedRound }) => {
   // API 데이터 가져오기
-  const { data: reportData, isLoading, error } = useComparingReportQuery();
+  const { data: reportData, isLoading, error } = useComparingReportQuery(selectedRound);
 
   // API 데이터가 있으면 사용, 없으면 기본값 사용
   const displayNickname = reportData?.nickname || nickname;
@@ -76,10 +77,10 @@ const Chart: React.FC<ChartProps> = ({ checkupDate, nickname }) => {
             </div>
             <div className='flex w-[556px] h-[556px] mt-[50px] mb-[100px]'>
               {/*원형 그래프*/}
-              <Gage nickname={displayNickname} round={1} />
+              <Gage nickname={displayNickname} round={selectedRound || 1} />
             </div>
 
-            <PatientCardList nickname={nickname} />
+            <PatientCardList nickname={nickname} round={selectedRound} />
           </div>
         </div>
       </div>

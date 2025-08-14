@@ -36,10 +36,14 @@ const HealthCheckupForm = () => {
     const next = currentMax + 1;
     setRounds([...rounds, next]);
     setCurrentRound(next);
+    // URL 동기화
+    navigate(`/health-result-input?round=${next}`, { replace: true });
   };
   // 회차 선택 핸들러
   const onSelectRound = (round: number) => {
     setCurrentRound(round);
+    // URL 동기화
+    navigate(`/health-result-input?round=${round}`, { replace: true });
   };
   const handleRoundFilterClick = () => {
     // 건강검진 입력 페이지에서는 별도의 필터 동작이 필요 없음 (콜백만 전달)
@@ -51,7 +55,9 @@ const HealthCheckupForm = () => {
       try {
         const res = await getDefaultReport();
         const count = Math.max(1, (res as any)?.result?.reportCount ?? 1);
-        const arr = Array.from({ length: count }, (_, i) => i + 1);
+        const ext = externalRound ? parseInt(externalRound) : undefined;
+        const maxRound = ext && !Number.isNaN(ext) ? Math.max(count, ext) : count;
+        const arr = Array.from({ length: maxRound }, (_, i) => i + 1);
         setRounds(arr);
         setServerRoundCount(count);
         if (!externalRound) setCurrentRound(arr[arr.length - 1]);

@@ -25,7 +25,7 @@ const BottomButtons = () => {
           borderRadius: '36px',
           border: '0.6px solid #DBE6FF',
           background: '#FFF',
-          boxShadow: '0px_0px_2px_2px_rgba(29,104,255,0.05)',
+          boxShadow: '0 0 6px 4px rgba(29,104,255,0.05)',
           color: '#121218',
           fontFamily: 'Pretendard',
           fontSize: '20px',
@@ -53,7 +53,7 @@ const BottomButtons = () => {
           borderRadius: '36px',
           background: '#1D68FF',
           boxShadow:
-            '0 0 9.6px 6px rgba(29, 104, 255, 0.00), 0 0 8.4px 6px rgba(29, 104, 255, 0.03), 0 0 7.2px 6px rgba(29, 104, 255, 0.10), 0 0 5.4px 6px rgba(29, 104, 255, 0.17), 0 0 3px 6px rgba(29, 104, 255, 0.20)',
+            '0 0 6px 4px rgba(29,104,255,0.10)',
           color: '#FFF',
           fontFamily: 'Pretendard',
           fontSize: '20px',

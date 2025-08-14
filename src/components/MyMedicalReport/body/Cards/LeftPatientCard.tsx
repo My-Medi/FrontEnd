@@ -73,7 +73,7 @@ const LeftPatientCard: React.FC<LeftPatientCardProps> = ({
       >
         {nickname}님의{' '}
         <TooltipForTerm title={title}>
-          <span>{title}</span>
+          <span style={{ display: 'inline' }}>{title}</span>
         </TooltipForTerm>
       </p>
 
