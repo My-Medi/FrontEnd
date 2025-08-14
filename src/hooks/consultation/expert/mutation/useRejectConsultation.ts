@@ -3,7 +3,7 @@ import type {
   ExpertRequestedConsultationList,
   ExpertRequestedConsultationListResponse,
 } from '../../../../types/consultation';
-import { rejectConsultation } from '../../../../apis/consultationApi/consultation';
+import { rejectConsultation } from '../../../../apis/expertApi/consultation';
 import { EXP_REQ_INF_QK, EXP_REQ_QK } from '../queries/useExpertRequestedConsultations';
 
 const pick = (r: any): ExpertRequestedConsultationList | undefined =>

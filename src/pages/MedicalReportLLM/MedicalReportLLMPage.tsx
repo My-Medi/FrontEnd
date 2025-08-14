@@ -51,9 +51,7 @@ const MedicalReportLLMPage: React.FC = () => {
     navigate(`/health-result-input?round=${nextRound}`);
   };
 
-  const handleFilterClick = () => {
-    console.log('전체 회차 보기 클릭됨');
-  };
+  const handleFilterClick = () => {};
 
   return (
     <div className='min-h-screen bg-white'>

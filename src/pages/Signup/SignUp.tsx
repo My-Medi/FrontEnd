@@ -65,24 +65,20 @@ const SignUp: React.FC = () => {
 
   // 개인 회원가입 뮤테이션
   const signUpMutation = useSignUpMutation({
-    onSuccess: useCallback((data: any) => {
-      console.log('개인 회원가입 성공:', data);
+    onSuccess: useCallback(() => {
       setCurrentStep("complete");
     }, []),
-    onError: useCallback((error: any) => {
-      console.error('개인 회원가입 실패:', error);
+    onError: useCallback(() => {
       alert('회원가입에 실패했습니다. 다시 시도해주세요.');
     }, []),
   });
 
   // 전문가 회원가입 뮤테이션
   const expertSignUpMutation = useExpertSignUpMutation({
-    onSuccess: useCallback((data: any) => {
-      console.log('전문가 회원가입 성공:', data);
+    onSuccess: useCallback(() => {
       setCurrentStep("complete");
     }, []),
-    onError: useCallback((error: any) => {
-      console.error('전문가 회원가입 실패:', error);
+    onError: useCallback(() => {
       alert('전문가 회원가입에 실패했습니다. 다시 시도해주세요.');
     }, []),
   });
@@ -123,10 +119,7 @@ const SignUp: React.FC = () => {
       weight: signUpData.weight ? parseInt(signUpData.weight) : undefined,
     };
 
-    console.log('개인 회원가입 데이터 변환:', {
-      original: signUpData,
-      transformed: apiData
-    });
+    
     
     return apiData;
   }, [signUpData, generateEmail]);
@@ -183,12 +176,7 @@ const SignUp: React.FC = () => {
       licenseImages: step3Data.licenseImages.filter((img: any) => img.imageUrl !== ''),
     };
 
-    console.log('전문가 회원가입 데이터 변환:', {
-      member: signUpData,
-      expertBasic: expertBasicData,
-      expertStep3: expertStep3Data,
-      transformed: apiData
-    });
+    
     
     return apiData;
   }, [signUpData, expertBasicData, expertStep3Data, generateEmail, normalizeDateForApi]);
@@ -217,31 +205,8 @@ const SignUp: React.FC = () => {
           if (isPasswordValid) {
             try {
               const apiData = transformSignUpData();
-              console.log('=== 개인 회원가입 전체 Request ===');
-              console.log('Request Data:', JSON.stringify(apiData, null, 2));
-              console.log('Request URL:', '/users');
-              console.log('Request Method:', 'POST');
-              console.log('Request Headers:', {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer [token]'
-              });
-              console.log('=== Request 끝 ===');
-              
-              // 실제 API 호출 전 전체 request 정보 출력
-              console.log('=== 실제 API 호출 정보 ===');
-              console.log('Request URL:', 'https://api.my-medi.cloud/api/v1/users');
-              console.log('Request Method:', 'POST');
-              console.log('Request Headers:', {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer [token]',
-                'Accept': '*/*'
-              });
-              console.log('Request Body:', JSON.stringify(apiData, null, 2));
-              console.log('=== 실제 API 호출 정보 끝 ===');
-              
               signUpMutation.mutate(apiData);
             } catch (error) {
-              console.error('데이터 변환 오류:', error);
               alert(error instanceof Error ? error.message : '입력 데이터를 확인해주세요.');
             }
           } else {
@@ -251,46 +216,13 @@ const SignUp: React.FC = () => {
         break;
       case "expert-info":
         // 전문가 회원가입 API 호출
-        console.log('전문가 회원가입 조건 확인:', {
-          isPasswordValid,
-          expertBasicData: !!expertBasicData,
-          expertStep3Data: !!expertStep3Data,
-          expertBasicDataContent: expertBasicData,
-          expertStep3DataContent: expertStep3Data,
-          signUpData: {
-            password: signUpData.password,
-            passwordCheck: signUpData.passwordCheck
-          }
-        });
+        
         
         if (isPasswordValid && expertBasicData && expertStep3Data) {
           try {
             const apiData = transformExpertSignUpData();
-            console.log('=== 전문가 회원가입 전체 Request ===');
-            console.log('Request Data:', JSON.stringify(apiData, null, 2));
-            console.log('Request URL:', '/experts');
-            console.log('Request Method:', 'POST');
-            console.log('Request Headers:', {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer [token]'
-            });
-            console.log('=== Request 끝 ===');
-            
-            // 실제 API 호출 전 전체 request 정보 출력
-            console.log('=== 실제 API 호출 정보 ===');
-            console.log('Request URL:', 'https://api.my-medi.cloud/api/v1/experts');
-            console.log('Request Method:', 'POST');
-            console.log('Request Headers:', {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer [token]',
-              'Accept': '*/*'
-            });
-            console.log('Request Body:', JSON.stringify(apiData, null, 2));
-            console.log('=== 실제 API 호출 정보 끝 ===');
-            
             expertSignUpMutation.mutate(apiData);
           } catch (error) {
-            console.error('전문가 데이터 변환 오류:', error);
             alert(error instanceof Error ? error.message : '입력 데이터를 확인해주세요.');
           }
         } else {
@@ -360,14 +292,6 @@ const SignUp: React.FC = () => {
     
     setExpertBasicData(basicData);
     setExpertStep3Data(step3Data);
-    
-    console.log('전문가 데이터 저장:', {
-      basic: basicData,
-      step3: step3Data
-    });
-    
-    // 데이터 저장 후 바로 API 호출
-    console.log('3단계 완료 - API 호출 시작');
     if (isPasswordValid && basicData && step3Data) {
       try {
         const apiData = {
@@ -422,11 +346,11 @@ const SignUp: React.FC = () => {
   }, [isPasswordValid, signUpData, generateEmail, normalizeDateForApi, expertSignUpMutation]);
 
   const handleCheckNickname = useCallback(() => {
-    console.log("닉네임 확인:", signUpData.nickname);
+    // 닉네임 중복확인 API 연동 지점
   }, [signUpData.nickname]);
 
   const handleCheckId = useCallback(() => {
-    console.log("아이디 확인:", signUpData.loginId);
+    // 아이디 중복확인 API 연동 지점
   }, [signUpData.loginId]);
 
   // 로딩 상태

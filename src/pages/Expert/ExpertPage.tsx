@@ -97,7 +97,7 @@ const ExpertPage = () => {
   // API에서 받은 데이터를 그대로 사용 (서버 사이드 필터링)
   const displayList: Expert[] = expertListData?.expertSummaryProfileDtoList || [];
 
-  console.log('[ExpertPage] list.length =', displayList.length, 'data =', displayList);
+  // 생산 환경에서는 로그를 출력하지 않습니다
 
   // 전문가의 연결 상태 확인
   const getExpertStatus = (expertId: number): 'matched' | 'request' | 'rejected' => {

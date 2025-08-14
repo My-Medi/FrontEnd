@@ -3,7 +3,7 @@ import type {
   ExpertRequestedConsultationList,
   ExpertRequestedConsultationListResponse,
 } from '../../../../types/consultation';
-import { getExpertRequestedConsultations } from '../../../../apis/consultationApi/consultation';
+import { getExpertRequestedConsultations } from '../../../../apis/expertApi/consultation';
 
 export const EXP_REQ_INF_QK = 'expertRequestedConsultationsInfinite';
 

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getExpertReportSummary } from '../../../../apis/consultationApi/consultation';
+import { getExpertReportSummary } from '../../../../apis/expertApi/consultation';
 import type { ReportSummary } from '../../../../types/reportSummary';
 
 export const EXPERT_REPORT_SUMMARY_QK = 'expertReportSummary';

@@ -8,13 +8,6 @@ export const getAcceptedMembers = async (page = 0, size = 6) => {
     });
     return data;
   } catch (e: any) {
-    // 디버깅용 로그
-    const status = e?.response?.status;
-    const body = e?.response?.data;
-    const headers = e?.config?.headers;
-    console.log('[AcceptedMembers] status:', status);
-    console.log('[AcceptedMembers] body:', body);
-    console.log('[AcceptedMembers] req headers:', headers);
     throw e;
   }
 };

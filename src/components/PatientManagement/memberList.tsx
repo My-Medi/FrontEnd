@@ -111,7 +111,7 @@ const PatientManagementList = () => {
               profileImageUrl: m.profileImage,
               healthInterest: Array.isArray(m.interestAreas) ? m.interestAreas : [],
               testDate: m.recentCheckupDate,
-              healthStatus: '위험',
+              healthStatus: (m as any).totalHealthStatusKor ?? '정상',
               signupDate: '-', //임시값
               consultationId: m.consultationId,
             }}

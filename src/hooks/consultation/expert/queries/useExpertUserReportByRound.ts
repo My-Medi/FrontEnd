@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getExpertUserReportByRound } from '../../../../apis/consultationApi/consultation';
+import { getExpertUserReportByRound } from '../../../../apis/expertApi/consultation';
 import type { HealthCheckupFormResponse } from '../../../../types/healthCheckupForm';
 
 export const EXPERT_USER_REPORT_QK = 'expertUserReportByRound';

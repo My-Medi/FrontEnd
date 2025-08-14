@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteApprovedConsultation } from '../../../../apis/consultationApi/consultation';
+import { deleteApprovedConsultation } from '../../../../apis/expertApi/consultation';
 import { EXP_APPROVED_INF_QK, EXP_APPROVED_QK } from '../queries/useExpertRequestedConsultations';
 
 export function useDeleteApprovedConsultation(onDone?: () => void, onFail?: (e: Error) => void) {

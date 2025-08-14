@@ -194,6 +194,7 @@ const RequestHealthCareCard: React.FC<RequestHealthCareCardProps> = ({
           nickname={nickname}
           requestNote={userInfoQuery.data?.requestNote || requestMessage}
           profile={{
+            profileImageUrl: userInfoQuery.data?.profileImg,
             age: userInfoQuery.data?.age ?? (typeof age === 'number' ? age : 0),
             gender: toKoreanGender(userInfoQuery.data?.gender ?? gender),
             height: userInfoQuery.data?.height ?? height,
@@ -207,6 +208,7 @@ const RequestHealthCareCard: React.FC<RequestHealthCareCardProps> = ({
           // ReportSummary는 상위에서 내려준 값이 있으면 표시
           // health modal 내부에서 그대로 전달
           summary={reportSummaryQuery.data}
+          isLoading={userInfoQuery.isLoading || reportSummaryQuery.isLoading}
           onClose={() => setIsModalOpen(false)}
           onAccept={() => {
             onAccept?.();

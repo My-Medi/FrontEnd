@@ -27,6 +27,7 @@ export type ConsultationAffectResponse = ApiResponse<number>;
 // 전문가가 보는 특정 사용자 요약 정보 (요청서 상세)
 export interface ExpertUserInfo {
   userId: number;
+  profileImg?: string; // 프로필 이미지 URL (전문가 전용 사용자 정보 응답)
   accountRegisterDate: string;
   nickname: string;
   age: number; // 또는 string이 올 수 있으나 현 스펙은 number
