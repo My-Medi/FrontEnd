@@ -4,52 +4,102 @@ import normalGage from '@/assets/MyMedicalReport/total/normal.svg';
 import interestGage from '@/assets/MyMedicalReport/total/interest.svg';
 import warnGage from '@/assets/MyMedicalReport/total/warn.svg';
 import dangerGage from '@/assets/MyMedicalReport/total/danger.svg';
-
-interface Indicator {
-  id: string;
-  stage: '안심' | '정상' | '관심' | '주의' | '위험';
-}
+import { useHealthScoreQuery } from '../../../hooks/myMedicalReport/useHealthScoreQuery';
+import { healthStatusMap } from '../../../types/myMedicalReport/graph';
 
 interface GageProps {
   nickname: string;
-  indicators: Indicator[];
+  round: number;
 }
 
-const Gage: React.FC<GageProps> = ({ nickname, indicators }) => {
-  const warningCount = indicators.filter((i) => i.stage === '위험').length;
-  const cautionCount = indicators.filter((i) => i.stage === '주의').length;
+const Gage: React.FC<GageProps> = ({ nickname, round }) => {
+  const { data: healthScoreData, isLoading, error } = useHealthScoreQuery(round);
 
-  let gageImage = safeGage;
-  let percentage = 96;
-  let percentColor = '#1D68FF';
-  let text = `${nickname}님의 건강지수는 ${percentage}%로 안심 단계입니다.`;
-  let textColor = '#002F8E';
-
-  if (cautionCount >= 1 && cautionCount <= 2 && warningCount === 0) {
-    gageImage = normalGage;
-    percentage = 86;
-    percentColor = '#76E15D';
-    text = `${nickname}님의 건강지수는 ${percentage}%로 정상 단계입니다.`;
-    textColor = '#136A00';
-  } else if ((cautionCount >= 3 || warningCount === 1) && warningCount < 2) {
-    gageImage = interestGage;
-    percentage = 73;
-    percentColor = '#FC0';
-    text = `${nickname}님의 건강지수는 ${percentage}%로 관심 단계입니다.`;
-    textColor = '#5B3C00';
-  } else if (warningCount === 2) {
-    gageImage = warnGage;
-    percentage = 58;
-    percentColor = '#FF732D';
-    text = `${nickname}님의 건강지수는 ${percentage}%로 주의 단계입니다.`;
-    textColor = '#923100';
-  } else if (warningCount >= 3) {
-    gageImage = dangerGage;
-    percentage = 39;
-    percentColor = '#ED5151';
-    text = `${nickname}님의 건강지수는 ${percentage}%로 위험 단계입니다.`;
-    textColor = '#680707';
+  // 로딩 상태 처리
+  if (isLoading) {
+    return (
+      <div
+        style={{
+          position: 'relative',
+          width: '555.188px',
+          height: '555.188px',
+          flexShrink: 0,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#f5f5f5',
+        }}
+      >
+        <div>로딩 중...</div>
+      </div>
+    );
   }
+
+  // 에러 상태 처리
+  if (error || !healthScoreData?.result) {
+    return (
+      <div
+        style={{
+          position: 'relative',
+          width: '555.188px',
+          height: '555.188px',
+          flexShrink: 0,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#f5f5f5',
+        }}
+      >
+        <div>데이터를 불러올 수 없습니다.</div>
+      </div>
+    );
+  }
+
+  const { totalScore, healthStatus } = healthScoreData.result;
+  const stage = healthStatusMap[healthStatus] || '정상';
+
+  // stage에 따른 설정값 결정
+  const getStageConfig = (stage: '안심' | '정상' | '관심' | '주의' | '위험') => {
+    switch (stage) {
+      case '안심':
+        return {
+          gageImage: safeGage,
+          percentColor: '#1D68FF',
+          textColor: '#002F8E',
+          text: `${nickname}님의 건강지수는 ${totalScore}%로 안심 단계입니다.`,
+        };
+      case '정상':
+        return {
+          gageImage: normalGage,
+          percentColor: '#76E15D',
+          textColor: '#136A00',
+          text: `${nickname}님의 건강지수는 ${totalScore}%로 정상 단계입니다.`,
+        };
+      case '관심':
+        return {
+          gageImage: interestGage,
+          percentColor: '#FC0',
+          textColor: '#5B3C00',
+          text: `${nickname}님의 건강지수는 ${totalScore}%로 관심 단계입니다.`,
+        };
+      case '주의':
+        return {
+          gageImage: warnGage,
+          percentColor: '#FF732D',
+          textColor: '#923100',
+          text: `${nickname}님의 건강지수는 ${totalScore}%로 주의 단계입니다.`,
+        };
+      case '위험':
+        return {
+          gageImage: dangerGage,
+          percentColor: '#ED5151',
+          textColor: '#680707',
+          text: `${nickname}님의 건강지수는 ${totalScore}%로 위험 단계입니다.`,
+        };
+    }
+  };
+
+  const config = getStageConfig(stage);
 
   return (
     <div
@@ -58,7 +108,7 @@ const Gage: React.FC<GageProps> = ({ nickname, indicators }) => {
         width: '555.188px',
         height: '555.188px',
         flexShrink: 0,
-        backgroundImage: `url(${gageImage})`,
+        backgroundImage: `url(${config.gageImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
@@ -74,14 +124,14 @@ const Gage: React.FC<GageProps> = ({ nickname, indicators }) => {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          color: percentColor,
+          color: config.percentColor,
           fontFamily: 'Pretendard',
           fontSize: '120px',
           fontWeight: 400,
           letterSpacing: '-3.6px',
         }}
       >
-        {percentage}%
+        {totalScore}%
       </div>
       <div
         style={{
@@ -91,7 +141,7 @@ const Gage: React.FC<GageProps> = ({ nickname, indicators }) => {
           transform: 'translateX(-50%)',
           textAlign: 'center',
           width: '100%',
-          color: textColor,
+          color: config.textColor,
           fontFamily: 'Pretendard',
           fontSize: '15.75px',
           fontWeight: 600,
@@ -99,7 +149,7 @@ const Gage: React.FC<GageProps> = ({ nickname, indicators }) => {
           letterSpacing: '-0.472px',
         }}
       >
-        {text}
+        {config.text}
       </div>
     </div>
   );
