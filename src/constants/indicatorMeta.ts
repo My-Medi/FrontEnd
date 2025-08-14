@@ -70,7 +70,7 @@ export const INDICATOR_META: Record<
       gender === '남성' ? '0.9~1.0' : gender === '여성' ? '0.8' : '0.8~1.0',
   },
 
-  egfr: { title: 'eGFR(신사구체여과율)', unit: 'mL/min/1.73㎡', standard: '90~99' },
+  egfr: { title: 'eGFR(신사구체여과율)', unit: 'mm/HG', standard: '90~99' },
 
   ast: { title: 'AST', unit: 'IU/L', standard: '21~30' },
 

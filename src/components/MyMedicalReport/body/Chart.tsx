@@ -14,32 +14,20 @@ interface ChartProps {
 }
 
 const Chart: React.FC<ChartProps> = ({ checkupDate, nickname }) => {
-  console.log('🏥 Chart 컴포넌트 렌더링:', { checkupDate, nickname });
-
   // API 데이터 가져오기
   const { data: reportData, isLoading, error } = useComparingReportQuery();
 
-  console.log('📊 Chart 상태:', {
-    isLoading,
-    hasError: !!error,
-    hasData: !!reportData,
-    originalNickname: nickname,
-    apiNickname: reportData?.nickname,
-  });
-
   // API 데이터가 있으면 사용, 없으면 기본값 사용
   const displayNickname = reportData?.nickname || nickname;
-  console.log('👤 표시할 닉네임:', displayNickname);
 
   // indicators 데이터 준비
   let indicators: Array<{ id: string; stage: '안심' | '정상' | '관심' | '주의' | '위험' }> = [];
 
   if (reportData) {
-    console.log('🔄 Chart 데이터 매핑 시작...');
     // API 데이터를 컴포넌트에서 사용할 수 있는 형태로 변환
     const combinedData = mapReportToCombinedByCategory(
       reportData,
-      categoryMap as any,
+      {}, // categoryMap 대신 빈 객체 사용 (API에서 데이터를 받으므로 불필요)
       reportData.nickname,
     );
 
@@ -53,24 +41,15 @@ const Chart: React.FC<ChartProps> = ({ checkupDate, nickname }) => {
             ? '정상'
             : (row.leftProps.stage as '안심' | '정상' | '관심' | '주의' | '위험'),
       }));
-
-    console.log('✅ Chart indicators 생성 완료:', {
-      totalIndicators: indicators.length,
-      indicators: indicators.map((ind) => ({ id: ind.id, stage: ind.stage })),
-    });
   }
 
   if (isLoading) {
-    console.log('⏳ Chart 로딩 중...');
     return <div>로딩 중...</div>;
   }
 
   if (error) {
-    console.error('❌ Chart 에러:', error);
     return <div>데이터를 불러오는데 실패했습니다.</div>;
   }
-
-  console.log('🎨 Chart 렌더링 완료');
   return (
     <div className='flex flex-col'>
       <div className='w-[1301px] max-h-[2600px] flex-shrink-0 rounded-[20px] border-[2px] border-[#DBE6FF] bg-[linear-gradient(157deg,_rgba(161,189,255,0.30)_-0.5%,_rgba(219,230,255,0.30)_85.34%)] flex flex-col items-center pt-[46px] relative'>
@@ -124,7 +103,7 @@ const Chart: React.FC<ChartProps> = ({ checkupDate, nickname }) => {
               <Gage nickname={displayNickname} indicators={indicators} />
             </div>
 
-            <PatientCardList />
+            <PatientCardList nickname={nickname} />
           </div>
         </div>
       </div>

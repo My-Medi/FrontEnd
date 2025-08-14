@@ -263,7 +263,64 @@ export function mapReportToCombinedByCategory(
     const isUnk = isUnknown(valueRaw);
     const stageKor = korStageFrom(lv?.status);
 
-    const right = rightLookup[leftId];
+    // API에서 받은 평균값 데이터 (백엔드 응답에서 추출)
+    const getAverageValue = () => {
+      switch (leftId) {
+        case 'bmi':
+          return res.obesityAssessmentDto?.comparingBmi?.averageBmi;
+        case 'waist':
+          return res.obesityAssessmentDto?.comparingWaist?.averageWaist;
+        case 'sbp':
+          return res.hypertensionAssessmentDto?.comparingSystolicBp?.averageSystolicBp;
+        case 'dbp':
+          return res.hypertensionAssessmentDto?.comparingDiastolicBp?.averageDiastolicBp;
+        case 'hemoglobin':
+          return res.anemiaAssessmentDto?.comparingHemoglobin?.averageHemoglobin;
+        case 'fbs':
+          return res.diabetesAssessmentDto?.comparingFastingBloodSugar?.averageFastingBloodSugar;
+        case 'tcho':
+          return res.dyslipidemiaAssessmentDto?.comparingTotalCholesterol?.averageTotalCholesterol;
+        case 'hdl':
+          return res.dyslipidemiaAssessmentDto?.comparingHDL?.averageHDL;
+        case 'tg':
+          return res.dyslipidemiaAssessmentDto?.comparingTriglyceride?.averageTriglyceride;
+        case 'ldl':
+          return res.dyslipidemiaAssessmentDto?.comparingLDL?.averageLDL;
+        case 'scr':
+          return res.kidneyDiseaseAssessmentDto?.comparingSerumCreatinine?.averageSerumCreatinine;
+        case 'egfr':
+          return res.kidneyDiseaseAssessmentDto?.comparingEGfr?.averageE_GFR;
+        case 'ast':
+          return res.liverDiseaseAssessmentDto?.comparingAst?.averageAst;
+        case 'alt':
+          return res.liverDiseaseAssessmentDto?.comparingAlt?.averageAlt;
+        case 'ggtp':
+          return res.liverDiseaseAssessmentDto?.comparingGammaGtp?.averageGammaGtp;
+        case 'urine':
+          // averageUrineStatus를 한글로 변환
+          const averageStatus =
+            res.urineProteinAssessmentDto?.comparingUrineProtein?.averageUrineStatus;
+          if (!averageStatus) return undefined;
+          switch (averageStatus.toUpperCase()) {
+            case 'SAFE':
+              return '안심';
+            case 'NORMAL':
+              return '정상';
+            case 'CAUTION':
+              return '주의';
+            case 'WATCH':
+              return '관심';
+            case 'DANGER':
+              return '위험';
+            default:
+              return undefined;
+          }
+        default:
+          return undefined;
+      }
+    };
+
+    const averageValue = getAverageValue();
 
     return {
       leftProps: {
@@ -277,83 +334,183 @@ export function mapReportToCombinedByCategory(
       compareProps: {
         stage: stageKor,
         patientValue: isUnk ? '' : String(valueRaw ?? ''),
-        averageValue: right?.value ?? '',
+        averageValue: averageValue ? String(averageValue) : '',
         indicatorId: leftId,
       },
-      rightProps: right
-        ? {
-            year: FIXED_YEAR, // ✅ 고정 연도
-            ageGroup: right.ageGroup,
-            value: right.value ?? '',
-            unit: INDICATOR_META[leftId as keyof typeof INDICATOR_META]?.unit ?? right.unit ?? '', // ✅ 단위는 상수 우선
-            standard: resolveStandard(
-              leftId as keyof typeof INDICATOR_META,
-              lv?.gender as '남성' | '여성' | undefined,
-            ), // 정상 기준 상수에서 계산
-            gender: lv?.gender, // 좌측 성별(남/여) 기준으로 문구 생성
-          }
-        : undefined,
-      descProps: right
-        ? {
-            indicatorName: meta.title,
-            patientValue: String(valueRaw ?? ''),
-            averageValue: right.value ?? '',
-            ageGroup: right.ageGroup,
-            rank: '', // 기존 폴백용(문구 포맷 새 필드 사용 시 비워둠)
-            gender: lv?.gender ?? right.gender ?? '',
-            ageGroup10Yr: right.ageGroup10Yr,
-            rankType:
-              right.rankType === '상위' || right.rankType === '하위' ? right.rankType : undefined,
-            rankPercent: right.rankPercent,
-            comparisonText: (() => {
-              // 백엔드에서 averageComparison 값을 가져와서 comparisonText로 사용
-              const leftIdKey = leftId as keyof typeof left;
-              const leftValue = left[leftIdKey];
-              if (!leftValue) return undefined;
+      rightProps: {
+        year: FIXED_YEAR, // 고정 연도
+        ageGroup: `${res.ageGroup10Yr}대`, // API에서 받은 연령대
+        value: averageValue ? String(averageValue) : '',
+        unit: INDICATOR_META[leftId as keyof typeof INDICATOR_META]?.unit ?? '', // 단위는 상수에서 가져옴
+        standard: resolveStandard(
+          leftId as keyof typeof INDICATOR_META,
+          lv?.gender as '남성' | '여성' | undefined,
+        ), // 정상 기준 상수에서 계산
+        gender: lv?.gender, // 좌측 성별(남/여) 기준으로 문구 생성
+      },
+      descProps: {
+        indicatorName: meta.title,
+        patientValue: String(valueRaw ?? ''),
+        averageValue: averageValue ? String(averageValue) : '',
+        ageGroup: `${res.ageGroup10Yr}대`,
+        rank: '', // 기존 폴백용(문구 포맷 새 필드 사용 시 비워둠)
+        gender: lv?.gender ?? '',
+        ageGroup10Yr: res.ageGroup10Yr,
+        rankType: (() => {
+          // 백엔드에서 rank 정보 추출
+          const rank = (() => {
+            switch (leftId) {
+              case 'bmi':
+                return res.obesityAssessmentDto?.comparingBmi?.rank;
+              case 'waist':
+                return res.obesityAssessmentDto?.comparingWaist?.rank;
+              case 'sbp':
+                return res.hypertensionAssessmentDto?.comparingSystolicBp?.rank;
+              case 'dbp':
+                return res.hypertensionAssessmentDto?.comparingDiastolicBp?.rank;
+              case 'hemoglobin':
+                return res.anemiaAssessmentDto?.comparingHemoglobin?.rank;
+              case 'fbs':
+                return res.diabetesAssessmentDto?.comparingFastingBloodSugar?.rank;
+              case 'tcho':
+                return res.dyslipidemiaAssessmentDto?.comparingTotalCholesterol?.rank;
+              case 'hdl':
+                return res.dyslipidemiaAssessmentDto?.comparingHDL?.rank;
+              case 'tg':
+                return res.dyslipidemiaAssessmentDto?.comparingTriglyceride?.rank;
+              case 'ldl':
+                return res.dyslipidemiaAssessmentDto?.comparingLDL?.rank;
+              case 'scr':
+                return res.kidneyDiseaseAssessmentDto?.comparingSerumCreatinine?.rank;
+              case 'egfr':
+                return res.kidneyDiseaseAssessmentDto?.comparingEGfr?.rank;
+              case 'ast':
+                return res.liverDiseaseAssessmentDto?.comparingAst?.rank;
+              case 'alt':
+                return res.liverDiseaseAssessmentDto?.comparingAlt?.rank;
+              case 'ggtp':
+                return res.liverDiseaseAssessmentDto?.comparingGammaGtp?.rank;
+              case 'urine':
+                return res.urineProteinAssessmentDto?.comparingUrineProtein?.rank;
+              default:
+                return undefined;
+            }
+          })();
 
-              // 각 지표별로 백엔드 응답에서 averageComparison 값을 찾기
-              switch (leftId) {
-                case 'bmi':
-                  return res.obesityAssessmentDto?.comparingBmi?.averageComparison;
-                case 'waist':
-                  return res.obesityAssessmentDto?.comparingWaist?.averageComparison;
-                case 'sbp':
-                  return res.hypertensionAssessmentDto?.comparingSystolicBp?.averageComparison;
-                case 'dbp':
-                  return res.hypertensionAssessmentDto?.comparingDiastolicBp?.averageComparison;
-                case 'hemoglobin':
-                  return res.anemiaAssessmentDto?.comparingHemoglobin?.averageComparison;
-                case 'fbs':
-                  return res.diabetesAssessmentDto?.comparingFastingBloodSugar?.averageComparison;
-                case 'tcho':
-                  return res.dyslipidemiaAssessmentDto?.comparingTotalCholesterol
-                    ?.averageComparison;
-                case 'hdl':
-                  return res.dyslipidemiaAssessmentDto?.comparingHDL?.averageComparison;
-                case 'tg':
-                  return res.dyslipidemiaAssessmentDto?.comparingTriglyceride?.averageComparison;
-                case 'ldl':
-                  return res.dyslipidemiaAssessmentDto?.comparingLDL?.averageComparison;
-                case 'scr':
-                  return res.kidneyDiseaseAssessmentDto?.comparingSerumCreatinine
-                    ?.averageComparison;
-                case 'egfr':
-                  return res.kidneyDiseaseAssessmentDto?.comparingEGfr?.averageComparison;
-                case 'ast':
-                  return res.liverDiseaseAssessmentDto?.comparingAst?.averageComparison;
-                case 'alt':
-                  return res.liverDiseaseAssessmentDto?.comparingAlt?.averageComparison;
-                case 'ggtp':
-                  return res.liverDiseaseAssessmentDto?.comparingGammaGtp?.averageComparison;
-                case 'urine':
-                  return res.urineProteinAssessmentDto?.comparingUrineProtein?.averageComparison;
-                default:
-                  return undefined;
-              }
-            })(),
-            isUnknown: isUnk,
+          // rank 값을 rankType으로 변환
+          if (!rank) return undefined;
+
+          // 백엔드에서 받은 rank 값이 '상위' 또는 '하위'인 경우 그대로 사용
+          if (rank === '상위' || rank === '하위') {
+            return rank;
           }
-        : undefined,
+
+          // 다른 형태의 rank 값이 있다면 변환 로직 추가
+          // 예: 'HIGH' -> '상위', 'LOW' -> '하위' 등
+          switch (rank.toUpperCase()) {
+            case 'HIGH':
+            case 'ABOVE':
+              return '상위';
+            case 'LOW':
+            case 'BELOW':
+              return '하위';
+            default:
+              return undefined;
+          }
+        })(),
+        rankPercent: (() => {
+          // 백엔드에서 rankPercent 정보 추출
+          const percent = (() => {
+            switch (leftId) {
+              case 'bmi':
+                return res.obesityAssessmentDto?.comparingBmi?.percentageBmi;
+              case 'waist':
+                return res.obesityAssessmentDto?.comparingWaist?.percentageWaist;
+              case 'sbp':
+                return res.hypertensionAssessmentDto?.comparingSystolicBp?.percentageSystolicBp;
+              case 'dbp':
+                return res.hypertensionAssessmentDto?.comparingDiastolicBp?.percentageDiastolicBp;
+              case 'hemoglobin':
+                return res.anemiaAssessmentDto?.comparingHemoglobin?.percentageHemoglobin;
+              case 'fbs':
+                return res.diabetesAssessmentDto?.comparingFastingBloodSugar
+                  ?.percentageFastingBloodSugar;
+              case 'tcho':
+                return res.dyslipidemiaAssessmentDto?.comparingTotalCholesterol
+                  ?.percentageTotalCholesterol;
+              case 'hdl':
+                return res.dyslipidemiaAssessmentDto?.comparingHDL?.percentageHDL;
+              case 'tg':
+                return res.dyslipidemiaAssessmentDto?.comparingTriglyceride?.percentageTriglyceride;
+              case 'ldl':
+                return res.dyslipidemiaAssessmentDto?.comparingLDL?.percentageLDL;
+              case 'scr':
+                return res.kidneyDiseaseAssessmentDto?.comparingSerumCreatinine
+                  ?.percentageSerumCreatinine;
+              case 'egfr':
+                return res.kidneyDiseaseAssessmentDto?.comparingEGfr?.percentageE_GFR;
+              case 'ast':
+                return res.liverDiseaseAssessmentDto?.comparingAst?.percentageAst;
+              case 'alt':
+                return res.liverDiseaseAssessmentDto?.comparingAlt?.percentageAlt;
+              case 'ggtp':
+                return res.liverDiseaseAssessmentDto?.comparingGammaGtp?.percentageGammaGtp;
+              case 'urine':
+                return undefined; // 요단백은 percentage가 없음
+              default:
+                return undefined;
+            }
+          })();
+
+          // null 값을 undefined로 변환
+          return percent === null ? undefined : percent;
+        })(),
+        comparisonText: (() => {
+          // 백엔드에서 averageComparison 값을 가져와서 comparisonText로 사용
+          const leftIdKey = leftId as keyof typeof left;
+          const leftValue = left[leftIdKey];
+          if (!leftValue) return undefined;
+
+          // 각 지표별로 백엔드 응답에서 averageComparison 값을 찾기
+          switch (leftId) {
+            case 'bmi':
+              return res.obesityAssessmentDto?.comparingBmi?.averageComparison;
+            case 'waist':
+              return res.obesityAssessmentDto?.comparingWaist?.averageComparison;
+            case 'sbp':
+              return res.hypertensionAssessmentDto?.comparingSystolicBp?.averageComparison;
+            case 'dbp':
+              return res.hypertensionAssessmentDto?.comparingDiastolicBp?.averageComparison;
+            case 'hemoglobin':
+              return res.anemiaAssessmentDto?.comparingHemoglobin?.averageComparison;
+            case 'fbs':
+              return res.diabetesAssessmentDto?.comparingFastingBloodSugar?.averageComparison;
+            case 'tcho':
+              return res.dyslipidemiaAssessmentDto?.comparingTotalCholesterol?.averageComparison;
+            case 'hdl':
+              return res.dyslipidemiaAssessmentDto?.comparingHDL?.averageComparison;
+            case 'tg':
+              return res.dyslipidemiaAssessmentDto?.comparingTriglyceride?.averageComparison;
+            case 'ldl':
+              return res.dyslipidemiaAssessmentDto?.comparingLDL?.averageComparison;
+            case 'scr':
+              return res.kidneyDiseaseAssessmentDto?.comparingSerumCreatinine?.averageComparison;
+            case 'egfr':
+              return res.kidneyDiseaseAssessmentDto?.comparingEGfr?.averageComparison;
+            case 'ast':
+              return res.liverDiseaseAssessmentDto?.comparingAst?.averageComparison;
+            case 'alt':
+              return res.liverDiseaseAssessmentDto?.comparingAlt?.averageComparison;
+            case 'ggtp':
+              return res.liverDiseaseAssessmentDto?.comparingGammaGtp?.averageComparison;
+            case 'urine':
+              return res.urineProteinAssessmentDto?.comparingUrineProtein?.averageComparison;
+            default:
+              return undefined;
+          }
+        })(),
+        isUnknown: isUnk,
+      },
       indicatorId: leftId,
     };
   };
