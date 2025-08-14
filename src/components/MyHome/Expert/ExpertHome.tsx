@@ -4,7 +4,7 @@ import HomeCalendar from '../Common/HomeCalendar';
 import ResumeManagement from '../Resume/ResumeManagement';
 import RequestHealthCare from '../../RequestHealthCare/RequestHealthCare';
 import { NotificationList } from '../../Alarm/NotificationList';
-import { expertNotificationList } from '../../../data/expertNotificationList';
+
 import ExpertSchedule from './ExpertSchedule';
 import PatientManagementList from '../../PatientManagement/memberList';
 
@@ -23,24 +23,19 @@ const ExpertHome: React.FC<ExpertHomeProps> = ({
   today,
   onDateSelect,
   onEditInfo,
-  // onMenuSelect,
+  onMenuSelect,
 }) => {
   switch (selectedMenu) {
     case 0: // 마이 홈
       return (
         <>
           <PatientInfoSection
-            nickname='하나'
-            name='김민지'
-            age={23}
-            height={168}
-            weight={52}
-            checkupCount={0}
             onEditInfo={onEditInfo}
             userType='expert'
+            useApiData={true}
           />
-          <ExpertSchedule />
-          <HomeCalendar selectedDate={selectedDate} today={today} onDateSelect={onDateSelect} />
+          <ExpertSchedule onGoPatientManagement={() => onMenuSelect(1)} />
+          <HomeCalendar selectedDate={selectedDate} today={today} onDateSelect={onDateSelect} userType='expert' />
         </>
       );
     case 1: // 환자 관리
@@ -50,7 +45,7 @@ const ExpertHome: React.FC<ExpertHomeProps> = ({
     case 3: // 건강관리요청서 확인하기
       return <RequestHealthCare />;
     case 4: // 내 알림
-      return <NotificationList notifications={expertNotificationList} />;
+      return <NotificationList userType="expert" />;
     default:
       return null;
   }

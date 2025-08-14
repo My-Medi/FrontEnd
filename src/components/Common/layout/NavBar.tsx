@@ -1,23 +1,35 @@
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
-import { useEffect } from 'react';
+import { useUserProfileOverviewQuery } from '../../../hooks/users/queries/useUserProfileQuery';
 
 const NavBar = memo(() => {
   const navigate = useNavigate();
-  const { userType } = useAuth();
+  const { userType, isAuthenticated } = useAuth();
+  const isExpert = userType === 'expert';
+  const { data: profileOverview } = useUserProfileOverviewQuery(!isExpert);
 
   // 디버깅용: userType 변경 시 콘솔에 출력
-  useEffect(() => {
-    console.log('NavBar - Current userType:', userType);
-  }, [userType]);
+  useEffect(() => {}, [userType]);
 
-  const handleNavigate = useCallback((path: string) => {
-    navigate(path);
-  }, [navigate]);
+  const handleNavigate = useCallback(
+    (path: string) => {
+      navigate(path);
+    },
+    [navigate],
+  );
+
+  const handleGoMyMedicalReport = useCallback(() => {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+    const count = profileOverview?.reportCount ?? 0;
+    navigate(count > 0 ? '/my-medical-report' : '/empty-report');
+  }, [navigate, profileOverview?.reportCount, isAuthenticated]);
 
   return (
-    <nav className="w-full hidden lg:block">
+    <nav className='w-full hidden xl:block'>
       <div className='border-b border-[#1D68FF] bg-white'>
         {/*Topbar와 동일한 기준을 (max-w + mx-auto) 적용해서 -> 바로 아래에 위치 고정 */}
         <div className='flex justify-center px-[60px]'>
@@ -31,8 +43,8 @@ const NavBar = memo(() => {
                 >
                   마이 홈
                 </p>
-                <p 
-                  onClick={() => handleNavigate('/health-result-input')}
+                <p
+                  onClick={handleGoMyMedicalReport}
                   className='cursor-pointer text-[#121218] text-[16px] leading-[36px] tracking-[-0.48px] font-[Pretendard] font-medium hover:text-[#1D68FF] transition-colors duration-200'
                 >
                   마이 메디컬 리포트
@@ -43,7 +55,7 @@ const NavBar = memo(() => {
                 >
                   전문가 찾기
                 </p>
-                <p 
+                <p
                   onClick={() => navigate('/health-terms')}
                   className='cursor-pointer text-[#121218] text-[16px] leading-[36px] tracking-[-0.48px] font-[Pretendard] font-medium hover:text-[#1D68FF] transition-colors duration-200'
                 >

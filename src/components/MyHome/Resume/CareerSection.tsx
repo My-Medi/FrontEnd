@@ -1,30 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import type { CareerFormItem } from '../../../types/expert/resume';
 
-const CareerSection: React.FC = () => {
-  // 경력 row 데이터 상태로 관리
-  const [careerRows, setCareerRows] = useState([
-    {
-      company: '대한영양사협회',
-      start: '2022.05.24',
-      end: '2025.05.12',
-      role: '식단 계획 및 조리',
-    },
-    {
-      company: '대한영양사협회',
-      start: '2022.05.24',
-      end: '2025.05.12',
-      role: '식단 계획 및 조리',
-    },
-  ]);
+interface CareerSectionProps {
+  career: CareerFormItem[];
+  onCareerChange: (career: CareerFormItem[]) => void;
+}
 
-  // 디버깅을 위한 useEffect 추가
-  useEffect(() => {
-    console.log('CareerSection 렌더링됨, careerRows:', careerRows);
-  }, [careerRows]);
-
+const CareerSection: React.FC<CareerSectionProps> = ({ career, onCareerChange }) => {
   const handleAddCareerRow = () => {
-    setCareerRows(prev => [
-      ...prev,
+    onCareerChange([
+      ...career,
       {
         company: '',
         start: '',
@@ -32,6 +17,15 @@ const CareerSection: React.FC = () => {
         role: '',
       },
     ]);
+  };
+
+  const handleCareerChange = (index: number, field: keyof CareerFormItem, value: string) => {
+    const newCareer = [...career];
+    newCareer[index] = {
+      ...newCareer[index],
+      [field]: value,
+    };
+    onCareerChange(newCareer);
   };
 
   return (
@@ -58,20 +52,16 @@ const CareerSection: React.FC = () => {
         </div>
 
         {/* 테이블 데이터 */}
-        {careerRows.map((row, idx) => (
+        {career.map((row, idx) => (
           <div
             key={idx}
-            className={`grid grid-cols-[1fr_1fr_1fr] xl:grid-cols-[11.6rem_19.7rem_15.4rem] bg-white min-w-[30rem] xl:min-w-0${idx !== careerRows.length - 1 ? ' border-b border-[#DBE6FF]' : ''}`}
+            className={`grid grid-cols-[1fr_1fr_1fr] xl:grid-cols-[11.6rem_19.7rem_15.4rem] bg-white min-w-[30rem] xl:min-w-0${idx !== career.length - 1 ? ' border-b border-[#DBE6FF]' : ''}`}
           >
             <div className="p-2 xl:p-[0.375rem_0.75rem] text-center text-sm xl:text-sm font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em] border-r border-[#DBE6FF] flex items-center justify-center">
               <input
                 type="text"
                 value={row.company}
-                onChange={(e) => {
-                  const newRows = [...careerRows];
-                  newRows[idx].company = e.target.value;
-                  setCareerRows(newRows);
-                }}
+                onChange={(e) => handleCareerChange(idx, 'company', e.target.value)}
                 className="w-full text-center bg-transparent border-none outline-none text-sm xl:text-sm font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em]"
                 placeholder="회사명 입력"
               />
@@ -80,11 +70,7 @@ const CareerSection: React.FC = () => {
               <input
                 type="text"
                 value={row.start}
-                onChange={(e) => {
-                  const newRows = [...careerRows];
-                  newRows[idx].start = e.target.value;
-                  setCareerRows(newRows);
-                }}
+                onChange={(e) => handleCareerChange(idx, 'start', e.target.value)}
                 className="w-[6.8rem] xl:w-[6.8rem] text-center bg-transparent border-none outline-none text-sm xl:text-sm font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em]"
                 placeholder="시작일"
               />
@@ -92,11 +78,7 @@ const CareerSection: React.FC = () => {
               <input
                 type="text"
                 value={row.end}
-                onChange={(e) => {
-                  const newRows = [...careerRows];
-                  newRows[idx].end = e.target.value;
-                  setCareerRows(newRows);
-                }}
+                onChange={(e) => handleCareerChange(idx, 'end', e.target.value)}
                 className="w-[6.8rem] xl:w-[6.8rem] text-center bg-transparent border-none outline-none text-sm xl:text-sm font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em]"
                 placeholder="종료일"
               />
@@ -105,11 +87,7 @@ const CareerSection: React.FC = () => {
               <input
                 type="text"
                 value={row.role}
-                onChange={(e) => {
-                  const newRows = [...careerRows];
-                  newRows[idx].role = e.target.value;
-                  setCareerRows(newRows);
-                }}
+                onChange={(e) => handleCareerChange(idx, 'role', e.target.value)}
                 className="w-full text-center bg-transparent border-none outline-none text-sm xl:text-sm font-light text-[#121218] font-pretendard leading-[1.571] tracking-[-0.03em]"
                 placeholder="역할 입력"
               />
@@ -123,7 +101,7 @@ const CareerSection: React.FC = () => {
         <button
           type="button"
           onClick={handleAddCareerRow}
-          className="w-[15.5rem] xl:w-[15.5rem] h-8 xl:h-[1.9rem] border border-[#DBE6FF] rounded-[1.9rem] xl:rounded-[1.9rem] flex items-center justify-center p-2 xl:p-[0.375rem]"
+          className="w-[15.5rem] xl:w-[15.5rem] h-8 xl:h-[1.9rem] border border-[#DBE6FF] rounded-[1.9rem] xl:rounded-[1.9rem] flex items-center justify-center"
         >
           <svg width="13.76" height="13.76" viewBox="0 0 14 14" fill="none">
             <path d="M7 0V14" stroke="#75787B" strokeWidth="1.8"/>

@@ -13,7 +13,7 @@ const RequestHealthGoal: React.FC<GoalProps> = ({ goal }) => {
             관리 목표와 기대
           </span>
         </div>
-        <div className='flex flex-col max-w-[480px] pt-[10px] pl-[32px] pr-[10px] pb-[10px] gap-[10px]'>
+        <div className='flex flex-col max-w-[520px] pt-[10px] pl-[32px] pr-[10px] pb-[10px] gap-[10px]'>
           <span className='text-[#121218] text-[14px] leading-[22px] tracking-[-0.42px] font-light'>
             {goal}
           </span>

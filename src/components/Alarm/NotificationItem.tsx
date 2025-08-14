@@ -7,6 +7,7 @@ interface NotificationItemProps {
   isSelected?: boolean;
   selectable?: boolean;
   onSelectChange?: (checked: boolean) => void;
+  onClick?: () => void;
 }
 
 export const NotificationItem: React.FC<NotificationItemProps> = ({
@@ -15,6 +16,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
   isSelected = false,
   selectable = false,
   onSelectChange,
+  onClick,
 }) => {
   return (
     <div className='flex items-center w-full ml-[-10px] gap-[16px]'>
@@ -49,7 +51,9 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
           h-[97px] w-full
           rounded-[20px] shadow-[0px_0px_5px_5px_rgba(29,104,255,0.05)]
           ${isNew ? 'bg-[#1D68FF]' : 'bg-[#C5C8CB]'}
+          ${onClick ? 'cursor-pointer' : ''}
         `}
+        onClick={onClick}
       >
         <div
           className={`

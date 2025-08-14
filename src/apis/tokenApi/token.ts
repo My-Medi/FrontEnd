@@ -1,6 +1,17 @@
 import { API } from '../axios';
 import { AUTH_ENDPOINTS } from '../../types';
 import type { LoginRequest, LoginResponse } from '../../types';
+import type { ApiResponse } from '../../types/common';
+
+// 토큰 재발급 응답 타입
+export interface TokenReissueResponse {
+  grantType?: string;
+  accessToken: string;
+  refreshToken: string;
+  accessTokenExpire?: string; // ISO datetime string
+  refreshTokenExpire?: string; // ISO datetime string
+  role?: string; // e.g., "[ROLE_EXPERT]" or "[ROLE_USER]"
+}
 
 // 토큰 관련 API 함수들
 export const tokenAPI = {
@@ -9,6 +20,12 @@ export const tokenAPI = {
     const response = await API.post(`${AUTH_ENDPOINTS.LOGIN}`, data);
     return response.data;
   },
+
+  // 토큰 재발급
+  reissue: async (refreshToken: string): Promise<ApiResponse<TokenReissueResponse>> => {
+    const response = await API.post(`${AUTH_ENDPOINTS.REISSUE}?refresh=${refreshToken}`);
+    return response.data;
+  },
 };
 
-export default tokenAPI; 
+export default tokenAPI;

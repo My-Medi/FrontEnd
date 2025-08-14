@@ -3,26 +3,36 @@ import backSvg from '../../../assets/Expert/back.svg';
 import closeSvg from '../../../assets/Expert/close.svg';
 import SuccessModal from './SuccessModal';
 import useModalScrollLock from '../../../hooks/useModalScrollLock';
+import { useRequestConsultationMutation } from '../../../hooks/experts/mutations/useRequestConsultationMutation';
 
 interface ConfirmRequestModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onBack?: () => void;
   onConfirm: () => void;
+  expertId: number;
   expertName: string;
   expertPosition: string;
   expertRealName: string;
+  comment: string;
 }
 
 const ConfirmRequestModal: React.FC<ConfirmRequestModalProps> = ({ 
   isOpen, 
   onClose, 
-  // onConfirm, 
+  onBack,
+  expertId,
   expertName, 
   expertPosition,
-  expertRealName
+  expertRealName,
+  comment
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  
+  // 상담 요청 mutation
+  // 모달이 떠있는 동안에는 쿼리 무효화 지연
+  const requestConsultationMutation = useRequestConsultationMutation({ skipQueryInvalidation: true });
 
   useModalScrollLock(isOpen && !showSuccessModal);
 
@@ -35,14 +45,25 @@ const ConfirmRequestModal: React.FC<ConfirmRequestModalProps> = ({
   }, [isOpen]);
 
   const handleConfirm = () => {
-    // 성공 모달만 표시 (상위 모달들은 닫지 않음)
-    setShowSuccessModal(true);
+    // 상담 요청 API 호출
+    requestConsultationMutation.mutate(
+      { expertId, comment },
+      {
+        onSuccess: () => {
+          // 성공 시 성공 모달 표시
+          setShowSuccessModal(true);
+        },
+        onError: (error) => {
+          console.error('상담 요청 실패:', error);
+          // 에러 처리 (필요시 에러 모달 표시)
+        }
+      }
+    );
   };
 
   const handleSuccessClose = () => {
-    console.log('ConfirmRequestModal handleSuccessClose 호출됨');
     setShowSuccessModal(false);
-    onClose(); // 모든 상위 모달들 닫기 (RequestModal, ExpertDetailModal)
+    onClose();
   };
 
   if (!isOpen) return null;
@@ -84,7 +105,7 @@ const ConfirmRequestModal: React.FC<ConfirmRequestModalProps> = ({
               
               <div className="text-center mb-8">
                 <h2 className="text-[24px] font-semibold text-[#121218] leading-[36px] tracking-[-0.03em]">
-                  <span className="text-[#1D68FF]">{expertName}</span> / <span className="text-[#121218]">{expertRealName}</span> <span className="text-[#121218]">{expertPosition}</span>에게 건강관리 요청서를 보내시겠습니까?
+                  <span className="text-[#1D68FF]">{expertRealName}</span> / <span className="text-[#121218]">{expertName}</span> <span className="text-[#121218]">{expertPosition}</span>에게 건강관리 요청서를 보내시겠습니까?
                 </h2>
               </div>
             </div>
@@ -92,7 +113,11 @@ const ConfirmRequestModal: React.FC<ConfirmRequestModalProps> = ({
             {/* Buttons */}
             <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-4">
               <button
-                onClick={onClose}
+                onClick={() => {
+                  // 모든 모달 닫기 (RequestModal, ExpertDetailModal)
+                  // RequestModal의 onClose를 호출하여 모든 모달 닫기
+                  onClose();
+                }}
                 className="w-full sm:w-[300px] h-14 rounded-full border border-[#FFFFFF] text-[#121218] hover:bg-[#EDF0F3] text-[20px] font-medium leading-[24px] tracking-[-0.03em] transition cursor-pointer bg-white shadow-[0px_0px_2px_3px_rgba(29,104,255,0.02),0px_0px_4px_6px_rgba(29,104,255,0.01),0px_0px_6px_0px_rgba(29,104,255,0)]"
               >
                 취소
@@ -108,7 +133,14 @@ const ConfirmRequestModal: React.FC<ConfirmRequestModalProps> = ({
 
           {/* Back button */}
           <button
-            onClick={onClose}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              // ConfirmRequestModal만 닫고 RequestModal은 유지
+              if (onBack) {
+                onBack();
+              }
+            }}
             className="absolute top-12 left-12 w-[17px] h-[35px] flex items-center justify-center"
           >
             <img src={backSvg} alt="뒤로가기" className="w-full h-full object-contain" />

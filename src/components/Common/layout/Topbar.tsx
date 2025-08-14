@@ -4,12 +4,13 @@ import logo from '../../../assets/Login/logo.svg';
 import mainLogo from '../../../assets/mainlog.svg';
 import { useAuth } from '../../../contexts/AuthContext';
 import { clearTokens } from '../../../utils/tokenStorage';
+import TopBarNotification from '../TopBarNotification';
 
 const Topbar = memo(() => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-  const { userType, setUserType } = useAuth();
+  const { userType, setUserType, showNotification, setShowNotification } = useAuth();
 
   const handleNavigate = useCallback((path: string) => {
     navigate(path);
@@ -40,9 +41,12 @@ const Topbar = memo(() => {
     clearTokens();
     // 사용자 타입 초기화
     setUserType(null);
-    // 로그인 페이지로 이동
-    navigate('/login');
-  }, [setUserType, navigate]);
+    // 메뉴/알림 닫기
+    setIsMenuOpen(false);
+    setShowNotification(false);
+    // 전체 새로고침으로 쿠키/상태 완전 반영 + 로그인 페이지 이동
+    window.location.replace('/login');
+  }, [setUserType, setShowNotification]);
 
   return (
     <>
@@ -108,12 +112,25 @@ const Topbar = memo(() => {
                   Login
                 </p>
               )}
-              <p
-                onClick={() => navigate('/alarm')}
-                className='text-[#25282B] text-sm font-[300] leading-[1.4] tracking-[-0.42px] cursor-pointer whitespace-nowrap font-[Pretendard] hover:text-[#1D68FF] transition-colors duration-200'
-              >
-                알림
-              </p>
+              <div className="relative">
+                <p
+                  onClick={() => setShowNotification(!showNotification)}
+                  className='text-[#25282B] text-sm font-[300] leading-[1.4] tracking-[-0.42px] cursor-pointer whitespace-nowrap font-[Pretendard] hover:text-[#1D68FF] transition-colors duration-200'
+                >
+                  알림
+                </p>
+                <TopBarNotification
+                  isVisible={showNotification}
+                  onClose={() => setShowNotification(false)}
+                  onAction={() => {
+                    setShowNotification(false);
+                    // 여기에 실제 액션 처리 로직 추가
+                    console.log('매칭 전문가 페이지로 이동');
+                  }}
+                  message="준호 핏 운동 처방사님께서 매칭을 수락하셨어요!"
+                  actionText="매칭 전문가 보러가기"
+                />
+              </div>
 
               <form
                 onSubmit={handleSearchSubmit}
@@ -205,7 +222,7 @@ const Topbar = memo(() => {
                 </a>
               )}
               <a
-                onClick={() => handleNavigate('/alarm')}
+                onClick={() => setShowNotification(true)}
                 className='px-4 py-2 text-lg text-gray-700 hover:text-[#1d68ff] cursor-pointer'
               >
                 알림

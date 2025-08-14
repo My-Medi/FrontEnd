@@ -5,16 +5,16 @@ const emailDomains = ["직접입력", "naver.com", "gmail.com", "daum.net", "han
 interface SignUpInfoProps {
   values: {
     name: string;
-    birth: string;
-    gender: "male" | "female";
+    birthDate: string;
+    gender: "MALE" | "FEMALE";
     nickname: string;
-    id: string;
+    loginId: string;
     password: string;
     passwordCheck: string;
     email: string;
     emailDomain: string;
-    phone: string;
-    agree: boolean;
+    phoneNumber: string;
+    profileImgUrl?: string;
   };
   onChange: (field: string, value: string | boolean) => void;
   onCheckNickname: () => void;
@@ -33,11 +33,42 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const passwordComplexityRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{8,}$/;
+  const passwordMeetsComplexityRequirements = passwordComplexityRegex.test(values.password);
+  const hasPassword = values.password.trim().length > 0;
+  const hasConfirmPassword = values.passwordCheck.trim().length > 0;
+  const passwordsMatch = hasConfirmPassword && values.password === values.passwordCheck;
+
+  const isNameError = submitted && values.name.trim().length === 0;
+  const isBirthDateError = submitted && !/^\d{6}$/.test(values.birthDate.trim());
+  const isNicknameError = submitted && values.nickname.trim().length === 0;
+  const isLoginIdError = submitted && values.loginId.trim().length === 0;
+  const isEmailError = submitted && values.email.trim().length === 0;
+  const isPhoneError = submitted && values.phoneNumber.trim().length === 0;
+
+  const handleNext = () => {
+    setSubmitted(true);
+
+    const isNameValid = values.name.trim().length > 0;
+    const isBirthDateValid = /^\d{6}$/.test(values.birthDate.trim());
+    const isNicknameValid = values.nickname.trim().length > 0;
+    const isLoginIdValid = values.loginId.trim().length > 0;
+    const isPasswordValid = hasPassword && passwordMeetsComplexityRequirements;
+    const isConfirmValid = hasConfirmPassword && passwordsMatch;
+    const isEmailValid = values.email.trim().length > 0;
+    const isPhoneValid = values.phoneNumber.trim().length > 0;
+
+    const allValid = isNameValid && isBirthDateValid && isNicknameValid && isLoginIdValid && isPasswordValid && isConfirmValid && isEmailValid && isPhoneValid;
+    if (!allValid) return;
+
+    onNext();
+  };
 
   return (
-    <form className='mt-[40px]' onSubmit={e => { e.preventDefault(); onNext(); }}>
+    <form className='mt-[40px]' onSubmit={e => { e.preventDefault(); handleNext(); }}>
         {/* 성명 */}
-        <div className='flex items-center space-x-3 mb-[32px]'>
+        <div className={`flex items-center space-x-3${isNameError ? ' ' : ' mb-[24px]'}`}> {/* 있을 때: 빈칸 없음, 없을 때: 빈칸 있음 */}
           <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
           <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>성명</label>
           <input
@@ -47,36 +78,44 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
             onChange={(e) => onChange('name', e.target.value)}
             className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[180px]'
           />
+          
         </div>
+        {isNameError && (
+            <div className='ml-[300px] mt-[3px] mb-[6px] text-[10px] text-red-500'>성명을 입력해주세요.</div>
+          )}
 
         {/* 생년월일 */}
-        <div className='flex items-center space-x-3 mb-[32px]'>
+        <div className={`flex items-center space-x-3${isBirthDateError ? ' ' : ' mb-[24px]'}`}>
           <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
           <label className='text-gray-700 font-medium min-w-[120px] flex items-center h-[36px]'>생년월일(6자리)</label>
           <input
             type='text'
-            value={values.birth}
-            onChange={(e) => onChange('birth', e.target.value)}
-            placeholder='예) XXXXXX(6자리를 입력하세요)'
+            value={values.birthDate}
+            onChange={(e) => onChange('birthDate', e.target.value)}
+            placeholder='예) 000926'
             maxLength={6}
             className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[140px]'
           />
+
         </div>
+        {isBirthDateError && (
+            <div className='ml-[300px] mt-[3px] mb-[6px] text-[10px] text-red-500'>생년월일 6자리를 입력해주세요.</div>
+          )}
 
         {/* 성별 */}
-        <div className='flex items-center space-x-3 mb-[32px]'>
+        <div className='flex items-center space-x-3 mb-[24px]'>
           <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
           <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>성별</label>
           <div className='flex space-x-4 ml-[180px]'>
             <label className="flex items-center cursor-pointer text-[14px]">
               <input 
                 type="checkbox" 
-                checked={values.gender === "male"} 
-                onChange={() => onChange("gender", "male")}
+                checked={values.gender === "MALE"} 
+                onChange={() => onChange("gender", "MALE")}
                 className="hidden"
               />
               <div className="mr-2">
-                {values.gender === "male" ? (
+                {values.gender === "MALE" ? (
                   <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18" fill="none">
                     <rect x="0.203125" width="18" height="18" rx="4.8" fill="#1D68FF"/>
                     <path d="M5.60156 8.72089L8.40577 11.4002L12.8016 7.2002" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
@@ -92,12 +131,12 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
             <label className="flex items-center cursor-pointer text-[14px]">
               <input 
                 type="checkbox" 
-                checked={values.gender === "female"} 
-                onChange={() => onChange("gender", "female")}
+                checked={values.gender === "FEMALE"} 
+                onChange={() => onChange("gender", "FEMALE")}
                 className="hidden"
               />
               <div className="mr-2">
-                {values.gender === "female" ? (
+                {values.gender === "FEMALE" ? (
                   <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18" fill="none">
                     <rect x="0.203125" width="18" height="18" rx="4.8" fill="#1D68FF"/>
                     <path d="M5.60156 8.72089L8.40577 11.4002L12.8016 7.2002" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
@@ -114,7 +153,7 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
         </div>
 
         {/* 닉네임 */}
-        <div className='flex items-center space-x-3 mb-[32px]'>
+        <div className={`flex items-center space-x-3${isNicknameError ? ' ' : ' mb-[24px]'}`}>
           <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
           <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>닉네임</label>
           <input
@@ -124,6 +163,7 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
             placeholder='닉네임을 입력하세요.'
             className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[180px]'
           />
+
           <button
             type='button'
             onClick={onCheckNickname}
@@ -132,25 +172,29 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
             닉네임 확인
           </button>
         </div>
+        {isNicknameError && (
+            <div className='ml-[300px] mt-[3px] mb-[6px] text-[10px] text-red-500'>닉네임을 입력해주세요.</div>
+          )}
         
         {/* 닉네임 아래 점선 */}
-        <div className='flex justify-center mb-[32px]'>
+        <div className='flex justify-center mb-[24px]'>
           <svg xmlns="http://www.w3.org/2000/svg" width="700" height="2" viewBox="0 0 700 2" fill="none">
             <path d="M1 1L700 1.00005" stroke="#DBE6FF" strokeWidth="0.5" strokeLinecap="square" strokeLinejoin="round" strokeDasharray="1.8 1.8"/>
           </svg>
         </div>
 
         {/* 아이디 */}
-        <div className='flex items-center space-x-3 mb-[32px]'>
+        <div className={`flex items-center space-x-3${isLoginIdError ? ' ' : ' mb-[24px]'}`}>
           <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
           <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>아이디</label>
           <input
             type='text'
-            value={values.id}
-            onChange={(e) => onChange('id', e.target.value)}
+            value={values.loginId}
+            onChange={(e) => onChange('loginId', e.target.value)}
             placeholder='아이디를 입력하세요.'
             className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[180px]'
           />
+
           <button
             type='button'
             onClick={onCheckId}
@@ -159,9 +203,12 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
             아이디 확인
           </button>
         </div>
+        {isLoginIdError && (
+            <div className='ml-[300px] mt-[3px] mb-[6px] text-[10px] text-red-500'>아이디를 입력해주세요.</div>
+          )}
 
         {/* 비밀번호 */}
-        <div className='flex items-center space-x-3'>
+        <div className="flex items-center space-x-3">
           <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
           <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>비밀번호</label>
           <div className='relative ml-[180px]'>
@@ -176,19 +223,32 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
               onClick={() => setShowPassword(!showPassword)}
               className='absolute right-3 top-1/2 transform -translate-y-1/2'
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="13" viewBox="0 0 12 13" fill="none">
-                <path d="M4.95 2.44273C5.29417 2.36055 5.64653 2.31948 6 2.32033C9.5 2.32033 11.5 6.40043 11.5 6.40043C11.1965 6.9796 10.8345 7.52487 10.42 8.02737M7.06 7.48166C6.92268 7.63198 6.75707 7.75255 6.57308 7.83618C6.38908 7.91981 6.19045 7.96477 5.98904 7.9684C5.78764 7.97202 5.58758 7.93423 5.4008 7.85728C5.21403 7.78032 5.04436 7.66579 4.90192 7.5205C4.75949 7.37521 4.6472 7.20214 4.57175 7.01162C4.49631 6.82111 4.45926 6.61704 4.46282 6.4116C4.46637 6.20616 4.51045 6.00356 4.59244 5.81588C4.67442 5.62819 4.79263 5.45928 4.94 5.3192M8.97 9.42991C8.11529 10.0945 7.07455 10.4626 6 10.4805C2.5 10.4805 0.5 6.40043 0.5 6.40043C1.12194 5.21817 1.98457 4.18524 3.03 3.37095L8.97 9.42991Z" stroke="#9DA0A3" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              {showPassword ? (
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="13" viewBox="0 0 12 13" fill="none">
+                  <path d="M0.5 6.40043C0.5 6.40043 2.5 2.32033 6 2.32033C9.5 2.32033 11.5 6.40043 11.5 6.40043C11.5 6.40043 9.5 10.4805 6 10.4805C2.5 10.4805 0.5 6.40043 0.5 6.40043Z" stroke="#9DA0A3" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round"/>
+                  <circle cx="6" cy="6.40043" r="1.7" stroke="#9DA0A3" strokeWidth="0.9"/>
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="13" viewBox="0 0 12 13" fill="none">
+                  <path d="M4.95 2.44273C5.29417 2.36055 5.64653 2.31948 6 2.32033C9.5 2.32033 11.5 6.40043 11.5 6.40043C11.1965 6.9796 10.8345 7.52487 10.42 8.02737M7.06 7.48166C6.92268 7.63198 6.75707 7.75255 6.57308 7.83618C6.38908 7.91981 6.19045 7.96477 5.98904 7.9684C5.78764 7.97202 5.58758 7.93423 5.4008 7.85728C5.21403 7.78032 5.04436 7.66579 4.90192 7.5205C4.75949 7.37521 4.6472 7.20214 4.57175 7.01162C4.49631 6.82111 4.45926 6.61704 4.46282 6.4116C4.46637 6.20616 4.51045 6.00356 4.59244 5.81588C4.67442 5.62819 4.79263 5.45928 4.94 5.3192M8.97 9.42991C8.11529 10.0945 7.07455 10.4626 6 10.4805C2.5 10.4805 0.5 6.40043 0.5 6.40043C1.12194 5.21817 1.98457 4.18524 3.03 3.37095L8.97 9.42991Z" stroke="#9DA0A3" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              )}
             </button>
           </div>
         </div>
-        <div className='ml-[300px] text-[10px] text-gray-400 mb-[32px] mt-[5px]'>
-          소문자, 대문자, 특수기호 포함 8글자 이상
+        <div className={`ml-[300px] text-[10px]  ${
+            submitted && !hasPassword
+              ? 'text-red-500'
+              : (!hasPassword || passwordMeetsComplexityRequirements ? 'text-gray-400' : 'text-red-500')
+          } mb-[24px] mt-[3px]`}>
+          {submitted && !hasPassword
+            ? '비밀번호를 입력해주세요.'
+            : '소문자, 대문자, 특수기호 포함 8글자 이상'}
         </div>
         
 
         {/* 비밀번호 확인 */}
-        <div className='flex items-center space-x-3'>
+        <div className='flex items-center space-x-3 '>
           <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
           <label className='text-gray-700 font-medium min-w-[120px] flex items-center h-[36px]'>비밀번호 확인</label>
           <div className='relative ml-[140px]'>
@@ -203,25 +263,38 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               className='absolute right-3 top-1/2 transform -translate-y-1/2'
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="13" viewBox="0 0 12 13" fill="none">
-                <path d="M4.95 2.44273C5.29417 2.36055 5.64653 2.31948 6 2.32033C9.5 2.32033 11.5 6.40043 11.5 6.40043C11.1965 6.9796 10.8345 7.52487 10.42 8.02737M7.06 7.48166C6.92268 7.63198 6.75707 7.75255 6.57308 7.83618C6.38908 7.91981 6.19045 7.96477 5.98904 7.9684C5.78764 7.97202 5.58758 7.93423 5.4008 7.85728C5.21403 7.78032 5.04436 7.66579 4.90192 7.5205C4.75949 7.37521 4.6472 7.20214 4.57175 7.01162C4.49631 6.82111 4.45926 6.61704 4.46282 6.4116C4.46637 6.20616 4.51045 6.00356 4.59244 5.81588C4.67442 5.62819 4.79263 5.45928 4.94 5.3192M8.97 9.42991C8.11529 10.0945 7.07455 10.4626 6 10.4805C2.5 10.4805 0.5 6.40043 0.5 6.40043C1.12194 5.21817 1.98457 4.18524 3.03 3.37095L8.97 9.42991Z" stroke="#9DA0A3" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              {showConfirmPassword ? (
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="13" viewBox="0 0 12 13" fill="none">
+                  <path d="M0.5 6.40043C0.5 6.40043 2.5 2.32033 6 2.32033C9.5 2.32033 11.5 6.40043 11.5 6.40043C11.5 6.40043 9.5 10.4805 6 10.4805C2.5 10.4805 0.5 6.40043 0.5 6.40043Z" stroke="#9DA0A3" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round"/>
+                  <circle cx="6" cy="6.40043" r="1.7" stroke="#9DA0A3" strokeWidth="0.9"/>
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="13" viewBox="0 0 12 13" fill="none">
+                  <path d="M4.95 2.44273C5.29417 2.36055 5.64653 2.31948 6 2.32033C9.5 2.32033 11.5 6.40043 11.5 6.40043C11.1965 6.9796 10.8345 7.52487 10.42 8.02737M7.06 7.48166C6.92268 7.63198 6.75707 7.75255 6.57308 7.83618C6.38908 7.91981 6.19045 7.96477 5.98904 7.9684C5.78764 7.97202 5.58758 7.93423 5.4008 7.85728C5.21403 7.78032 5.04436 7.66579 4.90192 7.5205C4.75949 7.37521 4.6472 7.20214 4.57175 7.01162C4.49631 6.82111 4.45926 6.61704 4.46282 6.4116C4.46637 6.20616 4.51045 6.00356 4.59244 5.81588C4.67442 5.62819 4.79263 5.45928 4.94 5.3192M8.97 9.42991C8.11529 10.0945 7.07455 10.4626 6 10.4805C2.5 10.4805 0.5 6.40043 0.5 6.40043C1.12194 5.21817 1.98457 4.18524 3.03 3.37095L8.97 9.42991Z" stroke="#9DA0A3" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              )}
             </button>
           </div>
         </div>
-        <div className='ml-[300px] text-[10px] text-gray-400 mb-[32px] mt-[5px]'>
-            소문자, 대문자, 특수기호 포함 8글자 이상
+        <div className='ml-[300px] mt-[3px] mb-[24px]'>
+          {submitted && !hasConfirmPassword && (
+            <div className='text-[10px] text-red-500 mb-[-18px]'>비밀번호 확인을 입력해주세요.</div>
+          )}
+          {hasConfirmPassword && !passwordsMatch && (
+            <div className='text-[10px] text-red-500 mb-[-18px]'>비밀번호가 일치하지 않습니다</div>
+          )}
         </div>
 
         {/* 비밀번호 확인 아래 점선 */}
-        <div className='flex justify-center mb-[32px]'>
+        <div className='flex justify-center mb-[24px]'>
           <svg xmlns="http://www.w3.org/2000/svg" width="700" height="2" viewBox="0 0 700 2" fill="none">
             <path d="M1 1L700 1.00005" stroke="#DBE6FF" strokeWidth="0.5" strokeLinecap="square" strokeLinejoin="round" strokeDasharray="1.8 1.8"/>
           </svg>
         </div>
 
         {/* 이메일 */}
-        <div className='flex items-center space-x-3 mb-[32px]'>
+        <div className={`flex items-center space-x-3${isEmailError ? '' : ' mb-[24px]'}`}>
+        <div className='flex items-center space-x-3'>
           <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
           <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>이메일</label>
           <input
@@ -231,6 +304,8 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
             placeholder='이메일을 입력하세요.'
             className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[180px]'
           />
+          </div>
+
           <span className='text-gray-500'>@</span>
           <select
             value={values.emailDomain}
@@ -244,60 +319,42 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
             ))}
           </select>
         </div>
+        {isEmailError && (
+            <div className='ml-[300px] mt-[3px] mb-[6px] text-[10px] text-red-500'>이메일을 입력해주세요.</div>
+          )}
 
         {/* 연락처 */}
-        <div className='flex items-center space-x-3 mb-[32px]'>
+        
+        <div className={`flex items-center space-x-3${isPhoneError ? ' ' : ' mb-[24px]'}`}>
           <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
           <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>연락처</label>
           <input
             type='text'
-            value={values.phone}
-            onChange={(e) => onChange('phone', e.target.value)}
+            value={values.phoneNumber}
+            onChange={(e) => onChange('phoneNumber', e.target.value)}
             placeholder='연락처를 입력하세요.'
             className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[180px]'
           />
         </div>
+        {isPhoneError && (
+            <div className='ml-[300px] mt-[3px] mb-[6px] text-[10px] text-red-500'>연락처를 입력해주세요.</div>
+          )}
 
         {/* 연락처 아래 점선 */}
-        <div className='flex justify-center mb-[32px]'>
+        
+        <div className='flex justify-center mb-[24px]'>
           <svg xmlns="http://www.w3.org/2000/svg" width="700" height="2" viewBox="0 0 700 2" fill="none">
             <path d="M1 1L700 1.00005" stroke="#DBE6FF" strokeWidth="0.5" strokeLinecap="square" strokeLinejoin="round" strokeDasharray="1.8 1.8"/>
           </svg>
         </div>
 
-        {/* 동의 */}
-        <div className=" font-medium  text-[#121212] mb-[80px]">
-          <label htmlFor="agree" className="flex items-center cursor-pointer ">
-            <input
-              id="agree"
-              type="checkbox"
-              checked={values.agree}
-              onChange={(e) => onChange('agree', e.target.checked)}
-              className="hidden"
-            />
-            <div className="mr-2">
-              {values.agree ? (
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
-                  <rect x="1.09688" y="0.700391" width="17.4" height="17.4" rx="8.7" fill="#1D68FF"/>
-                  <rect x="1.09688" y="0.700391" width="17.4" height="17.4" rx="8.7" stroke="#1D68FF" strokeWidth="0.6"/>
-                  <path d="M6.19531 9.12128L8.99952 11.8006L13.3953 7.60059" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
-                  <rect x="1.09688" y="0.700391" width="17.4" height="17.4" rx="8.7" fill="white"/>
-                  <rect x="1.09688" y="0.700391" width="17.4" height="17.4" rx="8.7" stroke="#9DA0A3" strokeWidth="0.6"/>
-                  <path d="M6.19531 9.12128L8.99952 11.8006L13.3953 7.60059" stroke="#9DA0A3" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              )}
-            </div>
-          <span className="font-size-[20px] text-#9DA0A3"> -- 동의하십니까?</span>
-        </label>
-        </div>
+
         {/* 버튼 */}
         <div className="flex gap-[200px]">
           <button onClick={onPrev} className="px-10 py-3 ml-[20px] rounded-[30px] cursor-pointer bg-[#dbe6ff] text-[18px] text-[#121218] font-medium">이전</button>
-          <button className="w-[216px] px-10 py-3 rounded-[30px] cursor-pointer bg-[#1d68ff] text-[18px] text-white font-semibold">다음</button>
+          <button type="submit" className="w-[216px] px-10 py-3 rounded-[30px] cursor-pointer bg-[#1d68ff] text-[18px] text-white font-semibold">다음</button>
         </div>
+
     </form>
   );
 };

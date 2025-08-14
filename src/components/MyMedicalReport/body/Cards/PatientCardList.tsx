@@ -1,0 +1,114 @@
+import { useEffect, useState } from 'react';
+import { useComparingReportQuery } from '../../../../hooks/myMedicalReport/useComparingReportQuery';
+import { mapReportToCombinedByCategory } from '../../../../utils/mappers/medicalReportMapper';
+import type { Category } from '../../../../constants/medicalCategory';
+import LeftPatientCard from './LeftPatientCard';
+import RightAverageCard from './RightAverageCard';
+import IndicationDescription from './IndicationDescription';
+import CategorySelector from '../CategorySelector';
+import SummaryTextArea from '../SummaryTextArea';
+import Compare from './Compare';
+import { getDefaultReport } from '../../../../apis/userApi/user';
+
+const PatientCardList = ({ nickname, round }: { nickname?: string; round?: number }) => {
+  const [currentCategory, setCurrentCategory] = useState<Category>('비만/복부비만');
+
+  // API 데이터 가져오기
+  const { data: reportData, isLoading, error } = useComparingReportQuery(round);
+
+  // 기본 리포트의 gender를 가져와 한글로 변환하여 사용 (남/여)
+  const [defaultGenderKor, setDefaultGenderKor] = useState<string | undefined>(undefined);
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await getDefaultReport();
+        const g: string | undefined = res?.result?.gender;
+        if (g === 'MALE') setDefaultGenderKor('남');
+        else if (g === 'FEMALE') setDefaultGenderKor('여');
+        else setDefaultGenderKor(undefined);
+      } catch (_) {
+        setDefaultGenderKor(undefined);
+      }
+    })();
+  }, []);
+
+  // API 데이터가 있으면 사용, 없으면 기본값 사용
+  const displayNickname = reportData?.nickname || nickname || '사용자';
+
+  if (isLoading) {
+    return <div>로딩 중...</div>;
+  }
+
+  if (error || !reportData) {
+    return <div>데이터를 불러오는데 실패했습니다.</div>;
+  }
+
+  // API 데이터를 컴포넌트에서 사용할 수 있는 형태로 변환
+  const combinedData = mapReportToCombinedByCategory(
+    reportData,
+    {}, // categoryMap 대신 빈 객체 사용 (API에서 데이터를 받으므로 불필요)
+    displayNickname,
+  );
+
+  const currentCategoryData = combinedData[currentCategory] || [];
+
+  return (
+    <div className='flex flex-col justify-center items-center mt-[-40px]'>
+      <CategorySelector selected={currentCategory} onSelect={setCurrentCategory} />
+      <div className='flex mt-[40px]'>
+        <SummaryTextArea
+          selectedCategory={currentCategory}
+          reportData={reportData}
+          nickname={nickname}
+        />
+      </div>
+      <div>
+        {currentCategoryData.map((row) => (
+          <div key={row.indicatorId} className='mb-[10px] mt-[48px]'>
+            {/* 설명 문구 */}
+            {row.descProps && (
+              <IndicationDescription
+                indicatorName={row.descProps.indicatorName}
+                patientValue={row.descProps.patientValue}
+                averageValue={row.descProps.averageValue}
+                ageGroup={row.descProps.ageGroup}
+                rank={row.descProps.rank}
+                gender={defaultGenderKor ?? row.descProps.gender}
+                ageGroup10Yr={row.descProps.ageGroup10Yr}
+                rankType={row.descProps.rankType}
+                rankPercent={row.descProps.rankPercent}
+                comparisonText={row.descProps.comparisonText}
+                isUnknown={row.descProps.isUnknown}
+                nickname={row.leftProps.nickname}
+              />
+            )}
+
+            {/* 좌우 카드 묶음 */}
+            <div className='flex gap-4 items-center'>
+              <LeftPatientCard
+                nickname={row.leftProps.nickname}
+                title={row.leftProps.title}
+                value={row.leftProps.value}
+                unit={row.leftProps.unit}
+                stage={row.leftProps.stage}
+                isUnknown={row.leftProps.isUnknown}
+              />
+
+              {/* 비교/우측 평균 카드 */}
+              <Compare
+                stage={row.compareProps.stage}
+                patientValue={row.compareProps.patientValue}
+                averageValue={row.compareProps.averageValue}
+                indicatorId={row.compareProps.indicatorId}
+              />
+
+              {row.rightProps && <RightAverageCard {...row.rightProps} />}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default PatientCardList;

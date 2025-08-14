@@ -1,13 +1,12 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import SideBar from '../../components/MyHome/Layout/SideBar';
 import SimpleBox from '../../components/MyHome/Layout/SimpleBox';
-import ConfirmModal from '../../components/MyHome/Edit/ConfirmModal';
 import EditInfo from '../../components/MyHome/Edit/EditInfo';
 import ExpertHome from '../../components/MyHome/Expert/ExpertHome';
 import PatientHome from '../../components/MyHome/Patient/PatientHome';
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
-import { initializeRandomSchedules } from '../../data/scheduleData';
 
 
 // 기존 scheduleData는 제거하고 동적으로 생성하도록 변경
@@ -15,12 +14,11 @@ import { initializeRandomSchedules } from '../../data/scheduleData';
 const MyHome: React.FC = () => {
   const [selectedMenu, setSelectedMenu] = useState(0);
   const [showEditInfo, setShowEditInfo] = useState(false);
-  const [hasChanges, setHasChanges] = useState(false);
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [pendingMenuIndex, setPendingMenuIndex] = useState<number | null>(null);
+  const [showProfileModal, setShowProfileModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState<number | undefined>(undefined);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const { userType } = useAuth();
+  const location = useLocation();
 
 
 
@@ -31,10 +29,15 @@ const MyHome: React.FC = () => {
     return koreaTime;
   }, []);
 
-  // 랜덤 일정 초기화 (컴포넌트 마운트 시 한 번만 실행)
-  useMemo(() => {
-    initializeRandomSchedules(15); // 15개의 랜덤 일정 생성
-  }, []);
+  // 더미 스케줄 초기화 제거
+
+  // 외부에서 전달된 초기 메뉴 선택 적용 (예: navigate('/myhome', { state: { selectedMenu: 3 } }))
+  useEffect(() => {
+    const state = location.state as { selectedMenu?: number } | null;
+    if (state && typeof state.selectedMenu === 'number') {
+      setSelectedMenu(state.selectedMenu);
+    }
+  }, [location.state]);
 
   // 사이드바 이미지 사전 로딩
   useEffect(() => {
@@ -65,11 +68,9 @@ const MyHome: React.FC = () => {
                 return new Promise<void>((resolve) => {
                   const img = new Image();
                   img.onload = () => {
-                    console.log(`이미지 로딩 완료: ${src}`);
                     resolve();
                   };
                   img.onerror = () => {
-                    console.warn(`이미지 로딩 실패: ${src}`);
                     resolve(); // 개별 이미지 실패해도 계속 진행
                   };
                   img.src = src;
@@ -80,10 +81,8 @@ const MyHome: React.FC = () => {
         })();
 
         await Promise.race([loadPromise, timeoutPromise]);
-        console.log('모든 사이드바 이미지 로딩 완료');
         setImagesLoaded(true);
       } catch (error) {
-        console.error('이미지 로딩 중 오류 발생:', error);
         setImagesLoaded(true); // 에러가 있어도 페이지는 표시
       }
     };
@@ -100,32 +99,11 @@ const MyHome: React.FC = () => {
 
   // 메뉴 선택 핸들러
   const handleMenuSelect = (menuIndex: number) => {
-    // EditInfo 페이지가 열려있고 변경사항이 있다면 확인 모달 표시
-    if (showEditInfo && hasChanges) {
-      setPendingMenuIndex(menuIndex);
-      setShowConfirmModal(true);
-    } else {
-      setSelectedMenu(menuIndex);
-      if (showEditInfo) {
-        setShowEditInfo(false);
-      }
-    }
-  };
-
-  // 확인 모달에서 저장 선택 시
-  const handleConfirmSave = () => {
-    setShowConfirmModal(false);
-    if (pendingMenuIndex !== null) {
-      setSelectedMenu(pendingMenuIndex);
+    // EditInfo 페이지가 열려있으면 닫고 메뉴 변경
+    if (showEditInfo) {
       setShowEditInfo(false);
-      setPendingMenuIndex(null);
     }
-  };
-
-  // 확인 모달에서 취소 선택 시
-  const handleConfirmCancel = () => {
-    setShowConfirmModal(false);
-    setPendingMenuIndex(null);
+    setSelectedMenu(menuIndex);
   };
 
   // 사용자 타입이 없으면 기본값으로 patient 사용
@@ -138,7 +116,8 @@ const MyHome: React.FC = () => {
         <EditInfo
           userType={currentUserType}
           onBack={() => setShowEditInfo(false)}
-          onHasChanges={setHasChanges}
+          // onHasChanges={setHasChanges} // This state was removed
+          onProfileModalChange={setShowProfileModal}
         />
       );
     }
@@ -173,7 +152,6 @@ const MyHome: React.FC = () => {
   if (!imagesLoaded) {
     return (
       <LoadingSpinner 
-        message="로딩중..." 
         size="lg" 
         className="bg-white"
       />
@@ -195,7 +173,7 @@ const MyHome: React.FC = () => {
         
         {/* 메인 컨텐츠 */}
         <div className='mt-4'>
-          <SimpleBox>
+          <SimpleBox isBlurred={showProfileModal}>
             <div
               className={`${selectedMenu === 2 && currentUserType === 'expert' ? 'p-0' : 'p-4 sm:p-6'}`}
             >
@@ -213,19 +191,14 @@ const MyHome: React.FC = () => {
           onMenuSelect={handleMenuSelect}
         />
         <main className='xl:pt-5 xl:pl-6'>
-          <SimpleBox>
+          <SimpleBox isBlurred={showProfileModal}>
             <div>{renderContent()}</div>
           </SimpleBox>
         </main>
       </div>
 
       {/* 확인 모달 */}
-      <ConfirmModal
-        isOpen={showConfirmModal}
-        onClose={() => setShowConfirmModal(false)}
-        onConfirm={handleConfirmSave}
-        onCancel={handleConfirmCancel}
-      />
+      {/* ConfirmModal 제거됨 - EditInfo 내부에서만 처리 */}
     </div>
   );
 };

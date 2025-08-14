@@ -4,7 +4,7 @@ import MyConstantMedical from './MyConstantMedical';
 import ExpertAdvice from './ExpertAdvice';
 import HomeCalendar from '../Common/HomeCalendar';
 import { NotificationList } from '../../Alarm/NotificationList';
-import { patientNotificationList } from '../../../data/patientNotificationList';
+
 import MatchedExperts from '../Matching/MatchedExperts';
 import RequestForm from '../../HealthCareRequest/RequestForm';
 
@@ -30,30 +30,22 @@ const PatientHome: React.FC<PatientHomeProps> = ({
       return (
         <>
           <PatientInfoSection
-            nickname='하나'
-            name='김민지'
-            age={23}
-            height={174}
-            weight={70}
-            checkupCount={0}
             onEditInfo={onEditInfo}
             userType='patient'
-            useApiData={true} // API 데이터 사용 (API가 없으면 기본값 사용)
+            useApiData={true} // API 데이터 사용
           />
-          <MyConstantMedical status='안심' nickname='하나' />
-          <ExpertAdvice 
-            adviceText='하루 1시간 이상 걷기, 추천 운동법으로 혈당 수치를 낮춰보세요!' 
-            onMenuSelect={onMenuSelect}
-          />
+          <MyConstantMedical />
+          <ExpertAdvice onMenuSelect={onMenuSelect} />
           <HomeCalendar
             selectedDate={selectedDate}
             today={today}
             onDateSelect={onDateSelect}
+            userType='patient'
           />
         </>
       );
     case 1: // 내 알림
-      return <NotificationList notifications={patientNotificationList} />;
+      return <NotificationList />;
     case 2: // 매칭된 전문가
       return <MatchedExperts />;
     case 3: // 건강관리요청서

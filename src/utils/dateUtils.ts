@@ -1,11 +1,24 @@
 /**
  * 생년월일로부터 만 나이를 계산합니다.
- * @param birthDate - 생년월일 (YYYY-MM-DD 형식)
+ * @param birthDate - 생년월일 (YYYY-MM-DD 형식 또는 YYMMDD 형식)
  * @returns 만 나이
  */
 export const calculateAge = (birthDate: string): number => {
+  let formattedBirthDate = birthDate;
+  
+  // YYMMDD 형식인 경우 YYYY-MM-DD 형식으로 변환
+  if (birthDate.length === 6 && /^\d{6}$/.test(birthDate)) {
+    const year = birthDate.substring(0, 2);
+    const month = birthDate.substring(2, 4);
+    const day = birthDate.substring(4, 6);
+    
+    // 연도 처리: 50 이상이면 19xx, 미만이면 20xx
+    const fullYear = parseInt(year) > 50 ? `19${year}` : `20${year}`;
+    formattedBirthDate = `${fullYear}-${month}-${day}`;
+  }
+  
   const today = new Date();
-  const birth = new Date(birthDate);
+  const birth = new Date(formattedBirthDate);
   
   let age = today.getFullYear() - birth.getFullYear();
   const monthDiff = today.getMonth() - birth.getMonth();

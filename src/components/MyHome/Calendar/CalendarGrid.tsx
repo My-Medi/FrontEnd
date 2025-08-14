@@ -1,16 +1,9 @@
 import React from 'react';
 import CalendarDay from './CalendarDay';
-
-interface CalendarDay {
-  date: number;
-  isCurrentMonth: boolean;
-  isToday: boolean;
-  isSelected?: boolean;
-  hasEvent?: string | string[];
-}
+import type { CalendarDay as CalendarDayType } from './calendarUtils';
 
 interface CalendarGridProps {
-  calendarData: CalendarDay[][];
+  calendarData: CalendarDayType[][];
   selectedDate?: number;
   defaultSelectedDate?: number; // 기본 선택된 날짜 (오늘)
   onDateSelect?: (date: number) => void;

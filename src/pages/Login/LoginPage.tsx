@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { cva } from "class-variance-authority";
 import logo from "../../assets/Login/mymedi.svg";
 import backSvg from "../../assets/Expert/back.svg";
@@ -38,8 +38,13 @@ const LoginPage = () => {
   const [showFindPW, setShowFindPW] = useState(false);
   const { setUserType } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [showFailModal, setShowFailModal] = useState(false);
   const idInputRef = useRef<HTMLInputElement>(null);
+  
+  // 리다이렉트 경로 가져오기
+  const redirectTo = searchParams.get('redirect') || '/myhome';
+  
   const loginMutation = useLoginMutation({
     onSuccess: (data) => {
       if (data.result) {
@@ -47,6 +52,9 @@ const LoginPage = () => {
         const role = data.result.role;
         const isExpert = role.includes('ROLE_EXPERT');
         setUserType(isExpert ? 'expert' : 'patient');
+        
+        // 로그인 성공 후 원래 접근하려던 페이지로 리다이렉트
+        navigate(redirectTo);
       }
     },
     onError: () => {
@@ -88,7 +96,6 @@ const LoginPage = () => {
   };
 
   const handleFindID = () => {
-    console.log('아이디 찾기 클릭됨');
     setShowFindID(true);
   };
 
@@ -112,7 +119,7 @@ const LoginPage = () => {
 
   // 로딩 중일 때 스피너 표시
   if (loginMutation.isPending) {
-    return <LoadingSpinner message="로그인 중..." />;
+    return <LoadingSpinner />;
   }
 
   return (
@@ -120,7 +127,7 @@ const LoginPage = () => {
       {/* 뒤로가기 버튼 */}
       <button
         onClick={handleBack}
-        className="absolute w-[17px] h-[35px] flex items-center justify-center top-[65px] left-[312px] lg:flex md:hidden sm:hidden"
+        className="absolute w-[17px] h-[35px] hidden xl:flex items-center justify-center top-[65px] left-[312px]"
         aria-label="뒤로가기"
       >
         <img src={backSvg} alt="뒤로가기" className="w-full h-full object-contain" />

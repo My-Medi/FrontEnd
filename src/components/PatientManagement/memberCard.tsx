@@ -1,31 +1,46 @@
 import { HEALTH_STATUS_COLOR } from '../../constants/memberStatusColor';
 import { FiChevronRight } from 'react-icons/fi';
 import defaultProfile from '@/assets/MyHome/noProfile.svg';
+import { useState } from 'react';
+import MemberCardModal from './memberCardModel/memberCardModal';
+import AdviceRegisterModal from './memberCardModel/adviceRegisterModel';
+import ConsultReservationModal from './consultReservationModal/CalendarModal';
 
 interface Member {
+  userId: number;
   profileImageUrl?: string;
   nickname: string;
   gender: string;
-  age: number;
+  age: string;
   height: number;
   weight: number;
   testDate: string;
   healthInterest: string[];
   healthStatus: '위험' | '주의' | '관심' | '안심' | '정상';
+  signupDate?: string; //optional로 변경하기 -> memberCardModal에서만 사용하니까.
+  consultationId: number;
 }
 
 const MemberCard: React.FC<{ member: Member }> = ({ member }) => {
   const color = HEALTH_STATUS_COLOR[member.healthStatus];
+  const [showMemberCardModal, setShowMemberCardModal] = useState(false);
+  const [showAdviceRegisterModal, setShowAdviceRegisterModal] = useState(false);
+  const [showConsultReservationModal, setShowConsultReservationModal] = useState(false);
+
+  const openAdviceRegisterModal = () => {
+    setShowAdviceRegisterModal(true);
+  };
+
+  const openConsultReservationModal = () => {
+    setShowConsultReservationModal(true);
+  };
 
   return (
     <div
       className='flex sm:w-[1046px] w-full cursor-pointer h-[168px] px-14 items-center gap-[40px] rounded-[20px]'
-      style={{
-        border: `0.5px solid ${color}`,
-        background: 'rgba(255, 255, 255, 0.80)',
-      }}
+      style={{ border: `0.5px solid ${color}`, background: 'rgba(255, 255, 255, 0.80)' }}
+      onClick={() => setShowMemberCardModal(true)}
     >
-      {/* 프로필 이미지 */}
       <div className='w-[124px] h-[124px] rounded-full border-[2px] border-[#1D68FF] overflow-hidden'>
         <img
           src={member.profileImageUrl || defaultProfile}
@@ -34,11 +49,10 @@ const MemberCard: React.FC<{ member: Member }> = ({ member }) => {
         />
       </div>
 
-      {/* 텍스트 정보 영역 */}
       <div className='flex flex-col justify-center w-[540px] text-[14px] font-medium leading-[24px] tracking-[-0.42px] text-[#121218] font-[Pretendard]'>
         <span className='text-[#1D68FF]'>{member.nickname}</span>
         <span>
-          만 {member.age}세 / {member.gender}
+          {member.age} / {member.gender}
         </span>
         <span>
           {member.height}cm / {member.weight}kg
@@ -47,18 +61,46 @@ const MemberCard: React.FC<{ member: Member }> = ({ member }) => {
         <span>건강 관심 분야 : {member.healthInterest.join(', ')}</span>
       </div>
 
-      {/* 오른쪽 화살표 */}
       <div className='ml-auto mr-[-40px]'>
         <FiChevronRight
           className='flex cursor-pointer'
           size={160}
-          style={{
-            stroke: color,
-            strokeWidth: 0.3,
-            fill: 'rgba(255, 255, 255, 0.80)',
-          }}
+          style={{ stroke: color, strokeWidth: 0.3, fill: 'rgba(255, 255, 255, 0.80)' }}
         />
       </div>
+
+      {showMemberCardModal && !showAdviceRegisterModal && !showConsultReservationModal && (
+        <MemberCardModal
+          member={member}
+          onClose={() => setShowMemberCardModal(false)}
+          openAdviceRegister={openAdviceRegisterModal}
+          openConsultReservation={openConsultReservationModal}
+        />
+      )}
+      {showAdviceRegisterModal && (
+        <AdviceRegisterModal
+          userId={member.userId}
+          onClose={(isFromRegister = false) => {
+            setShowAdviceRegisterModal(false);
+            if (isFromRegister) {
+              setShowMemberCardModal(false);
+            }
+          }}
+        />
+      )}
+      {showConsultReservationModal && (
+        <ConsultReservationModal
+          userId={member.userId}
+          onClose={(isFromSuccess = false) => {
+            setShowConsultReservationModal(false);
+            // 성공 모달에서 확인 버튼을 누르면 모든 모달을 닫기
+            if (isFromSuccess) {
+              setShowMemberCardModal(false);
+            }
+            // 뒤로가기 버튼을 누르면 memberCardModal로 돌아감
+          }}
+        />
+      )}
     </div>
   );
 };

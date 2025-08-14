@@ -11,6 +11,8 @@ export interface PersonalSignUpRequest {
   profileImgUrl?: string;
   loginId: string;
   password: string;
+  height?: number; // 키 (cm)
+  weight?: number; // 몸무게 (kg)
 }
 
 // 회원가입 응답 타입
@@ -26,4 +28,6 @@ export interface UserInfo {
   phoneNumber: string;
   profileImgUrl?: string;
   loginId: string;
-} 
+}
+
+ 

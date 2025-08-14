@@ -15,17 +15,29 @@ export interface PaginatedResponse<T> {
   totalPages: number;
 }
 
-// 사용자 프로필 타입 정의
+// 사용자 프로필 타입 정의 (API: GET /users)
 export interface UserProfile {
-  id: number;
+  userid: number;
   name: string;
+  nickname: string | null;
   birthDate: string;
   gender: 'MALE' | 'FEMALE';
   email: string;
   phoneNumber: string;
   profileImgUrl: string;
-  username: string;
-  role: 'USER' | 'EXPERT';
+  role: 'USER' | 'EXPERT' | string;
+  height?: number;
+  weight?: number;
+}
+
+// 요약 프로필 타입 정의 (API: GET /users/profile)
+export interface UserProfileOverview {
+  name: string;
+  nickname: string;
+  age: number;
+  height: number;
+  weight: number;
+  reportCount: number;
 }
 
 // 인증 관련 엔드포인트
@@ -36,6 +48,13 @@ export const AUTH_ENDPOINTS = {
 
 // 사용자 관련 엔드포인트
 export const USER_ENDPOINTS = {
-  PROFILE: '/users',
+  PROFILE: '/users/profile',
+  ME: '/users',
   EXPERTS: '/users/experts'
+} as const;
+
+// 사용자 관련 엔드포인트
+export const EXPERT_ENDPOINTS = {
+  SIGN_UP: '/experts',
+  PROFILE: '/experts'
 } as const;

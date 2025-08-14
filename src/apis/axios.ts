@@ -35,19 +35,25 @@ API.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // 401 에러이고 토큰 갱신을 시도하지 않은 경우
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    const status = error.response?.status;
+    const apiCode = error.response?.data?.code; // 서버 커스텀 코드
+    const apiResult = error.response?.data?.result;
+    const isTokenExpired =
+      status === 401 ||
+      apiCode === 4352 ||
+      apiResult === 'AUTH_TOKEN_HAS_EXPIRED';
+
+    // 토큰 만료(401 또는 서버 커스텀 코드)이고 토큰 갱신을 시도하지 않은 경우
+    if (isTokenExpired && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
-        const { refreshToken, accessToken } = getTokens();
+        const { refreshToken } = getTokens();
         if (refreshToken) {
-          // 토큰 재발급 요청 (GET 방식, 쿼리 파라미터로 refreshToken 전달)
-          const response = await axios.get(`${BASE_URL}${AUTH_ENDPOINTS.REISSUE}?refresh=${refreshToken}`, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`
-            }
-          });
+          // 서버 스펙에 맞춰 쿼리스트링 방식으로 통일
+          const response = await axios.post(
+            `${BASE_URL}${AUTH_ENDPOINTS.REISSUE}?refresh=${encodeURIComponent(refreshToken)}`
+          );
 
           const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data.result;
           
