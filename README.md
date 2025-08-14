@@ -1,6 +1,61 @@
 <img width="1920" height="1080" alt="표지" src="https://github.com/user-attachments/assets/07801c12-f933-4603-a03f-8e805a84ee26" />
 
 
+## 프로젝트 개요
+- **My-Medi**는 개인 건강검진 결과를 기반으로 AI 리포트(LLM)를 생성하고, 전문가 매칭과 건강 관리 제안을 제공하는 서비스입니다.
+- 사용자는 검진표를 업로드/입력하여 나만의 메디컬 리포트를 만들고, 회차별로 관리하며 전문가와 상담·매칭할 수 있습니다.
+
+## 주요 기능
+- **건강검진 결과 입력/업로드**: 결과 입력 폼과 OCR/파싱 보조, 검증 UI
+- **마이 메디컬 리포트**: 회차 선택·필터, 지표 비교/그래프, 요약, 상세 카드
+- **AI 메디컬 리포트(LLM)**: 지표 기반 요약·설명, 리스크/가이드 문구 생성
+- **전문가 매칭**: 전문가 목록/상세/요청, 요청사항 작성 및 재사용
+- **알림/스케줄**: 예약·상담 관련 알림 및 일정 관리(예정/지난)
+- **회원 관리**: 로그인/토큰 재발급, 프로필 수정, 기본 프로필/커스텀 이미지
+
+## 기술 스택
+- **Framework**: React, TypeScript, Vite
+- **UI**: Tailwind CSS
+- **State & Data**: React Query(TanStack Query), React Context
+- **Routing**: React Router
+- **HTTP**: Axios
+- **Deploy**: Netlify
+- **Lint**: ESLint
+
+## 0. Getting Started (시작하기)
+사전 준비: Node.js LTS, pnpm 설치
+
+```bash
+pnpm install
+pnpm run dev
+```
+
+- 기본 API 주소는 환경변수를 사용합니다. 필요 시 루트에 `.env` 파일을 생성하고 값을 설정하세요.
+
+## 파일 구조
+프로젝트 핵심 디렉터리 개요입니다.
+
+```
+FrontEnd2/
+├─ public/
+├─ src/
+│  ├─ apis/                # Axios 인스턴스 및 REST API 모듈
+│  ├─ assets/              # 이미지/아이콘 등 정적 자산
+│  ├─ components/          # 재사용 컴포넌트 (Common, MyMedicalReport, Expert 등)
+│  ├─ constants/           # 상수, 메타 데이터
+│  ├─ contexts/            # 전역 컨텍스트 (Auth 등)
+│  ├─ hooks/               # React Query 훅, 커스텀 훅
+│  ├─ layout/              # 레이아웃 컴포넌트
+│  ├─ pages/               # 페이지 단위 컴포넌트
+│  ├─ router/              # 라우터 설정
+│  ├─ types/               # 타입 정의
+│  ├─ utils/               # 유틸 함수
+│  ├─ App.tsx
+│  └─ index.css
+├─ README.md
+└─ netlify.toml
+```
+
 ## 🧑‍💻 Team My-Medi Fronted Developers
 
 <table>
