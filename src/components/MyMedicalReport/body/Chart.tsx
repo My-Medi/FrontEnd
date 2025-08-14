@@ -7,7 +7,6 @@ import Gage from './Gage';
 import BottomButtons from '../BottomButtons';
 import { useComparingReportQuery } from '../../../hooks/myMedicalReport/useComparingReportQuery';
 import { mapReportToCombinedByCategory } from '../../../utils/mappers/medicalReportMapper';
-import { categoryMap } from '../../../data/mmrCategoryAverageData';
 
 interface ChartProps {
   checkupDate: string;

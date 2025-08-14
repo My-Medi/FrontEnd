@@ -1,4 +1,3 @@
-import { summaryDataMap } from '../../../data/mmrSummaryData';
 import type { MyMedicalReportResponse } from '../../../types/myMedicalReport/compare';
 
 interface SummaryTextAreaProps {

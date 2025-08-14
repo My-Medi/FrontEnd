@@ -70,8 +70,6 @@ const IndicationDescription: React.FC<IndicationDescriptionProps> = ({
     !!comparisonText;
 
   if (hasNewFormat) {
-    const connector = comparisonText === '비슷합니다' ? '과' : '보다';
-
     return (
       <div>
         <p
@@ -86,7 +84,7 @@ const IndicationDescription: React.FC<IndicationDescriptionProps> = ({
             textAlign: 'center',
           }}
         >
-          {ageGroup10Yr}대 {gender} 중 {rankType} {rankPercent}%
+          {ageGroup10Yr}대 {gender}성 중 {rankType} {rankPercent}%
         </p>
         <p
           style={{
@@ -99,7 +97,7 @@ const IndicationDescription: React.FC<IndicationDescriptionProps> = ({
             textAlign: 'center',
           }}
         >
-          {`${indicatorName} 수치가 ${ageGroup10Yr}대 평균${connector} ${comparisonText}.`}
+          {`${indicatorName} 수치가 ${ageGroup10Yr}대 ${comparisonText}`}
         </p>
       </div>
     );

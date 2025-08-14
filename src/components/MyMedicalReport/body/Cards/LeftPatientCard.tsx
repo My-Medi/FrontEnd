@@ -88,7 +88,7 @@ const LeftPatientCard: React.FC<LeftPatientCardProps> = ({
             minWidth: '1ch', // 레이아웃 안정
           }}
         >
-          {value ?? ''} {/* 빈 문자열로 표시 */}
+          {shouldUseUnknownStyle ? '' : (value ?? '')} {/* unknown일 때는 빈 값 */}
         </span>
         {unit && (
           <span
