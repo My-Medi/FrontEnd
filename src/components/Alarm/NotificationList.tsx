@@ -145,7 +145,7 @@ export const NotificationList: React.FC<NotificationListProps> = ({ userType = '
             />
           </button>
           <div className='flex items-center gap-[8px]'>
-            <img src={pastTitleIcon} alt='지난 알림 아이콘' loading="eager" fetchPriority="high" />
+            <img src={pastTitleIcon} alt='지난 알림 아이콘' loading="eager" fetchPriority="high" decoding="sync" className='w-6 h-6' />
             <h2 className='text-[24px] font-semibold leading-[36px] tracking-[-0.72px] text-[#121218] font-[Pretendard]'>
               지난 알림
             </h2>
@@ -205,7 +205,7 @@ export const NotificationList: React.FC<NotificationListProps> = ({ userType = '
       {!showAllOld ? (
         <div className='flex flex-col items-start gap-[32px] w-full min-h-[300px]'>
           <div className='flex items-center gap-2'>
-            <img src={recentIcon} alt='recent' />
+            <img src={recentIcon} alt='recent' loading='eager' fetchPriority='high' decoding='sync' className='w-6 h-6' />
             <span className='text-[#1D68FF] text-[18px] font-medium leading-[36px] tracking-[-0.54px] font-[Pretendard]'>
               신규 알림 {newNotices.length}건
             </span>
@@ -233,7 +233,7 @@ export const NotificationList: React.FC<NotificationListProps> = ({ userType = '
           </div>
           <hr className='w-full h-px border-0 bg-[#C5C8CB] my-[24px] mt-[-5px]' />
           <div className='flex items-center gap-2 mt-[-30px]'>
-            <img src={pastIcon} alt='past' />
+            <img src={pastIcon} alt='past' loading='eager' fetchPriority='high' decoding='sync' className='w-6 h-6' />
             <span className='text-[#75787B] text-[18px] font-medium leading-[36px] tracking-[-0.54px] font-[Pretendard]'>
               지난 알림
             </span>
