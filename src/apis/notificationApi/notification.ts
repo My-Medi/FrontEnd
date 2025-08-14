@@ -16,7 +16,6 @@ export const getUserNotifications = async (currentPage: number = 0, pageSize: nu
     const response = await API.get<NotificationListResponse>(`/users/notifications?currentPage=${currentPage}&pageSize=${pageSize}`);
     return response.data;
   } catch (error) {
-    console.error('사용자 알림 목록 조회 실패:', error);
     throw error;
   }
 };
@@ -31,7 +30,6 @@ export const markNotificationAsRead = async (notificationId: number): Promise<Ap
     const response = await API.patch<ApiResponse<void>>(`/users/notifications/${notificationId}`);
     return response.data;
   } catch (error) {
-    console.error('알림 읽음 처리 실패:', error);
     throw error;
   }
 };
@@ -47,7 +45,6 @@ export const deleteNotifications = async (notificationIds: number[]): Promise<Ap
     const response = await API.delete<ApiResponse<void>>(`/users/notifications?${queryParams}`);
     return response.data;
   } catch (error) {
-    console.error('알림 삭제 실패:', error);
     throw error;
   }
 };
@@ -63,7 +60,6 @@ export const getExpertNotifications = async (currentPage: number = 0, pageSize: 
     const response = await API.get<ExpertNotificationListResponse>(`/experts/notifications?currentPage=${currentPage}&pageSize=${pageSize}`);
     return response.data;
   } catch (error) {
-    console.error('전문가 알림 목록 조회 실패:', error);
     throw error;
   }
 };
@@ -78,7 +74,6 @@ export const markExpertNotificationAsRead = async (notificationId: number): Prom
     const response = await API.patch<ApiResponse<void>>(`/experts/notifications/${notificationId}`);
     return response.data;
   } catch (error) {
-    console.error('전문가 알림 읽음 처리 실패:', error);
     throw error;
   }
 };
@@ -94,7 +89,6 @@ export const deleteExpertNotifications = async (notificationIds: number[]): Prom
     const response = await API.delete<ApiResponse<void>>(`/experts/notifications?${queryParams}`);
     return response.data;
   } catch (error) {
-    console.error('전문가 알림 삭제 실패:', error);
     throw error;
   }
 };
