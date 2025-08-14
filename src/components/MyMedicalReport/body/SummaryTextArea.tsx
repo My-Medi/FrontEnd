@@ -73,6 +73,65 @@ const SummaryTextArea: React.FC<SummaryTextAreaProps> = ({
   };
 
   const comparisonResult = getComparisonResult();
+
+  // 요단백의 경우 healthStatus를 사용해서 다른 텍스트 표시
+  if (selectedCategory === '요단백') {
+    const healthStatus = reportData.urineProteinAssessmentDto?.comparingUrineProtein?.healthStatus;
+    const healthStatusText = (() => {
+      switch (healthStatus) {
+        case 'SAFE':
+          return '안심';
+        case 'NORMAL':
+          return '정상';
+        case 'CAUTION':
+          return '주의';
+        case 'WATCH':
+          return '관심';
+        case 'DANGER':
+          return '위험';
+        case 'UNKNOWN':
+          return '알수없음';
+        default:
+          return '알수없음';
+      }
+    })();
+
+    return (
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          padding: '0 6px',
+          gap: '8px',
+          width: '528px',
+          height: '73px',
+        }}
+      >
+        <p
+          style={{
+            fontFamily: 'Pretendard',
+            fontSize: '24px',
+            fontWeight: 500,
+            letterSpacing: '-0.72px',
+            margin: 0,
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            color: '#121218',
+          }}
+        >
+          <span style={{ color: '#1D68FF' }}>{displayNickname}</span>
+          <span style={{ color: '#4D5053' }}>님</span>
+          <span style={{ color: '#121218' }}>&nbsp;요단백 가능성은</span>
+          <span style={{ color: '#121218' }}>&nbsp;{healthStatusText} 단계</span>
+          <span style={{ color: '#121218' }}>입니다.</span>
+        </p>
+      </div>
+    );
+  }
+
+  // 다른 카테고리들은 기존 로직 사용
   const comparisonText =
     comparisonResult === 'ABOVE_GOOD'
       ? '낮습니다'

@@ -34,15 +34,19 @@ const IndicationDescription: React.FC<IndicationDescriptionProps> = ({
     return null;
   }
 
+  // 요단백은 IndicationDescription을 표시하지 않음
+  if (indicatorName === '요단백') {
+    return null;
+  }
+
   // 신규 포맷이 모두 제공되면 그 문구를 그대로 사용
+  // comparisonText가 있으면 무조건 신규 포맷 사용
   const hasNewFormat =
-    typeof ageGroup10Yr === 'number' &&
-    !!rankType &&
-    typeof rankPercent === 'number' &&
-    !!comparisonText;
+    !!comparisonText ||
+    (typeof ageGroup10Yr === 'number' && !!rankType && typeof rankPercent === 'number');
 
   if (hasNewFormat) {
-    // 총 콜레스테롤, HDL-콜레스테롤, 중성지방, LDL-콜레스테롤, 혈청 크레아티닌, eGFR, 요단백은 rankType과 rankPercent가 표시되지 않음
+    // 혈색소, 총콜레스테롤, HDL-콜레스테롤, 중성지방, LDL-콜레스테롤, 혈청 크레아티닌, eGFR은 rankType과 rankPercent가 표시되지 않음
     const shouldHideRankInfo =
       indicatorName === '총콜레스테롤' ||
       indicatorName === 'HDL-콜레스테롤' ||
@@ -50,7 +54,7 @@ const IndicationDescription: React.FC<IndicationDescriptionProps> = ({
       indicatorName === 'LDL-콜레스테롤' ||
       indicatorName === '혈청 크레아티닌' ||
       indicatorName === 'eGFR(신사구체여과율)' ||
-      indicatorName === '요단백';
+      indicatorName === '혈색소';
 
     return (
       <div>
@@ -81,14 +85,16 @@ const IndicationDescription: React.FC<IndicationDescriptionProps> = ({
             textAlign: 'center',
           }}
         >
-          {`${indicatorName} 수치가 ${ageGroup10Yr}대 ${comparisonText}`}
+          {comparisonText
+            ? `${indicatorName} 수치가 ${ageGroup10Yr}대 ${comparisonText}`
+            : `${indicatorName} 수치가 ${ageGroup10Yr}대 평균과 비슷합니다.`}
         </p>
       </div>
     );
   }
 
   // 기존 로직 (폴백)
-  // 총 콜레스테롤, HDL-콜레스테롤, 중성지방, LDL-콜레스테롤, 혈청 크레아티닌, eGFR, 요단백은 rankType과 rankPercent가 표시되지 않음
+  // 혈색소, 총콜레스테롤, HDL-콜레스테롤, 중성지방, LDL-콜레스테롤, 혈청 크레아티닌, eGFR은 rankType과 rankPercent가 표시되지 않음
   const shouldHideRankInfo =
     indicatorName === '총콜레스테롤' ||
     indicatorName === 'HDL-콜레스테롤' ||
@@ -96,7 +102,7 @@ const IndicationDescription: React.FC<IndicationDescriptionProps> = ({
     indicatorName === 'LDL-콜레스테롤' ||
     indicatorName === '혈청 크레아티닌' ||
     indicatorName === 'eGFR(신사구체여과율)' ||
-    indicatorName === '요단백';
+    indicatorName === '혈색소';
 
   return (
     <div>
