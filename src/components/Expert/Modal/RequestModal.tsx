@@ -4,6 +4,7 @@ import closeSvg from '../../../assets/Expert/close.svg';
 import ConfirmRequestModal from './ConfirmRequestModal';
 import { useQueryClient } from '@tanstack/react-query';
 import SuccessModal from './SuccessModal';
+import { getUserRequestNote } from '../../../apis/userApi/user';
 import useModalScrollLock from '../../../hooks/useModalScrollLock';
 
 interface RequestModalProps {
@@ -112,9 +113,21 @@ const RequestModal: React.FC<RequestModalProps> = ({ isOpen, onClose, onBack, ex
               
               {/* 요청사항 미리보기 */}
                 <div className="mt-10 text-center">
-                  <div className="text-[20px] font-medium text-[#121218] leading-[100%] tracking-[-3%] font-medium text-center hover:underline cursor-pointer">
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      try {
+                        const res = await getUserRequestNote();
+                        const note = res?.result?.requestNote ?? '';
+                        setRequestText(note);
+                      } catch (e) {
+                        console.error('요청사항 불러오기 실패', e);
+                      }
+                    }}
+                    className="text-[20px] font-medium text-[#121218] leading-[100%] tracking-[-3%] hover:underline cursor-pointer"
+                  >
                     작성해 둔 요청사항 그대로 불러오기
-                  </div>
+                  </button>
                 </div>
             </div>
 

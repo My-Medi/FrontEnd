@@ -93,7 +93,11 @@ const MyMedicalReport: React.FC = () => {
         onFilterClick={handleFilterClick}
       />
       <div className='flex justify-center mt-[30px]'>
-        <Chart checkupDate={checkupDate || '-'} nickname={userInfo?.nickname || '사용자'} />
+        <Chart
+          checkupDate={checkupDate || '-'}
+          nickname={userInfo?.nickname || '사용자'}
+          selectedRound={selectedRound}
+        />
       </div>
     </div>
   );

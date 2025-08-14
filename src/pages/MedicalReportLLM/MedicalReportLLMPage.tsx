@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import MedicalReport from '../../components/MedicalReportLLM/MedicalReport';
 import Header from '../../components/Common/MyMedicalReportHeader';
 import { useMedicalReportLlmQuery } from '../../hooks/healthCheckup/useMedicalReportLlmQuery';
@@ -15,12 +16,13 @@ interface UserInfo {
 }
 
 const MedicalReportLLMPage: React.FC = () => {
-  // 요구사항: round는 1로 고정
-  const [rounds] = useState<number[]>([1]);
+  // LLM도 회차 버튼에 맞게 라운드 연동
+  const [rounds, setRounds] = useState<number[]>([]);
   const [selectedRound, setSelectedRound] = useState<number>(1);
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+  const navigate = useNavigate();
 
-  const { data, isLoading, isError } = useMedicalReportLlmQuery(1, true);
+  const { data, isLoading, isError } = useMedicalReportLlmQuery(selectedRound, true);
 
   // 초기 로드시 사용자 기본 정보 조회
   useEffect(() => {
@@ -29,6 +31,10 @@ const MedicalReportLLMPage: React.FC = () => {
         const userRes = await getDefaultReport();
         const userData = userRes.result;
         setUserInfo(userData);
+        const count = Math.max(1, userData?.reportCount ?? 1);
+        const arr = Array.from({ length: count }, (_, i) => i + 1);
+        setRounds(arr);
+        setSelectedRound(count);
       } catch (e) {
         console.error('사용자 정보 조회 실패', e);
       }
@@ -39,7 +45,11 @@ const MedicalReportLLMPage: React.FC = () => {
     setSelectedRound(round);
   };
 
-  const handleAddRound = () => {};
+  const handleAddRound = () => {
+    const currentMax = rounds.length > 0 ? Math.max(...rounds) : 0;
+    const nextRound = currentMax + 1;
+    navigate(`/health-result-input?round=${nextRound}`);
+  };
 
   const handleFilterClick = () => {
     console.log('전체 회차 보기 클릭됨');

@@ -71,6 +71,7 @@ const PatientInfoSection: React.FC<PatientInfoProps> = ({
   };
 
   const displayProfileImage = getProfileImageUrl();
+  const isDefaultImage = displayProfileImage === defaultProfileImage;
 
   // 키/몸무게 표시 로직 (부분 표시 허용: 하나만 있어도 표시)
   const apiProfile: any = profileData as any;
@@ -117,11 +118,11 @@ const PatientInfoSection: React.FC<PatientInfoProps> = ({
       </div>
       
       <div className="pt-6 flex items-start gap-6 xl:pt-6 xl:gap-6 md:pt-4 md:gap-6 sm:pt-3 sm:gap-4 xl:flex-row md:flex-row sm:flex-col sm:items-center">
-        <div className="w-32 h-32 bg-[#EDF0F3] rounded-full flex items-center justify-center xl:w-32 xl:h-32 md:w-24 md:h-24 sm:w-20 sm:h-20">
+        <div className={`w-32 h-32 bg-[#EDF0F3] rounded-full ${isDefaultImage ? 'flex items-center justify-center' : 'overflow-hidden'} xl:w-32 xl:h-32 md:w-24 md:h-24 sm:w-20 sm:h-20`}>
           <img
             src={displayProfileImage}
             alt="프로필 이미지"
-            className="w-20 h-20 object-contain xl:w-20 xl:h-20 md:w-16 md:h-16 sm:w-14 sm:h-14"
+            className={isDefaultImage ? 'w-20 h-20 object-contain xl:w-20 xl:h-20 md:w-16 md:h-16 sm:w-14 sm:h-14' : 'w-full h-full object-cover'}
             onError={(e) => {
               // 이미지 로드 실패 시 기본 이미지로 대체
               const target = e.target as HTMLImageElement;

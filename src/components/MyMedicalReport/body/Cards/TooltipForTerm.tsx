@@ -62,14 +62,13 @@ const TooltipForTerm: React.FC<TooltipForTermProps> = ({ title, children }) => {
   if (!tooltipText) return <>{children}</>;
 
   return (
-    <div
-      style={{ position: 'relative', display: 'inline-block' }}
+    <span
+      ref={ref}
+      style={{ position: 'relative', display: 'inline-block', cursor: 'pointer' }}
       onMouseEnter={open}
       onMouseLeave={scheduleClose}
     >
-      <span ref={ref} style={{ cursor: 'pointer' }}>
-        {children}
-      </span>
+      {children}
 
       {isHovering && (
         <>
@@ -134,7 +133,7 @@ const TooltipForTerm: React.FC<TooltipForTermProps> = ({ title, children }) => {
           </div>
         </>
       )}
-    </div>
+    </span>
   );
 };
 
