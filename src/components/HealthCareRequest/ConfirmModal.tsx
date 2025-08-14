@@ -35,13 +35,13 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onConfirm, userName
         <div className="flex justify-center gap-[30px] ">
           <button
             onClick={onConfirm}
-            className="w-[216px] h-[47px] bg-white text-gray-700 rounded-[36px] shadow-[0_0_6px_4px_rgba(29,104,255,0.10)] transition-colors font-medium"
+            className="w-[216px] h-[47px] bg-white text-gray-700 rounded-[36px] shadow-[0_0_6px_4px_rgba(29,104,255,0.10)] transition-colors text-[20px] font-medium  font-[Pretendard]"
           >
             확인
           </button>
           <button
             onClick={handleExpertSearch}
-            className="w-[216px] h-[47px] bg-[#1D68FF] text-white rounded-[36px] hover:bg-blue-600 transition-colors font-medium"
+            className="w-[216px] h-[47px] bg-[#1D68FF] text-white rounded-[36px] hover:bg-blue-600 transition-colors text-[20px] font-medium  font-[Pretendard]"
           >
             전문가찾기
           </button>
