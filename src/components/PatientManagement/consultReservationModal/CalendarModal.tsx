@@ -12,12 +12,17 @@ interface ConsultReservationModalProps {
 const ConsultReservationModal: React.FC<ConsultReservationModalProps> = ({ onClose, userId }) => {
   const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(null);
   const [isDateModalOpen, setIsDateModalOpen] = useState(false);
+  const [terminated, setTerminated] = useState(false); // 성공 종료 시 즉시 언마운트 처리
 
   const handleNext = () => {
     if (selectedDate) {
       setIsDateModalOpen(true);
     }
   };
+
+  if (terminated) {
+    return null;
+  }
 
   return (
     <>
@@ -67,12 +72,14 @@ const ConsultReservationModal: React.FC<ConsultReservationModalProps> = ({ onClo
       {isDateModalOpen && selectedDate && (
         <ConsultDateModal 
           onClose={(isFromSuccess = false) => {
-            setIsDateModalOpen(false);
-            // 성공 모달에서 확인 버튼을 누르면 모든 모달을 닫기
+            // 성공 모달에서 확인 버튼을 누르면 즉시 자기 자신 숨김 후 상위로 종료 신호 전달 (재등장 방지)
             if (isFromSuccess) {
-              onClose(true); // isFromSuccess = true
+              setTerminated(true);
+              onClose(true);
+              return;
             }
-            // 뒤로가기 버튼을 누르면 Calendar 모달은 유지하고 memberCardModal로 돌아감
+            // 뒤로가기 등 일반 닫기 시에만 날짜 모달을 닫고 캘린더로 복귀
+            setIsDateModalOpen(false);
           }} 
           selectedDate={selectedDate}
           userId={userId}

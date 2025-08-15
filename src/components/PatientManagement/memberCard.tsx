@@ -27,6 +27,14 @@ const MemberCard: React.FC<{ member: Member }> = ({ member }) => {
   const [showAdviceRegisterModal, setShowAdviceRegisterModal] = useState(false);
   const [showConsultReservationModal, setShowConsultReservationModal] = useState(false);
 
+  // 성별을 한글로 변환하는 함수
+  const toKoreanGender = (g?: string) => {
+    const norm = (g ?? '').toUpperCase();
+    if (norm === 'MALE' || norm === 'MAEL') return '남성';
+    if (norm === 'FEMALE' || norm === 'FAMALE') return '여성';
+    return g ?? '-';
+  };
+
   const openAdviceRegisterModal = () => {
     setShowAdviceRegisterModal(true);
   };
@@ -52,7 +60,7 @@ const MemberCard: React.FC<{ member: Member }> = ({ member }) => {
       <div className='flex flex-col justify-center w-[540px] text-[14px] font-medium leading-[24px] tracking-[-0.42px] text-[#121218] font-[Pretendard]'>
         <span className='text-[#1D68FF]'>{member.nickname}</span>
         <span>
-          {member.age} / {member.gender}
+          {member.age} / {toKoreanGender(member.gender)}
         </span>
         <span>
           {member.height}cm / {member.weight}kg

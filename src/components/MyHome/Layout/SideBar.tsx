@@ -142,7 +142,7 @@ const SideBar: React.FC<SideBarProps> = ({
                 <OverlayIcon src={item.overlayIcon} position={item.overlayPosition} alt={`${item.title.join(" ")} overlay`} eager={isSelected} />
               )}
             </div>
-            <div className="flex flex-col items-center justify-center text-center max-w-[5rem] xl:max-w-[5rem] gap-px xl:gap-[0.125rem]">
+            <div className="flex flex-col items-center justify-center text-center max-w-[5rem] xl:max-w-[5rem] gap-0">
               {item.title.map((line, lineIndex) => (
                 <div key={lineIndex} className="font-semibold leading-relaxed text-[#1D68FF] m-0 p-0 whitespace-nowrap break-keep text-xs xl:text-[0.8rem]">
                   {line}
