@@ -72,8 +72,22 @@ export const router = createBrowserRouter([
       { path: 'expert-matching-intro', element: <ExpertMatchingIntroPage /> },
       { path: 'medical-report-intro', element: <MedicalReportPage /> },
       { path: 'ai-healthcare-intro', element: <AIHealthCarePage /> },
-      { path: 'medical-report-llm', element: <MedicalReportLLMPage /> },
-      { path: 'empty-report', element: <EmptyReportPage /> },
+      {
+        path: 'medical-report-llm',
+        element: (
+          <ProtectedRoute>
+            <MedicalReportLLMPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'empty-report',
+        element: (
+          <ProtectedRoute>
+            <EmptyReportPage />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
 ]);
