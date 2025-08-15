@@ -8,7 +8,7 @@ export const mapApiResultToHealthStatus = (
   const mapping: Record<CurrentHealthStatusResult['result'], HealthStatus> = {
     DANGER: '위험',
     CAUTION: '주의',
-    INTEREST: '관심',
+    WATCH: '관심',
     NORMAL: '정상',
     SAFE: '안심',
   };
