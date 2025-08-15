@@ -100,7 +100,7 @@ const HealthDataModal: React.FC<DetailModalProps> = ({
               />
             )}
           </div>
-          <div className='flex flex-col gap-[32px] w-max-[496px]'>
+          <div className='flex flex-col gap-[32px] w-full max-w-[800px]'>
             {/* 관리 목표/기대 - goal 매핑 */}
             {isLoading ? <GoalSkeletonLg /> : <RequestHealthGoal goal={profile?.goal || ''} />}
             {/* 최근 건강검진 이상수치 항목 */}
