@@ -11,7 +11,7 @@ const ResumeConfirmModal: React.FC<ResumeConfirmModalProps> = ({ isOpen, onConfi
   return (
     <ConfirmModalBase
       isOpen={isOpen}
-      message="이력서를 저장되었습니다."
+      message="이력서가 저장되었습니다."
       confirmText="확인"
       onConfirm={onConfirm}
     />
