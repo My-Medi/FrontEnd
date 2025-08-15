@@ -150,6 +150,30 @@ const ReportSummary: React.FC<ReportProps> = ({
     }
   };
 
+  // 허리둘레 상태값 처리 함수
+  const getWaistDisplay = (waistValue: any) => {
+    if (!waistValue) return '-';
+    
+    // 숫자인 경우 그대로 반환
+    if (typeof waistValue === 'number') {
+      return `${waistValue} cm`;
+    }
+    
+    // 문자열인 경우 상태값인지 확인
+    const s = String(waistValue).toUpperCase();
+    if (['DANGER', 'CAUTION', 'WATCH', 'NORMAL', 'SAFE'].includes(s)) {
+      return mapApiStatusToKor(waistValue);
+    }
+    
+    // ABDOMINAL_OBESITY는 복부비만으로 변환
+    if (s === 'ABDOMINAL_OBESITY') {
+      return '복부비만';
+    }
+    
+    // 그 외의 경우 그대로 반환
+    return waistValue;
+  };
+
   // 각 지표별 상태 한글 문자열 준비
   const statuses = {
     obesityBmi: mapApiStatusToKor((summary as any)?.obesity?.bmiHealthStatus),
@@ -208,7 +232,7 @@ const ReportSummary: React.FC<ReportProps> = ({
                   </div>
                   <div className='flex items-start gap-2'>
                     <HealthStatusIcon status={statuses.obesityWaist} />
-                    <p>허리둘레 : {derived.waist ?? '-'} mm/HG</p>
+                    <p>허리둘레 : {getWaistDisplay(derived.waist)}</p>
                   </div>
                 </div>
               </div>
@@ -222,11 +246,11 @@ const ReportSummary: React.FC<ReportProps> = ({
                 <div className='flex flex-col mt-[4px] gap-1 text-[14px] font-light leading-[22px] tracking-[-0.42px] text-[#121218]'>
                   <div className='flex items-start gap-2'>
                     <HealthStatusIcon status={statuses.hypertensionSystolic} />
-                    <p>수축기 혈압 : {derived.sp ?? '-'} kg/m²</p>
+                    <p>수축기 혈압 : {derived.sp ?? '-'} mmHg</p>
                   </div>
                   <div className='flex items-start gap-2'>
                     <HealthStatusIcon status={statuses.hypertensionDiastolic} />
-                    <p>이완기 혈압 : {derived.dp ?? '-'} mm/HG</p>
+                    <p>이완기 혈압 : {derived.dp ?? '-'} mmHg</p>
                   </div>
                 </div>
               </div>
@@ -390,12 +414,12 @@ const ReportSummary: React.FC<ReportProps> = ({
           {
             title: '비만/복부비만',
             status: '안심',
-            values: [`체질량 지수 : ${derived.bmi ?? '-'} kg/m²`, `허리둘레 : ${derived.waist ?? '-'} mm/HG`],
+            values: [`체질량 지수 : ${derived.bmi ?? '-'} kg/m²`, `허리둘레 : ${getWaistDisplay(derived.waist)}`],
           },
           {
             title: '고혈압',
             status: '정상',
-            values: [`수축기 혈압 : ${derived.sp ?? '-'} kg/m²`, `이완기 혈압 : ${derived.dp ?? '-'} mm/HG`],
+            values: [`수축기 혈압 : ${derived.sp ?? '-'} mmHg`, `이완기 혈압 : ${derived.dp ?? '-'} mmHg`],
           },
           { title: '당뇨병', status: '주의', values: [`공복혈당 : ${derived.fastingBlood ?? '-'} mg/dL`] },
           {
