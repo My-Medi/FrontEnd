@@ -27,7 +27,7 @@ const healthAbnormalFields = [
   '건강검진 결과가 없어요',
 ];
 
-const helpFields = ['영양사', '건강관리사', '피트니스 코치', '운동처방사', '기타'];
+const helpFields = ['영양사', '건강관리사', '윌니스 코치', '운동처방사', '기타'];
 
 const RequestForm = () => {
   const [formData, setFormData] = useState({
@@ -78,7 +78,7 @@ const RequestForm = () => {
       const expertTypes = [];
       if (proposal.helpTopicDto.dietitian) expertTypes.push('영양사');
       if (proposal.helpTopicDto.healthManager) expertTypes.push('건강관리사');
-      if (proposal.helpTopicDto.wellnessCoach) expertTypes.push('피트니스 코치');
+      if (proposal.helpTopicDto.wellnessCoach) expertTypes.push('윌니스 코치');
       if (proposal.helpTopicDto.exerciseTherapist) expertTypes.push('운동처방사');
       if (proposal.helpTopicDto.recommendForMe) expertTypes.push('기타');
 
@@ -137,7 +137,7 @@ const RequestForm = () => {
       helpTopicDto: {
         dietitian: formData.expertTypes.includes('영양사'),
         healthManager: formData.expertTypes.includes('건강관리사'),
-        wellnessCoach: formData.expertTypes.includes('피트니스 코치'),
+        wellnessCoach: formData.expertTypes.includes('윌니스 코치'),
         exerciseTherapist: formData.expertTypes.includes('운동처방사'),
         recommendForMe: formData.expertTypes.includes('기타'),
       },

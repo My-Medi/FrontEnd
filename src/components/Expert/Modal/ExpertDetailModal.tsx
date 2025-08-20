@@ -329,6 +329,7 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
           expertName={expert.name}
           expertPosition={getSpecialtyKoreanName(expert.specialty)}
           expertRealName={expert.nickname || expert.name}
+          isMaxRequestsReached={(expert.requestCount ?? 0) >= 5}
         />
       )}
 

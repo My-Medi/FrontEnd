@@ -12,6 +12,7 @@ interface ReRequestConfirmModalProps {
   expertPosition: string;
   expertRealName: string;
   comment?: string;
+  isMaxRequestsReached?: boolean; // 5번 요청 제한에 도달했는지 여부
 }
 
 const ReRequestConfirmModal: React.FC<ReRequestConfirmModalProps> = ({ 
@@ -20,6 +21,7 @@ const ReRequestConfirmModal: React.FC<ReRequestConfirmModalProps> = ({
   // onConfirm, 
   expertId,
   comment,
+  isMaxRequestsReached = false,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -38,6 +40,11 @@ const ReRequestConfirmModal: React.FC<ReRequestConfirmModalProps> = ({
   }, [isOpen]);
 
   const handleConfirm = () => {
+    // 5번 요청 제한에 도달한 경우 아무것도 하지 않음
+    if (isMaxRequestsReached) {
+      return;
+    }
+
     // 즉시 재요청 전송 (쿼리 파라미터 comment 포함)
     if (isSubmitting) return;
     setIsSubmitting(true);
@@ -90,8 +97,14 @@ const ReRequestConfirmModal: React.FC<ReRequestConfirmModalProps> = ({
                 className="text-[24px] font-medium text-[#121218] leading-[1.193] tracking-[-3%] text-center"
                 style={{ fontFamily: 'Pretendard', fontWeight: 500, fontStyle: 'normal' }}
               >
-                건강관리요청서는 한 전문가에게 최대 5번까지 보낼 수 있습니다.<br />
-                <span className="pt-7 block">한 번 더 보내시겠습니까?</span>
+                {isMaxRequestsReached ? (
+                  "이미 해당 전문가에게 5번 요청하셨습니다."
+                ) : (
+                  <>
+                    건강관리요청서는 한 전문가에게 최대 5번까지 보낼 수 있습니다.<br />
+                    <span className="pt-7 block">한 번 더 보내시겠습니까?</span>
+                  </>
+                )}
               </p>
             </div>
 
@@ -104,18 +117,18 @@ const ReRequestConfirmModal: React.FC<ReRequestConfirmModalProps> = ({
               >
                 닫기
               </button>
-                             <button
-                 onClick={handleConfirm}
-                 disabled={isSubmitting}
-                 className="w-full sm:w-[300px] h-14 rounded-full bg-[#1D68FF] text-white text-[20px] font-semibold leading-[36px] tracking-[-0.03em] transition cursor-pointer"
-                 style={{ boxShadow: '0px 0px 2px 6px rgba(29, 104, 255, 0.06), 0px 0px 4px 6px rgba(29, 104, 255, 0.04), 0px 0px 6px 6px rgba(29, 104, 255, 0.02), 0px 0px 8px 0px rgba(29, 104, 255, 0)' }}
-               >
-                 {isSubmitting ? '전송중...' : '보내기'}
-               </button>
+              {!isMaxRequestsReached && (
+                <button
+                  onClick={handleConfirm}
+                  disabled={isSubmitting}
+                  className="w-full sm:w-[300px] h-14 rounded-full bg-[#1D68FF] text-white text-[20px] font-semibold leading-[36px] tracking-[-0.03em] transition cursor-pointer"
+                  style={{ boxShadow: '0px 0px 2px 6px rgba(29, 104, 255, 0.06), 0px 0px 4px 6px rgba(29, 104, 255, 0.04), 0px 0px 6px 6px rgba(29, 104, 255, 0.02), 0px 0px 8px 0px rgba(29, 104, 255, 0)' }}
+                >
+                  {isSubmitting ? '전송중...' : '보내기'}
+                </button>
+              )}
             </div>
           </div>
-
-
         </div>
       </div>
 

@@ -43,6 +43,22 @@ API.interceptors.response.use(
       apiCode === 4352 ||
       apiResult === 'AUTH_TOKEN_HAS_EXPIRED';
 
+    // 개발 환경에서만 에러 로깅 (사용자 콘솔 노이즈 방지)
+    if (import.meta.env.DEV) {
+      const errorInfo = {
+        status,
+        url: originalRequest?.url,
+        method: originalRequest?.method,
+        apiCode,
+        message: error.response?.data?.message || error.message
+      };
+      
+      // 중요한 에러만 콘솔에 표시 (토큰 관련 에러는 제외)
+      if (status !== 401 && status !== 403) {
+        console.warn('API Error:', errorInfo);
+      }
+    }
+
     // 토큰 만료(401 또는 서버 커스텀 코드)이고 토큰 갱신을 시도하지 않은 경우
     if (isTokenExpired && !originalRequest._retry) {
       originalRequest._retry = true;
