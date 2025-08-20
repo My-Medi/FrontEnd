@@ -29,7 +29,7 @@ interface Props {
           <div
             className="w-[780px] h-[76px] flex items-center px-8 py-2.5 border-t border-b border-[#82ABFD] lg:w-[780px] lg:h-[76px] lg:px-8 lg:py-2.5 md:w-full md:h-auto md:px-6 md:py-4 sm:w-full sm:h-auto sm:px-4 sm:py-3"
           >
-            <p className="text-lg font-medium leading-[2] tracking-[-0.54px] text-[#121218] lg:text-lg md:text-base sm:text-sm">
+            <p className="text-[1.125rem] font-medium leading-[2] tracking-[-0.54px] text-[#121218]">
               {adviceText}
             </p>
           </div>

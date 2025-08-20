@@ -144,7 +144,7 @@ const SideBar: React.FC<SideBarProps> = ({
             </div>
             <div className="flex flex-col items-center justify-center text-center max-w-[5rem] xl:max-w-[5rem] gap-0">
               {item.title.map((line, lineIndex) => (
-                <div key={lineIndex} className="font-semibold leading-relaxed text-[#1D68FF] m-0 p-0 whitespace-nowrap break-keep text-xs xl:text-[0.8rem]">
+                <div key={lineIndex} className="font-semibold text-[#1D68FF] m-0 p-0 whitespace-nowrap break-keep text-[0.8rem] leading-[140%] tracking-[-0.0384rem]">
                   {line}
                 </div>
               ))}

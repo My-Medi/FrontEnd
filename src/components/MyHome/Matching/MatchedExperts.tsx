@@ -205,7 +205,7 @@ const MatchedExperts: React.FC = () => {
       </div>
 
       {/* 전문가 목록 */}
-      <div className="flex flex-wrap justify-start gap-8 max-w-[1021px] w-full">
+      <div className="flex flex-wrap justify-start gap-[1.125rem] max-w-[1021px] w-full">
         {filteredExperts.length > 0 ? (
           <>
             {filteredExperts.map((expert, idx) => (
