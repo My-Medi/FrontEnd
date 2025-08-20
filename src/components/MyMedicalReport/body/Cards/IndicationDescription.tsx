@@ -67,7 +67,7 @@ const IndicationDescription: React.FC<IndicationDescriptionProps> = ({
               fontWeight: 600,
               lineHeight: '36px',
               letterSpacing: '-0.72px',
-              margin: 0,
+              marginBottom: '8px',
               textAlign: 'center',
             }}
           >
@@ -81,7 +81,7 @@ const IndicationDescription: React.FC<IndicationDescriptionProps> = ({
             fontWeight: 500,
             fontFamily: 'Pretendard',
             letterSpacing: '-0.6px',
-            marginBottom: '16px',
+            marginBottom: '24px',
             textAlign: 'center',
           }}
         >
