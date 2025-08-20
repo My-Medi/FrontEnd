@@ -994,7 +994,7 @@ const HealthCheckupForm = () => {
 
       <div className=' mb-8'>
         <div className='flex items-center gap-4 xl:gap-[0.9rem] mb-4 xl:mb-[0.9rem]'>
-          <span className='text-[18px] font-medium text-[#121218] font-pretendard'>
+          <span className='font-semibold text-base text-[18px] text-black'>
             건강검진결과지업로드
           </span>
         </div>
@@ -1059,11 +1059,10 @@ const HealthCheckupForm = () => {
 
       {/* 계측 검사 섹션 */}
       <fieldset>
-      <div className='mb-10'>
-        <div className='bg-[#DBE6FF] rounded-[14px] px-6 py-2 font-bold text-base mb-2'>
+        <div className='bg-[#DBE6FF] rounded-[14px] px-6 py-2 font-semibold text-[20px] mb-[24px]'>
           계측 검사
         </div>
-        <div className='space-y-6 bg-white rounded-[14px] p-6'>
+        <div className='space-y-6 bg-white rounded-[14px] px-6'>
           {/* 키 */}
           <div className='flex items-center mb-[24px]'>
             <label className='w-40 font-medium text-black text-[18px]'>키 (cm)</label>
@@ -1101,7 +1100,7 @@ const HealthCheckupForm = () => {
                 readOnly
               />
             </div>
-            <div className='flex gap-10 ml-50 mb-[24px]'>
+            <div className='flex gap-10 ml-50 text-[18px] mb-[24px] font-medium'>
               {['저체중', '정상', '과체중', '비만'].map((v) => (
                 <CustomCheckboxButton
                   key={v}
@@ -1124,7 +1123,7 @@ const HealthCheckupForm = () => {
                 onChange={(e) => setWaist(e.target.value)}
               />
             </div>
-            <div className='flex gap-10 ml-50 mb-[24px]'>
+            <div className='flex gap-10 ml-50 text-[18px] mb-[24px] font-medium'>
               {['정상', '복부비만'].map((v) => (
                 <CustomCheckboxButton
                   key={v}
@@ -1154,7 +1153,7 @@ const HealthCheckupForm = () => {
               </label>
               <div className='flex-1 flex'>
                 {/* 오른쪽 체크박스 영역 */}
-                <div className='flex-1 flex flex-col gap-4'>
+                <div className='flex-1 flex flex-col gap-4 text-[18px] font-medium'>
                   {/* 좌측 */}
                   <div className='flex items-center gap-4'>
                     <span className='text-[18px] text-gray-700 w-8 ml-10'>좌</span>
@@ -1219,11 +1218,11 @@ const HealthCheckupForm = () => {
             </div>
           </div>
           {/* 혈압 */}
-          <div className='flex items-center mb-2'>
+          <div className='flex items-center mb-[24px]'>
             <label className='w-40 font-medium text-black text-[18px]'>혈압(mmHg)</label>
-            <div className='flex gap-4 mb-[24px]'>
+            <div className='flex gap-4'>
               <div className='flex items-center gap-2'>
-                <span className='ml-10 text-[18px]'>수축기 혈압</span>
+                <span className='ml-10 text-[20px]'>수축기 혈압</span>
                 <input
                   type='number'
                   className='rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10'
@@ -1233,7 +1232,7 @@ const HealthCheckupForm = () => {
                 />
               </div>
               <div className='flex items-center gap-2'>
-                <span className='text-[18px]'>이완기 혈압</span>
+                <span className='text-[20px]'>이완기 혈압</span>
                 <input
                   type='number'
                   className='rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10'
@@ -1245,7 +1244,7 @@ const HealthCheckupForm = () => {
             </div>
           </div>
           <div className='flex flex-col gap-2 ml-50'>
-            <div className='flex gap-10 mb-[16px]'>
+            <div className='flex gap-10 text-[18px] mb-[16px] font-medium'>
               {['정상', '유질환자'].map((v) => (
                 <CustomCheckboxButton
                   key={v}
@@ -1255,7 +1254,7 @@ const HealthCheckupForm = () => {
                 />
               ))}
             </div>
-            <div className='mb-[16px]'>
+            <div className='mb-[16px] text-[18px] font-medium'>
               <CustomCheckboxButton
                 key='고혈압 전단계(수축기 120-139 또는  이완기 80-89)'
                 checked={bpType === '고혈압 전단계'}
@@ -1263,7 +1262,7 @@ const HealthCheckupForm = () => {
                 label='고혈압 전단계(수축기 120-139 또는  이완기 80-89)'
               />
             </div>
-            <div>
+            <div className='text-[18px] font-medium'>
               <CustomCheckboxButton
                 key='고혈압의심 (140이상) 또는 90이상'
                 checked={bpType === '고혈압의심'}
@@ -1273,16 +1272,14 @@ const HealthCheckupForm = () => {
             </div>
           </div>
         </div>
-      </div>
       </fieldset>
 
       {/* 혈액 검사 섹션 */}
       <fieldset>
-      <div className='mb-[24px]'>
-        <div className='bg-[#DBE6FF] rounded-[14px] font-bold px-6 py-2 text-[18px] mb-[24px]'>
+        <div className='bg-[#DBE6FF] rounded-[14px] font-semibold px-6 py-2 text-[20px] mb-[24px] mt-[32px]'>
           혈액 검사
         </div>
-        <div className='space-y-6 bg-white rounded-[14px] p-6'>
+        <div className='space-y-6 bg-white rounded-[14px] px-6'>
           {/* 혈색소 */}
           <div className='border-b-2 border-[#DBE6FF]'>
             <div className='flex items-center mb-[24px]'>
@@ -1295,7 +1292,7 @@ const HealthCheckupForm = () => {
                 onChange={(e) => setHemoglobin(e.target.value)}
               />
             </div>
-            <div className='flex gap-10 ml-50 mb-[24px]'>
+            <div className='flex gap-10 ml-50 text-[18px] mb-[24px] font-medium'>
               {['정상', '빈혈의심', '기타'].map((v) => (
                 <CustomCheckboxButton
                   key={v}
@@ -1318,7 +1315,7 @@ const HealthCheckupForm = () => {
                 onChange={(e) => setFastingGlucose(e.target.value)}
               />
             </div>
-            <div className='flex gap-10 ml-50 mb-[24px]'>
+            <div className='flex gap-10 ml-50 text-[18px] mb-[24px] font-medium'>
               {['정상', '유질환자', '공복혈당장애 의심', '당뇨병 의심'].map((v) => (
                 <CustomCheckboxButton
                   key={v}
@@ -1410,7 +1407,7 @@ const HealthCheckupForm = () => {
                 </svg>
               </div>
               {/* 오른쪽 체크박스 영역 */}
-              <div className='flex flex-col gap-8'>
+              <div className='flex flex-col gap-8 text-[18px] font-medium'>
                 {[
                   '정상',
                   '고콜레스테롤혈증 의심',
@@ -1486,7 +1483,7 @@ const HealthCheckupForm = () => {
                 </svg>
               </div>
               {/* 오른쪽 체크박스 영역 */}
-              <div className='flex flex-col gap-6 mt-5'>
+              <div className='flex flex-col gap-6 mt-5 text-[18px] font-medium'>
                 {['정상', '신장기능 이상 의심'].map((v) => (
                   <CustomCheckboxButton
                     key={v}
@@ -1537,7 +1534,7 @@ const HealthCheckupForm = () => {
               </div>
             </div>
             {/* 세로 점선 */}
-            <div className='w-8 flex flex-col items-center mx-4 mb-[24px]'>
+            <div className='w-8 flex flex-col items-center mx-4'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 width='4'
@@ -1556,7 +1553,7 @@ const HealthCheckupForm = () => {
               </svg>
             </div>
             {/* 오른쪽 체크박스 영역 */}
-            <div className='flex flex-col gap-6 mt-10'>
+            <div className='flex flex-col gap-[24px] mt-10 text-[18px] font-medium'>
               {['정상', '간기능 이상 의심'].map((v) => (
                 <CustomCheckboxButton
                   key={v}
@@ -1568,18 +1565,16 @@ const HealthCheckupForm = () => {
             </div>
           </div>
         </div>
-      </div>
       </fieldset>
 
       {/* 요검사 섹션 */}
       <fieldset>
-      <div className='mb-3'>
-        <div className='bg-[#DBE6FF] rounded-[14px] px-6 py-2 font-bold text-base mb-3'>요검사</div>
-        <div className='bg-white rounded-[14px] p-6'>
+        <div className='bg-[#DBE6FF] rounded-[14px] px-6 py-2 font-semibold text-[20px] mb-[24px] mt-[8px]'>요검사</div>
+        <div className='bg-white rounded-[14px] px-6'>
           {/* 요단백 */}
-          <div className='flex items-center mb-2'>
+          <div className='flex items-center'>
             <label className='w-40 font-medium text-black text-[18px]'>요단백</label>
-            <div className='flex gap-10 ml-15'>
+            <div className='flex gap-10 ml-15 text-[18px] font-medium'>
               {['정상', '경계', '단백뇨의심'].map((v) => (
                 <CustomCheckboxButton
                   key={v}
@@ -1591,20 +1586,18 @@ const HealthCheckupForm = () => {
             </div>
           </div>
         </div>
-      </div>
       </fieldset>
 
       {/* 영상검사 섹션 */}
       <fieldset>
-      <div className='mb-3'>
-        <div className='bg-[#DBE6FF] rounded-[14px] px-6 py-2 font-bold text-base mb-3'>
+        <div className='bg-[#DBE6FF] rounded-[14px] px-6 py-2 font-semibold text-[20px] mb-[24px] mt-[32px]'>
           영상검사
         </div>
-        <div className='bg-white rounded-[14px] p-6'>
+        <div className='bg-white rounded-[14px] px-6'>
           {/* 흉부촬영 */}
           <div className='flex items-center mb-2'>
             <label className='w-40 font-medium text-black text-[18px]'>흉부촬영</label>
-            <div className='flex gap-10 ml-15'>
+            <div className='flex gap-10 ml-15 text-[18px] font-medium'>
               {['정상', '비활동성 폐결핵', '질환의심', '기타'].map((v) => (
                 <CustomCheckboxButton
                   key={v}
@@ -1618,20 +1611,18 @@ const HealthCheckupForm = () => {
             </div>
           </div>
         </div>
-      </div>
       </fieldset>
 
       {/* 진찰(문진) 섹션 */}
       <fieldset>
-      <div className='mb-3'>
-        <div className='bg-[#DBE6FF] rounded-[14px] px-6 py-2 font-bold text-base mb-3'>
+        <div className='bg-[#DBE6FF] rounded-[14px] px-6 py-2 font-semibold text-[20px] mb-[24px] mt-[32px]'>
           진찰(문진)
         </div>
-        <div className='bg-white rounded-[14px] p-6'>
+        <div className='bg-white rounded-[14px] px-6'>
           {/* 과거병력 */}
           <div className='flex items-center mb-10'>
             <label className='w-40 font-medium text-black text-[18px]'>과거병력</label>
-            <div className='flex gap-10 ml-15'>
+            <div className='flex gap-10 ml-15 text-[18px] font-medium'>
               {['유', '무'].map((v) => (
                 <CustomCheckboxButton
                   key={v}
@@ -1645,7 +1636,7 @@ const HealthCheckupForm = () => {
           {/* 약물치료 */}
           <div className='flex items-center mb-10'>
             <label className='w-40 font-medium text-black text-[18px]'>약물치료</label>
-            <div className='flex gap-10 ml-15'>
+            <div className='flex gap-10 ml-15 text-[18px] font-medium'>
               {['유', '무'].map((v) => (
                 <CustomCheckboxButton
                   key={v}
@@ -1659,7 +1650,7 @@ const HealthCheckupForm = () => {
           {/* 생활습관 */}
           <div className='flex items-center mb-7'>
             <label className='w-40 font-medium text-black text-[18px]'>생활습관</label>
-            <div className='flex gap-10 ml-15'>
+            <div className='flex gap-10 ml-15 text-[18px] font-medium'>
               {['금연 필요', '절주 필요', '신체활동 필요', '근력운동 필요'].map((v) => (
                 <CustomCheckboxButton
                   key={v}
@@ -1671,7 +1662,6 @@ const HealthCheckupForm = () => {
             </div>
           </div>
         </div>
-      </div>
       </fieldset>
 
       {/* 추가검사 */}
