@@ -1,16 +1,106 @@
-import React, { useState, memo, useCallback } from 'react';
+import React, { useState, memo, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../../assets/Login/logo.svg';
 import mainLogo from '../../../assets/mainlog.svg';
 import { useAuth } from '../../../contexts/AuthContext';
 import { clearTokens } from '../../../utils/tokenStorage';
 import TopBarNotification from '../TopBarNotification';
+import { useNotificationStream } from '../../../hooks/notifications/useNotificationStream';
 
 const Topbar = memo(() => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [currentNotification, setCurrentNotification] = useState<any>(null);
   const { userType, setUserType, showNotification, setShowNotification } = useAuth();
+  
+  // 실시간 알림 스트림 연결
+  const { isConnected } = useNotificationStream({
+    enabled: !!userType, // 로그인된 사용자만 스트림 연결
+    onNewNotification: (notification) => {
+      console.log('=== Topbar onNewNotification 콜백 호출됨 ===');
+      console.log('Topbar에서 알림 수신:', notification);
+      console.log('알림 데이터 구조:', JSON.stringify(notification, null, 2));
+      console.log('현재 showNotification 상태:', showNotification);
+      
+      // 새로운 알림 데이터 저장
+      setCurrentNotification(notification);
+      console.log('setCurrentNotification 호출됨');
+      
+      // 새로운 알림이 오면 알림 표시
+      setShowNotification(true);
+      console.log('setShowNotification(true) 호출됨');
+      console.log('알림 표시 상태를 true로 설정');
+      
+      // 3초 후 자동으로 알림 숨기기
+      setTimeout(() => {
+        console.log('3초 타이머 실행: 알림 숨김');
+        setShowNotification(false);
+        setCurrentNotification(null);
+        console.log('알림 자동 숨김');
+      }, 3000);
+    }
+  });
+
+  // 테스트용 알림 트리거 함수 (개발자 도구에서 호출 가능)
+  useEffect(() => {
+    (window as any).testNotification = () => {
+      console.log('테스트 알림 트리거됨');
+      const testNotification = {
+        userNotificationDto: {
+          userNotificationId: 999,
+          userId: 7,
+          notificationContent: "테스트 알림입니다! SSE 스트림이 작동하고 있습니다.",
+          isRead: false,
+          createdAt: new Date().toISOString()
+        }
+      };
+      
+      setCurrentNotification(testNotification);
+      setShowNotification(true);
+      console.log('테스트 알림 표시됨');
+      
+      setTimeout(() => {
+        setShowNotification(false);
+        setCurrentNotification(null);
+        console.log('테스트 알림 자동 숨김');
+      }, 3000);
+    };
+    
+    return () => {
+      delete (window as any).testNotification;
+    };
+  }, []);
+
+  // 디버깅용 로그
+  console.log('Topbar 렌더링:', { 
+    userType, 
+    showNotification, 
+    isConnected, 
+    currentNotification,
+    hasNotificationData: !!currentNotification 
+  });
+
+  // 알림 메시지와 액션 텍스트를 동적으로 생성
+  const getNotificationContent = () => {
+    console.log('getNotificationContent 호출됨:', { currentNotification });
+    
+    if (currentNotification?.userNotificationDto) {
+      const notification = currentNotification.userNotificationDto;
+      console.log('알림 데이터에서 메시지 추출:', notification.notificationContent);
+      return {
+        message: notification.notificationContent,
+        actionText: "자세히 보기"
+      };
+    }
+    
+    // 기본값
+    console.log('기본 알림 메시지 사용');
+    return {
+      message: "새로운 알림이 도착했습니다.",
+      actionText: "알림 보러가기"
+    };
+  };
 
   const handleNavigate = useCallback((path: string) => {
     navigate(path);
@@ -114,7 +204,7 @@ const Topbar = memo(() => {
               )}
               <div className="relative">
                 <p
-                  onClick={userType ? () => navigate('/myhome', { state: { selectedMenu: userType === 'expert' ? 4 : 1 } }) : undefined}
+                  onClick={userType ? () => setShowNotification(!showNotification) : undefined}
                   className={`text-[#25282B] text-sm font-[300] leading-[1.4] tracking-[-0.42px] whitespace-nowrap font-[Pretendard] ${userType ? 'cursor-pointer hover:text-[#1D68FF] transition-colors duration-200' : 'cursor-default'}`}
                 >
                   알림
@@ -124,9 +214,10 @@ const Topbar = memo(() => {
                   onClose={() => setShowNotification(false)}
                   onAction={() => {
                     setShowNotification(false);
+                    navigate('/myhome', { state: { selectedMenu: userType === 'expert' ? 4 : 1 } });
                   }}
-                  message="준호 핏 운동 처방사님께서 매칭을 수락하셨어요!"
-                  actionText="매칭 전문가 보러가기"
+                  message={getNotificationContent().message}
+                  actionText={getNotificationContent().actionText}
                 />
               </div>
 

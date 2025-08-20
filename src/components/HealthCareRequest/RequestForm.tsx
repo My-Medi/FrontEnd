@@ -27,7 +27,7 @@ const healthAbnormalFields = [
   '건강검진 결과가 없어요',
 ];
 
-const helpFields = ['영양사', '건강관리사', '피트니스 코치', '운동처방사', '기타'];
+const helpFields = ['영양사', '건강관리사', '웰니스 코치', '운동처방사', '기타'];
 
 const RequestForm = () => {
   const [formData, setFormData] = useState({
