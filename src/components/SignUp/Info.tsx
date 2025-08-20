@@ -66,47 +66,47 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
   };
 
   return (
-    <form className='mt-[40px] ml-[150px]' onSubmit={e => { e.preventDefault(); handleNext(); }}>
+    <form className='pt-[10px] pl-[190px]' onSubmit={e => { e.preventDefault(); handleNext(); }}>
         {/* 성명 */}
-        <div className={`flex items-center space-x-3${isNameError ? ' ' : ' mb-[24px]'}`}> {/* 있을 때: 빈칸 없음, 없을 때: 빈칸 있음 */}
+        <div className={`flex items-center ${isNameError ? ' ' : ' mb-[24px]'}`}> {/* 있을 때: 빈칸 없음, 없을 때: 빈칸 있음 */}
           <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
-          <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>성명</label>
+          <label className='text-gray-700 font-medium flex items-center h-[36px] ml-[15px]'>성명</label>
           <input
             placeholder='성명을 입력하세요.'
             type='text'
             value={values.name}
             onChange={(e) => onChange('name', e.target.value)}
-            className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[180px]'
+            className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[122.2px]'
           />
           
         </div>
         {isNameError && (
-            <div className='ml-[300px] mt-[3px] mb-[6px] text-[10px] text-red-500'>성명을 입력해주세요.</div>
+            <div className='ml-[180px] mt-[3px] mb-[6px] text-[10px] text-red-500'>성명을 입력해주세요.</div>
           )}
 
         {/* 생년월일 */}
-        <div className={`flex items-center space-x-3${isBirthDateError ? ' ' : ' mb-[24px]'}`}>
+        <div className={`flex items-center ${isBirthDateError ? ' ' : ' mb-[24px]'}`}>
           <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
-          <label className='text-gray-700 font-medium min-w-[120px] flex items-center h-[36px]'>생년월일(6자리)</label>
+          <label className='text-gray-700 font-medium flex items-center h-[36px] ml-[15px]'>생년월일(6자리)</label>
           <input
             type='text'
             value={values.birthDate}
             onChange={(e) => onChange('birthDate', e.target.value)}
             placeholder='예) 000926'
             maxLength={6}
-            className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[140px]'
+            className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[45px]'
           />
 
         </div>
         {isBirthDateError && (
-            <div className='ml-[300px] mt-[3px] mb-[6px] text-[10px] text-red-500'>생년월일 6자리를 입력해주세요.</div>
+            <div className='ml-[180px] mt-[3px] mb-[6px] text-[10px] text-red-500'>생년월일 6자리를 입력해주세요.</div>
           )}
 
         {/* 성별 */}
-        <div className='flex items-center space-x-3 mb-[24px]'>
+        <div className='flex items-center mb-[24px]'>
           <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
-          <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>성별</label>
-          <div className='flex space-x-4 ml-[180px]'>
+          <label className='text-gray-700 font-medium flex items-center h-[36px] ml-[15px]'>성별</label>
+          <div className='flex space-x-4 ml-[122.2px] gap-[36px]'>
             <label className="flex items-center cursor-pointer text-[14px]">
               <input 
                 type="checkbox" 
@@ -114,7 +114,7 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
                 onChange={() => onChange("gender", "MALE")}
                 className="hidden"
               />
-              <div className="mr-2">
+              <div className="mr-[8px]">
                 {values.gender === "MALE" ? (
                   <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18" fill="none">
                     <rect x="0.203125" width="18" height="18" rx="4.8" fill="#1D68FF"/>
@@ -135,7 +135,7 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
                 onChange={() => onChange("gender", "FEMALE")}
                 className="hidden"
               />
-              <div className="mr-2">
+              <div className="mr-[8px]">
                 {values.gender === "FEMALE" ? (
                   <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18" fill="none">
                     <rect x="0.203125" width="18" height="18" rx="4.8" fill="#1D68FF"/>
@@ -153,15 +153,15 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
         </div>
 
         {/* 닉네임 */}
-        <div className={`flex items-center space-x-3${isNicknameError ? ' ' : ' mb-[24px]'}`}>
+        <div className={`flex items-center ${isNicknameError ? ' ' : ' mb-[24px]'}`}>
           <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
-          <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>닉네임</label>
+          <label className='text-gray-700 font-medium flex items-center h-[36px] ml-[15px]'>닉네임</label>
           <input
             type='text'
             value={values.nickname}
             onChange={(e) => onChange('nickname', e.target.value)}
             placeholder='닉네임을 입력하세요.'
-            className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[180px]'
+            className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[107px]'
           />
 
           <button
@@ -173,7 +173,7 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
           </button>
         </div>
         {isNicknameError && (
-            <div className='ml-[300px] mt-[3px] mb-[6px] text-[10px]  text-red-500'>닉네임을 입력해주세요.</div>
+            <div className='ml-[180px] mt-[3px] mb-[6px] text-[10px]  text-red-500'>닉네임을 입력해주세요.</div>
           )}
         
         {/* 닉네임 아래 점선 */}
@@ -184,15 +184,15 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
         </div>
 
         {/* 아이디 */}
-        <div className={`flex items-center space-x-3${isLoginIdError ? ' ' : ' mb-[24px]'}`}>
+        <div className={`flex items-center ${isLoginIdError ? ' ' : ' mb-[24px]'}`}>
           <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
-          <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>아이디</label>
+          <label className='text-gray-700 font-medium flex items-center h-[36px] ml-[15px]'>아이디</label>
           <input
             type='text'
             value={values.loginId}
             onChange={(e) => onChange('loginId', e.target.value)}
             placeholder='아이디를 입력하세요.'
-            className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[180px]'
+            className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[107px]'
           />
 
           <button
@@ -204,14 +204,14 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
           </button>
         </div>
         {isLoginIdError && (
-            <div className='ml-[300px] mt-[3px] mb-[6px] text-[10px] text-red-500'>아이디를 입력해주세요.</div>
+            <div className='ml-[180px] mt-[3px] mb-[6px] text-[10px] text-red-500'>아이디를 입력해주세요.</div>
           )}
 
         {/* 비밀번호 */}
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center ">
           <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
-          <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>비밀번호</label>
-          <div className='relative ml-[180px]'>
+          <label className='text-gray-700 font-medium flex items-center h-[36px] ml-[15px]'>비밀번호</label>
+          <div className='relative ml-[93px]'>
             <input
               type={showPassword ? 'text' : 'password'}
               value={values.password}
@@ -236,7 +236,7 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
             </button>
           </div>
         </div>
-        <div className={`ml-[300px] text-[10px]  ${
+        <div className={`ml-[180px] text-[10px]  ${
             submitted && !hasPassword
               ? 'text-red-500'
               : (!hasPassword || passwordMeetsComplexityRequirements ? 'text-gray-400' : 'text-red-500')
@@ -248,10 +248,10 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
         
 
         {/* 비밀번호 확인 */}
-        <div className='flex items-center space-x-3 '>
+        <div className='flex items-center '>
           <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
-          <label className='text-gray-700 font-medium min-w-[120px] flex items-center h-[36px]'>비밀번호 확인</label>
-          <div className='relative ml-[140px]'>
+          <label className='text-gray-700 font-medium flex items-center h-[36px] ml-[15px]'>비밀번호 확인</label>
+          <div className='relative ml-[63px]'>
             <input
               type={showConfirmPassword ? 'text' : 'password'}
               value={values.passwordCheck}
@@ -276,7 +276,7 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
             </button>
           </div>
         </div>
-        <div className='ml-[300px] mt-[3px] mb-[24px]'>
+        <div className='ml-[180px] mt-[3px] mb-[24px]'>
           {submitted && !hasConfirmPassword && (
             <div className='text-[10px] text-red-500 mb-[-18px]'>비밀번호 확인을 입력해주세요.</div>
           )}
@@ -294,15 +294,15 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
 
         {/* 이메일 */}
         <div className={`flex items-center space-x-3${isEmailError ? '' : ' mb-[24px]'}`}>
-        <div className='flex items-center space-x-3'>
+        <div className='flex items-center'>
           <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
-          <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>이메일</label>
+          <label className='text-gray-700 font-medium flex items-center h-[36px] ml-[15px]'>이메일</label>
           <input
             type='text'
             value={values.email}
             onChange={(e) => onChange('email', e.target.value)}
             placeholder='이메일을 입력하세요.'
-            className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[180px]'
+            className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[107px]'
           />
           </div>
 
@@ -336,24 +336,24 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
           </div>
         </div>
         {isEmailError && (
-            <div className='ml-[300px] mt-[3px] mb-[6px] text-[10px] text-red-500'>이메일을 입력해주세요.</div>
+            <div className='ml-[180px] mt-[3px] mb-[6px] text-[10px] text-red-500'>이메일을 입력해주세요.</div>
           )}
 
         {/* 연락처 */}
         
-        <div className={`flex items-center space-x-3${isPhoneError ? ' ' : ' mb-[24px]'}`}>
+        <div className={`flex items-center ${isPhoneError ? ' ' : ' mb-[24px]'}`}>
           <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
-          <label className='text-gray-700 font-medium min-w-[80px] flex items-center h-[36px]'>연락처</label>
+          <label className='text-gray-700 font-medium flex items-center h-[36px] ml-[15px]'>연락처</label>
           <input
             type='text'
             value={values.phoneNumber}
             onChange={(e) => onChange('phoneNumber', e.target.value)}
             placeholder='연락처를 입력하세요.'
-            className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[180px]'
+            className='w-[208px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-[107px]'
           />
         </div>
         {isPhoneError && (
-            <div className='ml-[300px] mt-[3px] mb-[6px] text-[10px] text-red-500'>연락처를 입력해주세요.</div>
+            <div className='ml-[180px] mt-[3px] mb-[6px] text-[10px] text-red-500'>연락처를 입력해주세요.</div>
           )}
 
         {/* 연락처 아래 점선 */}
@@ -365,9 +365,9 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
         </div>
 
 
-        {/* 버튼 */}
-        <div className="flex gap-[168px]">
-          <button onClick={onPrev} className="px-10 py-3 ml-[20px] rounded-[30px] cursor-pointer bg-[#dbe6ff] text-[18px] text-[#121218] font-medium">이전</button>
+        <div className="flex gap-[185px]">
+          <button onClick={onPrev} className="px-10 py-3 rounded-[30px] cursor-pointer bg-[#dbe6ff] text-[18px] text-[#121218] font-semibold">이전</button>
+          
           <button type="submit" className="w-[216px] px-10 py-3 rounded-[30px] cursor-pointer bg-[#1d68ff] text-[18px] text-white font-semibold">다음</button>
         </div>
 

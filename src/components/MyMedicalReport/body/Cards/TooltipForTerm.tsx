@@ -56,7 +56,24 @@ const TooltipForTerm: React.FC<TooltipForTermProps> = ({ title, children }) => {
   };
 
   const handleClick = () => {
-    navigate('/health-terms', { state: { preselectTerm: title } });
+    // TooltipForTerm의 title을 HealthTerm의 id로 매핑
+    const titleToIdMap: Record<string, string> = {
+      혈색소: '혈색소(Hemoglobin)',
+      공복혈당: '공복혈당(FBS)',
+      총콜레스테롤: '총콜레스테롤',
+      'HDL-콜레스테롤': 'HDL 콜레스테롤',
+      중성지방: '중성지방(Triglyceride)',
+      'LDL-콜레스테롤': 'LDL 콜레스테롤',
+      '혈청 크레아티닌': '혈청 크레아티닌',
+      'eGFR(신사구체여과율)': '신사구체여과율(eGFR)',
+      AST: 'AST(SGOT) / ALT(SGPT)',
+      ALT: 'AST(SGOT) / ALT(SGPT)', // ALT도 AST/ALT 항목으로 이동
+      '감마-GTP': '감마GTP(Y-GTP)',
+      요단백: '요단백',
+    };
+
+    const targetTerm = titleToIdMap[title] || title;
+    navigate('/health-terms', { state: { preselectTerm: targetTerm } });
   };
 
   if (!tooltipText) return <>{children}</>;

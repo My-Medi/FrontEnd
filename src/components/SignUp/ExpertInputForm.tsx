@@ -511,10 +511,10 @@ const ExpertInputForm: React.FC<ExpertInputFormProps> = ({ onNext, onPrev, initi
       </div>
 
       {/* 버튼 */}
-      <div className='flex gap-[200px]'>
+      <div className='flex gap-[185px]'>
         <button
           onClick={onPrev}
-          className='px-10 py-3 ml-[20px] rounded-[30px] cursor-pointer bg-[#dbe6ff] text-[18px] text-[#121218] font-medium'
+          className='px-10 py-3 rounded-[30px] cursor-pointer bg-[#dbe6ff] text-[18px] text-[#121218] font-semibold'
         >
           이전
         </button>
