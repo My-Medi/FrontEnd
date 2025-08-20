@@ -413,7 +413,7 @@ const SignUp: React.FC = () => {
 
   // 공통 헤더 컴포넌트
   const renderHeader = useCallback((showBackButton: boolean = true) => (
-    <div className="mt-[64px] mb-[96px] flex items-center justify-center w-full relative">
+    <div className="mt-[64px] mb-[40px] flex items-center justify-center w-full relative">
       {showBackButton && (
         <button 
           onClick={handlePrev} 

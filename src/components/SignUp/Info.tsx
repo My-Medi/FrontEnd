@@ -66,7 +66,7 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
   };
 
   return (
-    <form className='mt-[40px]' onSubmit={e => { e.preventDefault(); handleNext(); }}>
+    <form className='mt-[40px] ml-[150px]' onSubmit={e => { e.preventDefault(); handleNext(); }}>
         {/* 성명 */}
         <div className={`flex items-center space-x-3${isNameError ? ' ' : ' mb-[24px]'}`}> {/* 있을 때: 빈칸 없음, 없을 때: 빈칸 있음 */}
           <div className='w-[11.4px] h-[11.4px] bg-[#1D68FF] rounded-[3.6px] flex-shrink-0'></div>
@@ -167,13 +167,13 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
           <button
             type='button'
             onClick={onCheckNickname}
-            className='w-[101px] h-[36px] bg-gray-100 text-black rounded-[8.4px] ml-[24.4px]'
+            className='w-[101px] h-[36px] text-[12px] text-black bg-[#DBE6FF] rounded-[8.4px] ml-[24.4px]'
           >
             닉네임 확인
           </button>
         </div>
         {isNicknameError && (
-            <div className='ml-[300px] mt-[3px] mb-[6px] text-[10px] text-red-500'>닉네임을 입력해주세요.</div>
+            <div className='ml-[300px] mt-[3px] mb-[6px] text-[10px]  text-red-500'>닉네임을 입력해주세요.</div>
           )}
         
         {/* 닉네임 아래 점선 */}
@@ -198,7 +198,7 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
           <button
             type='button'
             onClick={onCheckId}
-            className='w-[101px] h-[36px] bg-gray-100 text-black rounded-[8.4px] ml-[24.4px]'
+            className='w-[101px] h-[36px] text-[12px] text-black bg-[#DBE6FF] rounded-[8.4px] ml-[24.4px]'
           >
             아이디 확인
           </button>
@@ -306,18 +306,34 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
           />
           </div>
 
-          <span className='text-gray-500'>@</span>
-          <select
-            value={values.emailDomain}
-            onChange={(e) => onChange('emailDomain', e.target.value)}
-            className='w-[100px] h-[36px] text-[14px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white px-3 ml-2'
-          >
-            {emailDomains.map((domain) => (
-              <option key={domain} value={domain}>
-                {domain}
-              </option>
-            ))}
-          </select>
+          <span className='text-gray-500 text-[19.5px]'>@</span>
+          <div className='relative'>
+            <select
+              value={values.emailDomain}
+              onChange={(e) => onChange('emailDomain', e.target.value)}
+              className='w-[88px] h-[36px] flex-shrink-0 rounded-[8.4px] text-[14px] border border-[#9DA0A3] bg-white pl-2 pr-8 appearance-none'
+            >
+              {emailDomains.map((domain) => (
+                <option key={domain} value={domain}>
+                  {domain}
+                </option>
+              ))}
+            </select>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#121218"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className='pointer-events-none absolute top-1/2 -translate-y-1/2 right-[10px]'
+            >
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </div>
         </div>
         {isEmailError && (
             <div className='ml-[300px] mt-[3px] mb-[6px] text-[10px] text-red-500'>이메일을 입력해주세요.</div>

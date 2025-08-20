@@ -1,4 +1,5 @@
 import React from "react";
+import dashSvg from "@/assets/SignUp/dash.svg";
 
 interface StepperProps {
   currentStep: "select" | "terms" | "info" | "expert-info" | "complete";
@@ -58,17 +59,17 @@ const Stepper: React.FC<StepperProps> = ({ currentStep, userType }) => {
       // 현재 단계 표시
       <div key={stepNumber} className="flex flex-col items-center z-10">
         <div 
-          className={`w-[40px] h-[40px] rounded-full flex items-center justify-center font-size-[19px] font-bold ${
+          className={`w-[40.8px] h-[40.8px] rounded-full flex items-center justify-center font-medium ${
             status === "completed" || status === "active"
-              ? "bg-[#1D68FF] text-white shadow-[0_0_16px_0_rgba(29,104,255,0.25)]"
-              : "border-2 border-[#B5D0FF] text-[#888] bg-white"
+              ? "bg-[#1D68FF] text-white text-[19px] shadow-[0_0_16px_0_rgba(29,104,255,0.25)]"
+              : "border-2 border-[#B5D0FF] text-[#888] bg-white text-[14.4px]"
           }`}
         >
           {stepNumber}
         </div>
         {/* 단계 라벨 표시 */}
         <span 
-          className={`mt-2 font-size-[12px] font-semibold ${
+          className={`mt-2 text-[12px] font-medium ${
             status === "completed" || status === "active" ? "text-black" : "text-[#888]"
           }`}
         >
@@ -86,14 +87,13 @@ const Stepper: React.FC<StepperProps> = ({ currentStep, userType }) => {
     
     return (
       // 단계 구분선 표시
-      <div 
-        key={`divider-${stepNumber}`}
-        className={`h-[3px] w-[154px] -ml-7 -mr-7 mb-[38px] z-0 ${
-          status === "completed" 
-            ? "bg-[#1D68FF]" 
-            : "border-b-[3px] border-dashed border-[#B5D0FF]"
-        }`}
-      />
+      <div key={`divider-${stepNumber}`} className="-ml-8 -mr-8 mb-[30px] z-0 flex items-center justify-center">
+        {status === "completed" ? (
+          <div className="h-[3px] w-[164px] bg-[#1D68FF]" />
+        ) : (
+          <img src={dashSvg} alt="divider" className="w-[164px] h-[10px] select-none pointer-events-none" />
+        )}
+      </div>
     );
   };
 

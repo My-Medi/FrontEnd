@@ -19,9 +19,9 @@ const TermsAgreement: React.FC<TermsAgreementProps> = ({ onNext }) => {
 
       {/* 하단 약관 영역 */}
       <div className="flex flex-col items-start bg-white border border-[#DBE6FF]  shadow-md w-[716px] h-[497px] rounded-[18px]">
-        <p className="font-size-[16px] mt-[22px] ml-[40px] text-[#121212]">약관동의</p>
-        <div className="ml-[24px] mt-[13px] ml-[40px] mb-[18px] mr-[40px] w-[634px] h-[379px] overflow-y-auto bg-[#e7e9ec] relative z-10 p-5 rounded-[12px]">
-          <div className="font-size-[12px]  text-black whitespace-pre-line break-words leading-normal">
+        <p className="font-size-[16px] mt-[22px] ml-[40px] text-gray-600">약관동의</p>
+        <div className="ml-[24px] mt-[13px] ml-[40px] mb-[18px] mr-[40px] w-[634px] h-[379px] overflow-y-auto bg-gray-100 relative z-10 p-5 rounded-[12px]">
+          <div className="font-size-[12px]  text-gray-600 whitespace-pre-line break-words leading-normal">
             {` MyMedi 이용약관
 
             서비스 이용약관 주요 조항
@@ -80,7 +80,7 @@ const TermsAgreement: React.FC<TermsAgreementProps> = ({ onNext }) => {
             본 약관은 2025.08.24.부터 시행됩니다.`}
             </div>
         </div>
-        <div className=" font-medium  ml-15 text-[#121212] mb-[32px]">
+        <div className=" font-medium  ml-10 text-[#121212] mb-[32px]">
           <label htmlFor="agree" className="flex items-center cursor-pointer">
             <input
               id="agree"
@@ -89,7 +89,7 @@ const TermsAgreement: React.FC<TermsAgreementProps> = ({ onNext }) => {
               onChange={(e) => setAgreed(e.target.checked)}
               className="hidden"
             />
-            <div className="mr-2">
+            <div className="mr-3">
               {agreed ? (
                 <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
                   <rect x="1.09688" y="0.700391" width="17.4" height="17.4" rx="8.7" fill="#1D68FF"/>
