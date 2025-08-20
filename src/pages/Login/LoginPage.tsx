@@ -13,7 +13,7 @@ import { useLoginMutation } from "../../hooks/tokens/useLoginMutation";
 import LoadingSpinner from "../../components/Common/LoadingSpinner";
 
 const button = cva(
-  "w-full max-w-[24rem] xl:w-[24rem] md:w-full sm:w-full h-15 xl:h-15 md:h-14 sm:h-12 mt-6 text-lg xl:text-lg md:text-base sm:text-sm font-semibold rounded-full flex justify-center items-center gap-2.5 leading-[1.193]",
+  "w-full max-w-[24rem] xl:w-[24rem] md:w-full sm:w-full h-15 xl:h-15 md:h-14 sm:h-12 text-lg xl:text-lg md:text-base sm:text-sm font-semibold rounded-full flex justify-center items-center gap-2.5 leading-[1.193]",
   {
     variants: {
       intent: {
@@ -138,7 +138,7 @@ const LoginPage = () => {
         <img src={logo} alt="로고" className="w-[111.6px] h-[20.4px] mt-[72px] mb-[15.6px]" />
 
         {/* 로그인 문구 */}
-        <h1 className="text-[28.8px] font-semibold text-[#121218] mb-8 leading-[1.4] tracking-[-3%]">
+        <h1 className="text-[28.8px] font-semibold text-[#121218] mb-[44px] leading-[1.4] tracking-[-3%]">
           로그인
         </h1>
 
@@ -148,7 +148,7 @@ const LoginPage = () => {
             e.preventDefault();
             handleLogin();
           }}
-          className="w-[385.2px] flex flex-col gap-4"
+          className="w-[385.2px] flex flex-col gap-[22px]"
         >
           <LoginInput
             ref={idInputRef}
@@ -176,11 +176,11 @@ const LoginPage = () => {
             type="submit"
             disabled={!isFormValid}
           >
-            <span className="font-semibold text-[18px]">로그인</span>
+            <span className="font-semibold text-[20px] mb-[1px]">로그인</span>
           </button>
         </form>
            {/* 로그인 유지 체크박스와 아이디/비밀번호 찾기 */}
-        <div className="w-[385.2px] flex items-center justify-between mt-6">
+        <div className="w-[385.2px] flex items-center justify-between mt-[16px]">
           <div className="flex items-center gap-3">
             <label className="relative flex items-center cursor-pointer">
               <input
@@ -222,7 +222,7 @@ const LoginPage = () => {
         </div>
 
         {/* 회원가입 링크 */}
-        <div className="w-[385.2px] flex items-center justify-center gap-2 mt-6">
+        <div className="w-[385.2px] flex items-center justify-center gap-2 mt-[23px]">
           <span className="text-[12px] font-light text-[#121218] leading-[1.833] tracking-[-3%]">
             아직 마이메디 회원이 아니신가요?
           </span>
