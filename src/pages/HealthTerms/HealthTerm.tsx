@@ -122,19 +122,19 @@ const HealthTermsPage: React.FC = () => {
 
   return (
     <div className='w-full'>
-      <div className='max-w-[1301px] mx-auto px-[100px] py-[60px]'>
+      <div className='max-w-[1360px] mx-auto  py-[60px]'>
         {/* 뒤로가기 버튼과 카테고리 제목 */}
         <div className='mb-[12px]'>
           <div className='flex items-center'>
             <button
-              className='w-[17px] h-[35px] flex items-center justify-center'
+              className='absolute w-[17px] h-[35px] flex items-center justify-center hidden [@media(min-width:1280px)]:flex'
               aria-label='뒤로가기'
               onClick={() => navigate(-1)}
             >
               <img src={backSvg} alt='뒤로가기' className='w-full h-full object-contain' />
             </button>
             <div className='flex-1 text-center'>
-              <span className='text-[20px] text-black block'>건강용어</span>
+              <span className='text-[20px] text-black block font-pretendard font-semibold'>건강용어</span>
             </div>
           </div>
         </div>
@@ -149,7 +149,7 @@ const HealthTermsPage: React.FC = () => {
         {/* 초기 상태일 때만 표시되는 제목 */}
         {!selectedTerm && (
           <div className='text-center mb-[60px]'>
-            <h1 className='text-[32px] font-bold text-[#121218]'>
+            <h1 className='text-[28px] font-bold text-[#121218]'>
               더 알아보고 싶은 건강용어를 선택해보세요!
             </h1>
           </div>
