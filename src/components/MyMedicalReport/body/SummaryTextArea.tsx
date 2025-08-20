@@ -33,7 +33,7 @@ const SummaryTextArea: React.FC<SummaryTextAreaProps> = ({
             letterSpacing: '-0.72px',
             margin: 0,
             display: 'flex',
-            flexWrap: 'wrap',
+            flexWrap: 'nowrap',
             justifyContent: 'center',
             color: '#121218',
           }}
@@ -116,7 +116,8 @@ const SummaryTextArea: React.FC<SummaryTextAreaProps> = ({
             letterSpacing: '-0.72px',
             margin: 0,
             display: 'flex',
-            flexWrap: 'wrap',
+            flexWrap: 'nowrap',
+            whiteSpace: 'nowrap',
             justifyContent: 'center',
             color: '#121218',
           }}
@@ -162,7 +163,8 @@ const SummaryTextArea: React.FC<SummaryTextAreaProps> = ({
           letterSpacing: '-0.72px',
           margin: 0,
           display: 'flex',
-          flexWrap: 'wrap',
+          flexWrap: 'nowrap',
+          whiteSpace: 'nowrap',
           justifyContent: 'center',
           color: '#121218',
         }}
