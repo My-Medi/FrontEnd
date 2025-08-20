@@ -11,6 +11,7 @@ import { useUserProfileUpdateMutation } from '../../../hooks/users/mutations/use
 import { useExpertProfileQuery } from '../../../hooks/experts/queries/useExpertProfileQuery';
 import { checkNicknameDuplication } from '../../../apis/duplicationApi/duplication';
 import { useExpertProfileUpdateMutation } from '../../../hooks/experts/mutations/useExpertProfileMutation';
+import backSvg from "../../../assets/Expert/back.svg";
 
 interface EditInfoProps {
   userType: 'patient' | 'expert';
@@ -282,11 +283,12 @@ const EditInfo: React.FC<EditInfoProps> = ({ userType, onBack, onProfileModalCha
       <div className='relative mb-8'>
         {onBack && (
           <button
-            onClick={handleBackClick}
-            className='absolute left-0 top-[50px] text-blue-500 hover:text-blue-700 z-10'
-          >
-            ← 뒤로가기
-          </button>
+          onClick={handleBackClick}
+          className="absolute w-[17px] h-[35px] top-[-2px] left-[0px]"
+          aria-label="뒤로가기"
+        >
+          <img src={backSvg} alt="뒤로가기" className="w-full h-full object-contain" />
+        </button>
         )}
         <h1 className='text-2xl font-bold text-gray-800 text-center mt-[50px]'>회원정보 수정</h1>
       </div>
