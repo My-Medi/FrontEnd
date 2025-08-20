@@ -417,7 +417,7 @@ const SignUp: React.FC = () => {
       {showBackButton && (
         <button 
           onClick={handlePrev} 
-          className="absolute w-[17px] h-[35px] flex items-center justify-center bottom-[10px] left-[312px] lg:flex md:hidden sm:hidden" 
+          className="absolute w-[17px] h-[35px] flex items-center justify-center bottom-[1px] left-[312px] lg:flex md:hidden sm:hidden" 
           aria-label="뒤로가기"
         >
           <img src={backSvg} alt="뒤로가기" className="w-full h-full object-contain" />
