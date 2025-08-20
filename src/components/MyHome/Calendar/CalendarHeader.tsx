@@ -1,4 +1,6 @@
 import React from 'react';
+import beforeIcon from '../../../assets/MyHome/c-before.svg';
+import nextIcon from '../../../assets/MyHome/c-next.svg';
 
 interface CalendarHeaderProps {
   currentDate: Date;
@@ -27,8 +29,9 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
       <div className="flex items-center justify-center mb-[29px]">
         <button 
           onClick={onPrevMonth}
-          className="w-[33.57px] h-[28.54px] bg-[#C5C8CB] hover:bg-[#B0B3B6] transition-colors flex items-center justify-center rounded-[1.5px] mr-[28px] [clip-path:polygon(100%_0%,100%_100%,0%_50%)]" 
+          className="w-[1.784rem] h-[2.098rem] flex items-center justify-center mr-[28px]" 
         >
+          <img src={beforeIcon} alt="이전 달" className="w-full h-full object-contain" />
         </button>
         
         <div className="flex items-center gap-[21px]">
@@ -42,8 +45,9 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
         
         <button 
           onClick={onNextMonth}
-          className="w-[28px] h-[28px] bg-[#1D68FF] hover:bg-[#0F4CCC] transition-colors flex items-center justify-center rounded-[1.5px] ml-[79px] [clip-path:polygon(0%_0%,100%_50%,0%_100%)]"
+          className="w-[1.784rem] h-[2.098rem] flex items-center justify-center ml-[79px]"
         >
+          <img src={nextIcon} alt="다음 달" className="w-full h-full object-contain" />
         </button>
       </div>
     </>

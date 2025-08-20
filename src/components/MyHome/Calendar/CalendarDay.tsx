@@ -39,7 +39,7 @@ const CalendarDay: React.FC<CalendarDayProps> = ({
   return (
     <div 
       className={`
-        relative h-[130px] border-r border-[#DBE6FF] last:border-r-0
+        relative h-[7.75rem] border-r border-[#DBE6FF] last:border-r-0
         flex flex-col items-start justify-start px-2
         ${getSelectionStyle()}
         hover:bg-gray-50 transition-colors cursor-pointer

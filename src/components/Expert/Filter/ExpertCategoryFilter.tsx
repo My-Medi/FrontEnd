@@ -21,8 +21,8 @@ const ExpertCategoryFilter: React.FC<ExpertCategoryFilterProps> = ({ selected, o
         key={cat.value}
         className={
           selected === cat.value
-            ? "bg-[#1D68FF] text-white rounded-full px-[4.5rem] py-[0.7rem] border border-[#1D68FF] shadow transition whitespace-nowrap text-lg font-medium font-pretendard leading-9 tracking-[-0.03em] text-center"
-            : "bg-white text-[#25282B] rounded-full px-[4.5rem] py-[0.7rem] border border-[#DBE6FF] shadow transition whitespace-nowrap text-lg font-medium font-pretendard leading-9 tracking-[-0.03em] text-center"
+            ? "bg-[#1D68FF] text-white rounded-full px-[4.6875rem] py-[0.5625rem] border border-[#1D68FF] shadow transition whitespace-nowrap text-lg font-medium font-pretendard leading-9 tracking-[-0.03em] text-center"
+            : "bg-white text-[#25282B] rounded-full px-[4.6875rem] py-[0.5625rem] border border-[#DBE6FF] shadow transition whitespace-nowrap text-lg font-medium font-pretendard leading-9 tracking-[-0.03em] text-center"
         }
         onClick={() => onSelect(cat.value)}
         type="button"

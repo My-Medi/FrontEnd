@@ -17,7 +17,7 @@ const button = cva(
   {
     variants: {
       intent: {
-        active: "text-white bg-[#1D68FF]",
+        active: "text-[#FFFFFF] bg-[#1D68FF]",
         inactive:
           "bg-[#C5C8CB] text-white",
       },
@@ -127,7 +127,7 @@ const LoginPage = () => {
       {/* 뒤로가기 버튼 */}
       <button
         onClick={handleBack}
-        className="absolute w-[17px] h-[35px] hidden xl:flex items-center justify-center top-[65px] left-[312px]"
+        className="absolute w-[17px] h-[35px] hidden xl:flex top-[65px] left-[19.5rem]"
         aria-label="뒤로가기"
       >
         <img src={backSvg} alt="뒤로가기" className="w-full h-full object-contain" />

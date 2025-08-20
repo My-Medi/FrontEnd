@@ -365,9 +365,9 @@ const SignUpInfo: React.FC<SignUpInfoProps> = ({
         </div>
 
 
-        {/* 버튼 */}
         <div className="flex gap-[185px]">
           <button onClick={onPrev} className="px-10 py-3 rounded-[30px] cursor-pointer bg-[#dbe6ff] text-[18px] text-[#121218] font-semibold">이전</button>
+          
           <button type="submit" className="w-[216px] px-10 py-3 rounded-[30px] cursor-pointer bg-[#1d68ff] text-[18px] text-white font-semibold">다음</button>
         </div>
 

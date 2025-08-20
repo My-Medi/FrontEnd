@@ -31,10 +31,25 @@ const ExpertAdvice: React.FC<Props> = ({ onMenuSelect }) => {
             {adviceText}
           </p>
         </div>
-
-        {/* 매칭된 전문가 보기 버튼 */}
-        <div className='lg:block md:hidden sm:hidden'>
-          <ActionButton text='매칭된 전문가 보기' onClick={handleExpertClick} />
+        
+        {/* 카드와 버튼 컨테이너 */}
+        <div className="mt-[17px] flex justify-between items-end lg:mt-[17px] lg:flex-row lg:justify-between lg:items-end md:mt-4 md:flex-col md:justify-start md:items-start md:gap-4 sm:mt-3 sm:flex-col sm:justify-start sm:items-start sm:gap-3">
+          {/* 전문가 조언 카드 */}
+          <div
+            className="w-[780px] h-[76px] flex items-center px-8 py-2.5 border-t border-b border-[#82ABFD] lg:w-[780px] lg:h-[76px] lg:px-8 lg:py-2.5 md:w-full md:h-auto md:px-6 md:py-4 sm:w-full sm:h-auto sm:px-4 sm:py-3"
+          >
+            <p className="text-[1.125rem] font-medium leading-[2] tracking-[-0.54px] text-[#121218]">
+              {adviceText}
+            </p>
+          </div>
+          
+          {/* 매칭된 전문가 보기 버튼 */}
+          <div className="lg:block md:hidden sm:hidden">
+            <ActionButton 
+              text="매칭된 전문가 보기" 
+              onClick={handleExpertClick} 
+            />
+          </div>
         </div>
       </div>
     </div>
