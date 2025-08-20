@@ -122,7 +122,7 @@ const HealthTermsPage: React.FC = () => {
 
   return (
     <div className='w-full'>
-      <div className='max-w-[1360px] mx-auto  py-[60px]'>
+      <div className='w-[1301px] mx-auto  py-[60px]'>
         {/* 뒤로가기 버튼과 카테고리 제목 */}
         <div className='mb-[12px]'>
           <div className='flex items-center'>
@@ -138,7 +138,8 @@ const HealthTermsPage: React.FC = () => {
             </div>
           </div>
         </div>
-
+        </div>
+        <div className='w-[1363px] mx-auto'>
         {/* 선택된 용어 제목 */}
         {selectedTerm && (
           <div className='text-center mb-[60px]'>

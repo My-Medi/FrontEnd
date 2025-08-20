@@ -19,7 +19,7 @@ const HealthTermButtons: React.FC<HealthTermButtonsProps> = ({
   onTermSelect 
 }) => {
   return (
-    <div className=" mx-auto">
+    <div className=" mx-auto max-w-[1380px]">
       {/* 첫 번째 줄 (6개) */}
       <div className="flex flex-wrap gap-[24px] mb-[40px] justify-center">
         {healthTerms.slice(0, 6).map((term) => (
