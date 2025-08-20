@@ -27,7 +27,7 @@ const HealthTermInfo: React.FC<HealthTermInfoProps> = ({ selectedTerm, healthTer
       <div className="max-w-[1300px] mx-auto">
         {/* 인용구 */}
         <div className="text-center mb-[24px]">
-          <p className="text-[20px] text-[#1D68FF] font-medium">
+          <p className="text-[24px] text-[#1D68FF] font-medium">
             {selectedTermData.quote}
           </p>
         </div>
@@ -38,7 +38,7 @@ const HealthTermInfo: React.FC<HealthTermInfoProps> = ({ selectedTerm, healthTer
         {/* 선택된 용어 정보 */}
         <div className="flex flex-col items-center">
           {/* 설명을 문장별로 분리해서 표시 */}
-          <div className="text-[18px] text-[#374151] leading-[1.8] mb-[12px] text-center">
+          <div className="text-[24px] text-[#374151] leading-[1.8] mb-[12px] text-center">
             {(() => {
               if (selectedTermData.id === 'B형 간염') {
                 // B형 간염의 경우 특별한 처리
@@ -49,7 +49,7 @@ const HealthTermInfo: React.FC<HealthTermInfoProps> = ({ selectedTerm, healthTer
                      const nextSentence = sentences[index + 1];
                      if (nextSentence && nextSentence.includes('예방접종')) {
                        return (
-                         <p key={index} className="mb-[12px] text-left">
+                         <p key={index} className="mb-[12px] text-left ml-[50px]">
                            <span dangerouslySetInnerHTML={{
                              __html: (sentence.trim() + '. ' + nextSentence.trim()).replace(
                                /(\d+~?\d*mg\/dL|\d+~?\d*IU\/L|\d+~?\d*g\/dL|\d+~?\d*mL\/min\/1\.73m²|\d+)/g,
@@ -72,7 +72,7 @@ const HealthTermInfo: React.FC<HealthTermInfoProps> = ({ selectedTerm, healthTer
                    }
                    if (sentence.includes('항원')) {
                      return (
-                       <p key={index} className="mb-[12px] text-left">
+                       <p key={index} className="mb-[12px] text-left ml-[50px]">
                          <span dangerouslySetInnerHTML={{
                            __html: sentence.trim().replace(
                              /(\d+~?\d*mg\/dL|\d+~?\d*IU\/L|\d+~?\d*g\/dL|\d+~?\d*mL\/min\/1\.73m²|\d+)/g,
