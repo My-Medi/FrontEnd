@@ -510,15 +510,28 @@ const HealthCheckupForm = () => {
   };
 
   // 키 변경 핸들러
+  // 숫자 입력 음수 방지 유틸
+  const normalizeNonNegativeInput = (input: string): string => {
+    if (input === '') return '';
+    if (input.trim().startsWith('-')) return '0';
+    const num = Number(input);
+    if (!Number.isFinite(num)) return input;
+    return num < 0 ? '0' : input;
+  };
+
+  const handleNumberInput = (setter: (v: string) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setter(normalizeNonNegativeInput(e.target.value));
+  };
+
   const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const value = normalizeNonNegativeInput(e.target.value);
     setHeight(value);
     calculateBMI(value, weight);
   };
 
   // 몸무게 변경 핸들러
   const handleWeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const value = normalizeNonNegativeInput(e.target.value);
     setWeight(value);
     calculateBMI(height, value);
   };
@@ -1068,6 +1081,7 @@ const HealthCheckupForm = () => {
             <label className='w-40 font-medium text-black text-[18px]'>키 (cm)</label>
             <input
               type='number'
+              min={0}
               className='rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10'
               placeholder='cm'
               value={height}
@@ -1080,6 +1094,7 @@ const HealthCheckupForm = () => {
               <label className='w-40 font-medium text-black text-[18px]'>몸무게 (kg)</label>
               <input
                 type='number'
+                min={0}
                 className='rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10'
                 placeholder='kg'
                 value={weight}
@@ -1117,10 +1132,11 @@ const HealthCheckupForm = () => {
               <label className='w-40 font-medium text-black text-[18px]'>허리둘레 (cm)</label>
               <input
                 type='number'
+                min={0}
                 className='rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10'
                 placeholder='cm'
                 value={waist}
-                onChange={(e) => setWaist(e.target.value)}
+                onChange={handleNumberInput(setWaist)}
               />
             </div>
             <div className='flex gap-10 ml-50 text-[18px] mb-[24px] font-medium'>
@@ -1225,20 +1241,22 @@ const HealthCheckupForm = () => {
                 <span className='ml-10 text-[20px]'>수축기 혈압</span>
                 <input
                   type='number'
+                  min={0}
                   className='rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10'
                   placeholder='120'
                   value={bpHigh}
-                  onChange={(e) => setBpHigh(e.target.value)}
+                  onChange={handleNumberInput(setBpHigh)}
                 />
               </div>
               <div className='flex items-center gap-2'>
                 <span className='text-[20px]'>이완기 혈압</span>
                 <input
                   type='number'
+                  min={0}
                   className='rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10'
                   placeholder='80'
                   value={bpLow}
-                  onChange={(e) => setBpLow(e.target.value)}
+                  onChange={handleNumberInput(setBpLow)}
                 />
               </div>
             </div>
@@ -1286,10 +1304,11 @@ const HealthCheckupForm = () => {
               <label className='w-40 font-medium text-black text-[18px]'>혈색소(g/dL)</label>
               <input
                 type='number'
+                min={0}
                 className='rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10'
                 placeholder='12.3'
                 value={hemoglobin}
-                onChange={(e) => setHemoglobin(e.target.value)}
+                onChange={handleNumberInput(setHemoglobin)}
               />
             </div>
             <div className='flex gap-10 ml-50 text-[18px] mb-[24px] font-medium'>
@@ -1309,10 +1328,11 @@ const HealthCheckupForm = () => {
               <label className='w-40 font-medium text-black text-[18px]'>공복혈당(mg/dL)</label>
               <input
                 type='number'
+                min={0}
                 className='rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10'
                 placeholder='85'
                 value={fastingGlucose}
-                onChange={(e) => setFastingGlucose(e.target.value)}
+                onChange={handleNumberInput(setFastingGlucose)}
               />
             </div>
             <div className='flex gap-10 ml-50 text-[18px] mb-[24px] font-medium'>
@@ -1341,10 +1361,11 @@ const HealthCheckupForm = () => {
                   </label>
                   <input
                     type='number'
+                    min={0}
                     className='rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10'
                     placeholder='0'
                     value={cholesterol}
-                    onChange={(e) => setCholesterol(e.target.value)}
+                    onChange={handleNumberInput(setCholesterol)}
                   />
                 </div>
                 {/* HDL 콜레스테롤 */}
@@ -1354,10 +1375,11 @@ const HealthCheckupForm = () => {
                   </label>
                   <input
                     type='number'
+                    min={0}
                     className='rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10'
                     placeholder='0'
                     value={hdl}
-                    onChange={(e) => setHdl(e.target.value)}
+                    onChange={handleNumberInput(setHdl)}
                   />
                 </div>
                 {/* 중성지방 */}
@@ -1367,10 +1389,11 @@ const HealthCheckupForm = () => {
                   </label>
                   <input
                     type='number'
+                    min={0}
                     className='rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10'
                     placeholder='0'
                     value={triglyceride}
-                    onChange={(e) => setTriglyceride(e.target.value)}
+                    onChange={handleNumberInput(setTriglyceride)}
                   />
                 </div>
                 {/* LDL 콜레스테롤 */}
@@ -1380,10 +1403,11 @@ const HealthCheckupForm = () => {
                   </label>
                   <input
                     type='number'
+                    min={0}
                     className='rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10'
                     placeholder='0'
                     value={ldl}
-                    onChange={(e) => setLdl(e.target.value)}
+                    onChange={handleNumberInput(setLdl)}
                   />
                 </div>
               </div>
@@ -1443,10 +1467,11 @@ const HealthCheckupForm = () => {
                   <label className='w-40 font-medium text-black text-[18px]'>혈청 크레아티닌</label>
                   <input
                     type='number'
+                    min={0}
                     className='rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10'
                     placeholder='1.2'
                     value={protein}
-                    onChange={(e) => setProtein(e.target.value)}
+                    onChange={handleNumberInput(setProtein)}
                   />
                 </div>
                 {/* eGFR */}
@@ -1456,10 +1481,11 @@ const HealthCheckupForm = () => {
                   </label>
                   <input
                     type='number'
+                    min={0}
                     className='rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10'
                     placeholder='72'
                     value={serumCreatinine}
-                    onChange={(e) => setSerumCreatinine(e.target.value)}
+                    onChange={handleNumberInput(setSerumCreatinine)}
                   />
                 </div>
               </div>
@@ -1504,10 +1530,11 @@ const HealthCheckupForm = () => {
                 <label className='w-40 font-medium text-black text-[18px]'>AST(SGOT)</label>
                 <input
                   type='number'
+                  min={0}
                   className='rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10'
                   placeholder='25'
                   value={ast}
-                  onChange={(e) => setAst(e.target.value)}
+                  onChange={handleNumberInput(setAst)}
                 />
               </div>
               {/* ALT(SGPT) */}
@@ -1515,10 +1542,11 @@ const HealthCheckupForm = () => {
                 <label className='w-40 font-medium text-black text-[18px]'>ALT(SGPT)</label>
                 <input
                   type='number'
+                  min={0}
                   className='rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10'
                   placeholder='25'
                   value={alt}
-                  onChange={(e) => setAlt(e.target.value)}
+                  onChange={handleNumberInput(setAlt)}
                 />
               </div>
               {/* 감마-GTP(Y-GTP) */}
@@ -1526,10 +1554,11 @@ const HealthCheckupForm = () => {
                 <label className='w-40 font-medium text-black text-[18px]'>감마-GTP(Y-GTP)</label>
                 <input
                   type='number'
+                  min={0}
                   className='rounded-[14px] border border-gray-300 px-4 py-2 h-[48px] w-[200px] ml-10'
                   placeholder='30'
                   value={gammaGtp}
-                  onChange={(e) => setGammaGtp(e.target.value)}
+                  onChange={handleNumberInput(setGammaGtp)}
                 />
               </div>
             </div>
