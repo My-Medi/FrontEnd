@@ -7,6 +7,7 @@ import IntroducePage from '../pages/Introduce/IntroducePage';
 import NotFoundPage from '../pages/NotFoundPage/NotFoundPage';
 import HealthCheckupResultInput from '../pages/HealthCheckupResultInput/HealthCheckupResultInput';
 import ExpertPage from '../pages/Expert/ExpertPage';
+import ExpertReportPage from '../pages/Expert/ExpertReportPage';
 import CalendarIntroPage from '../pages/Introduce/CalendarIntroPage';
 import ExpertMatchingIntroPage from '../pages/Introduce/ExpertMatchingPage';
 import MedicalReportPage from '../pages/Introduce/MedicalReportPage';
@@ -48,6 +49,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <ExpertPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'expert-report',
+        element: (
+          <ProtectedRoute>
+            <ExpertReportPage />
           </ProtectedRoute>
         ),
       },

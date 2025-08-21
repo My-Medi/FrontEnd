@@ -39,7 +39,7 @@ const MyMedicalReport: React.FC = () => {
         const arr = Array.from({ length: count }, (_, i) => i + 1);
         setRounds(arr);
         setSelectedRound(count);
-    } catch (e) {
+      } catch (e) {
         setRounds([1]);
         setSelectedRound(1);
       }
@@ -55,7 +55,7 @@ const MyMedicalReport: React.FC = () => {
         const raw = res.result?.checkupDate ?? '';
         // YYYY-MM-DD -> YYYY/MM/DD 표기로 변경 (replaceAll 미지원 환경 대비)
         setCheckupDate(raw.split('-').join('/'));
-    } catch (e) {
+      } catch (e) {
         setCheckupDate('');
       }
     })();
