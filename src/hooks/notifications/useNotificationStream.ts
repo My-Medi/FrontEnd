@@ -50,14 +50,23 @@ export const useNotificationStream = ({
         abortControllerRef.current.abort();
       }
       try {
+        // 토큰 리프레시 후 재연결을 위한 콜백
+        const handleTokenRefresh = () => {
+          // 약간의 지연 후 재연결
+          setTimeout(() => {
+            connectStream();
+          }, 1000);
+        };
+        
         abortControllerRef.current = connectNotificationStreamWithFetch(
           handleMessage, 
           handleError,
           () => {},
-          userType
+          userType,
+          handleTokenRefresh
         );
       } catch (error) {
-        console.error('알림 스트림 재연결 실패:', error);
+        // 재연결 실패 처리
       }
     }, 5000);
   }, [handleMessage]);
@@ -67,7 +76,6 @@ export const useNotificationStream = ({
   const connectStream = useCallback(() => {
     // 이미 연결 중이면 중복 연결 방지
     if (isConnectingRef.current) {
-      console.log('이미 연결 중입니다. 중복 연결 방지');
       return;
     }
 
@@ -76,10 +84,17 @@ export const useNotificationStream = ({
       
       // 기존 연결이 있으면 정리
       if (abortControllerRef.current) {
-        console.log('기존 연결 정리 중...');
         abortControllerRef.current.abort();
         abortControllerRef.current = null;
       }
+      
+      // 토큰 리프레시 후 재연결을 위한 콜백
+      const handleTokenRefresh = () => {
+        // 약간의 지연 후 재연결
+        setTimeout(() => {
+          connectStream();
+        }, 1000);
+      };
       
       // SSE 연결 시도
       abortControllerRef.current = connectNotificationStreamWithFetch(
@@ -88,10 +103,10 @@ export const useNotificationStream = ({
         () => {
           isConnectingRef.current = false;
         },
-        userType
+        userType,
+        handleTokenRefresh
       );
     } catch (error) {
-      console.error('알림 스트림 초기 연결 실패:', error);
       isConnectingRef.current = false;
     }
       }, [handleMessage, handleError]);
@@ -111,7 +126,6 @@ export const useNotificationStream = ({
       clearTimeout(timeoutId);
       
       if (abortControllerRef.current) {
-        console.log('컴포넌트 언마운트: SSE 연결 해제');
         abortControllerRef.current.abort();
         abortControllerRef.current = null;
       }

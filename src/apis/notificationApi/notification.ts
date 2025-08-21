@@ -4,7 +4,8 @@ import type {
   NotificationListResponse, 
   ExpertNotificationListResponse 
 } from '../../types/notification';
-import { getTokens } from '../../utils/tokenStorage';
+import { getTokens, saveTokens } from '../../utils/tokenStorage';
+import { tokenAPI } from '../tokenApi/token';
 
 /**
  * fetch API를 사용한 SSE 스트림 연결 (Bearer Token 지원)
@@ -17,13 +18,14 @@ export const connectNotificationStreamWithFetch = (
   onMessage: (data: any) => void,
   onError: (error: any) => void,
   onOpen: () => void,
-  userType?: string
+  userType?: string,
+  onTokenRefresh?: () => void
 ): AbortController => {
   // 환경변수에서 BASE_URL 가져오기 (기본값 설정)
   const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api.my-medi.cloud/api/v1';
   
   // 토큰을 쿠키에서 가져오기
-  const { accessToken } = getTokens();
+  const { accessToken, refreshToken } = getTokens();
   
   // 사용자 타입에 따라 다른 스트림 경로 사용
   const streamPath = userType === 'expert' 
@@ -38,6 +40,30 @@ export const connectNotificationStreamWithFetch = (
   }
   
   const url = `${BASE_URL}${streamPath}`;
+  
+  // 토큰 리프레시 함수
+  const refreshTokenAndReconnect = async () => {
+    if (!refreshToken) {
+      onError(new Error('리프레시 토큰이 없습니다.'));
+      return;
+    }
+    
+    try {
+      const response = await tokenAPI.reissue(refreshToken);
+      
+      if (response.result) {
+        // 새로운 토큰 저장
+        saveTokens(response.result.accessToken, response.result.refreshToken);
+        
+        // 토큰 리프레시 콜백 호출 (재연결을 위해)
+        onTokenRefresh?.();
+      } else {
+        throw new Error('토큰 재발급에 실패했습니다.');
+      }
+    } catch (error) {
+      onError(new Error('토큰 리프레시에 실패했습니다.'));
+    }
+  };
   
 
   
@@ -54,7 +80,13 @@ export const connectNotificationStreamWithFetch = (
     },
     signal: abortController.signal,
   })
-  .then(response => {
+  .then(async response => {
+    if (response.status === 401) {
+      // 토큰 만료 시 리프레시 시도
+      await refreshTokenAndReconnect();
+      return;
+    }
+    
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }

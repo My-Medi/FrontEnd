@@ -1,10 +1,14 @@
 import React, { useMemo, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
-import bg1 from '../../../assets/Introduce/1.png';
-import bg2 from '../../../assets/Introduce/2.png';
-import bg3 from '../../../assets/Introduce/3.png';
-import bg4 from '../../../assets/Introduce/4.png';
+import bg1Png from '../../../assets/Introduce/1.png';
+import bg2Png from '../../../assets/Introduce/2.png';
+import bg3Png from '../../../assets/Introduce/3.png';
+import bg4Png from '../../../assets/Introduce/4.png';
+import bg1Webp from '../../../assets/Introduce/1.webp';
+import bg2Webp from '../../../assets/Introduce/2.webp';
+import bg3Webp from '../../../assets/Introduce/3.webp';
+import bg4Webp from '../../../assets/Introduce/4.webp';
 import CTAButton from './CTAButton';
 
 interface AdBannerProps {
@@ -12,12 +16,20 @@ interface AdBannerProps {
   onVariantChange?: (variant: '1' | '2' | '3' | '4') => void;
 }
 
-// 배경 이미지 매핑 객체
+// WebP 지원 확인 함수
+const supportsWebP = (): boolean => {
+  const canvas = document.createElement('canvas');
+  canvas.width = 1;
+  canvas.height = 1;
+  return canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+};
+
+// 배경 이미지 매핑 객체 (WebP 우선, PNG fallback)
 const BACKGROUND_IMAGES = {
-  '1': bg1,
-  '2': bg2,
-  '3': bg3,
-  '4': bg4,
+  '1': { webp: bg1Webp, png: bg1Png },
+  '2': { webp: bg2Webp, png: bg2Png },
+  '3': { webp: bg3Webp, png: bg3Png },
+  '4': { webp: bg4Webp, png: bg4Png },
 } as const;
 
 // 화살표 아이콘 컴포넌트
@@ -32,15 +44,41 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
   const { userType } = useAuth();
   const isExpert = userType === 'expert';
 
+  // WebP 지원 여부 확인
+  const [webpSupported, setWebpSupported] = useState<boolean | null>(null);
+
   // 부드러운 전환을 위한 크로스페이드 레이어 상태
-  const [displayedSrc, setDisplayedSrc] = useState<string>(BACKGROUND_IMAGES[variant] || bg1);
+  const [displayedSrc, setDisplayedSrc] = useState<string>('');
   const [incomingSrc, setIncomingSrc] = useState<string | null>(null);
   const [incomingLoaded, setIncomingLoaded] = useState<boolean>(false);
   const [isFading, setIsFading] = useState<boolean>(false);
   const [initialLoaded, setInitialLoaded] = useState<boolean>(false);
+  const [currentImageLoaded, setCurrentImageLoaded] = useState<boolean>(false);
+
+  // WebP 지원 확인 및 초기 이미지 설정
+  useEffect(() => {
+    const isWebPSupported = supportsWebP();
+    setWebpSupported(isWebPSupported);
+    
+    // 초기 이미지 즉시 설정
+    const initialImageUrl = isWebPSupported ? BACKGROUND_IMAGES[variant].webp : BACKGROUND_IMAGES[variant].png;
+    setDisplayedSrc(initialImageUrl);
+    
+    // 초기 로딩 상태 즉시 설정 (이미지가 이미 캐시되어 있을 가능성)
+    if (initialImageUrl) {
+      setInitialLoaded(true);
+      setCurrentImageLoaded(true);
+    }
+  }, [variant]);
+
+  // 현재 배경 이미지 URL을 가져오는 함수
+  const getImageUrl = useCallback((variantKey: '1' | '2' | '3' | '4') => {
+    const images = BACKGROUND_IMAGES[variantKey];
+    return webpSupported ? images.webp : images.png;
+  }, [webpSupported]);
 
   // 배경 이미지를 메모이제이션
-  const backgroundImage = useMemo(() => BACKGROUND_IMAGES[variant] || bg1, [variant]);
+  const backgroundImage = useMemo(() => getImageUrl(variant), [variant, getImageUrl]);
 
   // 현재 배경 이미지를 우선 다운로드하도록 preload 힌트
   useEffect(() => {
@@ -59,36 +97,62 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
   // 나머지 배너 이미지는 미리 받아두도록 prefetch 힌트 (UI 블록 없음)
   useEffect(() => {
     const links: HTMLLinkElement[] = [];
-    Object.values(BACKGROUND_IMAGES).forEach((src) => {
-      if (src === backgroundImage) return;
+    Object.entries(BACKGROUND_IMAGES).forEach(([key, images]) => {
+      const imageUrl = webpSupported ? images.webp : images.png;
+      if (imageUrl === backgroundImage) return;
       const l = document.createElement('link');
       l.rel = 'prefetch';
       l.as = 'image';
-      l.href = src;
+      l.href = imageUrl;
       document.head.appendChild(l);
       links.push(l);
     });
     return () => {
       links.forEach((l) => document.head.removeChild(l));
     };
-  }, [backgroundImage]);
+  }, [backgroundImage, webpSupported]);
 
-  // 초기 표시 이미지 로딩 스피너 제어 (최초 1회 또는 displayedSrc 변경 시)
+  // displayedSrc 업데이트 (초기 설정 후)
   useEffect(() => {
-    let isMounted = true;
-    setInitialLoaded(false);
+    if (webpSupported !== null && displayedSrc) {
+      const newSrc = getImageUrl(variant);
+      if (newSrc !== displayedSrc) {
+        setDisplayedSrc(newSrc);
+      }
+    }
+  }, [variant, webpSupported, getImageUrl, displayedSrc]);
+
+  // 이미지 로딩 상태 설정
+  useEffect(() => {
+    if (!displayedSrc) return;
+    
+    // 이미 로드된 상태라면 스킵
+    if (currentImageLoaded && initialLoaded) return;
+    
     const img = new Image();
-    img.decoding = 'async';
-    img.onload = () => { if (isMounted) setInitialLoaded(true); };
-    img.onerror = () => { if (isMounted) setInitialLoaded(true); };
+    img.onload = () => {
+      setInitialLoaded(true);
+      setCurrentImageLoaded(true);
+    };
+    img.onerror = () => {
+      // 에러가 발생해도 UI는 표시
+      setInitialLoaded(true);
+      setCurrentImageLoaded(true);
+    };
     img.src = displayedSrc;
-    return () => { isMounted = false; };
-  }, [displayedSrc]);
+  }, [displayedSrc, currentImageLoaded, initialLoaded]);
 
   // variant 변경 시 부드러운 전환을 위한 incoming 레이어 준비 및 페이드 인
   useEffect(() => {
-    const nextSrc = BACKGROUND_IMAGES[variant] || bg1;
-    if (!nextSrc || nextSrc === displayedSrc) return;
+    const nextSrc = getImageUrl(variant);
+    if (!nextSrc || nextSrc === displayedSrc) {
+      // 같은 이미지인 경우 incoming 레이어 정리
+      setIncomingSrc(null);
+      setIncomingLoaded(false);
+      setIsFading(false);
+      return;
+    }
+    
     setIncomingSrc(nextSrc);
     setIncomingLoaded(false);
 
@@ -105,10 +169,12 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
       requestAnimationFrame(() => setIsFading(true));
     };
     img.src = nextSrc;
-  }, [variant, displayedSrc]);
+  }, [variant, displayedSrc, getImageUrl]);
 
   // 모든 배경 이미지 프리로드 (UI는 블록하지 않음)
   useEffect(() => {
+    if (webpSupported === null) return;
+    
     let isMounted = true;
     let count = 0;
     const imgs: HTMLImageElement[] = [];
@@ -119,12 +185,12 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
       // no-op: 프리로드 진행도는 UI에 표시하지 않음
     };
 
-    Object.values(BACKGROUND_IMAGES).forEach((src) => {
+    Object.values(BACKGROUND_IMAGES).forEach((images) => {
       const img = new Image();
       img.decoding = 'async';
       img.onload = handleDone;
       img.onerror = handleDone; // 에러여도 진행
-      img.src = src;
+      img.src = webpSupported ? images.webp : images.png;
       imgs.push(img);
     });
 
@@ -135,7 +201,7 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
         img.onerror = null;
       });
     };
-  }, []);
+  }, [webpSupported]);
 
   // 페이지네이션 버튼 클릭 핸들러를 useCallback으로 최적화
   const handlePaginationClick = useCallback((buttonVariant: '1' | '2' | '3' | '4') => {
@@ -155,7 +221,7 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
       <button 
         key={button.variant}
         onClick={() => handlePaginationClick(button.variant)}
-        className={`rounded-full transition-all duration-300 ease-in-out cursor-pointer ${
+        className={`rounded-full transition-all duration-500 ease-out cursor-pointer ${
           button.isActive 
             ? 'w-12 xl:w-12 h-1.5 xl:h-1.5 bg-white md:w-10 md:h-1.25 sm:w-8 sm:h-1' 
             : 'w-6 xl:w-6 h-1.5 xl:h-1.5 bg-[#C5C8CB] hover:bg-gray-300 md:w-5 md:h-1.25 sm:w-4 sm:h-1'
@@ -170,7 +236,8 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
     const order: Array<'1' | '2' | '3' | '4'> = ['1', '2', '3', '4'];
     const idx = order.indexOf(variant);
     const nextVariant = order[(idx + 1) % order.length];
-    const nextSrc = BACKGROUND_IMAGES[nextVariant];
+    const nextImages = BACKGROUND_IMAGES[nextVariant];
+    const nextSrc = webpSupported ? nextImages.webp : nextImages.png;
     if (!nextSrc) return;
 
     // preload hint
@@ -192,24 +259,13 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
       img.onload = null;
       img.onerror = null;
     };
-  }, [variant]);
+  }, [variant, webpSupported]);
 
   return (
     <div
-      className="relative w-full h-[32.6rem] xl:h-[32.6rem] rounded-5 xl:rounded-5 overflow-hidden transition-all duration-500 ease-in-out md:h-[25rem] md:rounded-4 sm:h-[18.8rem] sm:rounded-3"
-      style={{
-        boxShadow:
-          '0px 3px 6px 0px #1D68FF12, 0px 11px 11px 0px #1D68FF0F, 0px 26px 15px 0px #1D68FF08, 0px 46px 18px 0px #1D68FF03, 0px 71px 20px 0px #1D68FF00',
-      }}
+      className="relative w-full h-[32.6rem] xl:h-[32.6rem] rounded-5 xl:rounded-5 overflow-hidden md:h-[25rem] md:rounded-4 sm:h-[18.8rem] sm:rounded-3"
     >
-      {!initialLoaded && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-100">
-          <div className="h-6 w-6 rounded-full border-2 border-gray-300 border-t-blue-500 animate-spin" aria-hidden="true" />
-          <div className="mt-3 text-gray-500 text-sm" aria-live="polite">
-            로딩 중...
-          </div>
-        </div>
-      )}
+
 
       {/* Base layer (현재 표시 중인 배경) */}
       <div
@@ -219,13 +275,14 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
           backgroundSize: '100% 100%',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
+          backgroundColor: displayedSrc ? 'transparent' : '#f8f9fa',
         }}
       />
 
       {/* Incoming layer (다음 배경, 크로스페이드) */}
-      {incomingSrc && (
+      {incomingSrc && incomingLoaded && (
         <div
-          className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${incomingLoaded && isFading ? 'opacity-100' : 'opacity-0'}`}
+          className={`absolute inset-0 transition-opacity duration-1000 ease-out ${isFading ? 'opacity-100' : 'opacity-0'}`}
           style={{
             backgroundImage: `url(${incomingSrc})`,
             backgroundSize: '100% 100%',
@@ -233,7 +290,7 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
             backgroundRepeat: 'no-repeat',
           }}
           onTransitionEnd={() => {
-            if (incomingLoaded && isFading && incomingSrc) {
+            if (isFading && incomingSrc) {
               setDisplayedSrc(incomingSrc);
               setIncomingSrc(null);
               setIsFading(false);
@@ -242,8 +299,8 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
         />
       )}
       {/* 두 번째 배너에만 버튼 표시 */}
-      {initialLoaded && variant === '2' && (
-        <div className="relative z-10 flex flex-col justify-end items-start h-full pb-[6.7rem] xl:pb-[6.7rem] pl-[1rem] xl:pl-[7.3rem] md:pb-16 md:pl-5 md:justify-end sm:pb-12 sm:pl-7 sm:justify-end">
+      {currentImageLoaded && variant === '2' && (
+        <div className="relative z-10 flex flex-col justify-end items-start h-full pb-[6.7rem] xl:pb-[6.7rem] pl-[1rem] xl:pl-[7.3rem] md:pb-16 md:pl-5 md:justify-end sm:pb-12 sm:pl-7 sm:justify-end animate-fade-in-up">
           <CTAButton onClick={() => { if (!isExpert) navigate('/health-result-input'); }}>
             <span className="xl:text-xl md:text-lg sm:text-base">지금 바로 건강 기록하기</span>
             <ArrowIcon className="xl:w-[0.5rem] xl:h-[1rem] md:w-2 md:h-4 sm:w-1.5 sm:h-3" />
@@ -252,8 +309,8 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
       )}
 
       {/* 세 번째 배너에만 버튼 표시 */}
-      {initialLoaded && variant === '3' && (
-        <div className="relative z-10 flex flex-col justify-end items-start h-full pb-[6.7rem] xl:pb-[6.7rem] pl-[7.4rem] xl:pl-[7.4rem] md:pb-16 md:pl-8.5 md:justify-end sm:pb-12 sm:pl-6.5 sm:justify-end">
+      {currentImageLoaded && variant === '3' && (
+        <div className="relative z-10 flex flex-col justify-end items-start h-full pb-[6.7rem] xl:pb-[6.7rem] pl-[7.4rem] xl:pl-[7.4rem] md:pb-16 md:pl-8.5 md:justify-end sm:pb-12 sm:pl-6.5 sm:justify-end animate-fade-in-up">
           <CTAButton onClick={() => (!isExpert ? navigate('/expert') : undefined)}>
             <span className="xl:text-xl md:text-lg sm:text-base">전문가 찾기</span>
             <ArrowIcon className="xl:w-[0.5rem] xl:h-[1rem] md:w-2 md:h-4 sm:w-1.5 sm:h-3" />
@@ -262,8 +319,8 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
       )}
 
       {/* 네 번째 배너에만 버튼 표시 */}
-      {initialLoaded && variant === '4' && (
-         <div className="relative z-10 flex flex-col justify-end items-start h-full pb-[9.9rem] xl:pb-[9.9rem] pl-[27.5rem] xl:pl-[27.5rem] md:pb-16 md:pl-8 sm:pb-12 sm:pl-6">
+      {currentImageLoaded && variant === '4' && (
+         <div className="relative z-10 flex flex-col justify-end items-start h-full pb-[9.9rem] xl:pb-[9.9rem] pl-[27.5rem] xl:pl-[27.5rem] md:pb-16 md:pl-8 sm:pb-12 sm:pl-6 animate-fade-in-up">
           <div className="text-center">
             <CTAButton onClick={() => navigate('/myhome')}>
               <span className="xl:text-xl md:text-lg sm:text-base">마이홈 캘린더 가기</span>
@@ -274,11 +331,9 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
       )}
 
       {/* 페이지네이션 */}
-      {initialLoaded && (
-        <div className="absolute bottom-8 xl:bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2 xl:gap-2 z-20 md:bottom-6 md:gap-2 sm:bottom-4 sm:gap-1.5">
-          {paginationButtons}
-        </div>
-      )}
+      <div className="absolute bottom-8 xl:bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2 xl:gap-2 z-20 md:bottom-6 md:gap-2 sm:bottom-4 sm:gap-1.5">
+        {paginationButtons}
+      </div>
     </div>
   );
 };
