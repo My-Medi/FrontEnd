@@ -1,16 +1,63 @@
-import React, { useState, memo, useCallback } from 'react';
+import React, { useState, memo, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../../assets/Login/logo.svg';
 import mainLogo from '../../../assets/mainlog.svg';
 import { useAuth } from '../../../contexts/AuthContext';
 import { clearTokens } from '../../../utils/tokenStorage';
 import TopBarNotification from '../TopBarNotification';
+import { useNotificationStream } from '../../../hooks/notifications/useNotificationStream';
 
 const Topbar = memo(() => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [currentNotification, setCurrentNotification] = useState<any>(null);
   const { userType, setUserType, showNotification, setShowNotification } = useAuth();
+  
+  // 실시간 알림 스트림 연결
+  const { isConnected } = useNotificationStream({
+    enabled: !!userType, // 로그인된 사용자만 스트림 연결
+    userType: userType || undefined, // 사용자 타입 전달 (null인 경우 undefined로 변환)
+    onNewNotification: (notification) => {
+      // 서버에서 보내는 데이터 구조에 맞춰 처리
+      const notificationData = notification.userNotificationDto ? notification : notification;
+      
+      // 새로운 알림 데이터 저장 및 표시
+      setCurrentNotification(notificationData);
+      setShowNotification(true);
+      
+      // 5초 후 자동으로 알림 숨기기
+      setTimeout(() => {
+        setShowNotification(false);
+        setCurrentNotification(null);
+      }, 5000);
+    }
+  });
+
+
+
+
+
+  // 알림 메시지와 액션 텍스트를 동적으로 생성
+  const getNotificationContent = () => {
+    if (currentNotification?.userNotificationDto) {
+      const notification = currentNotification.userNotificationDto;
+      return {
+        message: notification.notificationContent,
+        actionText: "자세히 보기"
+      };
+    }
+    
+    // 직접 notificationContent가 있는 경우
+    if (currentNotification?.notificationContent) {
+      return {
+        message: currentNotification.notificationContent,
+        actionText: "자세히 보기"
+      };
+    }
+    
+    return null;
+  };
 
   const handleNavigate = useCallback((path: string) => {
     navigate(path);
@@ -114,20 +161,26 @@ const Topbar = memo(() => {
               )}
               <div className="relative">
                 <p
-                  onClick={userType ? () => navigate('/myhome', { state: { selectedMenu: userType === 'expert' ? 4 : 1 } }) : undefined}
+                  onClick={userType ? () => setShowNotification(!showNotification) : undefined}
                   className={`text-[#25282B] text-sm font-[300] leading-[1.4] tracking-[-0.42px] whitespace-nowrap font-[Pretendard] ${userType ? 'cursor-pointer hover:text-[#1D68FF] transition-colors duration-200' : 'cursor-default'}`}
                 >
                   알림
                 </p>
-                <TopBarNotification
-                  isVisible={showNotification}
-                  onClose={() => setShowNotification(false)}
-                  onAction={() => {
-                    setShowNotification(false);
-                  }}
-                  message="준호 핏 운동 처방사님께서 매칭을 수락하셨어요!"
-                  actionText="매칭 전문가 보러가기"
-                />
+                {(() => {
+                  const notificationContent = getNotificationContent();
+                  return notificationContent ? (
+                    <TopBarNotification
+                      isVisible={showNotification}
+                      onClose={() => setShowNotification(false)}
+                      onAction={() => {
+                        setShowNotification(false);
+                        navigate('/myhome', { state: { selectedMenu: userType === 'expert' ? 4 : 1 } });
+                      }}
+                      message={notificationContent.message}
+                      actionText={notificationContent.actionText}
+                    />
+                  ) : null;
+                })()}
               </div>
 
               <form
@@ -227,10 +280,10 @@ const Topbar = memo(() => {
               </a>
               <div className='w-10/12 h-px bg-gray-200 my-4'></div>
               {/* NavBar Links */}
-              <a onClick={() => handleNavigate('/myhome')} className="px-4 py-2 text-lg font-semibold text-gray-700 hover:text-[#1d68ff]">마이 홈</a>
-              <a onClick={() => handleNavigate('/health-result-input')} className="px-4 py-2 text-lg text-gray-700 hover:text-[#1d68ff]">마이 메디컬 리포트</a>
-              <a onClick={() => handleNavigate('/find-expert')} className="px-4 py-2 text-lg text-gray-700 hover:text-[#1d68ff]">전문가 찾기</a>
-              <a onClick={() => handleNavigate('/health-terms')} className="px-4 py-2 text-lg text-gray-700 hover:text-[#1d68ff]">건강용어 알아보기</a>
+              <a onClick={() => handleNavigate('/myhome')} className="px-4 py-2 text-lg font-semibold text-gray-700 hover:text-[#1d68ff] cursor-pointer">마이 홈</a>
+              <a onClick={() => handleNavigate('/health-result-input')} className="px-4 py-2 text-lg text-gray-700 hover:text-[#1d68ff] cursor-pointer">마이 메디컬 리포트</a>
+              <a onClick={() => handleNavigate('/find-expert')} className="px-4 py-2 text-lg text-gray-700 hover:text-[#1d68ff] cursor-pointer">전문가 찾기</a>
+              <a onClick={() => handleNavigate('/health-terms')} className="px-4 py-2 text-lg text-gray-700 hover:text-[#1d68ff] cursor-pointer">건강용어 알아보기</a>
               <div className="w-10/12 h-px bg-gray-200 my-4"></div>
               {/* Auth Links */}
               {userType ? (
