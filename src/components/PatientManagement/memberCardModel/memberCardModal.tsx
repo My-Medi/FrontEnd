@@ -62,11 +62,12 @@ const MemberCardModal: React.FC<MemberCardModalProps> = ({
   }, [info?.age, member.age]);
   const handleClick = () => {
     if (!summary) return;
-    navigate(`/health-result-input?userId=${member.userId}&round=${selectedRound || 1}`);
+    navigate(
+      `/expert-report?userId=${member.userId}&round=${selectedRound || 1}&nickname=${encodeURIComponent(info?.nickname ?? member.nickname)}`,
+    );
   };
   const isLoading = isInfoLoading || isSummaryLoading;
 
-  
   return (
     <>
       {!showAdviceModal && !showConsultModal && (
@@ -96,10 +97,11 @@ const MemberCardModal: React.FC<MemberCardModalProps> = ({
                 {/* 텍스트 블럭 */}
                 <div className='flex flex-col w-[837px] items-center justify-between h-[60px]'>
                   <p className='text-[#75787B] text-[16px] font-semibold font-[Pretendard] leading-[22px] tracking-[-0.48px]'>
-                    {(info?.accountRegisterDate ?? member.signupDate ?? '-')} 부터 함께하고 있는 회원이에요!
+                    {info?.accountRegisterDate ?? member.signupDate ?? '-'} 부터 함께하고 있는
+                    회원이에요!
                   </p>
                   <p className='text-[#121218] text-[24px] font-semibold font-[Pretendard] leading-[36px] tracking-[-0.72px]'>
-                    {(info?.nickname ?? member.nickname)} 회원님의 건강데이터
+                    {info?.nickname ?? member.nickname} 회원님의 건강데이터
                   </p>
                 </div>
               </div>
@@ -194,10 +196,7 @@ const MemberCardModal: React.FC<MemberCardModalProps> = ({
       {/* AdviceRegisterModal 열기 */}
 
       {showAdviceModal && (
-        <AdviceRegisterModal
-          userId={member.userId}
-          onClose={() => setShowAdviceModal(false)}
-        />
+        <AdviceRegisterModal userId={member.userId} onClose={() => setShowAdviceModal(false)} />
       )}
       {showConsultModal && <ConsultReservationModal onClose={() => setShowConsultModal(false)} />}
     </>
