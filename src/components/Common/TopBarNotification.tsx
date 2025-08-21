@@ -16,7 +16,6 @@ const TopBarNotification: React.FC<TopBarNotificationProps> = ({
   message,
   actionText,
 }) => {
-  console.log('TopBarNotification 렌더링:', { isVisible, message, actionText });
   return (
     <div 
       className={`absolute top-5 right-[-345px] z-50 w-[527px] h-[180px] cursor-pointer transition-opacity duration-1000 ${

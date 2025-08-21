@@ -17,89 +17,46 @@ const Topbar = memo(() => {
   // 실시간 알림 스트림 연결
   const { isConnected } = useNotificationStream({
     enabled: !!userType, // 로그인된 사용자만 스트림 연결
+    userType: userType || undefined, // 사용자 타입 전달 (null인 경우 undefined로 변환)
     onNewNotification: (notification) => {
-      console.log('=== Topbar onNewNotification 콜백 호출됨 ===');
-      console.log('Topbar에서 알림 수신:', notification);
-      console.log('알림 데이터 구조:', JSON.stringify(notification, null, 2));
-      console.log('현재 showNotification 상태:', showNotification);
+      // 서버에서 보내는 데이터 구조에 맞춰 처리
+      const notificationData = notification.userNotificationDto ? notification : notification;
       
-      // 새로운 알림 데이터 저장
-      setCurrentNotification(notification);
-      console.log('setCurrentNotification 호출됨');
-      
-      // 새로운 알림이 오면 알림 표시
+      // 새로운 알림 데이터 저장 및 표시
+      setCurrentNotification(notificationData);
       setShowNotification(true);
-      console.log('setShowNotification(true) 호출됨');
-      console.log('알림 표시 상태를 true로 설정');
       
-      // 3초 후 자동으로 알림 숨기기
+      // 5초 후 자동으로 알림 숨기기
       setTimeout(() => {
-        console.log('3초 타이머 실행: 알림 숨김');
         setShowNotification(false);
         setCurrentNotification(null);
-        console.log('알림 자동 숨김');
-      }, 3000);
+      }, 5000);
     }
   });
 
-  // 테스트용 알림 트리거 함수 (개발자 도구에서 호출 가능)
-  useEffect(() => {
-    (window as any).testNotification = () => {
-      console.log('테스트 알림 트리거됨');
-      const testNotification = {
-        userNotificationDto: {
-          userNotificationId: 999,
-          userId: 7,
-          notificationContent: "테스트 알림입니다! SSE 스트림이 작동하고 있습니다.",
-          isRead: false,
-          createdAt: new Date().toISOString()
-        }
-      };
-      
-      setCurrentNotification(testNotification);
-      setShowNotification(true);
-      console.log('테스트 알림 표시됨');
-      
-      setTimeout(() => {
-        setShowNotification(false);
-        setCurrentNotification(null);
-        console.log('테스트 알림 자동 숨김');
-      }, 3000);
-    };
-    
-    return () => {
-      delete (window as any).testNotification;
-    };
-  }, []);
 
-  // 디버깅용 로그
-  console.log('Topbar 렌더링:', { 
-    userType, 
-    showNotification, 
-    isConnected, 
-    currentNotification,
-    hasNotificationData: !!currentNotification 
-  });
+
+
 
   // 알림 메시지와 액션 텍스트를 동적으로 생성
   const getNotificationContent = () => {
-    console.log('getNotificationContent 호출됨:', { currentNotification });
-    
     if (currentNotification?.userNotificationDto) {
       const notification = currentNotification.userNotificationDto;
-      console.log('알림 데이터에서 메시지 추출:', notification.notificationContent);
       return {
         message: notification.notificationContent,
         actionText: "자세히 보기"
       };
     }
     
-    // 기본값
-    console.log('기본 알림 메시지 사용');
-    return {
-      message: "새로운 알림이 도착했습니다.",
-      actionText: "알림 보러가기"
-    };
+    // 직접 notificationContent가 있는 경우
+    if (currentNotification?.notificationContent) {
+      return {
+        message: currentNotification.notificationContent,
+        actionText: "자세히 보기"
+      };
+    }
+    
+    return null;
   };
 
   const handleNavigate = useCallback((path: string) => {
@@ -209,16 +166,21 @@ const Topbar = memo(() => {
                 >
                   알림
                 </p>
-                <TopBarNotification
-                  isVisible={showNotification}
-                  onClose={() => setShowNotification(false)}
-                  onAction={() => {
-                    setShowNotification(false);
-                    navigate('/myhome', { state: { selectedMenu: userType === 'expert' ? 4 : 1 } });
-                  }}
-                  message={getNotificationContent().message}
-                  actionText={getNotificationContent().actionText}
-                />
+                {(() => {
+                  const notificationContent = getNotificationContent();
+                  return notificationContent ? (
+                    <TopBarNotification
+                      isVisible={showNotification}
+                      onClose={() => setShowNotification(false)}
+                      onAction={() => {
+                        setShowNotification(false);
+                        navigate('/myhome', { state: { selectedMenu: userType === 'expert' ? 4 : 1 } });
+                      }}
+                      message={notificationContent.message}
+                      actionText={notificationContent.actionText}
+                    />
+                  ) : null;
+                })()}
               </div>
 
               <form
@@ -318,10 +280,10 @@ const Topbar = memo(() => {
               </a>
               <div className='w-10/12 h-px bg-gray-200 my-4'></div>
               {/* NavBar Links */}
-              <a onClick={() => handleNavigate('/myhome')} className="px-4 py-2 text-lg font-semibold text-gray-700 hover:text-[#1d68ff]">마이 홈</a>
-              <a onClick={() => handleNavigate('/health-result-input')} className="px-4 py-2 text-lg text-gray-700 hover:text-[#1d68ff]">마이 메디컬 리포트</a>
-              <a onClick={() => handleNavigate('/find-expert')} className="px-4 py-2 text-lg text-gray-700 hover:text-[#1d68ff]">전문가 찾기</a>
-              <a onClick={() => handleNavigate('/health-terms')} className="px-4 py-2 text-lg text-gray-700 hover:text-[#1d68ff]">건강용어 알아보기</a>
+              <a onClick={() => handleNavigate('/myhome')} className="px-4 py-2 text-lg font-semibold text-gray-700 hover:text-[#1d68ff] cursor-pointer">마이 홈</a>
+              <a onClick={() => handleNavigate('/health-result-input')} className="px-4 py-2 text-lg text-gray-700 hover:text-[#1d68ff] cursor-pointer">마이 메디컬 리포트</a>
+              <a onClick={() => handleNavigate('/find-expert')} className="px-4 py-2 text-lg text-gray-700 hover:text-[#1d68ff] cursor-pointer">전문가 찾기</a>
+              <a onClick={() => handleNavigate('/health-terms')} className="px-4 py-2 text-lg text-gray-700 hover:text-[#1d68ff] cursor-pointer">건강용어 알아보기</a>
               <div className="w-10/12 h-px bg-gray-200 my-4"></div>
               {/* Auth Links */}
               {userType ? (

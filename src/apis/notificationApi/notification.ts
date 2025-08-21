@@ -16,7 +16,8 @@ import { getTokens } from '../../utils/tokenStorage';
 export const connectNotificationStreamWithFetch = (
   onMessage: (data: any) => void,
   onError: (error: any) => void,
-  onOpen: () => void
+  onOpen: () => void,
+  userType?: string
 ): AbortController => {
   // 환경변수에서 BASE_URL 가져오기 (기본값 설정)
   const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api.my-medi.cloud/api/v1';
@@ -24,8 +25,10 @@ export const connectNotificationStreamWithFetch = (
   // 토큰을 쿠키에서 가져오기
   const { accessToken } = getTokens();
   
-  // BASE_URL에 이미 /api/v1이 포함되어 있으므로 직접 경로 사용
-  const streamPath = '/users/notifications/stream';
+  // 사용자 타입에 따라 다른 스트림 경로 사용
+  const streamPath = userType === 'expert' 
+    ? '/experts/notifications/stream'
+    : '/users/notifications/stream';
   
   // 토큰이 없으면 연결하지 않음
   if (!accessToken) {
@@ -36,8 +39,7 @@ export const connectNotificationStreamWithFetch = (
   
   const url = `${BASE_URL}${streamPath}`;
   
-  console.log('fetch API로 SSE 스트림 연결 시도 (Bearer Token):', url);
-  console.log('토큰 존재 여부:', !!accessToken);
+
   
   // AbortController로 연결 해제 가능하게 설정
   const abortController = new AbortController();
@@ -57,8 +59,6 @@ export const connectNotificationStreamWithFetch = (
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     
-    console.log('SSE 스트림 연결 성공 (Bearer Token)');
-    console.log('Response headers:', Object.fromEntries(response.headers.entries()));
     onOpen();
     
     // ReadableStream 처리
@@ -69,65 +69,68 @@ export const connectNotificationStreamWithFetch = (
       throw new Error('Response body is null');
     }
     
-    const processStream = async () => {
-      try {
-        let currentEvent = '';
-        let currentData = '';
-        
-        while (true) {
-          const { done, value } = await reader.read();
-          
-          if (done) {
-            console.log('SSE 스트림 종료');
-            break;
-          }
-          
-          // 받은 데이터를 텍스트로 디코딩
-          const chunk = decoder.decode(value, { stream: true });
-          console.log('SSE 원시 데이터 수신:', chunk);
-          
-          const lines = chunk.split('\n');
-          
-          for (const line of lines) {
-            console.log('SSE 라인 처리:', line);
+            const processStream = async () => {
+          try {
+            let buffer = '';
             
-            if (line.startsWith('event: ')) {
-              currentEvent = line.slice(7).trim();
-              console.log('SSE 이벤트 타입 설정:', currentEvent);
-            } else if (line.startsWith('data: ')) {
-              currentData = line.slice(6).trim();
-              console.log('SSE 데이터 설정:', currentData);
+            while (true) {
+              const { done, value } = await reader.read();
               
-              // notification 이벤트이고 데이터가 있는 경우 처리
-              if (currentEvent === 'notification' && currentData) {
-                try {
-                  const parsedData = JSON.parse(currentData);
-                  console.log('SSE 파싱된 알림 데이터:', parsedData);
-                  console.log('onMessage 콜백 호출 시작');
-                  onMessage(parsedData);
-                  console.log('onMessage 콜백 호출 완료');
-                } catch (error) {
-                  console.error('SSE 알림 데이터 파싱 실패:', error, '원본 데이터:', currentData);
-                }
+              if (done) {
+                console.log('SSE 스트림 종료');
+                break;
               }
               
-              // 이벤트와 데이터 초기화
-              currentEvent = '';
-              currentData = '';
-            } else if (line.startsWith('id: ')) {
-              console.log('SSE 이벤트 ID:', line.slice(4));
+                        // 받은 데이터를 텍스트로 디코딩하고 버퍼에 추가
+          const chunk = decoder.decode(value, { stream: true });
+          buffer += chunk;
+              
+              // 완전한 SSE 메시지 단위로 분리 (빈 줄로 구분)
+              const messages = buffer.split('\n\n');
+              buffer = messages.pop() || ''; // 마지막 불완전한 메시지는 버퍼에 유지
+              
+              for (const message of messages) {
+                if (!message.trim()) continue;
+                
+                let eventType = '';
+                let data = '';
+                
+                const lines = message.split('\n');
+                for (const line of lines) {
+                  // 정규식을 사용해서 더 안정적으로 처리
+                  const eventMatch = line.match(/^event:\s*(.+)$/);
+                  const dataMatch = line.match(/^data:\s*(.+)$/);
+                  const idMatch = line.match(/^id:\s*(.+)$/);
+                  
+                  if (eventMatch) {
+                    eventType = eventMatch[1].trim();
+                  } else if (dataMatch) {
+                    data = dataMatch[1].trim();
+                  }
+                }
+                
+                // notification 이벤트이고 데이터가 있는 경우 처리
+                if (eventType === 'notification' && data) {
+                  try {
+                    const parsedData = JSON.parse(data);
+                    // 서버에서 보내는 데이터 구조에 맞춰 처리
+                    const notificationData = parsedData.userNotificationDto ? parsedData : parsedData;
+                    onMessage(notificationData);
+                  } catch (error) {
+                    console.error('SSE 알림 데이터 파싱 실패:', error, '원본 데이터:', data);
+                  }
+                }
+              }
+            }
+          } catch (error: any) {
+            if (error.name === 'AbortError') {
+              console.log('SSE 스트림 연결 해제됨');
+            } else {
+              console.error('SSE 스트림 처리 중 에러:', error);
+              onError(error);
             }
           }
-        }
-      } catch (error: any) {
-        if (error.name === 'AbortError') {
-          console.log('SSE 스트림 연결 해제됨');
-        } else {
-          console.error('SSE 스트림 처리 중 에러:', error);
-          onError(error);
-        }
-      }
-    };
+        };
     
     processStream();
   })
