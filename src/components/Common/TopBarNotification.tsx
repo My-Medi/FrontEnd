@@ -16,10 +16,13 @@ const TopBarNotification: React.FC<TopBarNotificationProps> = ({
   message,
   actionText,
 }) => {
-  if (!isVisible) return null;
-
   return (
-    <div className="absolute top-5 right-[-345px] z-50 w-[527px] h-[180px]">
+    <div 
+      className={`absolute top-5 right-[-345px] z-50 w-[527px] h-[180px] cursor-pointer transition-opacity duration-1000 ${
+        isVisible ? 'opacity-100' : 'opacity-0'
+      }`} 
+      onClick={onAction}
+    >
       <img src={alarmBox} alt="알림 배경" className="absolute inset-0 w-full h-full" />
       {/* 메인 컨텐츠 */}
       <div className="relative flex items-center p-4 h-full pb-10">
