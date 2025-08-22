@@ -64,6 +64,7 @@ const RequestForm = () => {
       if (proposal.healthInterestsDto.dietImprovement) healthInterests.push('식습관 개선');
       if (proposal.healthInterestsDto.exerciseRoutine) healthInterests.push('운동 루틴 설정');
       if (proposal.healthInterestsDto.stressAndLifestyle) healthInterests.push('스트레스 / 생활습관 전반');
+      if (proposal.healthInterestsDto.other) healthInterests.push('기타');
 
       // 이상 수치 매핑
       const abnormalResults = [];
@@ -125,6 +126,7 @@ const RequestForm = () => {
         dietImprovement: formData.healthInterests.includes('식습관 개선'),
         exerciseRoutine: formData.healthInterests.includes('운동 루틴 설정'),
         stressAndLifestyle: formData.healthInterests.includes('스트레스 / 생활습관 전반'),
+        other: formData.healthInterests.includes('기타'),
       },
       abnormalValueDto: {
         fastingBloodSugar: formData.abnormalResults.includes('공복혈당'),

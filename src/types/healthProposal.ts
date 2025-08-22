@@ -12,6 +12,7 @@ export interface HealthProposalRequest {
     dietImprovement: boolean;
     exerciseRoutine: boolean;
     stressAndLifestyle: boolean;
+    other: boolean;
   };
   abnormalValueDto: {
     fastingBloodSugar: boolean;
@@ -47,6 +48,7 @@ export interface HealthProposalResponse {
     dietImprovement: boolean;
     exerciseRoutine: boolean;
     stressAndLifestyle: boolean;
+    other: boolean;
   };
   abnormalValueDto: {
     fastingBloodSugar: boolean;
