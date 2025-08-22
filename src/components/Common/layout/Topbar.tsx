@@ -38,6 +38,16 @@ const Topbar = memo(() => {
 
   // 알림 메시지와 액션 텍스트를 동적으로 생성
   const getNotificationContent = () => {
+    // 전문가 알림 처리
+    if (currentNotification?.expertNotificationDto) {
+      const notification = currentNotification.expertNotificationDto;
+      return {
+        message: notification.notificationContent || "새로운알림이 도착했습니다.",
+        actionText: "자세히 보기"
+      };
+    }
+    
+    // 일반 사용자 알림 처리
     if (currentNotification?.userNotificationDto) {
       // const notification = currentNotification.userNotificationDto;
       return {

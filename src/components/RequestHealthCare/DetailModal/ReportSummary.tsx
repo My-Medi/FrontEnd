@@ -6,6 +6,7 @@ import interest from '@/assets/health-constants/interest-constant.svg';
 import normal from '@/assets/health-constants/normal-constant.svg';
 import safe from '@/assets/health-constants/safe-constant.svg';
 import DotCol from '@/assets/dotcol.svg';
+import healthGaugeChart from '@/assets/123.svg';
 
 interface ReportProps {
   nickname: string;
@@ -210,10 +211,14 @@ const ReportSummary: React.FC<ReportProps> = ({
             </span>
           </div>
           <div className='flex items-center gap-2'>
-            <HealthStatusIcon status={healthStatus || '정상'} />
-            <span className='text-[#121218] text-[14px] font-medium'>
-              {healthStatus || '정상'}
-            </span>
+            {/* 건강 상태 게이지 차트 */}
+            <div className='flex items-center'>
+              <img 
+                src={healthGaugeChart} 
+                alt="건강 상태 게이지 차트" 
+                className="w-auto h-[34px]"
+              />
+            </div>
           </div>
         </div>
 

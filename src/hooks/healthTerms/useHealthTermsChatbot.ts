@@ -30,7 +30,7 @@ export const useHealthTermsChatbot = () => {
 
   const typeText = (text: string, callback: () => void) => {
     let index = 0;
-    setTypingText('생각 중...');
+    setTypingText(''); // 빈 문자열로 시작
     setIsTypingComplete(false);
     
     const typeInterval = setInterval(() => {
@@ -90,6 +90,7 @@ export const useHealthTermsChatbot = () => {
     setMessages(prev => [...prev, userMessage]);
     setInputText('');
     setIsTyping(true);
+    setTypingText('생각 중...'); // 응답 생성 중에만 "생각 중..." 표시
 
     // 챗봇 응답 생성 및 타이핑 효과
     setTimeout(async () => {

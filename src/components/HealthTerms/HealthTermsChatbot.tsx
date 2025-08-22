@@ -100,16 +100,19 @@ const HealthTermsChatbot: React.FC<HealthTermsChatbotProps> = ({ isOpen, onClose
                 </svg>
               </div>
               <div className="bg-[#ffffff] text-black px-6 py-4 rounded-3xl border border-[#1D68FF]/20 shadow-md max-w-2xl">
-                <div className="flex items-center space-x-2">
-                  <span className="text-base text-gray-600">생각 중</span>
-                  <div className="flex space-x-1">
-                    <div className="w-2 h-2 bg-[#1D68FF] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                    <div className="w-2 h-2 bg-[#1D68FF] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                    <div className="w-2 h-2 bg-[#1D68FF] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                {typingText === '생각 중...' ? (
+                  // 응답 생성 중일 때만 "생각 중" 애니메이션 표시
+                  <div className="flex items-center space-x-2">
+                    <span className="text-base text-gray-600">생각 중</span>
+                    <div className="flex space-x-1">
+                      <div className="w-2 h-2 bg-[#1D68FF] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                      <div className="w-2 h-2 bg-[#1D68FF] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                      <div className="w-2 h-2 bg-[#1D68FF] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                    </div>
                   </div>
-                </div>
-                {typingText && (
-                  <p className="text-base leading-relaxed whitespace-pre-line mt-2">
+                ) : (
+                  // 응답 텍스트 타이핑 중일 때는 실제 텍스트 표시
+                  <p className="text-base leading-relaxed whitespace-pre-line">
                     {typingText}
                     {!isTypingComplete && <span className="animate-pulse text-[#1D68FF]">|</span>}
                   </p>
