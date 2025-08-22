@@ -15,8 +15,8 @@ const PatientManagementList = () => {
     enabled: true,
   });
 
-  const content = useMemo(() => data?.content ?? [], [data?.content]);
-  const totalPages = useMemo(() => data?.totalPages ?? 0, [data?.totalPages]);
+  const content = data?.content ?? [];
+  const totalPages = data?.totalPages ?? 0;
 
   if (isLoading) {
     return (
@@ -127,7 +127,7 @@ const PatientManagementList = () => {
       <div className='mt-[40px]'>
         <Pagination
           currentPage={currentPage}
-          totalPages={totalPages}
+          totalPages={Math.max(totalPages, 1)}
           onPageChange={(p) => setCurrentPage(p)}
         />
       </div>

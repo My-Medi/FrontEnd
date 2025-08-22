@@ -43,7 +43,7 @@ const Topbar = memo(() => {
     if (currentNotification?.userNotificationDto) {
       const notification = currentNotification.userNotificationDto;
       return {
-        message: notification.notificationContent,
+        message: "새로운알림이 도착했습니다.",
         actionText: "자세히 보기"
       };
     }
@@ -51,7 +51,7 @@ const Topbar = memo(() => {
     // 직접 notificationContent가 있는 경우
     if (currentNotification?.notificationContent) {
       return {
-        message: currentNotification.notificationContent,
+        message: "새로운알림이 도착했습니다.",
         actionText: "자세히 보기"
       };
     }

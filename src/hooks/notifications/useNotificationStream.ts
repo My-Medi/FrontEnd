@@ -44,7 +44,11 @@ export const useNotificationStream = ({
       clearTimeout(reconnectTimeoutRef.current);
     }
     
-    // 5초 후 재연결 시도
+    // 네트워크 오류인 경우 더 긴 지연 후 재연결 시도
+    const isNetworkError = error.message?.includes('network error') || 
+                          error.message?.includes('ERR_HTTP2_PROTOCOL_ERROR');
+    const delay = isNetworkError ? 10000 : 5000; // 네트워크 오류 시 10초, 일반 오류 시 5초
+    
     reconnectTimeoutRef.current = setTimeout(() => {
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
@@ -67,8 +71,9 @@ export const useNotificationStream = ({
         );
       } catch (error) {
         // 재연결 실패 처리
+        console.error('재연결 실패:', error);
       }
-    }, 5000);
+    }, delay);
   }, [handleMessage]);
 
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import alarmBox from '../../assets/Alarm/alarmbox.svg';
 import alarmIcon from '../../assets/Alarm/alarm.svg';
 
@@ -16,12 +16,40 @@ const TopBarNotification: React.FC<TopBarNotificationProps> = ({
   message,
   actionText,
 }) => {
+  const [shouldRender, setShouldRender] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  useEffect(() => {
+    if (isVisible) {
+      setShouldRender(true);
+      // 다음 프레임에서 애니메이션 시작
+      requestAnimationFrame(() => {
+        setIsAnimating(true);
+      });
+    } else {
+      setIsAnimating(false);
+      // 애니메이션 완료 후 컴포넌트 제거
+      const timer = setTimeout(() => {
+        setShouldRender(false);
+      }, 400);
+      return () => clearTimeout(timer);
+    }
+  }, [isVisible]);
+
+  if (!shouldRender) return null;
+
   return (
     <div 
-      className={`absolute top-5 right-[-345px] z-50 w-[527px] h-[180px] cursor-pointer transition-opacity duration-1000 ${
-        isVisible ? 'opacity-100' : 'opacity-0'
+      className={`absolute top-5 right-[-345px] z-50 w-[527px] h-[180px] cursor-pointer transition-all duration-700 ease-out ${
+        isAnimating 
+          ? 'opacity-100 translate-x-0 scale-100' 
+          : 'opacity-0 translate-x-12 scale-95'
       }`} 
       onClick={onAction}
+      style={{
+        transformOrigin: 'right center',
+        willChange: 'transform, opacity',
+      }}
     >
       <img src={alarmBox} alt="알림 배경" className="absolute inset-0 w-full h-full" />
       {/* 메인 컨텐츠 */}
@@ -48,7 +76,7 @@ const TopBarNotification: React.FC<TopBarNotificationProps> = ({
              <div className="flex items-center gap-4 justify-start">
                <button
                  onClick={onAction}
-                 className="text-white font-medium text-lg leading-[2em] tracking-[-3%] hover:text-blue-200 transition-colors"
+                 className="text-white font-medium text-lg leading-[2em] tracking-[-3%] hover:text-blue-200 transition-colors duration-200"
                >
                  {actionText}
                </button>

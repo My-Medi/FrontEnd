@@ -53,6 +53,43 @@ export default {
           'sans-serif',
         ],
       },
+      keyframes: {
+        'slide-in-right': {
+          '0%': {
+            opacity: '0',
+            transform: 'translateX(2rem) scale(0.9)',
+          },
+          '50%': {
+            opacity: '0.8',
+            transform: 'translateX(-0.5rem) scale(1.02)',
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'translateX(0) scale(1)',
+          },
+        },
+        'bounce-in': {
+          '0%': {
+            opacity: '0',
+            transform: 'translateX(2rem) scale(0.8)',
+          },
+          '60%': {
+            opacity: '1',
+            transform: 'translateX(-0.3rem) scale(1.05)',
+          },
+          '80%': {
+            transform: 'translateX(0.1rem) scale(0.98)',
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'translateX(0) scale(1)',
+          },
+        },
+      },
+      animation: {
+        'slide-in-right': 'slide-in-right 0.7s ease-out',
+        'bounce-in': 'bounce-in 0.8s ease-out',
+      },
     },
   },
   plugins: [],

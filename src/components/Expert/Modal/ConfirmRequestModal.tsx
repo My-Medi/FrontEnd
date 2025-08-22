@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import backSvg from '../../../assets/Expert/back.svg';
 import closeSvg from '../../../assets/Expert/close.svg';
 import SuccessModal from './SuccessModal';
+import RequestLimitModal from './RequestLimitModal';
 import useModalScrollLock from '../../../hooks/useModalScrollLock';
-import { useRequestConsultationMutation } from '../../../hooks/experts/mutations/useRequestConsultationMutation';
+import { useRequestConsultationMutation, getRequestCount } from '../../../hooks/experts/mutations/useRequestConsultationMutation';
 
 interface ConfirmRequestModalProps {
   isOpen: boolean;
@@ -17,7 +18,7 @@ interface ConfirmRequestModalProps {
   comment: string;
 }
 
-const ConfirmRequestModal: React.FC<ConfirmRequestModalProps> = ({ 
+const ConfirmRequestModal: React.FC<ConfirmRequestModalProps> = ({
   isOpen, 
   onClose, 
   onBack,
@@ -29,12 +30,13 @@ const ConfirmRequestModal: React.FC<ConfirmRequestModalProps> = ({
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showLimitModal, setShowLimitModal] = useState(false);
   
   // 상담 요청 mutation
   // 모달이 떠있는 동안에는 쿼리 무효화 지연
   const requestConsultationMutation = useRequestConsultationMutation({ skipQueryInvalidation: true });
 
-  useModalScrollLock(isOpen && !showSuccessModal);
+  useModalScrollLock(isOpen && !showSuccessModal && !showLimitModal);
 
   useEffect(() => {
     if (isOpen) {
@@ -45,6 +47,15 @@ const ConfirmRequestModal: React.FC<ConfirmRequestModalProps> = ({
   }, [isOpen]);
 
   const handleConfirm = () => {
+    // 현재 요청 횟수 확인
+    const currentCount = getRequestCount();
+    
+    if (currentCount >= 5) {
+      // 5번째 요청인 경우 경고 모달 표시
+      setShowLimitModal(true);
+      return;
+    }
+    
     // 상담 요청 API 호출
     requestConsultationMutation.mutate(
       { expertId, comment },
@@ -66,93 +77,66 @@ const ConfirmRequestModal: React.FC<ConfirmRequestModalProps> = ({
     onClose();
   };
 
+  const handleLimitModalClose = () => {
+    setShowLimitModal(false);
+  };
+
   if (!isOpen) return null;
 
   return (
     <>
-      <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
-        {/* Backdrop */}
-        <div 
-          className={`absolute inset-0 bg-[#121218]/40 transition-opacity duration-300 ${
-            isVisible && !showSuccessModal ? 'opacity-100' : 'opacity-0'
-          }`}
-          onClick={onClose}
-        />
-        
-        {/* Modal */}
-        <div 
-          className={`relative w-full max-w-[744px] h-auto bg-white/96 rounded-[40px] transition-all duration-300 ${
-            isVisible && !showSuccessModal ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-          }`}
-          onClick={(e) => e.stopPropagation()}
-          style={{ 
-            boxShadow: '0px 2px 20px rgba(144, 181, 255, 0.5), inset 0px -4px 6px rgba(255, 255, 255, 0.25), inset 0px 4px 8px #FFFFFF'
-          }}
-        >
-          {/* Content */}
-          <div className="px-4 sm:px-8 lg:px-15 py-8 sm:py-10 lg:py-12.5 flex flex-col">
-            {/* Header */}
-            <div className="flex flex-col items-center">
-              {/* Step indicator */}
-              <div className="text-center mb-6">
-                <div className="text-[16px] font-semibold text-[#1D68FF] leading-[22px] tracking-[-0.03em]">
-                  2/2
-                </div>
-                <div className="text-[18px] font-medium text-[#4D5053] leading-[36px] tracking-[-0.03em]">
-                  요청서 전송
-                </div>
-              </div>
-              
-              <div className="text-center mb-8">
-                <h2 className="text-[24px] font-semibold text-[#121218] leading-[36px] tracking-[-0.03em]">
-                  <span className="text-[#1D68FF]">{expertRealName}</span> / <span className="text-[#121218]">{expertName}</span> <span className="text-[#121218]">{expertPosition}</span>에게 건강관리 요청서를 보내시겠습니까?
-                </h2>
-              </div>
-            </div>
+      <div className={`fixed inset-0 bg-black/30 z-40 transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`} onClick={onClose} />
+      <div className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 transition-all duration-300 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+        <div className="bg-white rounded-[24px] w-[520px] max-w-full p-8" onClick={(e) => e.stopPropagation()}>
+          {/* 헤더 */}
+          <div className="flex items-center justify-between mb-8">
+            <button onClick={onBack} className="flex items-center gap-2">
+              <img src={backSvg} alt="뒤로가기" className="w-6 h-6" />
+              <span className="text-[#121218] text-[16px] font-medium">뒤로가기</span>
+            </button>
+            <button onClick={onClose} className="flex items-center justify-center w-8 h-8">
+              <img src={closeSvg} alt="닫기" className="w-6 h-6" />
+            </button>
+          </div>
 
-            {/* Buttons */}
-            <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-4">
-              <button
-                onClick={() => {
-                  // 모든 모달 닫기 (RequestModal, ExpertDetailModal)
-                  // RequestModal의 onClose를 호출하여 모든 모달 닫기
-                  onClose();
-                }}
-                className="w-full sm:w-[300px] h-14 rounded-full border border-[#FFFFFF] text-[#121218] hover:bg-[#EDF0F3] text-[20px] font-medium leading-[24px] tracking-[-0.03em] transition cursor-pointer bg-white shadow-[0px_0px_2px_3px_rgba(29,104,255,0.02),0px_0px_4px_6px_rgba(29,104,255,0.01),0px_0px_6px_0px_rgba(29,104,255,0)]"
-              >
-                취소
-              </button>
-              <button
-                onClick={handleConfirm}
-                className="w-full sm:w-[300px] h-14 rounded-full bg-[#1D68FF] text-white text-[20px] font-semibold leading-[36px] tracking-[-0.03em] transition cursor-pointer shadow-[0px_0px_2px_4px_rgba(29,104,255,0.04),0px_0px_4px_4px_rgba(29,104,255,0.02),0px_0px_6px_0px_rgba(29,104,255,0)]"
-              >
-                요청서 보내기
-              </button>
+          {/* 제목 */}
+          <div className="text-center mb-8">
+            <h2 className="text-[#121218] text-[24px] font-semibold leading-[36px] mb-2">
+              상담 요청 확인
+            </h2>
+            <p className="text-[#75787B] text-[16px] leading-[24px]">
+              {expertName} {expertPosition}에게 상담을 요청하시겠습니까?
+            </p>
+          </div>
+
+          {/* 요청 내용 미리보기 */}
+          <div className="mb-8">
+            <h3 className="text-[#121218] text-[18px] font-medium leading-[28px] mb-4">
+              요청 내용
+            </h3>
+            <div className="bg-[#F8F9FA] rounded-lg p-4">
+              <p className="text-[#121218] text-[16px] leading-[24px] whitespace-pre-wrap">
+                {comment}
+              </p>
             </div>
           </div>
 
-          {/* Back button */}
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              // ConfirmRequestModal만 닫고 RequestModal은 유지
-              if (onBack) {
-                onBack();
-              }
-            }}
-            className="absolute top-12 left-12 w-[17px] h-[35px] flex items-center justify-center"
-          >
-            <img src={backSvg} alt="뒤로가기" className="w-full h-full object-contain" />
-          </button>
-
-          {/* Close button */}
-          <button
-            onClick={onClose}
-            className="absolute top-12 right-12 w-4 h-4 flex items-center justify-center"
-          >
-            <img src={closeSvg} alt="닫기" className="w-full h-full object-contain" />
-          </button>
+          {/* 버튼 */}
+          <div className="flex justify-center gap-4">
+            <button
+              onClick={onBack}
+              className="w-[180px] h-[44px] rounded-full bg-white text-[#25282B] border border-[#E3E6EB] font-medium"
+            >
+              수정하기
+            </button>
+            <button
+              onClick={handleConfirm}
+              disabled={requestConsultationMutation.isPending}
+              className="w-[180px] h-[44px] rounded-full bg-[#1D68FF] text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {requestConsultationMutation.isPending ? '요청 중...' : '요청하기'}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -160,6 +144,13 @@ const ConfirmRequestModal: React.FC<ConfirmRequestModalProps> = ({
       <SuccessModal
         isOpen={showSuccessModal}
         onClose={handleSuccessClose}
+      />
+
+      {/* Request Limit Modal */}
+      <RequestLimitModal
+        isOpen={showLimitModal}
+        onClose={handleLimitModalClose}
+        onConfirm={handleLimitModalClose}
       />
     </>
   );
