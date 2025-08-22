@@ -7,9 +7,14 @@ export const getMatchedExperts = async (): Promise<MatchedExpertApiResponse> => 
   return response.data;
 };
 
-// 상담요청 취소
+// 상담요청 취소 (요청 상태)
 export const cancelConsultation = async (consultationId: number): Promise<void> => {
-  await axiosInstance.delete(`/users/consultations/${consultationId}`);
+  await axiosInstance.delete(`/users/consultations/${consultationId}?status=REQUESTED`);
+};
+
+// 매칭 끊기 (승인된 상태)
+export const unmatchConsultation = async (consultationId: number): Promise<void> => {
+  await axiosInstance.delete(`/users/consultations/${consultationId}?status=ACCEPTED`);
 };
 
 // 전문가에게 상담 요청

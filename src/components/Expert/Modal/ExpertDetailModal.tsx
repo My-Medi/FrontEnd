@@ -288,7 +288,7 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
                 <div className='text-base text-[#121218] leading-[1.7] pl-11 font-normal'>
                   {expert.careers && expert.careers.length > 0 ? (
                     expert.careers.map((career) => (
-                      <div key={career.careerId} className='mb-3'>
+                      <div key={career.careerId}>
                         {(() => {
                           const months = diffMonths(career.startDate, career.endDate);
                           const duration = formatDuration(months);

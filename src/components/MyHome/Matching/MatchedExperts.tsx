@@ -5,6 +5,7 @@ import { addExpertCard, type MatchedExpert } from '../../../data/matchedExperts'
 import CancelRequestConfirmModal from './CancelRequestConfirmModal';
 import { useMatchedExpertsQuery } from '../../../hooks/experts/queries/useMatchedExpertsQuery';
 import { useCancelConsultationMutation } from '../../../hooks/experts/mutations/useCancelConsultationMutation';
+import { useUnmatchConsultationMutation } from '../../../hooks/experts/mutations/useUnmatchConsultationMutation';
 
 import LoadingSpinner from '../../Common/LoadingSpinner';
 
@@ -13,7 +14,9 @@ const MatchedExperts: React.FC = () => {
   const [selectedExpert, setSelectedExpert] = useState<MatchedExpert | null>(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+  const [showUnmatchConfirm, setShowUnmatchConfirm] = useState(false);
   const [pendingCancelExpertId, setPendingCancelExpertId] = useState<string | null>(null);
+  const [pendingUnmatchExpertId, setPendingUnmatchExpertId] = useState<string | null>(null);
   
   // API 데이터 조회
   const { data: apiData, isLoading, error } = useMatchedExpertsQuery();
@@ -56,6 +59,16 @@ const MatchedExperts: React.FC = () => {
     },
   });
 
+  // 매칭 끊기 뮤테이션
+  const unmatchConsultationMutation = useUnmatchConsultationMutation({
+    onSuccess: () => {
+      // 성공 시 별도 로그 출력 제거
+    },
+    onError: () => {
+      alert('매칭 끊기에 실패했습니다. 다시 시도해주세요.');
+    },
+  });
+
   const FilterButton: React.FC<{ 
     type: 'connected' | 'requested' | 'rejected'; 
     label: string; 
@@ -85,8 +98,10 @@ const MatchedExperts: React.FC = () => {
     </div>
   );
 
-  const handleUnmatch = () => {
-    // TODO: API 호출로 매칭 끊기 구현
+  const handleUnmatch = (expertId: string) => {
+    // 확인 모달 열기
+    setPendingUnmatchExpertId(expertId);
+    setShowUnmatchConfirm(true);
   };
 
   const handleCancelRequest = (expertId: string) => {
@@ -108,6 +123,23 @@ const MatchedExperts: React.FC = () => {
       onSettled: () => {
         setShowCancelConfirm(false);
         setPendingCancelExpertId(null);
+      }
+    });
+  };
+
+  const confirmUnmatch = () => {
+    if (!pendingUnmatchExpertId) return;
+    const expert = experts.find(e => e.expertId.toString() === pendingUnmatchExpertId);
+    if (!expert || !expert.consultationId) {
+      setShowUnmatchConfirm(false);
+      setPendingUnmatchExpertId(null);
+      alert('매칭 정보를 찾을 수 없습니다.');
+      return;
+    }
+    unmatchConsultationMutation.mutate(expert.consultationId, {
+      onSettled: () => {
+        setShowUnmatchConfirm(false);
+        setPendingUnmatchExpertId(null);
       }
     });
   };
@@ -269,6 +301,19 @@ const MatchedExperts: React.FC = () => {
         }}
         onConfirm={confirmCancelRequest}
         title="해당 상담요청을 취소하시겠습니까?"
+        confirmText="확인"
+        cancelText="취소"
+      />
+
+      {/* 매칭 끊기 확인 모달 */}
+      <CancelRequestConfirmModal
+        isOpen={showUnmatchConfirm}
+        onClose={() => {
+          setShowUnmatchConfirm(false);
+          setPendingUnmatchExpertId(null);
+        }}
+        onConfirm={confirmUnmatch}
+        title="매칭을 끊으시겠습니까?"
         confirmText="확인"
         cancelText="취소"
       />
