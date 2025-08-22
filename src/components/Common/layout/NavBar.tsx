@@ -7,7 +7,11 @@ const NavBar = memo(() => {
   const navigate = useNavigate();
   const { userType, isAuthenticated } = useAuth();
   const isExpert = userType === 'expert';
-  const { data: profileOverview } = useUserProfileOverviewQuery(!isExpert);
+  
+  // 인증된 상태이고 전문가가 아닐 때만 프로필 API 호출
+  const { data: profileOverview } = useUserProfileOverviewQuery(
+    isAuthenticated && !isExpert
+  );
 
   // 디버깅용: userType 변경 시 콘솔에 출력
   useEffect(() => {}, [userType]);

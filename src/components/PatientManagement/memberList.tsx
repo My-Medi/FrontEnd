@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import MemberCard from './memberCard';
 import Pagination from '../Expert/Intro/Pagination';
 import { useAcceptedMembersQuery } from '../../hooks/experts/queries/useAcceptedConsultations';
@@ -15,8 +15,8 @@ const PatientManagementList = () => {
     enabled: true,
   });
 
-  const content = useMemo(() => data?.content ?? [], [data?.content]);
-  const totalPages = useMemo(() => data?.totalPages ?? 0, [data?.totalPages]);
+  const content = data?.content ?? [];
+  const totalPages = data?.totalPages ?? 0;
 
   if (isLoading) {
     return (
@@ -127,7 +127,7 @@ const PatientManagementList = () => {
       <div className='mt-[40px]'>
         <Pagination
           currentPage={currentPage}
-          totalPages={totalPages}
+          totalPages={Math.max(totalPages, 1)}
           onPageChange={(p) => setCurrentPage(p)}
         />
       </div>

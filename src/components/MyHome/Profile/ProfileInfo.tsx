@@ -4,6 +4,7 @@ import smileIcon from "../../../assets/MyHome/smile.svg";
 import ActionButton from "../Common/ActionButton";
 import { useUserProfileOverviewQuery } from "../../../hooks/users/queries/useUserProfileQuery";
 import { useExpertProfileOverviewQuery } from "../../../hooks/experts/queries/useExpertProfileQuery";
+import { useAuth } from "../../../contexts/AuthContext";
 
 interface PatientInfoProps {
   nickname?: string;
@@ -20,12 +21,8 @@ interface PatientInfoProps {
 }
 
 // 프로필 이미지 URL이 유효한지 확인하는 함수
-const isValidProfileImageUrl = (url?: string): boolean => {
-  if (!url || url === 'string' || url.trim() === '') {
-    return false;
-  }
-  
-  // URL 형식이 유효한지 확인
+const isValidProfileImageUrl = (url?: string) => {
+  if (!url) return false;
   try {
     new URL(url);
     return true;
@@ -47,8 +44,10 @@ const PatientInfoSection: React.FC<PatientInfoProps> = ({
   useApiData = false,
   expertises,
 }) => {
-  // API 데이터 사용 시 - 사용자 타입에 따라 적절한 훅만 사용
-  const userProfileQuery = userType !== 'expert' ? useUserProfileOverviewQuery() : { data: undefined } as any;
+  const { isAuthenticated } = useAuth();
+  
+  // API 데이터 사용 시 - 인증된 상태이고 사용자 타입에 따라 적절한 훅만 사용
+  const userProfileQuery = userType !== 'expert' ? useUserProfileOverviewQuery(useApiData && isAuthenticated) : { data: undefined } as any;
   const expertProfileQuery = userType === 'expert' ? useExpertProfileOverviewQuery() : { data: undefined } as any;
 
   // 사용자 타입에 따라 적절한 프로필 데이터 선택

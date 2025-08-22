@@ -70,15 +70,18 @@ export const connectNotificationStreamWithFetch = (
   // AbortController로 연결 해제 가능하게 설정
   const abortController = new AbortController();
   
-  // fetch API로 SSE 스트림 연결
+  // fetch API로 SSE 스트림 연결 (HTTP/1.1 강제 사용)
   fetch(url, {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${accessToken}`,
       'Accept': 'text/event-stream',
       'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive',
     },
     signal: abortController.signal,
+    // HTTP/1.1 강제 사용으로 HTTP/2 프로토콜 오류 방지
+    keepalive: true,
   })
   .then(async response => {
     if (response.status === 401) {
@@ -132,7 +135,6 @@ export const connectNotificationStreamWithFetch = (
                   // 정규식을 사용해서 더 안정적으로 처리
                   const eventMatch = line.match(/^event:\s*(.+)$/);
                   const dataMatch = line.match(/^data:\s*(.+)$/);
-                  const idMatch = line.match(/^id:\s*(.+)$/);
                   
                   if (eventMatch) {
                     eventType = eventMatch[1].trim();

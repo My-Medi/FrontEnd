@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import SuccessModal from './SuccessModal';
+import RequestLimitModal from './RequestLimitModal';
 import useModalScrollLock from '../../../hooks/useModalScrollLock';
-import { useRequestConsultationMutation } from '../../../hooks/experts/mutations/useRequestConsultationMutation';
+import { useRequestConsultationMutation, getRequestCount } from '../../../hooks/experts/mutations/useRequestConsultationMutation';
 
 interface ReRequestConfirmModalProps {
   isOpen: boolean;
@@ -23,9 +24,10 @@ const ReRequestConfirmModal: React.FC<ReRequestConfirmModalProps> = ({
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showLimitModal, setShowLimitModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useModalScrollLock(isOpen && !showSuccessModal);
+  useModalScrollLock(isOpen && !showSuccessModal && !showLimitModal);
 
   const requestConsultationMutation = useRequestConsultationMutation({ skipQueryInvalidation: true });
 
@@ -38,6 +40,15 @@ const ReRequestConfirmModal: React.FC<ReRequestConfirmModalProps> = ({
   }, [isOpen]);
 
   const handleConfirm = () => {
+    // 현재 요청 횟수 확인
+    const currentCount = getRequestCount();
+    
+    if (currentCount >= 5) {
+      // 6번째 요청인 경우 경고 모달 표시
+      setShowLimitModal(true);
+      return;
+    }
+    
     // 즉시 재요청 전송 (쿼리 파라미터 comment 포함)
     if (isSubmitting) return;
     setIsSubmitting(true);
@@ -59,6 +70,10 @@ const ReRequestConfirmModal: React.FC<ReRequestConfirmModalProps> = ({
     onClose();
   };
 
+  const handleLimitModalClose = () => {
+    setShowLimitModal(false);
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -67,7 +82,7 @@ const ReRequestConfirmModal: React.FC<ReRequestConfirmModalProps> = ({
         {/* Backdrop */}
         <div 
           className={`absolute inset-0 bg-[#121218]/40 transition-opacity duration-300 ${
-            isVisible && !showSuccessModal ? 'opacity-100' : 'opacity-0'
+            isVisible && !showSuccessModal && !showLimitModal ? 'opacity-100' : 'opacity-0'
           }`}
           onClick={onClose}
         />
@@ -75,7 +90,7 @@ const ReRequestConfirmModal: React.FC<ReRequestConfirmModalProps> = ({
         {/* Modal */}
         <div 
           className={`relative w-[744px] bg-white rounded-[18px] transition-all duration-300 ${
-            isVisible && !showSuccessModal ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+            isVisible && !showSuccessModal && !showLimitModal ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
           }`}
           onClick={(e) => e.stopPropagation()}
           style={{ 
@@ -123,6 +138,13 @@ const ReRequestConfirmModal: React.FC<ReRequestConfirmModalProps> = ({
       <SuccessModal
         isOpen={showSuccessModal}
         onClose={handleSuccessClose}
+      />
+
+      {/* Request Limit Modal */}
+      <RequestLimitModal
+        isOpen={showLimitModal}
+        onClose={handleLimitModalClose}
+        onConfirm={handleLimitModalClose}
       />
     </>
   );

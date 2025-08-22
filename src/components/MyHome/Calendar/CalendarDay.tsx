@@ -48,14 +48,14 @@ const CalendarDay: React.FC<CalendarDayProps> = ({
       onClick={handleClick}
     >
               <span 
-          className={`
-            text-[16px] font-light leading-[1.19] tracking-[-0.48px]
-            ${isSelected || isDefaultSelected ? 'text-[#1D68FF] font-bold' : 
-              isCurrentMonth ? 'text-[#121218]' : 'text-[#75787B]'}
-          `}
-        >
-          {date}
-        </span>
+        className={`
+          text-[16px] font-light leading-[100%] tracking-[-3%] text-[#121218] pt-2
+          ${isSelected || isDefaultSelected ? 'text-[#1D68FF] font-bold' : 
+            isCurrentMonth ? 'text-[#121218]' : 'text-[#75787B]'}
+        `}
+      >
+        {date}
+      </span>
 
       {hasEvent && isCurrentMonth && (
         <div className="mt-1 w-full space-y-1">

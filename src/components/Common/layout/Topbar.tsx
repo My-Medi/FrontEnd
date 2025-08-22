@@ -1,4 +1,4 @@
-import React, { useState, memo, useCallback, useEffect } from 'react';
+import React, { useState, memo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../../assets/Login/logo.svg';
 import mainLogo from '../../../assets/mainlog.svg';
@@ -15,7 +15,7 @@ const Topbar = memo(() => {
   const { userType, setUserType, showNotification, setShowNotification } = useAuth();
   
   // 실시간 알림 스트림 연결
-  const { isConnected } = useNotificationStream({
+  const { } = useNotificationStream({
     enabled: !!userType, // 로그인된 사용자만 스트림 연결
     userType: userType || undefined, // 사용자 타입 전달 (null인 경우 undefined로 변환)
     onNewNotification: (notification) => {
@@ -41,9 +41,9 @@ const Topbar = memo(() => {
   // 알림 메시지와 액션 텍스트를 동적으로 생성
   const getNotificationContent = () => {
     if (currentNotification?.userNotificationDto) {
-      const notification = currentNotification.userNotificationDto;
+      // const notification = currentNotification.userNotificationDto;
       return {
-        message: notification.notificationContent,
+        message: "새로운알림이 도착했습니다.",
         actionText: "자세히 보기"
       };
     }
@@ -51,7 +51,7 @@ const Topbar = memo(() => {
     // 직접 notificationContent가 있는 경우
     if (currentNotification?.notificationContent) {
       return {
-        message: currentNotification.notificationContent,
+        message: "새로운알림이 도착했습니다.",
         actionText: "자세히 보기"
       };
     }

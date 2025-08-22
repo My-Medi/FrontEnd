@@ -11,6 +11,7 @@ import { useExpertDetailQuery } from '../../../hooks/experts/queries/useExpertDe
 import { getSpecialtyKoreanName } from '../../../types/expert/common';
 import { formatPhoneNumber } from '../../../utils/phoneUtils';
 import { useHealthProposalQuery } from '../../../hooks/healthProposal/useHealthProposalQuery';
+import RequestLimitModal from './RequestLimitModal';
 
 interface ExpertDetailModalProps {
   expertId: number;
@@ -25,13 +26,14 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
   const [showReRequestModal, setShowReRequestModal] = useState(false);
   const [showDetailSuccess, setShowDetailSuccess] = useState(false);
   const [showFillRequestPrompt, setShowFillRequestPrompt] = useState(false);
+  const [showLimitModal, setShowLimitModal] = useState(false);
   const navigate = useNavigate();
 
   // 전문가 상세 정보 조회
   const { data: expert, isLoading, error } = useExpertDetailQuery(expertId, expertStatus);
   const healthProposalQuery = useHealthProposalQuery();
 
-  useModalScrollLock(!showRequestModal && !showReRequestModal && !showDetailSuccess && !showFillRequestPrompt);
+  useModalScrollLock(!showRequestModal && !showReRequestModal && !showDetailSuccess && !showFillRequestPrompt && !showLimitModal);
 
   // 요청 날짜 포맷팅 함수
   const formatRequestDate = (dateString: string) => {
@@ -59,6 +61,15 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
   };
 
   const handleRequestClick = () => {
+    // 서버의 requestCount 확인
+    const requestCount = expert?.requestCount || 0;
+    
+    if (requestCount >= 5) {
+      // 5번 이상 요청한 경우 경고 모달 표시
+      setShowLimitModal(true);
+      return;
+    }
+    
     if (expertStatus === 'request') {
       // 요청 상태일 때는 재요청 확인 모달 먼저 표시
       setShowReRequestModal(true);
@@ -77,6 +88,12 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
     // 재요청 확인 후, 요청서 작성 모달로 이동해 코멘트를 받도록 통일
     setShowReRequestModal(false);
     setShowRequestModal(true);
+  };
+
+  const handleLimitModalClose = () => {
+    setShowLimitModal(false);
+    // RequestLimitModal이 닫힐 때 ExpertDetailModal도 함께 닫기
+    onClose();
   };
 
   const getKoreanOrdinalWord = (n: number): string => {
@@ -145,7 +162,7 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
       {/* ExpertDetailModal */}
       <div
         className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-300 ${
-          showRequestModal || showReRequestModal || showFillRequestPrompt ? 'hidden' : 'opacity-100'
+          showRequestModal || showReRequestModal || showFillRequestPrompt || showLimitModal ? 'hidden' : 'opacity-100'
         }`}
       >
         {/* 모달 배경 */}
@@ -394,6 +411,15 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
           onClose();
         }}
       />
+
+      {/* 요청 제한 모달 */}
+      {showLimitModal && (
+        <RequestLimitModal
+          isOpen={showLimitModal}
+          onClose={handleLimitModalClose}
+          onConfirm={handleLimitModalClose}
+        />
+      )}
     </>
   );
 };
