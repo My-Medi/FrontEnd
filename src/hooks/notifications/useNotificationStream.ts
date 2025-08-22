@@ -114,7 +114,7 @@ export const useNotificationStream = ({
     } catch (error) {
       isConnectingRef.current = false;
     }
-      }, [handleMessage, handleError]);
+      }, [handleMessage, handleError, userType]);
 
   useEffect(() => {
     if (!enabled) {
@@ -141,7 +141,7 @@ export const useNotificationStream = ({
 
       isConnectingRef.current = false;
     };
-  }, [enabled, connectStream]);
+  }, [enabled, userType]); // connectStream 대신 userType을 의존성으로 변경
 
   return {
     isConnected: !!abortControllerRef.current,

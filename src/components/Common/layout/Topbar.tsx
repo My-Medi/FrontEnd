@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../../../assets/Login/logo.svg';
 import mainLogo from '../../../assets/mainlog.svg';
 import { useAuth } from '../../../contexts/AuthContext';
+import { useChatbot } from '../../../contexts/ChatbotContext';
 import { clearTokens } from '../../../utils/tokenStorage';
 import TopBarNotification from '../TopBarNotification';
 import { useNotificationStream } from '../../../hooks/notifications/useNotificationStream';
@@ -13,6 +14,7 @@ const Topbar = memo(() => {
   const [searchValue, setSearchValue] = useState('');
   const [currentNotification, setCurrentNotification] = useState<any>(null);
   const { userType, setUserType, showNotification, setShowNotification } = useAuth();
+  const { openChatbot } = useChatbot();
   
   // 실시간 알림 스트림 연결
   const { } = useNotificationStream({
@@ -33,10 +35,6 @@ const Topbar = memo(() => {
       }, 5000);
     }
   });
-
-
-
-
 
   // 알림 메시지와 액션 텍스트를 동적으로 생성
   const getNotificationContent = () => {
@@ -72,6 +70,11 @@ const Topbar = memo(() => {
       navigate('/introduce');
     }
   }, [userType, navigate]);
+
+  // 검색창 클릭 핸들러 - 챗봇 열기
+  const handleSearchClick = useCallback(() => {
+    openChatbot();
+  }, [openChatbot]);
 
   // 추후에 기능을 더 넣을 때 수정하겠지만 -> 검색 창이 입력+검색 되도록 수정
   const handleSearchSubmit = useCallback((e: React.FormEvent) => {
@@ -185,16 +188,18 @@ const Topbar = memo(() => {
 
               <form
                 onSubmit={handleSearchSubmit}
-                className='flex items-center gap-[10px] w-[304px] h-[32px] px-[20px] bg-[#F6F6F6] rounded-[20px]'
+                className='flex items-center gap-[10px] w-[304px] h-[32px] px-[20px] bg-[#F6F6F6] rounded-[20px] cursor-pointer hover:bg-[#EDF0F3] transition-colors duration-200'
+                onClick={handleSearchClick}
               >
                 <input
                   type='text'
-                placeholder='건강용어를 검색해보세요.'
-                  className='bg-transparent text-[#121218]/50 placeholder-[#121218]/50 text-[14px] font-[Pretendard] font-light leading-[20px] outline-none flex-1'
+                  placeholder='건강용어를 검색해보세요.'
+                  className='bg-transparent text-[#121218]/50 placeholder-[#121218]/50 text-[14px] font-[Pretendard] font-light leading-[20px] outline-none flex-1 cursor-pointer'
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
+                  readOnly
                 />
-                <button type='submit' aria-label='검색'>
+                <button type='button' aria-label='검색'>
                   <svg
                     width={16}
                     height={18}
@@ -208,7 +213,7 @@ const Topbar = memo(() => {
                       fillRule='evenodd'
                       clipRule='evenodd'
                       d='M14.6357 14.9977C13.3152 16.1219 11.6035 16.8003 9.73341 16.8003C5.55446 16.8003 2.16675 13.4126 2.16675 9.23366C2.16675 5.0547 5.55446 1.66699 9.73341 1.66699C13.9124 1.66699 17.3001 5.0547 17.3001 9.23366C17.3001 11.0925 16.6298 12.7948 15.5178 14.112L19.1498 17.744L18.2659 18.6279L14.6357 14.9977ZM16.0501 9.23366C16.0501 12.7223 13.222 15.5503 9.73341 15.5503C6.24482 15.5503 3.41675 12.7223 3.41675 9.23366C3.41675 5.74506 6.24482 2.91699 9.73341 2.91699C13.222 2.91699 16.0501 5.74506 16.0501 9.23366Z'
-                                            fill='#121212'
+                      fill='#121212'
                       fillOpacity='0.5'
                     />
                   </svg>

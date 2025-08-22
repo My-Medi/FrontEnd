@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { API } from '../axios';
 import { AUTH_ENDPOINTS } from '../../types';
 import type { LoginRequest, LoginResponse } from '../../types';
@@ -23,7 +24,8 @@ export const tokenAPI = {
 
   // 토큰 재발급
   reissue: async (refreshToken: string): Promise<ApiResponse<TokenReissueResponse>> => {
-    const response = await API.post(`${AUTH_ENDPOINTS.REISSUE}?refresh=${refreshToken}`);
+    // 토큰 리프레시는 인터셉터를 거치지 않도록 axios를 직접 사용
+    const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}${AUTH_ENDPOINTS.REISSUE}?refresh=${refreshToken}`);
     return response.data;
   },
 };

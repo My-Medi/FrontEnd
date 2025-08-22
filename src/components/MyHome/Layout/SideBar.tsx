@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
-import myHomeIcon from '../../../assets/MyHome/SideBar/home.svg';
-import scheduleIcon from '../../../assets/MyHome/SideBar/write.svg';
-import resumeIcon from '../../../assets/MyHome/SideBar/resume.svg';
-import expertIcon from '../../../assets/MyHome/SideBar/expert.svg';
-import notificationIcon from '../../../assets/MyHome/SideBar/notification.svg';
-import checkIcon from '../../../assets/MyHome/SideBar/check.svg';
+import myHomeIcon from '../../../assets/MyHome/SideBar/home2.svg';
+import scheduleIcon from '../../../assets/MyHome/SideBar/write2.svg';
+import resumeIcon from '../../../assets/MyHome/SideBar/resume2.svg';
+import expertIcon from '../../../assets/MyHome/SideBar/expert2.svg';
+import notificationIcon from '../../../assets/MyHome/SideBar/notification2.svg';
+import checkIcon from '../../../assets/MyHome/SideBar/check2.svg';
+import expert2Icon from '../../../assets/MyHome/SideBar/expert3.svg';
 
 const DottedIndicator: React.FC = () => {
     return (
@@ -41,7 +42,6 @@ const OverlayIcon: React.FC<{ src: string; position: "center" | "right"; alt?: s
 
 interface MenuItem {
   id: number;
-  title: string[];
   icon: string;
   overlayIcon?: string;
   overlayPosition?: "center" | "right";
@@ -54,22 +54,18 @@ interface SideBarProps {
 }
 
 const patientMenuItems: MenuItem[] = [
-  { id: 0, title: ['마이 홈'], icon: myHomeIcon },
-  { id: 1, title: ['알림'], icon: notificationIcon },
-  { id: 2, title: ['매칭 전문가'], icon: expertIcon },
-  {
-    id: 3,
-    title: ['건강관리요청서', '작성하기'],
-    icon: scheduleIcon,
-  },
+  { id: 0, icon: myHomeIcon },
+  { id: 1, icon: notificationIcon },
+  { id: 2, icon: expert2Icon },
+  { id: 3, icon: scheduleIcon },
 ];
 
 const expertMenuItems: MenuItem[] = [
-  { id: 0, title: ['마이 홈'], icon: myHomeIcon },
-  { id: 1, title: ['환자 관리'], icon: expertIcon },
-  { id: 2, title: ['이력서 관리'], icon: resumeIcon },
-  { id: 3, title: ['건강관리요청서', '확인하기'], icon: checkIcon },
-  { id: 4, title: ['알림'], icon: notificationIcon },
+  { id: 0, icon: myHomeIcon },
+  { id: 1, icon: expertIcon },
+  { id: 2, icon: resumeIcon },
+  { id: 3, icon: checkIcon },
+  { id: 4, icon: notificationIcon },
 ];
 
 const SideBar: React.FC<SideBarProps> = ({
@@ -86,6 +82,7 @@ const SideBar: React.FC<SideBarProps> = ({
       scheduleIcon,
       resumeIcon,
       expertIcon,
+      expert2Icon,
       notificationIcon,
       checkIcon,
     ]));
@@ -129,26 +126,20 @@ const SideBar: React.FC<SideBarProps> = ({
             `}
           >
             {isSelected && <DottedIndicator />}
-            <div className="relative w-8 h-9 xl:w-[2.2rem] xl:h-[2.4rem]">
+            <div className="relative w-24 h-25 xl:w-[6rem] xl:h-[6.2rem]">
               <img 
                 src={item.icon} 
-                alt={item.title.join(" ")} 
+                alt="menu icon" 
                 className="w-full h-full object-contain" 
                 loading={isSelected ? "eager" : "lazy"}
                 fetchPriority={isSelected ? "high" : "auto"}
                 decoding="async"
               />
               {item.overlayIcon && item.overlayPosition && (
-                <OverlayIcon src={item.overlayIcon} position={item.overlayPosition} alt={`${item.title.join(" ")} overlay`} eager={isSelected} />
+                <OverlayIcon src={item.overlayIcon} position={item.overlayPosition} alt="overlay icon" eager={isSelected} />
               )}
             </div>
-            <div className="flex flex-col items-center justify-center text-center max-w-[5rem] xl:max-w-[5rem] gap-0">
-              {item.title.map((line, lineIndex) => (
-                <div key={lineIndex} className="font-semibold text-[#1D68FF] m-0 p-0 whitespace-nowrap break-keep text-[0.8rem] leading-[140%] tracking-[-0.0384rem]">
-                  {line}
-                </div>
-              ))}
-            </div>
+
           </div>
         );
       })}

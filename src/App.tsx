@@ -2,6 +2,7 @@ import { RouterProvider } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import './App.css';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { ChatbotProvider } from './contexts/ChatbotContext';
 import LoadingSpinner from './components/Common/LoadingSpinner';
 import { router } from './router';
 
@@ -15,8 +16,6 @@ const AppContent = () => {
 
   return <RouterProvider router={router} />;
 };
-
-
 
 // QueryClient 인스턴스 생성
 const queryClient = new QueryClient({
@@ -35,7 +34,9 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <AppContent />
+        <ChatbotProvider>
+          <AppContent />
+        </ChatbotProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

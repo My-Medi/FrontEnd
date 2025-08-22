@@ -22,7 +22,7 @@ export const connectNotificationStreamWithFetch = (
   onTokenRefresh?: () => void
 ): AbortController => {
   // 환경변수에서 BASE_URL 가져오기 (기본값 설정)
-  const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api.my-medi.cloud/api/v1';
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
   
   // 토큰을 쿠키에서 가져오기
   const { accessToken, refreshToken } = getTokens();
@@ -51,7 +51,7 @@ export const connectNotificationStreamWithFetch = (
     try {
       const response = await tokenAPI.reissue(refreshToken);
       
-      if (response.result) {
+      if (response.isSuccess && response.result) {
         // 새로운 토큰 저장
         saveTokens(response.result.accessToken, response.result.refreshToken);
         
@@ -61,6 +61,7 @@ export const connectNotificationStreamWithFetch = (
         throw new Error('토큰 재발급에 실패했습니다.');
       }
     } catch (error) {
+      console.error('토큰 리프레시 실패:', error);
       onError(new Error('토큰 리프레시에 실패했습니다.'));
     }
   };

@@ -3,9 +3,12 @@ import { Outlet, useLocation } from 'react-router-dom';
 import NavBar from '../components/Common/layout/NavBar';
 import Footer from '../components/Common/layout/Footer';
 import Topbar from '../components/Common/layout/Topbar';
+import HealthTermsChatbot from '../components/HealthTerms/HealthTermsChatbot';
+import { useChatbot } from '../contexts/ChatbotContext';
 
 const HomeLayout: React.FC = () => {
   const location = useLocation();
+  const { isChatbotOpen, closeChatbot } = useChatbot();
   
   // 페이지 변경 시 스크롤을 맨 위로 이동
   useEffect(() => {
@@ -31,6 +34,12 @@ const HomeLayout: React.FC = () => {
         </main>
       </div>
       <Footer />
+      
+      {/* 전역 챗봇 */}
+      <HealthTermsChatbot
+        isOpen={isChatbotOpen}
+        onClose={closeChatbot}
+      />
     </div>
   );
 };

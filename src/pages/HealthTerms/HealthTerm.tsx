@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import HealthTermButtons from '../../components/HealthTerms/HealthTermButtons';
 import HealthTermInfo from '../../components/HealthTerms/HealthTermsInfo';
+import ChatbotButton from '../../components/HealthTerms/ChatbotButton';
+import { useChatbot } from '../../contexts/ChatbotContext';
 import backSvg from '../../assets/back.svg';
 
 interface HealthTerm {
@@ -15,6 +17,7 @@ const HealthTermsPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [selectedTerm, setSelectedTerm] = useState<string>('');
+  const { openChatbot } = useChatbot();
 
   //팝업창 클릭 시 이동 구현
   useEffect(() => {
@@ -79,9 +82,9 @@ const HealthTermsPage: React.FC = () => {
     {
       id: '요단백',
       name: '요단백',
-      quote: '“콩팥의 필터!”',
+      quote: '"콩팥의 필터!"',
       description:
-        '요단백?  소변에 ‘단백질’이 섞여 나왔는지 보는 검사예요. 보통 단백질은 몸에서 필요한 중요한 영양소이기 때문에 소변으로 나가면 안 돼요. 그런데 콩팥이 아프거나 약해지면, 필터가 망가져서 단백질이 소변에 새어 나올 수 있어요.',
+        '요단백?  소변에 \'단백질\'이 섞여 나왔는지 보는 검사예요. 보통 단백질은 몸에서 필요한 중요한 영양소이기 때문에 소변으로 나가면 안 돼요. 그런데 콩팥이 아프거나 약해지면, 필터가 망가져서 단백질이 소변에 새어 나올 수 있어요.',
     },
     {
       id: 'AST(SGOT) / ALT(SGPT)',
@@ -95,21 +98,21 @@ const HealthTermsPage: React.FC = () => {
       name: '신사구체여과율(eGFR)',
       quote: '"단백질 먹고 생긴 찌꺼기를 잘 버렸나요?"',
       description:
-        '신사구체여과율 (eGFR)?  우리 몸속 필터가 제대로 작동하고 있는지 확인하는 검사에요. 우리 몸 속에는 찌꺼기나 노폐물이 생기는데요, 이걸 콩팥이 깨끗하게 걸러서 소변으로 보내줘야 해요. ‘신사구체’는 콩팥 속 아주 작은 필터처럼 생긴 부분이에요. 그 필터가 제대로 작동하고 있는지 확인하는 검사가 바로 이거예요. 60 아래로 내려가면 콩팥이 좀 힘들어하는 거예요.',
+        '신사구체여과율 (eGFR)?  우리 몸속 필터가 제대로 작동하고 있는지 확인하는 검사에요. 우리 몸 속에는 찌꺼기나 노폐물이 생기는데요, 이걸 콩팥이 깨끗하게 걸러서 소변으로 보내줘야 해요. \'신사구체\'는 콩팥 속 아주 작은 필터처럼 생긴 부분이에요. 그 필터가 제대로 작동하고 있는지 확인하는 검사가 바로 이거예요. 60 아래로 내려가면 콩팥이 좀 힘들어하는 거예요.',
     },
     {
       id: 'B형 간염',
       name: 'B형 간염',
-      quote: '“작은 병균이 몸속에 들어가서 간을 아프게 해요.”',
+      quote: '"작은 병균이 몸속에 들어가서 간을 아프게 해요."',
       description:
         'B형 간염?  B형 간염 바이러스가 몸에 들어오면, 작은 병균이 몸속에 들어가서 간을 아프게 하는 질병이에요. 이 바이러스가 몸에 들어오면, 피를 통해 다른 사람에게 옮길 수도 있어요. 하지만 걱정하지 마세요! 우리나라는 아기 때부터 예방접종을 해줘요. 항원(-) 항체(+)  제일 좋아요! 감염 안 됐고, 면역도 있어요. 항원(-) 항체(-)  감염은 안 됐지만 면역도 없어요. 예방접종 다시 해야 할 수도 있어요. 항원(+)  바이러스가 있을 수 있어서, 병원에서 꼭 다시 검사 받아야 해요.',
     },
     {
       id: '비활동성 폐결핵',
       name: '비활동성 폐결핵',
-      quote: '“예전에 싸우다가 이긴 병균이 흉터처럼 남아 있는 거에요.”',
+      quote: '"예전에 싸우다가 이긴 병균이 흉터처럼 남아 있는 거에요."',
       description:
-        '비활동성 폐결핵?  예전에 결핵균에 한 번 감염된 적은 있지만, 지금은 전혀 활동하지 않고 조용히 잠든 상태라는 뜻이에요. 결핵은 ‘결핵균’이라는 아주 작은 세균이 몸에 들어와서 생기는 병이에요. 특히 폐에 들어오면 ‘폐결핵’이라고 해요. 옛날엔 정말 무서운 병이었지만, 지금은 약도 많고 치료도 잘 되는 병이에요.',
+        '비활동성 폐결핵?  예전에 결핵균에 한 번 감염된 적은 있지만, 지금은 전혀 활동하지 않고 조용히 잠든 상태라는 뜻이에요. 결핵은 \'결핵균\'이라는 아주 작은 세균이 몸에 들어와서 생기는 병이에요. 특히 폐에 들어오면 \'폐결핵\'이라고 해요. 옛날엔 정말 무서운 병이었지만, 지금은 약도 많고 치료도 잘 되는 병이에요.',
     },
     {
       id: '감마GTP(Y-GTP)',
@@ -166,6 +169,9 @@ const HealthTermsPage: React.FC = () => {
           onTermSelect={setSelectedTerm}
         />
       </div>
+
+      {/* 챗봇 버튼 */}
+      <ChatbotButton onClick={openChatbot} />
     </div>
   );
 };

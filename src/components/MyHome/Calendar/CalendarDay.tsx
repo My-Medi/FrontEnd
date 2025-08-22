@@ -47,26 +47,29 @@ const CalendarDay: React.FC<CalendarDayProps> = ({
       `}
       onClick={handleClick}
     >
-              <span 
-        className={`
-          text-[16px] font-light leading-[100%] tracking-[-3%] text-[#121218] pt-2
-          ${isSelected || isDefaultSelected ? 'text-[#1D68FF] font-bold' : 
-            isCurrentMonth ? 'text-[#121218]' : 'text-[#75787B]'}
-        `}
-      >
-        {date}
-      </span>
+              <div className="flex items-center justify-between w-full pt-2">
+        <span 
+          className={`
+            text-[16px] font-light leading-[100%] tracking-[-3%] text-[#121218]
+            ${isSelected || isDefaultSelected ? 'text-[#1D68FF] font-bold' : 
+              isCurrentMonth ? 'text-[#121218]' : 'text-[#75787B]'}
+          `}
+        >
+          {date}
+        </span>
+        {Array.isArray(hasEvent) && hasEvent.length > 3 && (
+          <span className="text-xs text-gray-500">
+            +{hasEvent.length - 3}
+          </span>
+        )}
+      </div>
 
       {hasEvent && isCurrentMonth && (
         <div className="mt-1 w-full space-y-1">
           {hasEvent.slice(0, 3).map((ev, index) => (
             <CalendarEvent key={index} eventText={ev.text} colorIndex={ev.colorIndex} />
           ))}
-          {Array.isArray(hasEvent) && hasEvent.length > 3 && (
-            <div className="text-xs text-gray-500 px-1">
-              +{hasEvent.length - 3}개 더
-            </div>
-          )}
+
         </div>
       )}
     </div>
