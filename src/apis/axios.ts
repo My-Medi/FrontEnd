@@ -55,7 +55,17 @@ API.interceptors.response.use(
             `${BASE_URL}${AUTH_ENDPOINTS.REISSUE}?refresh=${encodeURIComponent(refreshToken)}`
           );
 
-          const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data.result;
+          // ApiResponse 형태로 응답됨
+          const responseData = response.data;
+          if (!responseData.isSuccess || !responseData.result) {
+            throw new Error('토큰 리프레시 실패: ' + responseData.message);
+          }
+          
+          const { accessToken: newAccessToken, refreshToken: newRefreshToken } = responseData.result;
+          
+          if (!newAccessToken || !newRefreshToken) {
+            throw new Error('새로운 토큰이 없습니다.');
+          }
           
           // 새로운 토큰 저장
           saveTokens(newAccessToken, newRefreshToken);

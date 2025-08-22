@@ -49,7 +49,7 @@ const HealthTermsChatbot: React.FC<HealthTermsChatbotProps> = ({ isOpen, onClose
               </div>
               <div>
                 <h2 className="text-xl font-semibold">건강용어 AI 어시스턴트</h2>
-                <p className="text-white/90 text-sm">건강검진 결과에 대해 궁금한 점을 물어보세요</p>
+                <p className="text-white/90 text-sm">건강용어에 대해 궁금한 점을 물어보세요</p>
               </div>
             </div>
             <button

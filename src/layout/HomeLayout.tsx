@@ -4,6 +4,7 @@ import NavBar from '../components/Common/layout/NavBar';
 import Footer from '../components/Common/layout/Footer';
 import Topbar from '../components/Common/layout/Topbar';
 import HealthTermsChatbot from '../components/HealthTerms/HealthTermsChatbot';
+import ScrollToTopButton from '../components/Common/ScrollToTopButton';
 import { useChatbot } from '../contexts/ChatbotContext';
 
 const HomeLayout: React.FC = () => {
@@ -40,6 +41,9 @@ const HomeLayout: React.FC = () => {
         isOpen={isChatbotOpen}
         onClose={closeChatbot}
       />
+      
+      {/* 맨 위로 스크롤 버튼 */}
+      <ScrollToTopButton />
     </div>
   );
 };

@@ -5,6 +5,8 @@ import { useState } from 'react';
 import MemberCardModal from './memberCardModel/memberCardModal';
 import AdviceRegisterModal from './memberCardModel/adviceRegisterModel';
 import ConsultReservationModal from './consultReservationModal/CalendarModal';
+import { useExpertUserLatestHealthStatusQuery } from '../../hooks/expert/report/useExpertUserLatestHealthStatusQuery';
+import { mapApiResultToHealthStatus } from '../../utils/mappers/healthStatusMapper';
 
 interface Member {
   userId: number;
@@ -22,7 +24,15 @@ interface Member {
 }
 
 const MemberCard: React.FC<{ member: Member }> = ({ member }) => {
-  const color = HEALTH_STATUS_COLOR[member.healthStatus];
+  // API에서 최신 건강 상태 가져오기
+  const { data: latestHealthStatus, isLoading: healthStatusLoading } = useExpertUserLatestHealthStatusQuery(member.userId);
+  
+  // API 데이터가 있으면 사용, 없으면 기본값 사용
+  const healthStatus = latestHealthStatus?.healthStatus 
+    ? mapApiResultToHealthStatus(latestHealthStatus.healthStatus as any)
+    : member.healthStatus;
+  
+  const color = HEALTH_STATUS_COLOR[healthStatus];
   const [showMemberCardModal, setShowMemberCardModal] = useState(false);
   const [showAdviceRegisterModal, setShowAdviceRegisterModal] = useState(false);
   const [showConsultReservationModal, setShowConsultReservationModal] = useState(false);

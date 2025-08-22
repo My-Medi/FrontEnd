@@ -46,15 +46,14 @@ const IndicationDescription: React.FC<IndicationDescriptionProps> = ({
     (typeof ageGroup10Yr === 'number' && !!rankType && typeof rankPercent === 'number');
 
   if (hasNewFormat) {
-    // 혈색소, 총콜레스테롤, HDL-콜레스테롤, 중성지방, LDL-콜레스테롤, 혈청 크레아티닌, eGFR은 rankType과 rankPercent가 표시되지 않음
+    // 총콜레스테롤, HDL-콜레스테롤, 중성지방, LDL-콜레스테롤, 혈청 크레아티닌, eGFR은 rankType과 rankPercent가 표시되지 않음
     const shouldHideRankInfo =
       indicatorName === '총콜레스테롤' ||
       indicatorName === 'HDL-콜레스테롤' ||
       indicatorName === '중성지방' ||
       indicatorName === 'LDL-콜레스테롤' ||
       indicatorName === '혈청 크레아티닌' ||
-      indicatorName === 'eGFR(신사구체여과율)' ||
-      indicatorName === '혈색소';
+      indicatorName === 'eGFR(신사구체여과율)';
 
     return (
       <div>
@@ -94,15 +93,14 @@ const IndicationDescription: React.FC<IndicationDescriptionProps> = ({
   }
 
   // 기존 로직 (폴백)
-  // 혈색소, 총콜레스테롤, HDL-콜레스테롤, 중성지방, LDL-콜레스테롤, 혈청 크레아티닌, eGFR은 rankType과 rankPercent가 표시되지 않음
+  // 총콜레스테롤, HDL-콜레스테롤, 중성지방, LDL-콜레스테롤, 혈청 크레아티닌, eGFR은 rankType과 rankPercent가 표시되지 않음
   const shouldHideRankInfo =
     indicatorName === '총콜레스테롤' ||
     indicatorName === 'HDL-콜레스테롤' ||
     indicatorName === '중성지방' ||
     indicatorName === 'LDL-콜레스테롤' ||
     indicatorName === '혈청 크레아티닌' ||
-    indicatorName === 'eGFR(신사구체여과율)' ||
-    indicatorName === '혈색소';
+    indicatorName === 'eGFR(신사구체여과율)';
 
   return (
     <div>

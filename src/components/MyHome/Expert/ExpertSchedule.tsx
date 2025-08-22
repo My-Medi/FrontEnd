@@ -5,14 +5,73 @@ import { useExpertUpcomingSchedules } from '../../../hooks/experts/queries/useEx
 import { getColorIndicesForDate } from '../Calendar/calendarUtils';
 import { useExpertMonthlySchedules } from '../../../hooks/experts/queries/useExpertSchedules';
 import ExpertScheduleCardSkeleton from './ExpertScheduleCardSkeleton';
+import { useAcceptedMembersQuery } from '../../../hooks/experts/queries/useAcceptedConsultations';
+import { HEALTH_STATUS_COLOR } from '../../../constants/memberStatusColor';
+import { healthStatusMap } from '../../../constants/healthStatus';
+import { useExpertUserLatestHealthStatusQuery } from '../../../hooks/expert/report/useExpertUserLatestHealthStatusQuery';
+import { mapApiResultToHealthStatus } from '../../../utils/mappers/healthStatusMapper';
+import type { AcceptedMember } from '../../../types/expert/consultation';
 
 interface Props {
   onGoPatientManagement?: () => void;
 }
 
+// 환자 건강 상태 표시 컴포넌트
+const PatientHealthDisplay: React.FC<{ patient: AcceptedMember }> = ({ patient }) => {
+  const { data: latestHealthStatus } = useExpertUserLatestHealthStatusQuery(patient.userId);
+  
+  // API 데이터가 있으면 사용, 없으면 기본값 사용
+  const healthStatus = latestHealthStatus?.healthStatus 
+    ? mapApiResultToHealthStatus(latestHealthStatus.healthStatus as any)
+    : (patient as any).totalHealthStatusKor ?? '정상';
+  
+  const current = healthStatusMap[healthStatus as keyof typeof healthStatusMap];
+  
+  if (!current) {
+    return (
+      <div className="text-[#9DA0A3] text-[14.4px] font-medium leading-[100%] tracking-[-0.432px] text-center py-[28px]">
+        건강 상태 정보를 불러올 수 없습니다.
+      </div>
+    );
+  }
+  
+  return (
+    <div
+      className="w-full rounded-[12px] p-[7px]"
+      style={{
+        backgroundColor: 'white',
+        border: `1px solid ${current.borderColor}`,
+      }}
+    >
+      <div
+        className="w-full flex items-center justify-center"
+        style={{
+          height: '73px',
+        }}
+      >
+        <div
+          className="text-[14.4px] font-medium leading-[100%] tracking-[-0.432px] text-center"
+          style={{ color: current.borderColor }}
+        >
+          {patient.nickname}님의 건강은 {healthStatus} 단계입니다.
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const ExpertSchedule: React.FC<Props> = ({ onGoPatientManagement }) => {
   const { data, isFetching } = useExpertUpcomingSchedules(true);
   const nearestSchedule = data?.result?.[0] ?? null;
+  
+  // 환자 목록 가져오기 (1명만)
+  const { data: patientsData, isLoading: patientsLoading } = useAcceptedMembersQuery({
+    page: 1,
+    size: 1,
+    enabled: true,
+  });
+  
+  const patient = patientsData?.content?.[0] ?? null;
 
   // 월별 요약은 HomeCalendar와 동일 포맷을 재사용(전문가용도 동일 포맷)
   const baseDate = React.useMemo(() => nearestSchedule ? new Date(nearestSchedule.meetingDate) : new Date(), [nearestSchedule]);
@@ -64,10 +123,24 @@ const ExpertSchedule: React.FC<Props> = ({ onGoPatientManagement }) => {
           예약 환자의 건강
         </div>
       </div>
-      <div className="bg-white border border-[#DBE6FF] rounded-[12px] p-[7px] w-[876px] lg:w-[876px] md:w-full sm:w-full">
-        <div className="text-[#9DA0A3] text-[14.4px] font-medium leading-[100%] tracking-[-0.432px] text-center py-[28px] lg:text-[14.4px] md:text-sm sm:text-xs lg:py-[28px] md:py-6 sm:py-4">
-          아직 연결된 환자가 없습니다
-        </div>
+      <div className="w-[876px] lg:w-[876px] md:w-full sm:w-full">
+        {patientsLoading ? (
+          <div className="text-[#9DA0A3] text-[14.4px] font-medium leading-[100%] tracking-[-0.432px] text-center py-[28px] lg:text-[14.4px] md:text-sm sm:text-xs lg:py-[28px] md:py-6 sm:py-4">
+            로딩 중...
+          </div>
+        ) : !patient ? (
+          <div 
+            className="text-[#9DA0A3] text-[14.4px] font-medium leading-[100%] tracking-[-0.432px] text-center py-[28px] lg:text-[14.4px] md:text-sm sm:text-xs lg:py-[28px] md:py-6 sm:py-4 rounded-[12px] p-[7px]"
+            style={{
+              backgroundColor: 'white',
+              border: '1px solid #DBE6FF',
+            }}
+          >
+            아직 연결된 환자가 없습니다
+          </div>
+        ) : (
+          <PatientHealthDisplay patient={patient} />
+        )}
       </div>
       <div className="flex justify-end -mt-5 lg:-mt-5 md:-mt-4 sm:-mt-3 lg:flex md:hidden sm:hidden">
         <ActionButton 

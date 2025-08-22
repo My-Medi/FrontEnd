@@ -11,6 +11,8 @@ import AdviceRegisterModal from './adviceRegisterModel';
 import ConsultReservationModal from '../consultReservationModal/CalendarModal';
 import { useExpertUserInfo } from '../../../hooks/consultation/expert/queries/useExpertUserInfo';
 import { useExpertReportSummary } from '../../../hooks/consultation/expert/queries/useExpertReportSummary';
+import { useExpertUserLatestHealthStatusQuery } from '../../../hooks/expert/report/useExpertUserLatestHealthStatusQuery';
+import { mapApiResultToHealthStatus } from '../../../utils/mappers/healthStatusMapper';
 import { useNavigate } from 'react-router-dom';
 
 interface Member {
@@ -46,6 +48,13 @@ const MemberCardModal: React.FC<MemberCardModalProps> = ({
   const navigate = useNavigate();
   const { data: info, isLoading: isInfoLoading } = useExpertUserInfo(member.userId, 'ACCEPTED');
   const { data: summary, isLoading: isSummaryLoading } = useExpertReportSummary(member.userId);
+  const { data: latestHealthStatus, isLoading: healthStatusLoading } = useExpertUserLatestHealthStatusQuery(member.userId);
+  
+  // API 데이터가 있으면 사용, 없으면 기본값 사용
+  const healthStatus = latestHealthStatus?.healthStatus 
+    ? mapApiResultToHealthStatus(latestHealthStatus.healthStatus as any)
+    : member.healthStatus;
+  
   // 요약 API의 round 값을 사용해 바로 이동할 회차를 결정
   const selectedRound = useMemo(() => summary?.round ?? 1, [summary?.round]);
 
@@ -66,7 +75,7 @@ const MemberCardModal: React.FC<MemberCardModalProps> = ({
       `/expert-report?userId=${member.userId}&round=${selectedRound || 1}&nickname=${encodeURIComponent(info?.nickname ?? member.nickname)}`,
     );
   };
-  const isLoading = isInfoLoading || isSummaryLoading;
+  const isLoading = isInfoLoading || isSummaryLoading || healthStatusLoading;
 
   return (
     <>
@@ -172,7 +181,11 @@ const MemberCardModal: React.FC<MemberCardModalProps> = ({
                   <>
                     <AdvicePart userId={member.userId} />
                     <AbnormalPart abnormal={info?.abnormalCheckItems ?? []} />
-                    <ReportSummary nickname={info?.nickname ?? member.nickname} summary={summary} />
+                    <ReportSummary 
+                      nickname={info?.nickname ?? member.nickname} 
+                      healthStatus={healthStatus}
+                      summary={summary} 
+                    />
                   </>
                 )}
               </div>

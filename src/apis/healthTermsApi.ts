@@ -6,7 +6,7 @@ export const fetchTermData = async (term: string): Promise<TermResponse | null> 
     // URL 인코딩 개선 - 한글 처리
     const encodedTerm = encodeURIComponent(term.trim());
     
-    const response = await API.get<TermResponse>(`/users/term?term=${encodedTerm}`);
+    const response = await API.get<TermResponse>(`/term?term=${encodedTerm}`);
     
     return response.data;
   } catch (error) {

@@ -9,6 +9,7 @@ import DotCol from '@/assets/dotcol.svg';
 
 interface ReportProps {
   nickname: string;
+  healthStatus?: '위험' | '주의' | '관심' | '안심' | '정상';
   summary?: {
     obesity?: { bmi?: number; waistType?: string };
     hypertension?: { systolic?: number; diastolic?: number };
@@ -77,6 +78,7 @@ export const HealthStatusIcon: React.FC<{ status: string; className?: string }> 
 
 const ReportSummary: React.FC<ReportProps> = ({
   nickname,
+  healthStatus,
   summary,
   bmi,
   waist,
@@ -207,7 +209,12 @@ const ReportSummary: React.FC<ReportProps> = ({
               {nickname}님의 건강검진 리포트 요약
             </span>
           </div>
-          <img src={TotalConstant} alt='전체 기준' className='w-auto h-[34px]' />
+          <div className='flex items-center gap-2'>
+            <HealthStatusIcon status={healthStatus || '정상'} />
+            <span className='text-[#121218] text-[14px] font-medium'>
+              {healthStatus || '정상'}
+            </span>
+          </div>
         </div>
 
         {/* 리포트 요약 부분 (데스크톱) */}
@@ -396,7 +403,12 @@ const ReportSummary: React.FC<ReportProps> = ({
         </div>
 
         {/* 오른쪽 이미지 */}
-        <img src={TotalConstant} alt='전체 기준' className='h-[26px] w-auto ml-4 shrink-0' />
+        <div className='flex items-center gap-2'>
+          <HealthStatusIcon status={healthStatus || '정상'} />
+          <span className='text-[#121218] text-[12px] font-medium'>
+            {healthStatus || '정상'}
+          </span>
+        </div>
       </div>
 
       {/* 모바일 빈 상태 */}
