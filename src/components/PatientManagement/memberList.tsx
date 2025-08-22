@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import MemberCard from './memberCard';
 import Pagination from '../Expert/Intro/Pagination';
 import { useAcceptedMembersQuery } from '../../hooks/experts/queries/useAcceptedConsultations';

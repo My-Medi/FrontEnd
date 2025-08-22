@@ -135,7 +135,6 @@ export const connectNotificationStreamWithFetch = (
                   // 정규식을 사용해서 더 안정적으로 처리
                   const eventMatch = line.match(/^event:\s*(.+)$/);
                   const dataMatch = line.match(/^data:\s*(.+)$/);
-                  const idMatch = line.match(/^id:\s*(.+)$/);
                   
                   if (eventMatch) {
                     eventType = eventMatch[1].trim();

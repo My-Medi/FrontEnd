@@ -48,7 +48,7 @@ const PatientInfoSection: React.FC<PatientInfoProps> = ({
   
   // API 데이터 사용 시 - 인증된 상태이고 사용자 타입에 따라 적절한 훅만 사용
   const userProfileQuery = userType !== 'expert' ? useUserProfileOverviewQuery(useApiData && isAuthenticated) : { data: undefined } as any;
-  const expertProfileQuery = userType === 'expert' ? useExpertProfileOverviewQuery(useApiData && isAuthenticated) : { data: undefined } as any;
+  const expertProfileQuery = userType === 'expert' ? useExpertProfileOverviewQuery() : { data: undefined } as any;
 
   // 사용자 타입에 따라 적절한 프로필 데이터 선택
   const profileData = userType === 'expert' ? expertProfileQuery.data : userProfileQuery.data;

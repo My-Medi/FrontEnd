@@ -25,7 +25,7 @@ const ConfirmRequestModal: React.FC<ConfirmRequestModalProps> = ({
   expertId,
   expertName, 
   expertPosition,
-  expertRealName,
+  // expertRealName,
   comment
 }) => {
   const [isVisible, setIsVisible] = useState(false);

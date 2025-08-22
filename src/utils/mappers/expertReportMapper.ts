@@ -1,6 +1,6 @@
 // utils/mappers/expertReportMapper.ts
 
-import { FIXED_YEAR, INDICATOR_META } from '../../constants/indicatorMeta';
+import { FIXED_YEAR } from '../../constants/indicatorMeta';
 import type { Category } from '../../constants/medicalCategory';
 import type { ExpertReportResponse } from '../../types/expert/report';
 

@@ -97,7 +97,7 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
   // 나머지 배너 이미지는 미리 받아두도록 prefetch 힌트 (UI 블록 없음)
   useEffect(() => {
     const links: HTMLLinkElement[] = [];
-    Object.entries(BACKGROUND_IMAGES).forEach(([key, images]) => {
+    Object.entries(BACKGROUND_IMAGES).forEach(([, images]) => {
       const imageUrl = webpSupported ? images.webp : images.png;
       if (imageUrl === backgroundImage) return;
       const l = document.createElement('link');
