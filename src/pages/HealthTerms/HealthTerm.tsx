@@ -139,7 +139,7 @@ const HealthTermsPage: React.FC = () => {
           </div>
         </div>
         </div>
-        <div className='w-[1363px] mx-auto'>
+        <div className='w-[1365px] mx-auto'>
         {/* 선택된 용어 제목 */}
         {selectedTerm && (
           <div className='text-center mb-[60px]'>
