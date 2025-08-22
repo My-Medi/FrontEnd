@@ -188,7 +188,7 @@ const RequestForm = () => {
               value={formData.jobAndLifestyle}
               onChange={(e) => setFormData(prev => ({ ...prev, jobAndLifestyle: e.target.value }))}
               placeholder='ex) 야근이 많은 직장인, 교대 근무, 하루 10시간 앉아 있음 등'
-              className='w-full border border-gray-300 rounded-lg px-4 py-2 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-200'
+              className='w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200'
             />
           </div>
 
@@ -254,7 +254,7 @@ const RequestForm = () => {
               value={formData.healthGoals}
               onChange={(e) => setFormData(prev => ({ ...prev, healthGoals: e.target.value }))}
               placeholder='ex) 혈당 수치를 정상화하고 싶어요. / 건강하게 체중을 감량하고 싶어요.'
-              className='w-full border border-gray-300 rounded-lg px-4 py-2 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-200'
+              className='w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200'
             />
           </div>
           {/* 6. 요청사항*/}
@@ -267,7 +267,7 @@ const RequestForm = () => {
               value={formData.requestNote}
               onChange={(e) => setFormData(prev => ({ ...prev, requestNote: e.target.value }))}
               placeholder='ex) 야근이 많은 직장인, 교대 근무, 하루 10시간 앉아 있음 등'
-              className='w-full border border-gray-300 rounded-lg px-4 py-2 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-200'
+              className='w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200'
             />
           </div>
           {/* 제출 버튼 */}
