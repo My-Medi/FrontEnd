@@ -300,7 +300,7 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
       )}
       {/* 두 번째 배너에만 버튼 표시 */}
       {currentImageLoaded && variant === '2' && (
-        <div className="relative z-10 flex flex-col justify-end items-start h-full pb-[6.7rem] xl:pb-[6.7rem] pl-[310px] xl:pl-[310px] md:pb-16 md:pl-5 md:justify-end sm:pb-12 sm:pl-7 sm:justify-end animate-fade-in-up">
+        <div className="relative z-10 flex flex-col justify-end items-start h-full pb-[6.7rem] xl:pb-[6.7rem] pl-[1rem] xl:pl-[7.3rem] md:pb-16 md:pl-5 md:justify-end sm:pb-12 sm:pl-7 sm:justify-end animate-fade-in-up">
           <CTAButton onClick={() => { if (!isExpert) navigate('/health-result-input'); }}>
             <span className="xl:text-xl md:text-lg sm:text-base">지금 바로 건강 기록하기</span>
             <ArrowIcon className="xl:w-[0.5rem] xl:h-[1rem] md:w-2 md:h-4 sm:w-1.5 sm:h-3" />
@@ -310,7 +310,7 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
 
       {/* 세 번째 배너에만 버튼 표시 */}
       {currentImageLoaded && variant === '3' && (
-        <div className="relative z-10 flex flex-col justify-end items-start h-full pb-[6.7rem] xl:pb-[6.7rem] pl-[310px] xl:pl-[310px] md:pb-16 md:pl-8.5 md:justify-end sm:pb-12 sm:pl-6.5 sm:justify-end animate-fade-in-up">
+        <div className="relative z-10 flex flex-col justify-end items-start h-full pb-[6.7rem] xl:pb-[6.7rem] pl-[7.4rem] xl:pl-[7.4rem] md:pb-16 md:pl-8.5 md:justify-end sm:pb-12 sm:pl-6.5 sm:justify-end animate-fade-in-up">
           <CTAButton onClick={() => (!isExpert ? navigate('/expert') : undefined)}>
             <span className="xl:text-xl md:text-lg sm:text-base">전문가 찾기</span>
             <ArrowIcon className="xl:w-[0.5rem] xl:h-[1rem] md:w-2 md:h-4 sm:w-1.5 sm:h-3" />
@@ -320,7 +320,7 @@ const AdBanner: React.FC<AdBannerProps> = ({ variant = '1', onVariantChange }) =
 
       {/* 네 번째 배너에만 버튼 표시 */}
       {currentImageLoaded && variant === '4' && (
-         <div className="relative z-10 flex flex-col justify-end items-start h-full pb-[9.9rem] xl:pb-[9.9rem] pl-[310px] xl:pl-[310px] md:pb-16 md:pl-8 sm:pb-12 sm:pl-6 animate-fade-in-up">
+         <div className="relative z-10 flex flex-col justify-end items-start h-full pb-[9.9rem] xl:pb-[9.9rem] pl-[27.5rem] xl:pl-[27.5rem] md:pb-16 md:pl-8 sm:pb-12 sm:pl-6 animate-fade-in-up">
           <div className="text-center">
             <CTAButton onClick={() => navigate('/myhome')}>
               <span className="xl:text-xl md:text-lg sm:text-base">마이홈 캘린더 가기</span>
