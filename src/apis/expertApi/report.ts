@@ -24,10 +24,10 @@ export const getExpertUserReportResult = async (userId: number, round: number) =
   return response.data;
 };
 
-// GET /api/v1/experts/reports/users/{userId}/result/latest
-export const getExpertUserLatestHealthStatus = async (userId: number): Promise<ApiResponse<{ totalScore: number; healthStatus: string }>> => {
+// GET /api/v1/experts/reports/users/result/latest
+export const getExpertUserLatestHealthStatus = async (): Promise<ApiResponse<{ totalScore: number; healthStatus: string }>> => {
   const response = await API.get<ApiResponse<{ totalScore: number; healthStatus: string }>>(
-    `/experts/reports/users/${userId}/result/latest`,
+    `/experts/reports/users/result/latest`,
   );
   return response.data;
 };

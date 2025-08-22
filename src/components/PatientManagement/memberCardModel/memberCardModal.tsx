@@ -48,7 +48,7 @@ const MemberCardModal: React.FC<MemberCardModalProps> = ({
   const navigate = useNavigate();
   const { data: info, isLoading: isInfoLoading } = useExpertUserInfo(member.userId, 'ACCEPTED');
   const { data: summary, isLoading: isSummaryLoading } = useExpertReportSummary(member.userId);
-  const { data: latestHealthStatus, isLoading: healthStatusLoading } = useExpertUserLatestHealthStatusQuery(member.userId);
+  const { data: latestHealthStatus, isLoading: healthStatusLoading } = useExpertUserLatestHealthStatusQuery();
   
   // API 데이터가 있으면 사용, 없으면 기본값 사용
   const healthStatus = latestHealthStatus?.healthStatus 

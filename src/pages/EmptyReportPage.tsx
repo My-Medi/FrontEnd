@@ -75,7 +75,7 @@ const EmptyReportPage: React.FC = () => {
   };
 
   const handleFilterClick = () => {
-    console.log('전체 회차 보기 클릭됨');
+    // 전체 회차 보기 클릭 처리
   };
 
   useEffect(() => {

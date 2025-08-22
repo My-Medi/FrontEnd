@@ -6,7 +6,7 @@ export const useMatchedExpertsQuery = () => {
     queryKey: ['matchedExperts'],
     queryFn: getMatchedExperts,
     staleTime: 0,
-    gcTime: 10 * 60 * 1000, // 10분
+    gcTime: 0, // 캐시 제거
     refetchOnMount: 'always',
     refetchOnWindowFocus: true,
   });

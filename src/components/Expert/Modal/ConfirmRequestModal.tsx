@@ -53,8 +53,7 @@ const ConfirmRequestModal: React.FC<ConfirmRequestModalProps> = ({
           // 성공 시 성공 모달 표시
           setShowSuccessModal(true);
         },
-        onError: (error) => {
-          console.error('상담 요청 실패:', error);
+        onError: () => {
           // 에러 처리 (필요시 에러 모달 표시)
         }
       }

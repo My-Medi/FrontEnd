@@ -106,7 +106,7 @@ const ExpertDetailModal: React.FC<ExpertDetailModalProps> = ({ expertId, expertS
       6: '여섯',
     };
     const word = mapping[n] || String(n);
-    return word === '첫' ? '첫' : `${word}번째`;
+    return word === '첫' ? '첫' : `${word}`;
   };
 
   // 경력 기간 계산 유틸 (YYYY-MM-DD 기준)

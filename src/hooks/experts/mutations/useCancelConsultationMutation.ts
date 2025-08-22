@@ -20,7 +20,6 @@ export const useCancelConsultationMutation = ({
       onSuccess?.();
     },
     onError: (error) => {
-      console.error('상담요청 취소 실패:', error);
       onError?.(error);
     },
   });

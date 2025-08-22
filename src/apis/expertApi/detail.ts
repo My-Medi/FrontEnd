@@ -13,7 +13,6 @@ export const getExpertDetail = async (expertId: number): Promise<ExpertDetailRes
     const response = await API.get<ExpertDetailResponse>(`${USER_ENDPOINTS.EXPERTS}/${expertId}`);
     return response.data;
   } catch (error) {
-    console.error('전문가 상세 조회 실패:', error);
     throw error;
   }
 };

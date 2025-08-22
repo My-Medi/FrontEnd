@@ -1,5 +1,5 @@
 import React from 'react';
-import TotalConstant from '@/assets/health-constants/total-constant.svg';
+
 import danger from '@/assets/health-constants/danger-constant.svg';
 import caution from '@/assets/health-constants/caution-constant.svg';
 import interest from '@/assets/health-constants/interest-constant.svg';

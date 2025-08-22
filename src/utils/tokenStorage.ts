@@ -41,7 +41,6 @@ export const getTokens = () => {
     
     return { accessToken, refreshToken };
   } catch (error) {
-    console.error('토큰 복호화 실패:', error);
     // 복호화 실패 시 토큰 삭제
     clearTokens();
     return { accessToken: null, refreshToken: null };

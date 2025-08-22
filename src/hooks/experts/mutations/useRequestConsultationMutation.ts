@@ -47,14 +47,11 @@ export const useRequestConsultationMutation = (options?: { skipQueryInvalidation
         queryClient.invalidateQueries({ queryKey: ['matchedExperts'] });
       }
     },
-    onError: (error: any) => {
+    onError: () => {
       // 에러 발생 시 요청 횟수 감소 (실패한 요청은 카운트하지 않음)
       decrementRequestCount();
       
-      const status = error?.response?.status;
-      const data = error?.response?.data;
-      const url = error?.config?.url;
-      console.error('상담 요청 실패:', { status, url, data });
+      // 상담 요청 실패 처리
     },
   });
 };

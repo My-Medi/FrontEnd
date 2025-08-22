@@ -45,10 +45,7 @@ const ExpertPatientCardList: React.FC<ExpertPatientCardListProps> = ({
 
   const currentCategoryData = combinedData[currentCategory] || [];
 
-  // 디버깅: rank 값 확인
-  console.log('ExpertPatientCardList - reportData:', reportData);
-  console.log('ExpertPatientCardList - combinedData:', combinedData);
-  console.log('ExpertPatientCardList - currentCategoryData:', currentCategoryData);
+  // 데이터 처리 완료
 
   return (
     <div className='flex flex-col justify-center items-center mt-[-40px]'>

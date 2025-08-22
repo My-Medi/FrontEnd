@@ -57,7 +57,6 @@ export const getExpertList = async (params: ExpertListRequestParams): Promise<Ex
     const response = await API.get<ExpertListResponse>(url);
     return response.data;
   } catch (error) {
-    console.error('전문가 목록 조회 실패:', error);
     throw error;
   }
 };

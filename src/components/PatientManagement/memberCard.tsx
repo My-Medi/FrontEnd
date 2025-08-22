@@ -25,7 +25,7 @@ interface Member {
 
 const MemberCard: React.FC<{ member: Member }> = ({ member }) => {
   // API에서 최신 건강 상태 가져오기
-  const { data: latestHealthStatus, isLoading: healthStatusLoading } = useExpertUserLatestHealthStatusQuery(member.userId);
+  const { data: latestHealthStatus } = useExpertUserLatestHealthStatusQuery();
   
   // API 데이터가 있으면 사용, 없으면 기본값 사용
   const healthStatus = latestHealthStatus?.healthStatus 

@@ -6,7 +6,7 @@ import { getColorIndicesForDate } from '../Calendar/calendarUtils';
 import { useExpertMonthlySchedules } from '../../../hooks/experts/queries/useExpertSchedules';
 import ExpertScheduleCardSkeleton from './ExpertScheduleCardSkeleton';
 import { useAcceptedMembersQuery } from '../../../hooks/experts/queries/useAcceptedConsultations';
-import { HEALTH_STATUS_COLOR } from '../../../constants/memberStatusColor';
+
 import { healthStatusMap } from '../../../constants/healthStatus';
 import { useExpertUserLatestHealthStatusQuery } from '../../../hooks/expert/report/useExpertUserLatestHealthStatusQuery';
 import { mapApiResultToHealthStatus } from '../../../utils/mappers/healthStatusMapper';
@@ -18,7 +18,7 @@ interface Props {
 
 // 환자 건강 상태 표시 컴포넌트
 const PatientHealthDisplay: React.FC<{ patient: AcceptedMember }> = ({ patient }) => {
-  const { data: latestHealthStatus } = useExpertUserLatestHealthStatusQuery(patient.userId);
+  const { data: latestHealthStatus } = useExpertUserLatestHealthStatusQuery();
   
   // API 데이터가 있으면 사용, 없으면 기본값 사용
   const healthStatus = latestHealthStatus?.healthStatus 
@@ -51,7 +51,7 @@ const PatientHealthDisplay: React.FC<{ patient: AcceptedMember }> = ({ patient }
       >
         <div
           className="text-[14.4px] font-medium leading-[100%] tracking-[-0.432px] text-center"
-          style={{ color: current.borderColor }}
+          style={{ color: current.textColor }}
         >
           {patient.nickname}님의 건강은 {healthStatus} 단계입니다.
         </div>

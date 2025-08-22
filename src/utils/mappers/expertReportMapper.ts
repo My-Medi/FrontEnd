@@ -411,7 +411,7 @@ export function mapExpertReportToCombinedByCategory(
                 default:
                   rankValue = '';
               }
-              console.log(`Rank for ${id}:`, rankValue);
+              // Rank 값 처리
               return rankValue;
             })(),
             gender: '여', // 전문가 API에서는 gender 정보가 없으므로 기본값 설정

@@ -10,7 +10,6 @@ export const getHealthProposal = async (): Promise<HealthProposalApiResponse> =>
     const response = await API.get<HealthProposalApiResponse>('/users/proposals');
     return response.data;
   } catch (error) {
-    console.error('건강관리요청서 조회 실패:', error);
     // 400 에러는 제안서가 없는 경우로 처리
     if ((error as any)?.response?.status === 400) {
       throw new Error('제안서를 찾을 수 없습니다');
@@ -29,7 +28,6 @@ export const createHealthProposal = async (data: HealthProposalRequest): Promise
     const response = await API.post<HealthProposalCreateResponse>('/users/proposals', data);
     return response.data;
   } catch (error) {
-    console.error('건강관리요청서 작성 실패:', error);
     throw error;
   }
 };
@@ -44,7 +42,6 @@ export const updateHealthProposal = async (data: HealthProposalRequest): Promise
     const response = await API.patch<HealthProposalCreateResponse>('/users/proposals', data);
     return response.data;
   } catch (error) {
-    console.error('건강관리요청서 수정 실패:', error);
     throw error;
   }
 };

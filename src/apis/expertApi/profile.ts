@@ -11,7 +11,6 @@ export const getExpertProfile = async (): Promise<ApiResponse<any>> => {
     const response = await API.get<ApiResponse<any>>(EXPERT_ENDPOINTS.PROFILE);
     return response.data;
   } catch (error) {
-    console.error('전문가 프로필 조회 실패:', error);
     throw error;
   }
 };
@@ -25,7 +24,6 @@ export const getExpertProfileOverview = async (): Promise<ApiResponse<any>> => {
     const response = await API.get<ApiResponse<any>>(`${EXPERT_ENDPOINTS.PROFILE}/profile`);
     return response.data;
   } catch (error) {
-    console.error('전문가 프로필(overview) 조회 실패:', error);
     throw error;
   }
 };
@@ -48,7 +46,6 @@ export const updateExpertProfile = async (updateData: {
     const response = await API.patch<ApiResponse<any>>(EXPERT_ENDPOINTS.PROFILE, updateData);
     return response.data;
   } catch (error) {
-    console.error('전문가 프로필 업데이트 실패:', error);
     throw error;
   }
 };

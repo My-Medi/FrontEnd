@@ -20,7 +20,6 @@ export const useUnmatchConsultationMutation = ({
       onSuccess?.();
     },
     onError: (error) => {
-      console.error('매칭 끊기 실패:', error);
       onError?.(error);
     },
   });

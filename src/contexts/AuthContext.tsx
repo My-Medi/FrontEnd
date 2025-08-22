@@ -96,7 +96,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           setUserInfo(null);
         }
       } catch (error) {
-        console.error('토큰 검증 중 오류:', error);
         setUserType(null);
         setUserInfo(null);
       } finally {

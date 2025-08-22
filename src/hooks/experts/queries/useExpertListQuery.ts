@@ -18,8 +18,8 @@ export const useExpertListQuery = (params: ExpertListRequestParams) => {
       }
       return response.result!;
     },
-    staleTime: 5 * 60 * 1000, // 5분
-    gcTime: 10 * 60 * 1000, // 10분
+    staleTime: 0, // 캐시 제거
+    gcTime: 0, // 캐시 제거
     retry: 2,
   });
 };
